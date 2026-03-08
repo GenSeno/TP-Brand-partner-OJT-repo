@@ -1,0 +1,34 @@
+[
+    {
+        "code": "PHP",
+        "name": "Philippine Peso",
+        "symbol": "₱",
+        "exchange_rate": 1,
+        "decimal_places": 2,
+        "default": true
+    },
+    {
+        "code": "USD",
+        "name": "US Dollar",
+        "symbol": "$",
+        "exchange_rate": 0.018,
+        "decimal_places": 2,
+        "default": false
+    },
+    {
+        "code": "EUR",
+        "name": "Euro",
+        "symbol": "€",
+        "exchange_rate": 0.016,
+        "decimal_places": 2,
+        "default": false
+    },
+    {
+        "code": "JPY",
+        "name": "Japanese Yen",
+        "symbol": "¥",
+        "exchange_rate": 2.0,
+        "decimal_places": 0,
+        "default": false
+    }
+]

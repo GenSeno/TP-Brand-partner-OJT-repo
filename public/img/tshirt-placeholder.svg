@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#f8f9fa"/>
+
+  <!-- T-Shirt Shape -->
+  <path d="M200 80 L140 80 L100 120 L100 160 L140 160 L140 320 L260 320 L260 160 L300 160 L300 120 L260 80 L200 80"
+        fill="#e9ecef"
+        stroke="#dee2e6"
+        stroke-width="3"/>
+
+  <!-- Collar -->
+  <path d="M170 80 Q200 110 230 80"
+        fill="none"
+        stroke="#dee2e6"
+        stroke-width="3"/>
+
+  <!-- Left Sleeve Line -->
+  <line x1="140" y1="80" x2="140" y2="160" stroke="#dee2e6" stroke-width="2"/>
+
+  <!-- Right Sleeve Line -->
+  <line x1="260" y1="80" x2="260" y2="160" stroke="#dee2e6" stroke-width="2"/>
+
+  <!-- Text -->
+  <text x="200" y="220" font-family="Arial, sans-serif" font-size="16" fill="#adb5bd" text-anchor="middle">No Image</text>
+  <text x="200" y="245" font-family="Arial, sans-serif" font-size="14" fill="#ced4da" text-anchor="middle">Available</text>
+</svg>

@@ -1,0 +1,19 @@
+.list {
+    margin-inline-start: 1rem;
+
+    .list-margin-start-2 {
+        margin-inline-start: 2rem;
+    }
+
+    .list-margin-start-3 {
+        margin-inline-start: 3rem;
+    }
+}
+
+ol.list {
+    list-style: decimal;
+}
+
+ul.list {
+    list-style: disc;
+}

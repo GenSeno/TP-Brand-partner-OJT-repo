@@ -1,0 +1,140 @@
+[
+    {
+        "name": "Piece",
+        "code": "pc",
+        "type": "count",
+        "enabled": true
+    },
+    {
+        "name": "Item",
+        "code": "item",
+        "type": "count",
+        "enabled": true
+    },
+    {
+        "name": "Package",
+        "code": "pkg",
+        "type": "count",
+        "enabled": true
+    },
+
+    {
+        "name": "Kilogram",
+        "code": "kg",
+        "type": "weight",
+        "enabled": true
+    },
+    {
+        "name": "Gram",
+        "code": "g",
+        "type": "weight",
+        "enabled": true
+    },
+    {
+        "name": "Pound",
+        "code": "lb",
+        "type": "weight",
+        "enabled": true
+    },
+
+    {
+        "name": "Milimeter",
+        "code": "mm",
+        "type": "length",
+        "enabled": true
+    },
+    {
+        "name": "Meter",
+        "code": "m",
+        "type": "length",
+        "enabled": true
+    },
+    {
+        "name": "Centimeter",
+        "code": "cm",
+        "type": "length",
+        "enabled": true
+    },
+    {
+        "name": "Inch",
+        "code": "in",
+        "type": "length",
+        "enabled": true
+    },
+    {
+        "name": "Feet",
+        "code": "ft",
+        "type": "length",
+        "enabled": true
+    },
+
+    {
+        "name": "Liter",
+        "code": "L",
+        "type": "volume",
+        "enabled": true
+    },
+    {
+        "name": "Milliliter",
+        "code": "mL",
+        "type": "volume",
+        "enabled": true
+    },
+    {
+        "name": "Gallon",
+        "code": "gal",
+        "type": "volume",
+        "enabled": true
+    },
+
+    {
+        "name": "Square Meter",
+        "code": "m²",
+        "type": "area",
+        "enabled": true
+    },
+    {
+        "name": "Square Foot",
+        "code": "ft²",
+        "type": "area",
+        "enabled": true
+    },
+
+    {
+        "name": "Hour",
+        "code": "hr",
+        "type": "time",
+        "enabled": true
+    },
+    {
+        "name": "Day",
+        "code": "day",
+        "type": "time",
+        "enabled": true
+    },
+    {
+        "name": "Month",
+        "code": "mo",
+        "type": "time",
+        "enabled": true
+    },
+
+    {
+        "name": "sheets",
+        "code": "sheets",
+        "type": "custom",
+        "enabled": true
+    },
+    {
+        "name": "boxes",
+        "code": "boxes",
+        "type": "custom",
+        "enabled": false
+    },
+    {
+        "name": "Cone",
+        "code": "cone",
+        "type": "custom",
+        "enabled": true
+    }
+]

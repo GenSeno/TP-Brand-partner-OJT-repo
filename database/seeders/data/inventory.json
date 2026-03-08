@@ -1,0 +1,87 @@
+[
+    {
+        "type": "fabric",
+        "items": [
+            {
+                "item_name": "Ribstop 110gsm",
+                "uom_code": "kg",
+                "stock": 50
+            },
+            {
+                "item_name": "Polydex 150gsm",
+                "uom_code": "kg",
+                "stock": 75
+            },
+            {
+                "item_name": "CM Stripe 130gsm",
+                "uom_code": "kg",
+                "stock": 60
+            },
+            {
+                "item_name": "Pineapple",
+                "uom_code": "kg",
+                "stock": 40
+            },
+            {
+                "item_name": "Microol 110gsm",
+                "uom_code": "kg",
+                "stock": 55
+            }
+        ]
+    },
+    {
+        "type": "thread",
+        "items": [
+            {
+                "item_name": "98",
+                "uom_code": "cone",
+                "stock": 120
+            },
+            {
+                "item_name": "356",
+                "uom_code": "cone",
+                "stock": 150
+            },
+            {
+                "item_name": "61",
+                "uom_code": "cone",
+                "stock": 100
+            }
+        ]
+    },
+    {
+        "type": "packaging",
+        "items": [
+            {
+                "item_name": "Plastic packaging",
+                "uom_code": "pc",
+                "stock": 200
+            },
+            {
+                "item_name": "Ziplock",
+                "uom_code": "pc",
+                "stock": 300
+            },
+            {
+                "item_name": "Sticker",
+                "uom_code": "pc",
+                "stock": 500
+            }
+        ]
+    },
+    {
+        "type": "subli paper",
+        "items": [
+            {
+                "item_name": "Paper 36",
+                "uom_code": "in",
+                "stock": 100
+            },
+            {
+                "item_name": "Paper 44",
+                "uom_code": "in",
+                "stock": 150
+            }
+        ]
+    }
+]

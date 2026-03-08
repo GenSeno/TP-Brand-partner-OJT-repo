@@ -1,0 +1,43 @@
+@use '../utils/variables';
+
+.print-preview {
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        border-bottom: variables.$border-width variables.$border-style
+            variables.$secondary-transparent;
+
+        .company-logo {
+            width: 160px;
+        }
+    }
+
+    .address-block {
+        font-style: normal; /* address tag defaults to italic, which is ugly */
+        line-height: 1.5;
+        color: variables.$text-muted;
+        font-size: 0.875em;
+
+        p {
+            margin: 0;
+
+            & + p {
+                margin-top: 0;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .separator {
+            margin: 0 0.25rem;
+        }
+    }
+}

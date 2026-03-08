@@ -1,0 +1,111 @@
+@use '../utils/variables';
+@use '../utils/mixins';
+
+.im-dialog {
+    position: relative;
+    z-index: 1050;
+
+    .im-backdrop {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        // backdrop-filter: blur(4px);
+        z-index: 30;
+    }
+
+    .im-modal-container {
+        position: fixed;
+        inset: 0;
+        overflow-y: auto;
+        z-index: 40;
+        padding: 1rem;
+
+        .im-modal-positioner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+
+            .im-modal-wrapper {
+                width: 100%;
+                margin: auto;
+                transition-property:
+                    color, background-color, border-color,
+                    text-decoration-color, fill, stroke, opacity, box-shadow,
+                    transform, filter, backdrop-filter;
+                transition-duration: 0.3s;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+                .im-modal-content {
+                    position: relative;
+                    // padding: 15px 20px !important;
+                    padding: 0 !important;
+                    background-color: variables.$white !important;
+                    border-radius: variables.$border-radius !important;
+
+                    .page-header,
+                    .page-body,
+                    .page-footer,
+                    .page-footer-buttons {
+                        padding: 15px 20px;
+                    }
+
+                    .page-header {
+                        // margin: -15px -20px 15px -20px;
+                        margin: 0;
+                        border-bottom: 1px solid variables.$border-color;
+
+                        &:not(.no-close-btn) {
+                            padding-right: 60px;
+                        }
+
+                        .page-title {
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    .page-footer,
+                    .page-footer-buttons {
+                        // margin: 15px -20px -15px -20px;
+                        margin: 0;
+                        border-top: 1px solid variables.$border-color;
+                    }
+
+                    .page-footer-buttons {
+                        display: flex;
+                        flex-shrink: 0;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 0.5rem;
+                    }
+
+                    div:has(> .im-close-button) {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        padding: 15px 20px 0 0 !important;
+
+                        .im-close-button {
+                            display: flex;
+                            align-items: center;
+                            -webkit-box-align: center;
+                            -ms-flex-align: center;
+                            justify-content: center;
+                            -webkit-justify-content: center;
+                            -ms-flex-pack: center;
+                            color: variables.$white;
+                            opacity: 1;
+                            width: 20px;
+                            height: 20px;
+                            border: 0;
+                            font-weight: variables.$font-weight-bold;
+                            background-color: variables.$danger;
+                            @include mixins.rounded(50px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

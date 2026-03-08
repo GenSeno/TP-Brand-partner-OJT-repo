@@ -1,0 +1,198 @@
+<template>
+    <Head title="Products" />
+
+    <div class="page-header">
+        <div class="add-item d-flex">
+            <div class="page-title">
+                <h4>Products</h4>
+                <h6>Manage your products</h6>
+            </div>
+        </div>
+        <div class="page-btn">
+            <ModalLink
+                navigate
+                :href="route('brand-partner.products.create')"
+                class="btn btn-added"
+                #default="{ loading }"
+            >
+                <loading-text :loading="loading">
+                    <vue-feather type="plus-circle" class="me-2"></vue-feather>
+                    Add Product
+                </loading-text>
+            </ModalLink>
+        </div>
+    </div>
+
+    <div class="card table-list-card">
+        <div
+            class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+        >
+            <div class="d-flex align-items-center gap-2">
+                <dt-search
+                    v-model="form.filter.search"
+                    @search="submitFilters"
+                />
+            </div>
+            <div
+                class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3"
+            >
+                <select-filter
+                    v-model="form.filter.status"
+                    :options="statusOptions"
+                    name="Status"
+                    @change="submitFilters"
+                ></select-filter>
+                <select-filter
+                    v-model="form.filter.category_id"
+                    :options="categoryOptions"
+                    name="Category"
+                    @change="submitFilters"
+                ></select-filter>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <dt-table
+                v-model:sortings="form.sort"
+                v-model:perPage="form.per_page"
+                :columns="columns"
+                :data="products.data"
+                :total-records="products.total"
+                :start-record="products.from"
+                :end-record="products.to"
+                :links="products.links"
+                @change="submitFilters"
+            >
+                <template #name="{ row, value }">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar avatar-md bg-light me-2">
+                            <img
+                                :src="getProductImage(row)"
+                                :alt="value"
+                                class="img-fluid rounded"
+                            />
+                        </div>
+                        <span>{{ value }}</span>
+                    </div>
+                </template>
+
+                <template #price="{ row }">
+                    {{ formatCurrency(row.price) }}
+                </template>
+
+                <template #status="{ value }">
+                    <span class="badge" :class="`bg-${getStatusColor(value)}`">
+                        {{ value }}
+                    </span>
+                </template>
+
+                <template #action="{ row, value }">
+                    <div class="action-table-data">
+                        <div class="edit-delete-action">
+                            <ModalLink
+                                navigate
+                                :href="
+                                    route('brand-partner.products.edit', value)
+                                "
+                                class="btn btn-icon btn-outline-light btn-sm me-2"
+                                title="Edit"
+                            >
+                                <vue-feather
+                                    type="edit"
+                                    class="feather-14"
+                                ></vue-feather>
+                            </ModalLink>
+                            <dt-delete
+                                :id="value"
+                                route-name="brand-partner.products.destroy"
+                                :name="row.name"
+                                model-name="product"
+                                class="btn btn-icon btn-danger-light btn-sm"
+                                title="Delete"
+                            >
+                                <vue-feather
+                                    type="trash-2"
+                                    class="feather-14"
+                                ></vue-feather>
+                            </dt-delete>
+                        </div>
+                    </div>
+                </template>
+            </dt-table>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { Head, useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { removeEmptyValues } from '@/helpers/form';
+
+const props = defineProps({
+    products: Object,
+    categories: Array,
+    events: Array,
+    statusOptions: Object,
+    filter: Object,
+});
+
+const columns = [
+    { title: 'Product', dataIndex: 'name', key: 'name', sortable: true },
+    { title: 'Category', dataIndex: 'category.name', key: 'category' },
+    { title: 'Price', dataIndex: 'price', key: 'price', sortable: true },
+    { title: 'Stock', dataIndex: 'stock', key: 'stock' },
+    { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
+    { title: '', dataIndex: 'id', key: 'action' },
+];
+
+const categoryOptions = computed(() => {
+    return props.categories.reduce((acc, cat) => {
+        acc[cat.id] = cat.name;
+        return acc;
+    }, {});
+});
+
+const form = useForm({
+    filter: {
+        search: props.filter?.search || '',
+        status: props.filter?.status || '',
+        category_id: props.filter?.category_id || '',
+    },
+    sort: [],
+    per_page: props.products?.per_page || 10,
+});
+
+const submitFilters = () => {
+    form.transform((data) =>
+        removeEmptyValues({
+            ...data,
+            sort: data.sort.join(','),
+            per_page: data.per_page === 10 ? '' : data.per_page,
+        }),
+    ).get(route('brand-partner.products.index'), {
+        preserveState: true,
+        replace: true,
+    });
+};
+
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+    }).format(amount / 100);
+};
+
+const getStatusColor = (status) => {
+    const colors = {
+        draft: 'warning',
+        published: 'success',
+        disabled: 'secondary',
+    };
+    return colors[status] || 'secondary';
+};
+
+const getProductImage = (product) => {
+    const primaryImage = product.images?.find((img) => img.is_primary);
+    return primaryImage?.url || product.images?.[0]?.url || '/img/default.png';
+};
+</script>

@@ -1,0 +1,6 @@
+.dp__input {
+    &.form-control {
+        padding-inline-start: var(--dp-input-icon-padding);
+        padding-right: 30px;
+    }
+}

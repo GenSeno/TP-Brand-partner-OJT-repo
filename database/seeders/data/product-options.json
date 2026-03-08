@@ -1,0 +1,84 @@
+[
+    {
+        "name": "Printing Option",
+        "position": 1,
+        "values": [
+            {
+                "label": "WITH name",
+                "value": "WITH-name",
+                "position": 1
+            },
+            {
+                "label": "NO name",
+                "value": "NO-name",
+                "position": 2
+            }
+        ]
+    },
+    {
+        "name": "Size",
+        "position": 2,
+        "values": [
+            {
+                "label": "XXS",
+                "value": "XXS",
+                "position": 1
+            },
+            {
+                "label": "XS",
+                "value": "XS",
+                "position": 2
+            },
+            {
+                "label": "S",
+                "value": "S",
+                "position": 3
+            },
+            {
+                "label": "M",
+                "value": "M",
+                "position": 4
+            },
+            {
+                "label": "L",
+                "value": "L",
+                "position": 5
+            },
+            {
+                "label": "XL",
+                "value": "XL",
+                "position": 6
+            },
+            {
+                "label": "XXL",
+                "value": "XXL",
+                "position": 7
+            },
+            {
+                "label": "XXXL",
+                "value": "XXXL",
+                "position": 8
+            },
+            {
+                "label": "4XL",
+                "value": "4XL",
+                "position": 9
+            },
+            {
+                "label": "5XL",
+                "value": "5XL",
+                "position": 10
+            },
+            {
+                "label": "Others",
+                "value": "OTHERS",
+                "position": 11
+            },
+            {
+                "label": "Custom",
+                "value": "Custom",
+                "position": 12
+            }
+        ]
+    }
+]

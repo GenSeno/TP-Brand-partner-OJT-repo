@@ -1,0 +1,23 @@
+[
+    {
+        "Name" : "Personal Assets",
+        "GB" : "2.4 GB",
+        "Files" : "135 Files",
+        "Image" : "avatar-19.jpg",
+        "ImageOne" : "avatar-29.jpg"
+    },
+    {
+        "Name" : "Document",
+        "GB" : "4 GB",
+        "Files" : "15 Files",
+        "Image" : "avatar-05.jpg",
+        "ImageOne" : "avatar-02.jpg"
+    },
+    {
+        "Name" : "Handyimages",
+        "GB" : "1.4 GB",
+        "Files" : "115 Files",
+        "Image" : "avatar-05.jpg",
+        "ImageOne" : "avatar-02.jpg"
+    }
+]

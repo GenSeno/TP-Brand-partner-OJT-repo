@@ -1,0 +1,234 @@
+[
+    {
+        "title": "",
+        "showAsTab": false,
+        "separateRoute": false,
+        "hasSubRoute": true,
+        "showSubRoute": true,
+        "permissions": [],
+        "menu": [
+            {
+                "menuValue": "Dashboard",
+                "icon": "ti ti-layout-grid",
+                "active_routes": ["admin.dashboard"],
+                "route": "admin.dashboard",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": []
+            }
+        ]
+    },
+    {
+        "title": "Catalog",
+        "showAsTab": true,
+        "separateRoute": false,
+        "hasSubRoute": true,
+        "showSubRoute": true,
+        "permissions": ["catalog"],
+        "menu": [
+            {
+                "menuValue": "Category",
+                "icon": "ti ti-list-details",
+                "active_routes": ["admin.category.*"],
+                "route": "admin.category.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["catalog:manage-categories"]
+            },
+            {
+                "menuValue": "Products",
+                "icon": "ti ti-box",
+                "active_routes": ["admin.product.*", "admin.product-option.*"],
+                "route": "admin.product.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["catalog:manage-products"]
+            },
+            {
+                "menuValue": "Pricelist",
+                "icon": "ti ti-currency-dollar",
+                "active_routes": [],
+                "route": "#",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["catalog:manage-pricelist"]
+            },
+            {
+                "menuValue": "Suppliers",
+                "icon": "ti ti-truck-delivery",
+                "active_routes": ["admin.supplier.*"],
+                "route": "admin.supplier.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["catalog:manage-suppliers"]
+            },
+            {
+                "menuValue": "Brand Partners",
+                "icon": "ti ti-building-factory-2",
+                "active_routes": ["admin.brand-partners.*"],
+                "route": "admin.brand-partners.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["catalog:manage-brand-partners"]
+            }
+        ]
+    },
+    {
+        "title": "Sales",
+        "showAsTab": true,
+        "separateRoute": false,
+        "permissions": ["sales"],
+        "menu": [
+            {
+                "menuValue": "Customers",
+                "icon": "ti ti-users-group",
+                "active_routes": ["admin.customer.*"],
+                "route": "admin.customer.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["sales:manage-customers"]
+            },
+            {
+                "menuValue": "Quotation",
+                "icon": "ti ti-files",
+                "active_routes": ["admin.quotation.*"],
+                "route": "admin.quotation.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["sales:manage-quotations"]
+            },
+            {
+                "menuValue": "Sales Order",
+                "icon": "ti ti-shopping-bag",
+                "active_routes": ["admin.order.*"],
+                "route": "admin.order.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["sales:manage-orders"]
+            },
+            {
+                "menuValue": "Billing",
+                "icon": "ti ti-report-money",
+                "active_routes": ["admin.billing.*"],
+                "route": "admin.billing.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["sales:manage-invoices"]
+            },
+            {
+                "menuValue": "Payments",
+                "icon": "ti ti-receipt-2",
+                "active_routes": ["admin.payment-acknowledgement.*"],
+                "route": "admin.payment-acknowledgement.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["sales:manage-invoices"]
+            }
+        ]
+    },
+    {
+        "title": "Operations",
+        "showAsTab": true,
+        "separateRoute": false,
+        "permissions": ["operations", "job-orders"],
+        "menu": [
+            {
+                "menuValue": "Job Order",
+                "icon": "ti ti-palette",
+                "active_routes": ["admin.job-order.*"],
+                "route": "admin.job-order.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["job-orders"]
+            },
+            {
+                "menuValue": "Raw Materials",
+                "icon": "ti ti-truck",
+                "active_routes": ["admin.inventory-item.*"],
+                "route": "admin.inventory-item.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["operations:manage-raw-materials"]
+            },
+            {
+                "menuValue": "Purchase Orders",
+                "icon": "ti ti-file-unknown",
+                "active_routes": ["admin.purchase-order.*"],
+                "route": "admin.purchase-order.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["operations:manage-purchase-orders"]
+            }
+        ]
+    },
+    {
+        "title": "Finance",
+        "showAsTab": true,
+        "separateRoute": false,
+        "permissions": ["finance"],
+        "menu": [
+            {
+                "menuValue": "Sales",
+                "icon": "ti ti-chart-bar",
+                "active_routes": [],
+                "route": "#",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["finance:manage-sales"]
+            },
+            {
+                "menuValue": "Expenses",
+                "icon": "ti ti-file-vector",
+                "active_routes": ["admin.expense.*"],
+                "route": "admin.expense.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["finance:manage-expenses"]
+            },
+            {
+                "menuValue": "Cash Flow",
+                "icon": "ti ti-zoom-money",
+                "active_routes": ["admin.cashflow.*"],
+                "route": "admin.cashflow.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["finance:manage-cash-flow"]
+            }
+        ]
+    },
+    {
+        "title": "Settings",
+        "showAsTab": true,
+        "separateRoute": false,
+        "permissions": ["settings"],
+        "menu": [
+            {
+                "menuValue": "Staff",
+                "icon": "ti ti-user-check",
+                "active_routes": ["admin.staff.*"],
+                "route": "admin.staff.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["settings:manage-staff"]
+            },
+            {
+                "menuValue": "Users",
+                "icon": "ti ti-user-circle",
+                "active_routes": ["admin.users.*"],
+                "route": "admin.users.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["settings:manage-users"]
+            },
+            {
+                "menuValue": "Employees",
+                "icon": "ti ti-id",
+                "active_routes": ["admin.employee.*"],
+                "route": "admin.employee.index",
+                "hasSubRoute": false,
+                "showSubRoute": false,
+                "permissions": ["settings:manage-employees"]
+            }
+        ]
+    }
+]

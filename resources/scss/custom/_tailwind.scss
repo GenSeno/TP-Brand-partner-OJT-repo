@@ -1,0 +1,72 @@
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+$sm: 640px;
+$md: 768px;
+$lg: 1024px;
+$xl: 1280px;
+$xxl: 1536px;
+
+$max-xs: 20rem; // 320px
+$max-sm: 24rem; // 384px
+$max-md: 28rem; // 448px
+$max-lg: 32rem; // 512px
+$max-xl: 36rem; // 576px
+$max-2xl: 42rem; // 672px
+$max-3xl: 48rem; // 768px
+$max-4xl: 56rem; // 896px
+$max-5xl: 64rem; // 1024px
+$max-6xl: 72rem; // 1152px
+$max-7xl: 80rem; // 1280px
+
+@mixin max-width-utility($name, $value) {
+    .#{$name} {
+        max-width: $value;
+    }
+    @media (min-width: $sm) {
+        .sm\:#{$name} {
+            max-width: $value;
+        }
+    }
+    @media (min-width: $md) {
+        .md\:#{$name} {
+            max-width: $value;
+        }
+    }
+    @media (min-width: $lg) {
+        .lg\:#{$name} {
+            max-width: $value;
+        }
+    }
+    @media (min-width: $xl) {
+        .xl\:#{$name} {
+            max-width: $value;
+        }
+    }
+    @media (min-width: $xxl) {
+        .xxl\:#{$name} {
+            max-width: $value;
+        }
+    }
+}
+
+@include max-width-utility('max-w-xs', $max-xs);
+@include max-width-utility('max-w-sm', $max-sm);
+@include max-width-utility('max-w-md', $max-md);
+@include max-width-utility('max-w-lg', $max-lg);
+@include max-width-utility('max-w-xl', $max-xl);
+@include max-width-utility('max-w-2xl', $max-2xl);
+@include max-width-utility('max-w-3xl', $max-3xl);
+@include max-width-utility('max-w-4xl', $max-4xl);
+@include max-width-utility('max-w-5xl', $max-5xl);
+@include max-width-utility('max-w-6xl', $max-6xl);
+@include max-width-utility('max-w-7xl', $max-7xl);

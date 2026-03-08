@@ -1,0 +1,660 @@
+<template>
+    <Head :title="`Checkout - ${brandPartner.name}`" />
+
+    <div class="grocery-checkout-section">
+        <!-- Header -->
+        <div class="grocery-header">
+            <div class="grocery-container">
+                <div class="header-inner">
+                    <Link
+                        :href="
+                            route('store.brand-partner.cart')
+                        "
+                        class="header-back"
+                    >
+                        <i class="ri-arrow-left-s-line"></i>
+                    </Link>
+                    <h2 class="header-title">Checkout</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="grocery-container">
+            <form @submit.prevent="submitOrder" class="checkout-grid">
+                <!-- Left: Form -->
+                <div class="form-column">
+                    <!-- Contact Information -->
+                    <div class="grocery-card">
+                        <div class="card-header">
+                            <i class="ri-user-3-line"></i>
+                            <h5>Contact Information</h5>
+                        </div>
+                        <div class="form-row-grid">
+                            <div class="form-group">
+                                <label class="required">Full Name</label>
+                                <input
+                                    v-model="form.customer_name"
+                                    type="text"
+                                    class="grocery-input"
+                                    :class="{
+                                        'input-error':
+                                            form.errors.customer_name,
+                                    }"
+                                    placeholder="Enter your full name"
+                                    required
+                                />
+                                <span
+                                    class="error-text"
+                                    v-if="form.errors.customer_name"
+                                >
+                                    {{ form.errors.customer_name }}
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Email</label>
+                                <input
+                                    v-model="form.customer_email"
+                                    type="email"
+                                    class="grocery-input"
+                                    :class="{
+                                        'input-error':
+                                            form.errors.customer_email,
+                                    }"
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                                <span
+                                    class="error-text"
+                                    v-if="form.errors.customer_email"
+                                >
+                                    {{ form.errors.customer_email }}
+                                </span>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="required">Phone</label>
+                                <input
+                                    v-model="form.customer_phone"
+                                    type="tel"
+                                    class="grocery-input"
+                                    :class="{
+                                        'input-error':
+                                            form.errors.customer_phone,
+                                    }"
+                                    placeholder="Enter your phone number"
+                                    required
+                                />
+                                <span
+                                    class="error-text"
+                                    v-if="form.errors.customer_phone"
+                                >
+                                    {{ form.errors.customer_phone }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="grocery-card">
+                        <div class="card-header">
+                            <i class="ri-map-pin-line"></i>
+                            <h5>Shipping Address</h5>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Address</label>
+                            <textarea
+                                v-model="form.shipping_address"
+                                rows="3"
+                                class="grocery-input"
+                                :class="{
+                                    'input-error': form.errors.shipping_address,
+                                }"
+                                placeholder="Enter your complete shipping address"
+                                required
+                            ></textarea>
+                            <span
+                                class="error-text"
+                                v-if="form.errors.shipping_address"
+                            >
+                                {{ form.errors.shipping_address }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="grocery-card">
+                        <div class="card-header">
+                            <i class="ri-sticky-note-line"></i>
+                            <h5>Additional Notes</h5>
+                        </div>
+                        <div class="form-group">
+                            <textarea
+                                v-model="form.notes"
+                                rows="3"
+                                class="grocery-input"
+                                placeholder="Any special instructions or notes for your order..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div class="summary-column">
+                    <div class="grocery-card summary-card">
+                        <h4 class="summary-heading">Order Summary</h4>
+
+                        <div class="summary-items">
+                            <div
+                                class="summary-item"
+                                v-for="item in cart.items"
+                                :key="item.id"
+                            >
+                                <div class="si-image-wrap">
+                                    <img
+                                        :src="
+                                            item.product.image_url ||
+                                            '/img/tshirt-placeholder.svg'
+                                        "
+                                        :alt="item.product.name"
+                                    />
+                                    <span class="si-qty-badge">{{
+                                        item.quantity
+                                    }}</span>
+                                </div>
+                                <div class="si-details">
+                                    <span class="si-name">{{
+                                        item.product.name
+                                    }}</span>
+                                    <span class="si-each"
+                                        >{{
+                                            formatCurrency(item.price)
+                                        }}
+                                        each</span
+                                    >
+                                </div>
+                                <span class="si-total">{{
+                                    formatCurrency(item.total)
+                                }}</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <ul class="summary-totals">
+                            <li>
+                                <span>Subtotal</span>
+                                <span>{{ formatCurrency(cart.subtotal) }}</span>
+                            </li>
+                            <li v-if="cart.discount > 0">
+                                <span>Discount</span>
+                                <span class="discount-amount"
+                                    >-{{ formatCurrency(cart.discount) }}</span
+                                >
+                            </li>
+                        </ul>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="grand-total-row">
+                            <span>Total</span>
+                            <span>{{ formatCurrency(cart.total) }}</span>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="grocery-btn theme-btn place-order-btn"
+                            :disabled="form.processing"
+                        >
+                            <span v-if="form.processing" class="btn-loading">
+                                <i class="ri-loader-4-line spin"></i>
+                                Processing...
+                            </span>
+                            <span v-else>
+                                <i class="ri-check-double-line"></i> Place Order
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { Head, Link, useForm } from '@inertiajs/vue3';
+
+const props = defineProps({
+    brandPartner: Object,
+    cart: Object,
+});
+
+const form = useForm({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+    shipping_address: '',
+    notes: '',
+});
+
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+    }).format(amount / 100);
+};
+
+const submitOrder = () => {
+    form.post(
+        route('store.brand-partner.checkout.store'),
+    );
+};
+</script>
+
+<style scoped>
+.grocery-checkout-section {
+    min-height: 60vh;
+    padding-bottom: 40px;
+    font-family: 'Public Sans', sans-serif;
+    background: rgb(var(--grocery-light-bg));
+    /* Grocery Theme Color Variables */
+    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
+    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
+    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
+    --grocery-border: 232, 232, 232; /* Light gray borders */
+    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
+    --grocery-light-bg: 247, 247, 247; /* Light gray background */
+    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+}
+
+/* Header */
+.grocery-header {
+    background: #fff;
+    padding: 16px 0;
+    border-bottom: 1px solid rgb(var(--grocery-border));
+    margin-bottom: 24px;
+}
+
+.grocery-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgb(var(--grocery-light-bg));
+    color: rgb(var(--grocery-title));
+    text-decoration: none;
+    font-size: 20px;
+    transition: background 0.2s;
+}
+
+.header-back:hover {
+    background: rgb(var(--grocery-border));
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgb(var(--grocery-title));
+    margin: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-back:hover {
+    background: rgb(var(--grocery-border));
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgb(var(--grocery-title));
+    margin: 0;
+}
+
+/* Grid Layout */
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Form Column */
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Grocery Card */
+.grocery-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card-header i {
+    font-size: 22px;
+    color: rgb(var(--grocery-theme));
+}
+
+.card-header h5 {
+    font-size: 16px;
+    font-weight: 700;
+    color: rgb(var(--grocery-title));
+    margin: 0;
+}
+
+/* Form Row Grid */
+.form-row-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+}
+
+.form-group label.required::after {
+    content: ' *';
+    color: #ff4757;
+}
+
+/* Grocery Input */
+.grocery-input {
+    padding: 12px 14px;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Public Sans', sans-serif;
+    color: #333;
+    background: #fff;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grocery-input:focus {
+    border-color: rgb(var(--grocery-theme));
+    box-shadow: 0 0 0 3px rgba(255, 141, 47, 0.1);
+}
+
+.grocery-input.input-error {
+    border-color: #ff4757;
+}
+
+.grocery-input.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+textarea.grocery-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.error-text {
+    font-size: 12px;
+    color: #ff4757;
+    font-weight: 500;
+}
+
+/* Summary Column */
+.summary-column {
+    position: sticky;
+    top: 80px;
+}
+
+.summary-card {
+    padding: 24px;
+}
+
+.summary-heading {
+    font-size: 18px;
+    font-weight: 800;
+    color: rgb(var(--grocery-title));
+    margin: 0 0 18px;
+}
+
+/* Summary Items */
+.summary-items {
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-top: 6px;
+    padding-right: 6px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.si-image-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.si-image-wrap img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f5f5f5;
+}
+
+.si-qty-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+.si-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.si-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgb(var(--grocery-title));
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.si-each {
+    font-size: 11px;
+    color: #bbb;
+}
+
+.si-total {
+    font-size: 14px;
+    font-weight: 700;
+    color: #555;
+    flex-shrink: 0;
+}
+
+/* Summary Totals */
+.summary-divider {
+    height: 1px;
+    background: rgb(var(--grocery-border));
+    margin: 12px 0;
+}
+
+.summary-totals {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.summary-totals li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #777;
+}
+
+.discount-amount {
+    color: #2ed573;
+    font-weight: 600;
+}
+
+.grand-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.grand-total-row span:first-child {
+    font-size: 16px;
+    font-weight: 800;
+    color: rgb(var(--grocery-title));
+}
+
+.grand-total-row span:last-child {
+    font-size: 20px;
+    font-weight: 900;
+    color: rgb(var(--grocery-theme));
+}
+
+/* Place Order Button */
+.grocery-btn.theme-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 24px;
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Public Sans', sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.15s;
+}
+
+.grocery-btn.theme-btn:hover {
+    background: #e67a1f;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.grocery-btn.theme-btn:disabled {
+    background: #ddd;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.place-order-btn {
+    margin-top: 18px;
+}
+
+.place-order-btn i {
+    font-size: 18px;
+}
+
+.btn-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .summary-column {
+        position: static;
+    }
+
+    .form-row-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grocery-card {
+        padding: 18px;
+    }
+}
+</style>

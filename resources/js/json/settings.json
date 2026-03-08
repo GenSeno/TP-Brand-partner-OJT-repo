@@ -1,0 +1,75 @@
+[
+    {
+      "icon": "settings",
+      "title": "General Settings",
+      "page": "settings",
+      "subMenu": [
+        { "title": "Profile", "routes": "/settings/general-settings" },
+        { "title": "Security", "routes": "/settings/security-settings" },
+        { "title": "Notifications", "routes": "/settings/notification" },
+        { "title": "Connected Apps", "routes": "/settings/connected-apps" }
+      ]
+    },
+    {
+      "icon": "airplay",
+      "title": "Website Settings",
+      "page": "website-settings",
+      "subMenu": [
+        { "title": "System Settings", "routes": "/website-settings/system-settings" },
+        { "title": "Company Settings", "routes": "/website-settings/company-settings" },
+        { "title": "Localization", "routes": "/website-settings/localization-settings" },
+        { "title": "Prefixes", "routes": "/website-settings/prefixes" },
+        { "title": "Preference", "routes": "/website-settings/preference" },
+        { "title": "Appearance", "routes": "/website-settings/appearance" },
+        {
+          "title": "Social Authentication",
+          "routes": "/website-settings/social-authentication"
+        },
+        { "title": "Language", "routes": "/website-settings/language-settings" }
+      ]
+    },
+    {
+      "icon": "archive",
+      "title": "App Settings",
+      "page": "app-settings",
+      "subMenu": [
+        { "title": "Invoice Settings", "routes": "/app-settings/invoice-settings" },
+        { "title": "Invoice Template", "routes": "/app-settings/invoice-templates" },
+        { "title": "Printer", "routes": "/app-settings/printer-settings" },
+        { "title": "POS", "routes": "/app-settings/pos-settings" },
+        { "title": "Signatures", "routes": "/app-settings/signatures" },
+        { "title": "Custom Fields", "routes": "/app-settings/custom-fields" }
+      ]
+    },
+    {
+      "icon": "server",
+      "title": "System Settings",
+      "page": "system-settings",
+      "subMenu": [
+        { "title": "Email", "routes": "/system-settings/email-settings" },
+        { "title": "SMS Gateways", "routes": "/system-settings/sms-settings" },
+        { "title": "OTP", "routes": "/system-settings/otp-settings" },
+        { "title": "GDPR Cookies", "routes": "/system-settings/gdpr-settings" }
+      ]
+    },
+    {
+      "icon": "credit-card",
+      "title": "Financial Settings",
+      "page": "financial-settings",
+      "subMenu": [
+        { "title": "Payment Gateway", "routes": "/financial-settings/payment-gateway-settings" },
+        { "title": "Bank Accounts", "routes": "/financial-settings/bank-settings-grid" },
+        { "title": "Tax Rates", "routes": "/financial-settings/tax-rates" },
+        { "title": "Currencies", "routes": "/financial-settings/currency-settings" }
+      ]
+    },
+    {
+      "icon": "layout",
+      "title": "Other Settings",
+      "page": "other-settings",
+      "subMenu": [
+        { "title": "Storage", "routes": "/other-settings/storage-settings" },
+        { "title": "Ban IP Address", "routes": "/other-settings/ban-ip-address" }
+      ]
+    }
+]

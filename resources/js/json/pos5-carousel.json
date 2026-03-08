@@ -1,0 +1,42 @@
+[
+    {
+        "Id" : "1",
+        "IdName" : "all",
+        "Name" : "All Categories"
+    },
+    {
+        "Id" : "2",
+        "IdName" : "headphones",
+        "Name" : "Headphones"
+    },
+    {
+        "Id" : "3",
+        "IdName" : "shoes",
+        "Name" : "Shoes"
+    },
+    {
+        "Id" : "4",
+        "IdName" : "mobiles",
+        "Name" : "Mobiles"
+    },
+    {
+        "Id" : "5",
+        "IdName" : "watches",
+        "Name" : "Watches"
+    },
+    {
+        "Id" : "6",
+        "IdName" : "laptops",
+        "Name" : "Laptops"
+    },
+    {
+        "Id" : "7",
+        "IdName" : "homeneed",
+        "Name" : "Home Needs"
+    },
+    {
+        "Id" : "1",
+        "IdName" : "headphonesone",
+        "Name" : "Headphones"
+    }
+]

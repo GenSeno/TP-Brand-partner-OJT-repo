@@ -1,0 +1,202 @@
+[
+    {
+        "name": "Classic Crew Neck T-Shirt",
+        "slug": "classic-crew-neck-t-shirt",
+        "description": "Comfortable cotton crew neck t-shirt perfect for everyday wear and custom printing.",
+        "category": "tops-shirts-polo",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80"
+    },
+    {
+        "name": "Premium Polo Shirt",
+        "slug": "premium-polo-shirt",
+        "description": "High-quality polo shirt with collar, ideal for corporate uniforms and casual wear.",
+        "category": "tops-shirts-polo",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=800&q=80"
+    },
+    {
+        "name": "V-Neck Cotton Tee",
+        "slug": "v-neck-cotton-tee",
+        "description": "Soft v-neck t-shirt made from premium cotton, perfect for sublimation printing.",
+        "category": "tops-shirts-polo",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1622445275576-721325763afe?w=800&q=80"
+    },
+    {
+        "name": "Long Sleeve Shirt",
+        "slug": "long-sleeve-shirt",
+        "description": "Durable long sleeve shirt suitable for screen printing and embroidery.",
+        "category": "tops-shirts-polo",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=800&q=80"
+    },
+    {
+        "name": "Athletic Performance Jersey",
+        "slug": "athletic-performance-jersey",
+        "description": "Moisture-wicking sports jersey perfect for team uniforms and athletic events.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=800&q=80"
+    },
+    {
+        "name": "Basketball Jersey Set",
+        "slug": "basketball-jersey-set",
+        "description": "Complete basketball uniform set including jersey and shorts with custom printing options.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1515523110800-9415d13b84a8?w=800&q=80"
+    },
+    {
+        "name": "Running Singlet",
+        "slug": "running-singlet",
+        "description": "Lightweight running singlet designed for marathon and race events.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80"
+    },
+    {
+        "name": "Cycling Jersey",
+        "slug": "cycling-jersey",
+        "description": "Professional cycling jersey with breathable fabric and sublimation print capability.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800&q=80"
+    },
+    {
+        "name": "Sports Compression Shirt",
+        "slug": "sports-compression-shirt",
+        "description": "High-performance compression wear for training and active sports.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80"
+    },
+    {
+        "name": "Windbreaker Jacket",
+        "slug": "windbreaker-jacket",
+        "description": "Lightweight windbreaker jacket perfect for outdoor events and team wear.",
+        "category": "outerwear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80"
+    },
+    {
+        "name": "Hooded Jacket",
+        "slug": "hooded-jacket",
+        "description": "Comfortable hooded jacket with custom embroidery and print options.",
+        "category": "outerwear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80"
+    },
+    {
+        "name": "Varsity Jacket",
+        "slug": "varsity-jacket",
+        "description": "Classic varsity jacket ideal for school teams and organizations.",
+        "category": "outerwear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80"
+    },
+    {
+        "name": "Track Jacket",
+        "slug": "track-jacket",
+        "description": "Athletic track jacket with zipper closure, perfect for warm-ups.",
+        "category": "outerwear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1578932750355-5eb30ece487a?w=800&q=80"
+    },
+    {
+        "name": "Baseball Cap",
+        "slug": "baseball-cap",
+        "description": "Classic 6-panel baseball cap with embroidery and print customization.",
+        "category": "headwear-accessories",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80"
+    },
+    {
+        "name": "Trucker Hat",
+        "slug": "trucker-hat",
+        "description": "Mesh-back trucker hat with customizable front panel.",
+        "category": "headwear-accessories",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=800&q=80"
+    },
+    {
+        "name": "Beanie",
+        "slug": "beanie",
+        "description": "Warm knit beanie perfect for cold weather events and outdoor activities.",
+        "category": "headwear-accessories",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&q=80"
+    },
+    {
+        "name": "Visor Cap",
+        "slug": "visor-cap",
+        "description": "Sporty visor cap ideal for golf, tennis, and outdoor sports.",
+        "category": "headwear-accessories",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80"
+    },
+    {
+        "name": "Race Bib Numbers",
+        "slug": "race-bib-numbers",
+        "description": "Durable race bib numbers for marathon and running events.",
+        "category": "event-race-essentials",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=800&q=80"
+    },
+    {
+        "name": "Event T-Shirt",
+        "slug": "event-t-shirt",
+        "description": "Standard event t-shirt for conferences, races, and corporate events.",
+        "category": "event-race-essentials",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&q=80"
+    },
+    {
+        "name": "Finisher Medal Ribbon",
+        "slug": "finisher-medal-ribbon",
+        "description": "Custom printed medal ribbons for race finishers and event participants.",
+        "category": "event-race-essentials",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&q=80"
+    },
+    {
+        "name": "Team Warm-Up Suit",
+        "slug": "team-warm-up-suit",
+        "description": "Complete warm-up suit set for team sports and athletic events.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80"
+    },
+    {
+        "name": "Performance Shorts",
+        "slug": "performance-shorts",
+        "description": "Athletic shorts with moisture-wicking fabric for sports and training.",
+        "category": "sportswear-activewear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=800&q=80"
+    },
+    {
+        "name": "Zip-Up Hoodie",
+        "slug": "zip-up-hoodie",
+        "description": "Comfortable zip-up hoodie perfect for casual wear and team uniforms.",
+        "category": "outerwear",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80"
+    },
+    {
+        "name": "Bucket Hat",
+        "slug": "bucket-hat",
+        "description": "Trendy bucket hat with all-around sun protection and custom printing.",
+        "category": "headwear-accessories",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80"
+    },
+    {
+        "name": "Dri-Fit Polo",
+        "slug": "dri-fit-polo",
+        "description": "Moisture-wicking polo shirt ideal for golf, corporate, and sports teams.",
+        "category": "tops-shirts-polo",
+        "status": "published",
+        "image": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=800&q=80"
+    }
+]

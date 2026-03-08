@@ -1,0 +1,18 @@
+td.selectable,
+th.selectable {
+    cursor: pointer;
+
+    input[type='checkbox'] {
+        cursor: pointer;
+    }
+}
+
+input[type='checkbox'].selectable {
+    cursor: pointer;
+}
+
+.selectable {
+    input[type='checkbox'] {
+        cursor: pointer;
+    }
+}

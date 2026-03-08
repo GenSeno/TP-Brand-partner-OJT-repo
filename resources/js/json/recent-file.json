@@ -1,0 +1,22 @@
+[
+    {
+        "Class" : "ti ti-file-description fs-24 text-title",
+        "Name" : "customer_data.txt"
+
+    },
+    {
+        "Class" : "ti ti-file-type-pdf fs-24 text-title",
+        "Name" : "video_player_installer_setup.rar"
+
+    },
+    {
+        "Class" : "fa-regular fa-file-audio fs-24 text-title",
+        "Name" : "recording.mp3"
+
+    },
+    {
+        "Class" : "fa-solid fa-file-zipper fs-24 text-title",
+        "Name" : "header_file.zip"
+
+    }
+]

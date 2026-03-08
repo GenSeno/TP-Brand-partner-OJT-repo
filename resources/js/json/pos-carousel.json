@@ -1,0 +1,44 @@
+[
+    {
+        "Id": "1",
+        "IdName": "all",
+        "Image": "category-01.svg",
+        "Title": "All"
+    },
+    {
+        "Id": "2",
+        "IdName": "headphones",
+        "Image": "category-02.svg",
+        "Title": "Headset"
+    },
+    {
+        "Id": "3",
+        "IdName": "shoes",
+        "Image": "category-03.svg",
+        "Title": "Shoes"
+    },
+    {
+        "Id": "4",
+        "IdName": "mobiles",
+        "Image": "category-04.svg",
+        "Title": "Mobiles"
+    },
+    {
+        "Id": "5",
+        "IdName": "watches",
+        "Image": "category-05.svg",
+        "Title": "Watches"
+    },
+    {
+        "Id": "6",
+        "IdName": "laptops",
+        "Image": "category-06.svg",
+        "Title": "Laptops"
+    },
+    {
+        "Id": "7",
+        "IdName": "appliances",
+        "Image": "category-07.svg",
+        "Title": "Appliance"
+    }
+]

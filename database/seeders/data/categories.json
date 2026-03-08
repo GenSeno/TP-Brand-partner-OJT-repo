@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Tops (Shirts & Polo)",
+        "slug": "tops-shirts-polo"
+    },
+    {
+        "name": "Sportswear & Activewear",
+        "slug": "sportswear-activewear"
+    },
+    {
+        "name": "Outerwear",
+        "slug": "outerwear"
+    },
+    {
+        "name": "Headwear & Accessories",
+        "slug": "headwear-accessories"
+    },
+    {
+        "name": "Event & Race Essentials",
+        "slug": "event-race-essentials"
+    }
+]
