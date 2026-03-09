@@ -6,6 +6,7 @@ use App\Actions\GenerateReference;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Services\InvoiceService;
+use App\Services\TpinkLabService;
 use App\States\JobOrderState\Cancelled;
 
 class OrderObserver
@@ -50,6 +51,10 @@ class OrderObserver
 
             if ($order->status->is(OrderStatus::CANCELLED)) {
                 $order->jobOrder->update(['cancelled_at' => now()]);
+            }
+
+            if ($order->status->is(OrderStatus::SENT_TO_TPINKLAB)) {
+                (new TpinkLabService)->sendOrder($order);
             }
         }
     }

@@ -16,6 +16,7 @@ enum OrderStatus: string
     case UNPAID = 'unpaid';
     case PAID = 'paid';
     case PARTIALLY_PAID = 'partially-paid';
+    case SENT_TO_TPINKLAB = 'sent_to_tpinklab';
     case COMPLETED = 'completed';
     case CANCELLED = 'cancelled';
 
@@ -35,6 +36,7 @@ enum OrderStatus: string
             self::PENDING => 'warning',
             self::UNPAID => 'danger',
             self::PARTIALLY_PAID => 'primary',
+            self::SENT_TO_TPINKLAB => 'info',
             self::COMPLETED => 'success',
             self::CANCELLED => 'secondary',
         };
@@ -46,6 +48,7 @@ enum OrderStatus: string
             self::PENDING => [],
             self::UNPAID => [],
             self::PARTIALLY_PAID => [],
+            self::SENT_TO_TPINKLAB => [],
             self::COMPLETED => [],
             self::CANCELLED => [],
         };
@@ -57,6 +60,7 @@ enum OrderStatus: string
             self::PENDING => [],
             self::UNPAID => [],
             self::PARTIALLY_PAID => [],
+            self::SENT_TO_TPINKLAB => [],
             self::COMPLETED => [],
             self::CANCELLED => [],
         };

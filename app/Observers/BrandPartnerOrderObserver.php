@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Enums\BrandPartnerOrderStatus;
 use App\Models\BrandPartnerOrder;
+use App\Services\TpinkLabService;
 
 class BrandPartnerOrderObserver
 {
@@ -15,6 +17,19 @@ class BrandPartnerOrderObserver
             $order->updateQuietly([
                 'reference' => $this->generateReference($order),
             ]);
+        }
+    }
+
+    /**
+     * Handle the BrandPartnerOrder "updated" event.
+     */
+    public function updated(BrandPartnerOrder $order): void
+    {
+        if (
+            $order->wasChanged('status') &&
+            $order->status === BrandPartnerOrderStatus::SENT_TO_TPINKLAB
+        ) {
+            (new TpinkLabService)->sendOrder($order);
         }
     }
 

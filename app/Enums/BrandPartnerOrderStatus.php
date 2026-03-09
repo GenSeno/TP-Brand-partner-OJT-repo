@@ -14,6 +14,7 @@ enum BrandPartnerOrderStatus: string
 
     case PENDING = 'pending';
     case CONFIRMED = 'confirmed';
+    case SENT_TO_TPINKLAB = 'sent_to_tpinklab';
     case COMPLETED = 'completed';
     case CANCELLED = 'cancelled';
 
@@ -24,7 +25,10 @@ enum BrandPartnerOrderStatus: string
 
     public function getLabel(): string
     {
-        return ucfirst($this->value);
+        return match ($this) {
+            self::SENT_TO_TPINKLAB => 'Sent to TPInkLab',
+            default => ucfirst($this->value),
+        };
     }
 
     public function getColor(): string
@@ -32,6 +36,7 @@ enum BrandPartnerOrderStatus: string
         return match ($this) {
             self::PENDING => 'warning',
             self::CONFIRMED => 'primary',
+            self::SENT_TO_TPINKLAB => 'info',
             self::COMPLETED => 'success',
             self::CANCELLED => 'danger',
         };
