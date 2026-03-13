@@ -99,6 +99,11 @@
                                 <span class="ordered-item-name">{{
                                     line.product_name
                                 }}</span>
+                                <span v-if="line.meta?.color || line.meta?.size" style="font-size:11px;color:#888;display:block;">
+                                    <span v-if="line.meta.color">{{ line.meta.color }}</span>
+                                    <span v-if="line.meta.color && line.meta.size"> / </span>
+                                    <span v-if="line.meta.size">{{ line.meta.size }}</span>
+                                </span>
                                 <span class="ordered-item-meta">
                                     {{ formatCurrency(line.unit_price) }} x
                                     {{ line.quantity }}

@@ -60,21 +60,23 @@ class BrandPartnerCheckoutController extends Controller
         $cartItems = [];
         $subTotal = 0;
 
-        foreach ($cart as $productId => $quantity) {
+        foreach ($cart as $itemKey => $item) {
             $product = BrandPartnerProduct::with('images')
-                ->where('id', $productId)
+                ->where('id', $item['product_id'])
                 ->where('brand_partner_id', $brandPartner->id)
                 ->where('status', BrandPartnerProductStatus::PUBLISHED)
                 ->first();
 
             if ($product) {
-                $itemTotal = $product->price * $quantity;
+                $itemTotal = $product->price * $item['quantity'];
                 $cartItems[] = [
-                    'id' => $product->id,
-                    'product' => $product,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
-                    'total' => $itemTotal,
+                    'id'       => $itemKey,
+                    'product'  => $product,
+                    'color'    => $item['color'] ?? null,
+                    'size'     => $item['size'] ?? null,
+                    'quantity' => $item['quantity'],
+                    'price'    => $product->price,
+                    'total'    => $itemTotal,
                 ];
                 $subTotal += $itemTotal;
             }
@@ -93,7 +95,7 @@ class BrandPartnerCheckoutController extends Controller
                 'discount' => 0,
                 'total' => $subTotal,
             ],
-            'cartCount' => array_sum($cart),
+            'cartCount' => array_sum(array_column($cart, 'quantity')),
         ]);
     }
 
@@ -125,8 +127,8 @@ class BrandPartnerCheckoutController extends Controller
             $subTotal = 0;
             $orderLines = [];
 
-            foreach ($cart as $productId => $quantity) {
-                $product = BrandPartnerProduct::where('id', $productId)
+            foreach ($cart as $itemKey => $item) {
+                $product = BrandPartnerProduct::where('id', $item['product_id'])
                     ->where('brand_partner_id', $brandPartner->id)
                     ->where('status', BrandPartnerProductStatus::PUBLISHED)
                     ->first();
@@ -134,6 +136,10 @@ class BrandPartnerCheckoutController extends Controller
                 if (!$product) {
                     continue;
                 }
+
+                $quantity = $item['quantity'];
+                $color    = $item['color'] ?? null;
+                $size     = $item['size'] ?? null;
 
                 // Check stock
                 if ($product->track_stock && $product->stock < $quantity) {
@@ -143,15 +149,17 @@ class BrandPartnerCheckoutController extends Controller
                 $itemTotal = $product->price * $quantity;
                 $subTotal += $itemTotal;
 
+                $meta = ($color || $size) ? ['color' => $color, 'size' => $size] : null;
+
                 $orderLines[] = [
-                    'product_id' => $product->id,
+                    'product_id'   => $product->id,
                     'product_name' => $product->name,
-                    'quantity' => $quantity,
-                    'unit_price' => $product->price,
-                    'total' => $itemTotal,
+                    'quantity'     => $quantity,
+                    'unit_price'   => $product->price,
+                    'total'        => $itemTotal,
+                    'meta'         => $meta,
                 ];
 
-                // Decrement stock
                 $product->decrementStock($quantity);
             }
 

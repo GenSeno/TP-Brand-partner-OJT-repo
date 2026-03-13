@@ -61,7 +61,14 @@
                                                     object-fit: cover;
                                                 "
                                             />
-                                            <span>{{ line.product_name }}</span>
+                                            <div>
+                                                <span>{{ line.product_name }}</span>
+                                                <div v-if="line.meta?.color || line.meta?.size" style="font-size:11px;color:#888;margin-top:2px;">
+                                                    <span v-if="line.meta.color">Color: <strong>{{ line.meta.color }}</strong></span>
+                                                    <span v-if="line.meta.color && line.meta.size"> &middot; </span>
+                                                    <span v-if="line.meta.size">Size: <strong>{{ line.meta.size }}</strong></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="text-center">

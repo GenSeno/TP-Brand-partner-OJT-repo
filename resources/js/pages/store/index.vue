@@ -181,9 +181,31 @@
                                         }}
                                     </span>
                                 </h5>
+                                <!-- Color & Size chips -->
+                                <div v-if="product.colors_array?.length || product.sizes_array?.length" class="product-options-chips">
+                                    <span
+                                        v-for="color in (product.colors_array ?? []).slice(0, 4)"
+                                        :key="color"
+                                        class="option-chip color-chip"
+                                    >{{ color }}</span>
+                                    <span
+                                        v-for="size in (product.sizes_array ?? []).slice(0, 4)"
+                                        :key="size"
+                                        class="option-chip size-chip"
+                                    >{{ size }}</span>
+                                </div>
+
                                 <div class="add-quantity-wrap">
+                                    <Link
+                                        v-if="product.colors_array?.length || product.sizes_array?.length"
+                                        :href="route('store.brand-partner.product', product.slug)"
+                                        class="btn-add-quantity"
+                                        title="Select options"
+                                    >
+                                        <i class="ri-equalizer-line"></i>
+                                    </Link>
                                     <button
-                                        v-if="product.in_stock"
+                                        v-else-if="product.in_stock"
                                         class="btn-add-quantity"
                                         @click.prevent="addToCart(product)"
                                     >
@@ -874,6 +896,28 @@ const confirmAddToCart = () => {
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.3px;
+}
+
+.product-options-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+.option-chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 0.2px;
+}
+.color-chip {
+    background: rgba(var(--grocery-theme), 0.1);
+    color: rgb(var(--grocery-theme));
+}
+.size-chip {
+    background: #f0f0f0;
+    color: #555;
 }
 
 .product-content {

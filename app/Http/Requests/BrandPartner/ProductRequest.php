@@ -52,6 +52,8 @@ class ProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'compare_price' => ['nullable', 'numeric', 'min:0'],
             'sku' => ['nullable', 'string', 'max:100'],
+            'colors' => ['nullable', 'string', 'max:1000'],
+            'sizes' => ['nullable', 'string', 'max:1000'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'track_stock' => ['nullable', 'boolean'],
             'status' => ['required', Rule::enum(BrandPartnerProductStatus::class)],

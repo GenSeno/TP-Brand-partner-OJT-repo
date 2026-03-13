@@ -50,6 +50,8 @@ class BrandPartnerProduct extends Model
         'price',
         'compare_price',
         'sku',
+        'colors',
+        'sizes',
         'stock',
         'track_stock',
         'status',
@@ -70,6 +72,9 @@ class BrandPartnerProduct extends Model
     protected $appends = [
         'formatted_price',
         'in_stock',
+        'image_url',
+        'colors_array',
+        'sizes_array',
     ];
 
     // Relationships
@@ -120,6 +125,37 @@ class BrandPartnerProduct extends Model
     {
         return Attribute::make(
             get: fn() => $this->isInStock(),
+        );
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->relationLoaded('images')) {
+                    $primary = $this->images->firstWhere('is_primary', true) ?? $this->images->first();
+                    return $primary?->url;
+                }
+                return $this->primaryImage?->url;
+            },
+        );
+    }
+
+    protected function colorsArray(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->colors
+                ? array_values(array_filter(array_map('trim', explode(',', $this->colors))))
+                : [],
+        );
+    }
+
+    protected function sizesArray(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->sizes
+                ? array_values(array_filter(array_map('trim', explode(',', $this->sizes))))
+                : [],
         );
     }
 

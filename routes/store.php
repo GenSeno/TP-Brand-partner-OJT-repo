@@ -35,6 +35,9 @@ Route::group([
     Route::delete('/cart/{itemId}', [BrandPartnerCartController::class, 'remove'])
         ->name('brand-partner.cart.remove');
 
+    Route::delete('/cart', [BrandPartnerCartController::class, 'clear'])
+        ->name('brand-partner.cart.clear');
+
     // Checkout routes
     Route::get('/checkout', [BrandPartnerCheckoutController::class, 'index'])
         ->name('brand-partner.checkout');

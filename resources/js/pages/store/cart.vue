@@ -72,7 +72,11 @@
                                             {{ item.product.name }}
                                         </Link>
                                     </h5>
-                                    <h6 v-if="item.product.sku">
+                                    <h6 v-if="item.color || item.size" class="text-muted" style="font-size:12px;">
+                                        <span v-if="item.color">Color: <strong>{{ item.color }}</strong></span>
+                                        <span v-if="item.size" class="ms-2">Size: <strong>{{ item.size }}</strong></span>
+                                    </h6>
+                                    <h6 v-else-if="item.product.sku" style="font-size:12px;">
                                         SKU: {{ item.product.sku }}
                                     </h6>
                                     <div class="qty-controls">

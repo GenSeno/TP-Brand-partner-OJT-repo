@@ -8,32 +8,40 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class BrandPartnerCartController extends Controller
 {
-    /**
-     * Get the cart session key for a brand partner.
-     */
     protected function getCartKey(string $brandPartnerSlug): string
     {
         return "bp_cart_{$brandPartnerSlug}";
     }
 
-    /**
-     * Get the cart items from session.
-     */
     protected function getCart(Request $request, string $brandPartnerSlug): array
     {
         return $request->session()->get($this->getCartKey($brandPartnerSlug), []);
     }
 
-    /**
-     * Save the cart to session.
-     */
     protected function saveCart(Request $request, string $brandPartnerSlug, array $cart): void
     {
         $request->session()->put($this->getCartKey($brandPartnerSlug), $cart);
+    }
+
+    /**
+     * Cart structure: { itemKey => {product_id, color, size, quantity} }
+     * itemKey is URL-safe: e.g. "5_red_l", "5__" for no color/size.
+     */
+    protected function buildItemKey(int $productId, ?string $color, ?string $size): string
+    {
+        $c = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($color ?? '')));
+        $s = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($size ?? '')));
+        return "{$productId}_{$c}_{$s}";
+    }
+
+    protected function cartTotal(array $cart): int
+    {
+        return array_sum(array_column($cart, 'quantity'));
     }
 
     /**
@@ -51,35 +59,39 @@ class BrandPartnerCartController extends Controller
         $cartItems = [];
         $total = 0;
 
-        foreach ($cart as $productId => $quantity) {
+        foreach ($cart as $itemKey => $item) {
             $product = BrandPartnerProduct::with('images')
-                ->where('id', $productId)
+                ->where('id', $item['product_id'])
                 ->where('brand_partner_id', $brandPartner->id)
                 ->where('status', BrandPartnerProductStatus::PUBLISHED)
                 ->first();
 
-            if ($product) {
-                $itemTotal = $product->price * $quantity;
-                $cartItems[] = [
-                    'id' => $product->id,
-                    'product' => $product,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
-                    'total' => $itemTotal,
-                ];
-                $total += $itemTotal;
+            if (!$product) {
+                continue;
             }
+
+            $itemTotal = $product->price * $item['quantity'];
+            $cartItems[] = [
+                'id'       => $itemKey,
+                'product'  => $product,
+                'color'    => $item['color'] ?? null,
+                'size'     => $item['size'] ?? null,
+                'quantity' => $item['quantity'],
+                'price'    => $product->price,
+                'total'    => $itemTotal,
+            ];
+            $total += $itemTotal;
         }
 
         return Inertia::render('store/cart', [
             'brandPartner' => $brandPartner,
-            'cart' => [
-                'items' => $cartItems,
+            'cart'         => [
+                'items'    => $cartItems,
                 'subtotal' => $total,
                 'discount' => 0,
-                'total' => $total,
+                'total'    => $total,
             ],
-            'cartCount' => array_sum($cart),
+            'cartCount' => $this->cartTotal($cart),
         ]);
     }
 
@@ -90,7 +102,9 @@ class BrandPartnerCartController extends Controller
     {
         $request->validate([
             'product_id' => ['required', 'integer'],
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity'   => ['required', 'integer', 'min:1'],
+            'color'      => ['nullable', 'string', 'max:100'],
+            'size'       => ['nullable', 'string', 'max:50'],
         ]);
 
         $brandPartnerSlug = config('store.brand_partner_slug');
@@ -104,22 +118,26 @@ class BrandPartnerCartController extends Controller
             ->where('status', BrandPartnerProductStatus::PUBLISHED)
             ->firstOrFail();
 
-        // Check stock if tracking is enabled
-        if ($product->track_stock && $product->stock < $request->quantity) {
-            return back()->with('error', __('Insufficient stock available.'));
-        }
+        $color = $request->color ?: null;
+        $size  = $request->size ?: null;
 
+        $itemKey = $this->buildItemKey($product->id, $color, $size);
         $cart = $this->getCart($request, $brandPartnerSlug);
 
-        $currentQty = $cart[$product->id] ?? 0;
+        $currentQty = $cart[$itemKey]['quantity'] ?? 0;
         $newQty = $currentQty + $request->quantity;
 
-        // Check stock for total quantity
         if ($product->track_stock && $product->stock < $newQty) {
             return back()->with('error', __('Insufficient stock available.'));
         }
 
-        $cart[$product->id] = $newQty;
+        $cart[$itemKey] = [
+            'product_id' => $product->id,
+            'color'      => $color,
+            'size'       => $size,
+            'quantity'   => $newQty,
+        ];
+
         $this->saveCart($request, $brandPartnerSlug, $cart);
 
         return back()->with('success', __('Product added to cart.'));
@@ -128,29 +146,20 @@ class BrandPartnerCartController extends Controller
     /**
      * Update cart item quantity.
      */
-    public function update(Request $request, int $itemId)
+    public function update(Request $request, string $itemId)
     {
         $request->validate([
             'quantity' => ['required', 'integer', 'min:1'],
         ]);
 
         $brandPartnerSlug = config('store.brand_partner_slug');
+        $cart = $this->getCart($request, $brandPartnerSlug);
 
-        $brandPartner = BrandPartner::where('slug', $brandPartnerSlug)
-            ->where('status', BrandPartnerStatus::ACTIVE)
-            ->firstOrFail();
-
-        $product = BrandPartnerProduct::where('id', $itemId)
-            ->where('brand_partner_id', $brandPartner->id)
-            ->firstOrFail();
-
-        // Check stock if tracking is enabled
-        if ($product->track_stock && $product->stock < $request->quantity) {
-            return back()->with('error', __('Insufficient stock available.'));
+        if (!isset($cart[$itemId])) {
+            return back()->with('error', __('Cart item not found.'));
         }
 
-        $cart = $this->getCart($request, $brandPartnerSlug);
-        $cart[$itemId] = $request->quantity;
+        $cart[$itemId]['quantity'] = $request->quantity;
         $this->saveCart($request, $brandPartnerSlug, $cart);
 
         return back()->with('success', __('Cart updated.'));
@@ -159,7 +168,7 @@ class BrandPartnerCartController extends Controller
     /**
      * Remove an item from the cart.
      */
-    public function remove(Request $request, int $itemId)
+    public function remove(Request $request, string $itemId)
     {
         $brandPartnerSlug = config('store.brand_partner_slug');
         $cart = $this->getCart($request, $brandPartnerSlug);
@@ -167,5 +176,16 @@ class BrandPartnerCartController extends Controller
         $this->saveCart($request, $brandPartnerSlug, $cart);
 
         return back()->with('success', __('Product removed from cart.'));
+    }
+
+    /**
+     * Clear the entire cart.
+     */
+    public function clear(Request $request)
+    {
+        $brandPartnerSlug = config('store.brand_partner_slug');
+        $this->saveCart($request, $brandPartnerSlug, []);
+
+        return back()->with('success', __('Cart cleared.'));
     }
 }

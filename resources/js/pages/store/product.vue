@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="stock-indicator">
-                        <span v-if="product.in_stock" class="stock-in">
+                        <span v-if="currentInStock" class="stock-in">
                             <i class="ri-checkbox-circle-fill"></i> In Stock
                         </span>
                         <span v-else class="stock-out">
@@ -118,6 +118,42 @@
                     <div class="sku-info" v-if="product.sku">
                         <span>SKU: {{ product.sku }}</span>
                     </div>
+
+                    <!-- Variations: Colors -->
+                    <div v-if="hasColors" class="variation-section">
+                        <div class="variation-label">
+                            Color: <strong>{{ selectedColor || 'Select' }}</strong>
+                        </div>
+                        <div class="color-swatches">
+                            <button
+                                v-for="color in availableColors"
+                                :key="color"
+                                type="button"
+                                class="color-swatch-btn"
+                                :class="{ active: selectedColor === color }"
+                                @click="selectColor(color)"
+                            >{{ color }}</button>
+                        </div>
+                    </div>
+
+                    <!-- Variations: Sizes -->
+                    <div v-if="hasSizes" class="variation-section">
+                        <div class="variation-label">Size:</div>
+                        <div class="size-options">
+                            <button
+                                v-for="size in availableSizes"
+                                :key="size"
+                                type="button"
+                                class="size-btn"
+                                :class="{ active: selectedSize === size }"
+                                @click="selectSize(size)"
+                            >{{ size }}</button>
+                        </div>
+                    </div>
+
+                    <p v-if="hasVariations && !variationReady" class="variation-hint">
+                        Please select{{ hasColors ? ' a color' : '' }}{{ hasColors && hasSizes ? ' and' : '' }}{{ hasSizes ? ' a size' : '' }} to continue.
+                    </p>
 
                     <!-- Desktop Add to Cart (hidden on mobile) -->
                     <div class="desktop-add-section">
@@ -141,7 +177,7 @@
                         </div>
                         <button
                             class="add-cart-btn"
-                            :disabled="!product.in_stock || isAddingToCart"
+                            :disabled="!currentInStock || isAddingToCart || !variationReady"
                             @click="showConfirmModal"
                         >
                             <i class="ri-shopping-cart-2-line"></i>
@@ -259,7 +295,7 @@
             </div>
             <button
                 class="add-cart-mobile-btn"
-                :disabled="!product.in_stock || isAddingToCart"
+                :disabled="!currentInStock || isAddingToCart || !variationReady"
                 @click="showConfirmModal"
             >
                 <i class="ri-shopping-cart-2-line"></i>
@@ -305,6 +341,10 @@
                                     formatCurrency(product.price)
                                 }}</span>
                             </div>
+                        </div>
+                        <div v-if="selectedColor || selectedSize" class="confirm-variation">
+                            <span v-if="selectedColor">Color: <strong>{{ selectedColor }}</strong></span>
+                            <span v-if="selectedSize" class="ms-2">Size: <strong>{{ selectedSize }}</strong></span>
                         </div>
                         <div class="confirm-summary">
                             <div class="summary-row">
@@ -365,6 +405,33 @@ const quantity = ref(1);
 const isAddingToCart = ref(false);
 const selectedImage = ref(props.product.image_url);
 
+// Variations
+const selectedColor = ref(null);
+const selectedSize = ref(null);
+
+const availableColors = computed(() => props.product.colors_array ?? []);
+const availableSizes = computed(() => props.product.sizes_array ?? []);
+const hasColors = computed(() => availableColors.value.length > 0);
+const hasSizes = computed(() => availableSizes.value.length > 0);
+const hasVariations = computed(() => hasColors.value || hasSizes.value);
+
+const variationReady = computed(() => {
+    if (!hasVariations.value) return true;
+    const colorOk = !hasColors.value || selectedColor.value !== null;
+    const sizeOk = !hasSizes.value || selectedSize.value !== null;
+    return colorOk && sizeOk;
+});
+
+const currentInStock = computed(() => props.product.in_stock);
+
+const selectColor = (color) => {
+    selectedColor.value = color === selectedColor.value ? null : color;
+};
+
+const selectSize = (size) => {
+    selectedSize.value = size === selectedSize.value ? null : size;
+};
+
 const discountPercent = computed(() => {
     if (
         !props.product.compare_price ||
@@ -415,6 +482,8 @@ const addToCart = () => {
         {
             product_id: props.product.id,
             quantity: quantity.value,
+            color: selectedColor.value,
+            size: selectedSize.value,
         },
         {
             preserveScroll: true,
@@ -430,6 +499,73 @@ const addToCart = () => {
 </script>
 
 <style scoped>
+/* ========================
+   Variation Selectors
+   ======================== */
+.variation-section {
+    margin: 12px 0;
+}
+.variation-label {
+    font-size: 13px;
+    color: rgb(var(--grocery-title));
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.color-swatch-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.color-swatch-btn.active,
+.color-swatch-btn:hover {
+    border-color: rgb(var(--grocery-theme));
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+.size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.size-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.size-btn.active,
+.size-btn:hover {
+    border-color: rgb(var(--grocery-theme));
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+.variation-hint {
+    font-size: 12px;
+    color: #e57373;
+    margin: 6px 0 0;
+}
+.confirm-variation {
+    font-size: 13px;
+    color: rgb(var(--grocery-content));
+    margin-bottom: 10px;
+}
+
 /* ========================
    Grocery Product Page
    ======================== */

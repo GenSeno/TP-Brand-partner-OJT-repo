@@ -18,7 +18,7 @@ class BrandPartnerStoreController extends Controller
     protected function getCartCount(Request $request, string $brandPartnerSlug): int
     {
         $cart = $request->session()->get("bp_cart_{$brandPartnerSlug}", []);
-        return array_sum($cart);
+        return array_sum(array_column($cart, 'quantity'));
     }
 
     /**

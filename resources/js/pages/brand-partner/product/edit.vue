@@ -57,6 +57,80 @@
                             ></textarea>
                             <input-error :message="form.errors.description" />
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Product Images</label>
+                            <div v-if="productImages.length" class="d-flex flex-wrap gap-2 mb-2">
+                                <div
+                                    v-for="image in productImages"
+                                    :key="image.id"
+                                    class="position-relative"
+                                    style="width: 80px;"
+                                >
+                                    <img
+                                        :src="image.url"
+                                        style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 2px solid;"
+                                        :style="{ borderColor: image.is_primary ? '#0d6efd' : '#dee2e6' }"
+                                    />
+                                    <span
+                                        v-if="image.is_primary"
+                                        class="badge bg-primary position-absolute bottom-0 start-0"
+                                        style="font-size: 9px;"
+                                    >Primary</span>
+                                    <div class="d-flex gap-1 mt-1">
+                                        <button
+                                            v-if="!image.is_primary"
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm flex-fill"
+                                            style="font-size: 10px; padding: 1px 2px;"
+                                            :disabled="imageActionLoading"
+                                            @click="setPrimary(image)"
+                                        >★</button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger btn-sm flex-fill"
+                                            style="font-size: 10px; padding: 1px 2px;"
+                                            :disabled="imageActionLoading"
+                                            @click="deleteImage(image)"
+                                        >×</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input
+                                ref="imageInputRef"
+                                type="file"
+                                class="form-control"
+                                multiple
+                                accept="image/*"
+                                :disabled="imageActionLoading"
+                                @change="uploadNewImages"
+                            />
+                            <small class="text-muted">Upload additional images.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Colors</label>
+                            <input
+                                v-model="form.data.colors"
+                                type="text"
+                                class="form-control"
+                                placeholder="e.g. Red, Blue, Green"
+                            />
+                            <small class="text-muted">Separate with commas.</small>
+                            <input-error :message="form.errors.colors" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Sizes</label>
+                            <input
+                                v-model="form.data.sizes"
+                                type="text"
+                                class="form-control"
+                                placeholder="e.g. S, M, L, XL"
+                            />
+                            <small class="text-muted">Separate with commas.</small>
+                            <input-error :message="form.errors.sizes" />
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -219,7 +293,8 @@
 import { useAxiosForm } from '@/composables/axiosForm';
 import * as alert from '@/helpers/alert';
 import { Head, router } from '@inertiajs/vue3';
-import { computed, useTemplateRef } from 'vue';
+import { ref, computed, useTemplateRef } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     product: Object,
@@ -229,6 +304,9 @@ const props = defineProps({
 });
 
 const modalRef = useTemplateRef('modalRef');
+const imageInputRef = useTemplateRef('imageInputRef');
+const productImages = ref([...(props.product.images ?? [])]);
+const imageActionLoading = ref(false);
 
 const form = useAxiosForm({
     name: props.product.name,
@@ -242,6 +320,8 @@ const form = useAxiosForm({
         ? props.product.compare_price / 100
         : '',
     sku: props.product.sku || '',
+    colors: props.product.colors || '',
+    sizes: props.product.sizes || '',
     stock: props.product.stock,
     track_stock: props.product.track_stock,
     status: props.product.status,
@@ -260,6 +340,42 @@ const onCategoryChange = () => {
     if (!showEventSelect.value) {
         form.data.event_id = '';
     }
+};
+
+const uploadNewImages = async (e) => {
+    const files = Array.from(e.target.files);
+    e.target.value = '';
+    imageActionLoading.value = true;
+    for (const file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await axios.post(
+            route('brand-partner.products.images.store', props.product.id),
+            formData,
+        );
+        productImages.value.push(response.data.image);
+    }
+    imageActionLoading.value = false;
+};
+
+const deleteImage = async (image) => {
+    imageActionLoading.value = true;
+    await axios.delete(
+        route('brand-partner.products.images.destroy', [props.product.id, image.id]),
+    );
+    productImages.value = productImages.value.filter((img) => img.id !== image.id);
+    imageActionLoading.value = false;
+};
+
+const setPrimary = async (image) => {
+    imageActionLoading.value = true;
+    await axios.post(
+        route('brand-partner.products.images.primary', [props.product.id, image.id]),
+    );
+    productImages.value.forEach((img) => {
+        img.is_primary = img.id === image.id;
+    });
+    imageActionLoading.value = false;
 };
 
 const submitForm = () => {

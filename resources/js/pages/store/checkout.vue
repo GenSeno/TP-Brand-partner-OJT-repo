@@ -164,6 +164,11 @@
                                     <span class="si-name">{{
                                         item.product.name
                                     }}</span>
+                                    <span v-if="item.color || item.size" style="font-size:11px;color:#888;">
+                                        <span v-if="item.color">{{ item.color }}</span>
+                                        <span v-if="item.color && item.size"> / </span>
+                                        <span v-if="item.size">{{ item.size }}</span>
+                                    </span>
                                     <span class="si-each"
                                         >{{
                                             formatCurrency(item.price)

@@ -6,7 +6,6 @@ use App\Enums\BrandPartnerStatus;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Response as InertiaResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureBrandPartnerIsActive
@@ -14,7 +13,7 @@ class EnsureBrandPartnerIsActive
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next): Response|InertiaResponse
+    public function handle(Request $request, Closure $next): mixed
     {
         $brandPartner = Auth::guard('brand_partner')->user();
 

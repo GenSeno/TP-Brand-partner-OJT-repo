@@ -58,6 +58,42 @@
                             ></textarea>
                             <input-error :message="form.errors.description" />
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Product Images</label>
+                            <input
+                                ref="imageInputRef"
+                                type="file"
+                                class="form-control"
+                                multiple
+                                accept="image/*"
+                                @change="onImagesSelected"
+                            />
+                            <small class="text-muted">First image will be set as primary.</small>
+                            <div v-if="selectedImages.length" class="d-flex flex-wrap gap-2 mt-2">
+                                <div
+                                    v-for="(img, idx) in selectedImages"
+                                    :key="idx"
+                                    class="position-relative"
+                                >
+                                    <img
+                                        :src="img.preview"
+                                        style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #dee2e6;"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-sm position-absolute top-0 end-0"
+                                        style="padding: 1px 5px; font-size: 11px; line-height: 1.4;"
+                                        @click="removeSelectedImage(idx)"
+                                    >×</button>
+                                    <span
+                                        v-if="idx === 0"
+                                        class="badge bg-primary position-absolute bottom-0 start-0"
+                                        style="font-size: 9px;"
+                                    >Primary</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -152,6 +188,30 @@
                             <input-error :message="form.errors.sku" />
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Colors</label>
+                            <input
+                                v-model="form.data.colors"
+                                type="text"
+                                class="form-control"
+                                placeholder="e.g. Red, Blue, Green"
+                            />
+                            <small class="text-muted">Separate with commas.</small>
+                            <input-error :message="form.errors.colors" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Sizes</label>
+                            <input
+                                v-model="form.data.sizes"
+                                type="text"
+                                class="form-control"
+                                placeholder="e.g. S, M, L, XL"
+                            />
+                            <small class="text-muted">Separate with commas.</small>
+                            <input-error :message="form.errors.sizes" />
+                        </div>
+
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label">Stock</label>
@@ -216,8 +276,8 @@
                     >
                         Cancel
                     </button>
-                    <submit-btn :loading="form.processing">
-                        Create Product
+                    <submit-btn :loading="form.processing || uploadingImages">
+                        {{ uploadingImages ? 'Uploading Images...' : 'Create Product' }}
                     </submit-btn>
                 </div>
             </div>
@@ -230,6 +290,7 @@ import { useAxiosForm } from '@/composables/axiosForm';
 import * as alert from '@/helpers/alert';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, useTemplateRef } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     categories: Array,
@@ -238,7 +299,10 @@ const props = defineProps({
 });
 
 const modalRef = useTemplateRef('modalRef');
+const imageInputRef = useTemplateRef('imageInputRef');
 const createAnother = ref(false);
+const selectedImages = ref([]);
+const uploadingImages = ref(false);
 
 const form = useAxiosForm({
     name: '',
@@ -250,6 +314,8 @@ const form = useAxiosForm({
     price: '',
     compare_price: '',
     sku: '',
+    colors: '',
+    sizes: '',
     stock: 0,
     track_stock: false,
     status: 'draft',
@@ -270,12 +336,42 @@ const onCategoryChange = () => {
     }
 };
 
+const onImagesSelected = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+        selectedImages.value.push({ file, preview: URL.createObjectURL(file) });
+    });
+    e.target.value = '';
+};
+
+const removeSelectedImage = (idx) => {
+    URL.revokeObjectURL(selectedImages.value[idx].preview);
+    selectedImages.value.splice(idx, 1);
+};
+
+const uploadImages = async (productId) => {
+    for (const img of selectedImages.value) {
+        const formData = new FormData();
+        formData.append('image', img.file);
+        await axios.post(
+            route('brand-partner.products.images.store', productId),
+            formData,
+        );
+    }
+};
+
 const submitForm = () => {
     form.post(route('brand-partner.products.store'), {
-        onSuccess: ({ data }) => {
+        onSuccess: async ({ data }) => {
+            if (selectedImages.value.length > 0) {
+                uploadingImages.value = true;
+                await uploadImages(data.product.id);
+                uploadingImages.value = false;
+            }
             alert.showSuccess(data.message || 'Product created successfully.');
             if (createAnother.value) {
                 form.reset();
+                selectedImages.value = [];
                 router.reload();
             } else {
                 modalRef.value.close();
