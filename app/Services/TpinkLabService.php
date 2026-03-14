@@ -42,6 +42,65 @@ class TpinkLabService
         }
     }
 
+    public function sendOrderToAdmin(BrandPartnerOrder $order): void
+    {
+        try {
+            $payload = $this->buildAdminOrderPayload($order);
+
+            $response = Http::withHeaders([
+                'X-API-Key' => config('services.tpinklab.api_key'),
+            ])->post(config('services.tpinklab.admin_api_url'), $payload);
+
+            if ($response->failed()) {
+                Log::error('TpinkLab Admin API returned an error', [
+                    'order_id' => $order->id,
+                    'http_status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('TpinkLab Admin API request failed', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    protected function buildAdminOrderPayload(BrandPartnerOrder $order): array
+    {
+        $order->loadMissing(['lines.product.images', 'brandPartner']);
+
+        $nameParts = explode(' ', trim($order->customer_name), 2);
+        $firstName = $nameParts[0] ?? '';
+        $lastName = $nameParts[1] ?? $firstName;
+
+        $payload = [
+            'notes' => $order->notes,
+            'status' => 'pending',
+            'address' => [
+                'first_name' => $firstName,
+                'last_name'  => $lastName,
+                'email'      => $order->customer_email,
+                'phone'      => $order->customer_phone ?? '-',
+                'line1'      => '-',
+                'city'       => '-',
+                'province'   => '-',
+                'postcode'   => '0000',
+                'country_id' => 175,
+            ],
+            'items' => $order->lines->map(fn($line) => [
+                'name'              => $line->product_name,
+                'quantity'          => $line->quantity,
+                'price'             => round($line->unit_price / 100, 2),
+                'sku'               => $line->product?->sku ?? null,
+                'short_description' => $line->product?->short_description ?? null,
+                'product_image'     => $line->product?->images->first()?->url ?? null,
+            ])->values()->all(),
+        ];
+
+        return $payload;
+    }
+
     protected function buildBrandPartnerOrderPayload(BrandPartnerOrder $order): array
     {
         $order->loadMissing(['brandPartner', 'lines.product']);

@@ -38,6 +38,7 @@ return [
     'tpinklab' => [
         'api_url' => env('TPINKLAB_API_URL', 'https://tpinklab.com/brand-partner/send-so'),
         'api_key' => env('TPINKLAB_API_KEY'),
+        'admin_api_url' => env('TPINKLAB_ADMIN_API_URL', 'http://localhost:8000/api/orders'),
     ],
 
 ];

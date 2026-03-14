@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BrandPartner;
 use App\Enums\BrandPartnerOrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartnerOrder;
+use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -81,6 +82,8 @@ class OrderController extends Controller
         }
 
         $order->confirm();
+
+        (new TpinkLabService)->sendOrderToAdmin($order);
 
         return back()->with('success', __('Order confirmed successfully.'));
     }
