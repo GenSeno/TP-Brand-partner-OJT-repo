@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @property int $id
@@ -50,7 +49,7 @@ class BrandPartnerProductImage extends Model
     protected function url(): Attribute
     {
         return Attribute::make(
-            get: fn() => Storage::url($this->path),
+            get: fn() => asset('storage/' . $this->path),
         );
     }
 
