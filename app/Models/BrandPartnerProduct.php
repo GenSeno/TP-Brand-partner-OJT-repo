@@ -67,6 +67,9 @@ class BrandPartnerProduct extends Model
     ];
 
     protected $casts = [
+        'brand_partner_id' => 'integer',
+        'category_id'      => 'integer',
+        'event_id'         => 'integer',
         'price' => 'integer',
         'compare_price' => 'integer',
         'stock' => 'integer',

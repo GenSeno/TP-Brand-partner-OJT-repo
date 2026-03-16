@@ -125,7 +125,7 @@ class OrderController extends Controller
      */
     protected function authorize(BrandPartnerOrder $order)
     {
-        if ($order->brand_partner_id !== $this->brandPartner()->id) {
+        if ((int) $order->brand_partner_id !== (int) $this->brandPartner()->id) {
             abort(403);
         }
     }

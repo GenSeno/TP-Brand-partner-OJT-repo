@@ -104,7 +104,7 @@ class ProductImageController extends Controller
      */
     protected function authorize(BrandPartnerProduct $product)
     {
-        if ($product->brand_partner_id !== $this->brandPartner()->id) {
+        if ((int) $product->brand_partner_id !== (int) $this->brandPartner()->id) {
             abort(403);
         }
     }

@@ -41,7 +41,8 @@ class TpinkLabService
                 'description'        => $product->description,
                 'status'             => $product->status instanceof \BackedEnum ? $product->status->value : $product->status,
                 'product_image'      => $product->images->first()?->url ?? null,
-                'callback_url'       => config('services.tpinklab.brandpartner_callback_url'),
+                'callback_url'       => config('services.tpinklab.brandpartner_callback_url')
+                    ?: rtrim(config('app.url'), '/') . '/api/products',
             ];
 
             $response = Http::withHeaders([

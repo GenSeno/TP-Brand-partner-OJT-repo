@@ -140,7 +140,7 @@ class CategoryController extends Controller
      */
     protected function authorize(BrandPartnerCategory $category)
     {
-        if ($category->brand_partner_id !== $this->brandPartner()->id) {
+        if ((int) $category->brand_partner_id !== (int) $this->brandPartner()->id) {
             abort(403);
         }
     }
