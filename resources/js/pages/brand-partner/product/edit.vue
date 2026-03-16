@@ -134,6 +134,27 @@
                     </div>
 
                     <div class="col-md-4">
+                        <!-- Approval Status Banner -->
+                        <div
+                            v-if="product.approval_status !== 'approved'"
+                            class="alert d-flex align-items-start gap-2 mb-3 p-2"
+                            :class="product.approval_status === 'rejected' ? 'alert-danger' : 'alert-warning'"
+                            style="font-size: 13px;"
+                        >
+                            <vue-feather type="info" size="16" class="flex-shrink-0 mt-1" />
+                            <div>
+                                <template v-if="product.approval_status === 'pending'">
+                                    <strong>Pending Approval</strong> — This product is awaiting TPInkAdmin review. Publishing is disabled until approved.
+                                </template>
+                                <template v-else-if="product.approval_status === 'rejected'">
+                                    <strong>Rejected</strong> — This product was rejected by TPInkAdmin.
+                                    <div v-if="product.approval_notes" class="mt-1">
+                                        <em>Reason: {{ product.approval_notes }}</em>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label required">Category</label>
                             <select
@@ -181,8 +202,9 @@
                                     v-for="(label, value) in statusOptions"
                                     :key="value"
                                     :value="value"
+                                    :disabled="value === 'published' && product.approval_status !== 'approved'"
                                 >
-                                    {{ label }}
+                                    {{ label }}{{ value === 'published' && product.approval_status !== 'approved' ? ' (requires approval)' : '' }}
                                 </option>
                             </select>
                             <input-error :message="form.errors.status" />

@@ -74,6 +74,11 @@ class TpinkLabService
         $firstName = $nameParts[0] ?? '';
         $lastName = $nameParts[1] ?? $firstName;
 
+        $shippingAddress = $order->meta ? ($order->meta['shipping_address'] ?? null) : null;
+        $addr = $shippingAddress instanceof \ArrayObject
+            ? $shippingAddress
+            : (is_array($shippingAddress) ? $shippingAddress : []);
+
         $payload = [
             'notes' => $order->notes,
             'status' => 'pending',
@@ -81,12 +86,14 @@ class TpinkLabService
                 'first_name' => $firstName,
                 'last_name'  => $lastName,
                 'email'      => $order->customer_email,
-                'phone'      => $order->customer_phone ?? '-',
-                'line1'      => '-',
-                'city'       => '-',
-                'province'   => '-',
-                'postcode'   => '0000',
-                'country_id' => 175,
+                'phone'      => $order->customer_phone ?? null,
+                'line1'      => $addr['line1'] ?? null,
+                'line2'      => $addr['line2'] ?? null,
+                'barangay'   => $addr['barangay'] ?? null,
+                'city'       => $addr['city'] ?? null,
+                'province'   => $addr['province'] ?? null,
+                'postcode'   => $addr['postcode'] ?? null,
+                'country_id' => $addr['country_id'] ?? 175,
             ],
             'items' => $order->lines->map(fn($line) => [
                 'name'              => $line->product_name,

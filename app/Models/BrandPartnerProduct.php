@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BrandPartnerProductApprovalStatus;
 use App\Enums\BrandPartnerProductStatus;
 use App\Lunar\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,6 +28,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $stock
  * @property bool $track_stock
  * @property BrandPartnerProductStatus $status
+ * @property BrandPartnerProductApprovalStatus $approval_status
+ * @property ?string $approval_notes
+ * @property ?\Illuminate\Support\Carbon $approved_at
  * @property bool $featured
  * @property ?array $meta
  * @property ?\Illuminate\Support\Carbon $created_at
@@ -55,6 +59,9 @@ class BrandPartnerProduct extends Model
         'stock',
         'track_stock',
         'status',
+        'approval_status',
+        'approval_notes',
+        'approved_at',
         'featured',
         'meta',
     ];
@@ -64,8 +71,10 @@ class BrandPartnerProduct extends Model
         'compare_price' => 'integer',
         'stock' => 'integer',
         'track_stock' => 'boolean',
-        'status' => BrandPartnerProductStatus::class,
-        'featured' => 'boolean',
+        'status'          => BrandPartnerProductStatus::class,
+        'approval_status' => BrandPartnerProductApprovalStatus::class,
+        'approved_at'     => 'datetime',
+        'featured'        => 'boolean',
         'meta' => AsArrayObject::class,
     ];
 
@@ -214,6 +223,26 @@ class BrandPartnerProduct extends Model
         return $this->status === BrandPartnerProductStatus::DISABLED;
     }
 
+    public function isPendingApproval(): bool
+    {
+        return $this->approval_status === BrandPartnerProductApprovalStatus::PENDING;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approval_status === BrandPartnerProductApprovalStatus::APPROVED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->approval_status === BrandPartnerProductApprovalStatus::REJECTED;
+    }
+
+    public function canBePublished(): bool
+    {
+        return $this->approval_status === BrandPartnerProductApprovalStatus::APPROVED;
+    }
+
     public function isInStock(): bool
     {
         if (!$this->track_stock) {
@@ -232,9 +261,14 @@ class BrandPartnerProduct extends Model
 
     public function toggleStatus(): bool
     {
-        $this->status = $this->status === BrandPartnerProductStatus::DISABLED
-            ? BrandPartnerProductStatus::PUBLISHED
-            : BrandPartnerProductStatus::DISABLED;
+        if ($this->status === BrandPartnerProductStatus::DISABLED) {
+            // Only allow toggling back to Published if approved
+            $this->status = $this->canBePublished()
+                ? BrandPartnerProductStatus::PUBLISHED
+                : BrandPartnerProductStatus::DRAFT;
+        } else {
+            $this->status = BrandPartnerProductStatus::DISABLED;
+        }
 
         return $this->save();
     }

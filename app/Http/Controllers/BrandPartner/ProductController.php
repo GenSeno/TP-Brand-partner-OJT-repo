@@ -81,9 +81,14 @@ class ProductController extends Controller
         $product = DB::transaction(function () use ($request) {
             $product = $this->brandPartner()->products()->create([
                 ...$request->validated(),
-                'slug' => $request->slug ?? Str::slug($request->name),
-                'price' => (int) ($request->price * 100),
-                'compare_price' => $request->compare_price ? (int) ($request->compare_price * 100) : null,
+                'slug'            => $request->slug ?? Str::slug($request->name),
+                'price'           => (int) ($request->price * 100),
+                'compare_price'   => $request->compare_price ? (int) ($request->compare_price * 100) : null,
+                // New products always start as draft pending admin approval
+                'status'          => \App\Enums\BrandPartnerProductStatus::DRAFT,
+                'approval_status' => 'pending',
+                'approval_notes'  => null,
+                'approved_at'     => null,
             ]);
 
             return $product;
@@ -134,6 +139,14 @@ class ProductController extends Controller
     public function update(ProductRequest $request, BrandPartnerProduct $product)
     {
         $this->authorize($product);
+
+        // Prevent publishing without approval
+        if ($request->status === 'published' && ! $product->canBePublished()) {
+            return response()->json([
+                'message' => 'Product must be approved by TPInkAdmin before it can be published.',
+                'errors'  => ['status' => ['Product requires TPInkAdmin approval before publishing.']],
+            ], 422);
+        }
 
         DB::transaction(function () use ($request, $product) {
             $data = $request->validated();

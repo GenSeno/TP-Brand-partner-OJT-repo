@@ -86,6 +86,15 @@
                     </span>
                 </template>
 
+                <template #approval_status="{ row }">
+                    <span class="badge" :class="`bg-${getApprovalColor(row.approval_status)}`">
+                        {{ getApprovalLabel(row.approval_status) }}
+                    </span>
+                    <div v-if="row.approval_status === 'rejected' && row.approval_notes" class="small text-danger mt-1" style="max-width: 180px; white-space: normal;">
+                        {{ row.approval_notes }}
+                    </div>
+                </template>
+
                 <template #action="{ row, value }">
                     <div class="action-table-data">
                         <div class="edit-delete-action">
@@ -142,6 +151,7 @@ const columns = [
     { title: 'Price', dataIndex: 'price', key: 'price', sortable: true },
     { title: 'Stock', dataIndex: 'stock', key: 'stock' },
     { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
+    { title: 'Approval', dataIndex: 'approval_status', key: 'approval_status' },
     { title: '', dataIndex: 'id', key: 'action' },
 ];
 
@@ -189,6 +199,14 @@ const getStatusColor = (status) => {
         disabled: 'secondary',
     };
     return colors[status] || 'secondary';
+};
+
+const getApprovalColor = (status) => {
+    return { pending: 'warning', approved: 'success', rejected: 'danger' }[status] ?? 'secondary';
+};
+
+const getApprovalLabel = (status) => {
+    return { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' }[status] ?? status;
 };
 
 const getProductImage = (product) => {

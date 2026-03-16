@@ -134,6 +134,11 @@
                             <input-error :message="form.errors.event_id" />
                         </div>
 
+                        <div class="alert alert-warning d-flex align-items-start gap-2 mb-3 p-2" style="font-size: 13px;">
+                            <vue-feather type="info" size="16" class="flex-shrink-0 mt-1" />
+                            <span>New products require <strong>TPInkAdmin approval</strong> before they can be published. Products are saved as <em>Draft</em> until approved.</span>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label required">Status</label>
                             <select
@@ -141,7 +146,7 @@
                                 class="form-select"
                             >
                                 <option
-                                    v-for="(label, value) in statusOptions"
+                                    v-for="(label, value) in allowedStatusOptions"
                                     :key="value"
                                     :value="value"
                                 >
@@ -320,6 +325,12 @@ const form = useAxiosForm({
     track_stock: false,
     status: 'draft',
     featured: false,
+});
+
+// New products cannot be published — exclude 'published' from options
+const allowedStatusOptions = computed(() => {
+    const { published: _removed, ...rest } = props.statusOptions;
+    return rest;
 });
 
 const selectedCategory = computed(() => {

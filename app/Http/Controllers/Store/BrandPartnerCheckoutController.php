@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerOrder;
 use App\Models\BrandPartnerProduct;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -87,6 +88,9 @@ class BrandPartnerCheckoutController extends Controller
                 ->with('error', __('Your cart is empty.'));
         }
 
+        $countries = Country::orderBy('name')->get();
+        $defaultCountryId = Country::where('iso2', 'PH')->value('id');
+
         return Inertia::render('store/checkout', [
             'brandPartner' => $brandPartner,
             'cart' => [
@@ -96,6 +100,8 @@ class BrandPartnerCheckoutController extends Controller
                 'total' => $subTotal,
             ],
             'cartCount' => array_sum(array_column($cart, 'quantity')),
+            'countries' => $countries,
+            'defaultCountryId' => $defaultCountryId,
         ]);
     }
 
@@ -105,10 +111,17 @@ class BrandPartnerCheckoutController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_name' => ['required', 'string', 'max:255'],
-            'customer_email' => ['required', 'email', 'max:255'],
-            'customer_phone' => ['nullable', 'string', 'max:50'],
-            'notes' => ['nullable', 'string'],
+            'customer_name'       => ['required', 'string', 'max:255'],
+            'customer_email'      => ['required', 'email', 'max:255'],
+            'customer_phone'      => ['nullable', 'string', 'max:50'],
+            'shipping_line1'      => ['nullable', 'string', 'max:255'],
+            'shipping_line2'      => ['nullable', 'string', 'max:255'],
+            'shipping_province'   => ['nullable', 'string', 'max:255'],
+            'shipping_city'       => ['nullable', 'string', 'max:255'],
+            'shipping_barangay'   => ['nullable', 'string', 'max:255'],
+            'shipping_postcode'   => ['nullable', 'string', 'max:20'],
+            'shipping_country_id' => ['nullable', 'integer'],
+            'notes'               => ['nullable', 'string'],
         ]);
 
         $brandPartnerSlug = config('store.brand_partner_slug');
@@ -181,6 +194,17 @@ class BrandPartnerCheckoutController extends Controller
                 'total' => $subTotal,
                 'notes' => $request->notes,
                 'placed_at' => now(),
+                'meta' => [
+                    'shipping_address' => [
+                        'line1'      => $request->shipping_line1,
+                        'line2'      => $request->shipping_line2,
+                        'province'   => $request->shipping_province,
+                        'city'       => $request->shipping_city,
+                        'barangay'   => $request->shipping_barangay,
+                        'postcode'   => $request->shipping_postcode,
+                        'country_id' => $request->shipping_country_id,
+                    ],
+                ],
             ]);
 
             // Create order lines

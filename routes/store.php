@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Store\BrandPartnerCartController;
 use App\Http\Controllers\Store\BrandPartnerCheckoutController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
@@ -44,6 +45,11 @@ Route::group([
 
     Route::post('/checkout', [BrandPartnerCheckoutController::class, 'store'])
         ->name('brand-partner.checkout.store');
+
+    // Address lookup routes (public, used by checkout form)
+    Route::get('/address/provinces', [AddressController::class, 'provinces'])->name('address.provinces');
+    Route::get('/address/cities', [AddressController::class, 'cities'])->name('address.cities');
+    Route::post('/address/states', [AddressController::class, 'states'])->name('address.states');
 
     // Order confirmation
     Route::get('/order/{reference}', [BrandPartnerCheckoutController::class, 'confirmation'])

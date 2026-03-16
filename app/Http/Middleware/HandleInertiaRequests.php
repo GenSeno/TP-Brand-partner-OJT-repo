@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BrandPartnerProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -42,6 +44,11 @@ class HandleInertiaRequests extends Middleware
                 'info' => fn() => $request->session()->get('info'),
                 'warning' => fn() => $request->session()->get('warning'),
             ],
+            'pendingProductsCount' => fn() => ($bp = Auth::guard('brand_partner')->user())
+                ? BrandPartnerProduct::where('brand_partner_id', $bp->id)
+                    ->where('approval_status', 'pending')
+                    ->count()
+                : 0,
         ];
     }
 }

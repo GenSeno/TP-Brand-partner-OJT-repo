@@ -99,23 +99,141 @@
                             <i class="ri-map-pin-line"></i>
                             <h5>Shipping Address</h5>
                         </div>
-                        <div class="form-group">
-                            <label class="required">Address</label>
-                            <textarea
-                                v-model="form.shipping_address"
-                                rows="3"
+
+                        <!-- Street Address -->
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label>Street Address</label>
+                            <input
+                                v-model="form.shipping_line1"
+                                type="text"
                                 class="grocery-input"
-                                :class="{
-                                    'input-error': form.errors.shipping_address,
-                                }"
-                                placeholder="Enter your complete shipping address"
-                                required
-                            ></textarea>
-                            <span
-                                class="error-text"
-                                v-if="form.errors.shipping_address"
-                            >
-                                {{ form.errors.shipping_address }}
+                                :class="{ 'input-error': form.errors.shipping_line1 }"
+                                placeholder="House number and street name"
+                            />
+                            <span class="error-text" v-if="form.errors.shipping_line1">
+                                {{ form.errors.shipping_line1 }}
+                            </span>
+                            <input
+                                v-model="form.shipping_line2"
+                                type="text"
+                                class="grocery-input"
+                                :class="{ 'input-error': form.errors.shipping_line2 }"
+                                placeholder="Apartment, suite, unit, etc."
+                                style="margin-top: 8px;"
+                            />
+                            <span class="error-text" v-if="form.errors.shipping_line2">
+                                {{ form.errors.shipping_line2 }}
+                            </span>
+                        </div>
+
+                        <!-- Country / Province -->
+                        <div class="form-row-grid" style="margin-bottom: 16px;">
+                            <div class="form-group">
+                                <label>Country/Region</label>
+                                <select
+                                    v-model="form.shipping_country_id"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_country_id }"
+                                >
+                                    <option value="">Select a country</option>
+                                    <option v-for="country in countries" :key="country.id" :value="country.id">
+                                        {{ country.emoji }} {{ country.name }}
+                                    </option>
+                                </select>
+                                <span class="error-text" v-if="form.errors.shipping_country_id">
+                                    {{ form.errors.shipping_country_id }}
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label>Province</label>
+                                <select
+                                    v-if="isShippingPH"
+                                    v-model="form.shipping_province"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_province }"
+                                >
+                                    <option value="">Select a province</option>
+                                    <option v-for="p in provinces" :key="p.id" :value="p.province_name">
+                                        {{ p.province_name }}
+                                    </option>
+                                </select>
+                                <input
+                                    v-else
+                                    v-model="form.shipping_province"
+                                    type="text"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_province }"
+                                    placeholder="e.g. N/A"
+                                />
+                                <span class="error-text" v-if="form.errors.shipping_province">
+                                    {{ form.errors.shipping_province }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- City / Barangay -->
+                        <div class="form-row-grid" style="margin-bottom: 16px;">
+                            <div class="form-group">
+                                <label>City</label>
+                                <select
+                                    v-if="isShippingPH && cities.length > 0"
+                                    v-model="form.shipping_city"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_city }"
+                                >
+                                    <option value="">Select a city</option>
+                                    <option v-for="c in cities" :key="c.id" :value="c.city_name">
+                                        {{ c.city_name }}
+                                    </option>
+                                </select>
+                                <select
+                                    v-else-if="!isShippingPH && cities.length > 0"
+                                    v-model="form.shipping_city"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_city }"
+                                >
+                                    <option value="">Select a city</option>
+                                    <option v-for="c in cities" :key="c.value" :value="c.value">
+                                        {{ c.label }}
+                                    </option>
+                                </select>
+                                <input
+                                    v-else
+                                    v-model="form.shipping_city"
+                                    type="text"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_city }"
+                                    placeholder="Enter city"
+                                />
+                                <span class="error-text" v-if="form.errors.shipping_city">
+                                    {{ form.errors.shipping_city }}
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label>Barangay</label>
+                                <input
+                                    v-model="form.shipping_barangay"
+                                    type="text"
+                                    class="grocery-input"
+                                    :class="{ 'input-error': form.errors.shipping_barangay }"
+                                />
+                                <span class="error-text" v-if="form.errors.shipping_barangay">
+                                    {{ form.errors.shipping_barangay }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Postal / Zip Code -->
+                        <div class="form-group">
+                            <label>Postal / Zip Code</label>
+                            <input
+                                v-model="form.shipping_postcode"
+                                type="text"
+                                class="grocery-input"
+                                :class="{ 'input-error': form.errors.shipping_postcode }"
+                            />
+                            <span class="error-text" v-if="form.errors.shipping_postcode">
+                                {{ form.errors.shipping_postcode }}
                             </span>
                         </div>
                     </div>
@@ -226,18 +344,66 @@
 
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { computed, ref, watch } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     brandPartner: Object,
     cart: Object,
+    countries: Array,
+    defaultCountryId: Number,
+});
+
+const PHILIPPINES_ID = props.defaultCountryId ?? 175;
+
+const provinces = ref([]);
+const cities = ref([]);
+
+axios.get(route('store.address.provinces')).then(({ data }) => {
+    provinces.value = data;
 });
 
 const form = useForm({
     customer_name: '',
     customer_email: '',
     customer_phone: '',
-    shipping_address: '',
+    shipping_line1: '',
+    shipping_line2: '',
+    shipping_province: '',
+    shipping_city: '',
+    shipping_barangay: '',
+    shipping_postcode: '',
+    shipping_country_id: PHILIPPINES_ID,
     notes: '',
+});
+
+const isShippingPH = computed(() => form.shipping_country_id === PHILIPPINES_ID);
+
+watch(() => form.shipping_country_id, (value) => {
+    form.shipping_province = '';
+    form.shipping_city = '';
+    cities.value = [];
+    if (value && value !== PHILIPPINES_ID) {
+        axios
+            .post(route('store.address.states'), { country_id: value })
+            .then(({ data }) => {
+                cities.value = data.map((s) => ({ label: s.name, value: s.name }));
+            });
+    }
+});
+
+watch(() => form.shipping_province, (value) => {
+    form.shipping_city = '';
+    const province = provinces.value.find((p) => p.province_name === value);
+    if (!province) {
+        cities.value = [];
+        return;
+    }
+    axios
+        .get(route('store.address.cities'), { params: { province_id: province.id } })
+        .then(({ data }) => {
+            cities.value = data;
+        });
 });
 
 const formatCurrency = (amount) => {
