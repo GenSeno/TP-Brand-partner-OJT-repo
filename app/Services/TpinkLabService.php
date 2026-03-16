@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BrandPartnerOrder;
+use App\Models\BrandPartnerProduct;
 use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Support\Facades\Http;
@@ -10,6 +11,54 @@ use Illuminate\Support\Facades\Log;
 
 class TpinkLabService
 {
+    /**
+     * Submit a newly created product to TPInkAdmin for approval.
+     */
+    public function submitProductForApproval(BrandPartnerProduct $product): void
+    {
+        $url = config('services.tpinklab.admin_api_url');
+        // Derive product submission URL from admin_api_url base
+        $baseUrl = rtrim(preg_replace('#/api/.*#', '', $url), '/');
+        $endpoint = $baseUrl . '/api/brand-partner-products';
+
+        try {
+            $product->loadMissing(['images', 'brandPartner']);
+
+            $payload = [
+                'brand_partner_id'   => $product->brand_partner_id,
+                'brand_partner_slug' => $product->brandPartner?->slug,
+                'external_id'        => $product->id,
+                'name'               => $product->name,
+                'slug'               => $product->slug,
+                'sku'                => $product->sku,
+                'price'              => $product->price,
+                'compare_price'      => $product->compare_price,
+                'short_description'  => $product->short_description,
+                'description'        => $product->description,
+                'status'             => $product->status instanceof \BackedEnum ? $product->status->value : $product->status,
+                'product_image'      => $product->images->first()?->url ?? null,
+                'callback_url'       => config('services.tpinklab.brandpartner_callback_url'),
+            ];
+
+            $response = Http::withHeaders([
+                'X-API-Key' => config('services.tpinklab.api_key'),
+            ])->post($endpoint, $payload);
+
+            if ($response->failed()) {
+                Log::error('TpinkLab Admin API: product submission failed', [
+                    'product_id'  => $product->id,
+                    'http_status' => $response->status(),
+                    'body'        => $response->body(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('TpinkLab Admin API: product submission exception', [
+                'product_id' => $product->id,
+                'error'      => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function sendOrder(Order|BrandPartnerOrder $order): void
     {
         $isBrandPartner = $order instanceof BrandPartnerOrder;

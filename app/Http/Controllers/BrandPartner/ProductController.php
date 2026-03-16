@@ -6,6 +6,7 @@ use App\Enums\BrandPartnerProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandPartner\ProductRequest;
 use App\Models\BrandPartnerProduct;
+use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,9 @@ class ProductController extends Controller
 
             return $product;
         });
+
+        // Notify TPInkAdmin about the new product (non-blocking; errors are logged)
+        app(TpinkLabService::class)->submitProductForApproval($product);
 
         return response()->json([
             'product' => $product->load(['category', 'event', 'images']),
