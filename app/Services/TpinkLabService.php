@@ -24,10 +24,14 @@ class TpinkLabService
         try {
             $product->loadMissing(['images', 'brandPartner']);
 
+            $bp = $product->brandPartner;
+
             $payload = [
-                'brand_partner_id'   => $product->brand_partner_id,
-                'brand_partner_slug' => $product->brandPartner?->slug,
-                'external_id'        => $product->id,
+                'brand_partner_id'    => $product->brand_partner_id,
+                'brand_partner_slug'  => $bp?->slug,
+                'brand_partner_name'  => $bp?->name,
+                'brand_partner_email' => $bp?->email,
+                'external_id'         => $product->id,
                 'name'               => $product->name,
                 'slug'               => $product->slug,
                 'sku'                => $product->sku,
