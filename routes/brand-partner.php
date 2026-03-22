@@ -22,6 +22,8 @@ Route::group([
 
         require __DIR__ . '/brand-partner/products.php';
 
+        require __DIR__ . '/brand-partner/product-options.php';
+
         require __DIR__ . '/brand-partner/orders.php';
 
         require __DIR__ . '/brand-partner/settings.php';

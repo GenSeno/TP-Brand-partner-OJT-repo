@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             StaffSeeder::class,
+            BrandPartnerSeeder::class,
+            BrandPartnerProductOptionSeeder::class,
 
                 // Test Data Seeders
             CustomerSeeder::class,

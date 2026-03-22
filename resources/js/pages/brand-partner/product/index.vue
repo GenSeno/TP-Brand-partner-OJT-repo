@@ -8,7 +8,14 @@
                 <h6>Manage your products</h6>
             </div>
         </div>
-        <div class="page-btn">
+        <div class="page-btn d-flex gap-2">
+            <Link
+                :href="route('brand-partner.product-options.index')"
+                class="btn btn-added btn-dark"
+            >
+                <vue-feather type="settings" class="me-2"></vue-feather>
+                Product Options
+            </Link>
             <ModalLink
                 navigate
                 :href="route('brand-partner.products.create')"
@@ -86,7 +93,7 @@
                     </span>
                 </template>
 
-                <template #approval_status="{ row }">
+                <template v-if="approvalEnabled" #approval_status="{ row }">
                     <span class="badge" :class="`bg-${getApprovalColor(row.approval_status)}`">
                         {{ getApprovalLabel(row.approval_status) }}
                     </span>
@@ -133,7 +140,7 @@
 </template>
 
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { removeEmptyValues } from '@/helpers/form';
 
@@ -145,15 +152,23 @@ const props = defineProps({
     filter: Object,
 });
 
-const columns = [
-    { title: 'Product', dataIndex: 'name', key: 'name', sortable: true },
-    { title: 'Category', dataIndex: 'category.name', key: 'category' },
-    { title: 'Price', dataIndex: 'price', key: 'price', sortable: true },
-    { title: 'Stock', dataIndex: 'stock', key: 'stock' },
-    { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
-    { title: 'Approval', dataIndex: 'approval_status', key: 'approval_status' },
-    { title: '', dataIndex: 'id', key: 'action' },
-];
+const page = usePage();
+const approvalEnabled = computed(() => page.props.features?.product_approval ?? true);
+
+const columns = computed(() => {
+    const cols = [
+        { title: 'Product', dataIndex: 'name', key: 'name', sortable: true },
+        { title: 'Category', dataIndex: 'category.name', key: 'category' },
+        { title: 'Price', dataIndex: 'price', key: 'price', sortable: true },
+        { title: 'Stock', dataIndex: 'stock', key: 'stock' },
+        { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
+    ];
+    if (approvalEnabled.value) {
+        cols.push({ title: 'Approval', dataIndex: 'approval_status', key: 'approval_status' });
+    }
+    cols.push({ title: '', dataIndex: 'id', key: 'action' });
+    return cols;
+});
 
 const categoryOptions = computed(() => {
     return props.categories.reduce((acc, cat) => {

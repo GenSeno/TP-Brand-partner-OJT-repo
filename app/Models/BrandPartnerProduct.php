@@ -46,6 +46,7 @@ class BrandPartnerProduct extends Model
     protected $fillable = [
         'brand_partner_id',
         'category_id',
+        'collection_id',
         'event_id',
         'name',
         'slug',
@@ -69,6 +70,7 @@ class BrandPartnerProduct extends Model
     protected $casts = [
         'brand_partner_id' => 'integer',
         'category_id'      => 'integer',
+        'collection_id'    => 'integer',
         'event_id'         => 'integer',
         'price' => 'integer',
         'compare_price' => 'integer',
@@ -98,6 +100,11 @@ class BrandPartnerProduct extends Model
     public function category(): Relations\BelongsTo
     {
         return $this->belongsTo(BrandPartnerCategory::class, 'category_id');
+    }
+
+    public function collection(): Relations\BelongsTo
+    {
+        return $this->belongsTo(BrandPartnerProductOptionValue::class, 'collection_id');
     }
 
     public function event(): Relations\BelongsTo

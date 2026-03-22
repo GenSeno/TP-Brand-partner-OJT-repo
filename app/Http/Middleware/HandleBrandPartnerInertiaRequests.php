@@ -34,6 +34,9 @@ class HandleBrandPartnerInertiaRequests extends Middleware
             'auth' => [
                 'brand_partner' => $request->user('brand_partner'),
             ],
+            'features' => [
+                'product_approval' => config('store.brand_partner_product_approval', true),
+            ],
             'flash' => [
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),

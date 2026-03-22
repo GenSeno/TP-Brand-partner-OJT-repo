@@ -20,6 +20,16 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Notes</label>
+                    <textarea
+                        v-model="form.data.notes"
+                        class="form-control"
+                        rows="3"
+                    ></textarea>
+                    <input-error :message="form.errors.notes" />
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Slug</label>
                     <input-slug
                         v-model="form.data.slug"
@@ -103,6 +113,7 @@ const modalRef = useTemplateRef('modalRef');
 
 const form = useAxiosForm({
     name: props.category.name,
+    notes: props.category.notes || '',
     slug: props.category.slug,
     type: props.category.type,
     position: props.category.position,

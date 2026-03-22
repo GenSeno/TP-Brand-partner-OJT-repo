@@ -25,6 +25,17 @@ class StaffSeeder extends Seeder
             'status' => UserStatus::ACTIVE,
         ]);
 
+        Staff::createOrFirst([
+            'email' => 'pakaras@tpinklab.com',
+        ], [
+            'admin' => true,
+            'first_name' => 'Pakaras',
+            'last_name' => 'Admin',
+            'email_verified_at' => now(),
+            'password' => bcrypt('password'),
+            'status' => UserStatus::ACTIVE,
+        ]);
+
         // Create sample staff for local/testing environments
         if (app()->environment('local', 'testing')) {
             $staff = [

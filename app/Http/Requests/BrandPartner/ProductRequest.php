@@ -41,6 +41,11 @@ class ProductRequest extends FormRequest
                 Rule::exists('brand_partner_categories', 'id')
                     ->where('brand_partner_id', $brandPartnerId),
             ],
+            'collection_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('brand_partner_product_option_values', 'id'),
+            ],
             'event_id' => [
                 'nullable',
                 'integer',
@@ -49,7 +54,7 @@ class ProductRequest extends FormRequest
             ],
             'description' => ['nullable', 'string'],
             'short_description' => ['nullable', 'string', 'max:500'],
-            'price' => ['required', 'numeric', 'min:0'],
+            'price' => ['nullable', 'numeric', 'min:0'],
             'compare_price' => ['nullable', 'numeric', 'min:0'],
             'sku' => ['nullable', 'string', 'max:100'],
             'colors' => ['nullable', 'string', 'max:1000'],

@@ -1,5 +1,5 @@
 <template>
-    <Head title="Add Category" />
+    <Head title="Add Collection" />
 
     <Modal
         ref="modalRef"
@@ -8,7 +8,7 @@
         v-slot="{ close }"
     >
         <div class="page-header">
-            <h4>Add Category</h4>
+            <h4>Add Collection</h4>
         </div>
 
         <form @submit.prevent="submitForm">
@@ -27,55 +27,6 @@
                         rows="3"
                     ></textarea>
                     <input-error :message="form.errors.notes" />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Slug</label>
-                    <input-slug
-                        v-model="form.data.slug"
-                        :reference="form.data.name"
-                        :hide-tip="!!form.errors.slug"
-                    />
-                    <input-error :message="form.errors.slug" />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label required">Type</label>
-                    <select v-model="form.data.type" class="form-select">
-                        <option
-                            v-for="(label, value) in typeOptions"
-                            :key="value"
-                            :value="value"
-                        >
-                            {{ label }}
-                        </option>
-                    </select>
-                    <input-error :message="form.errors.type" />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Position</label>
-                    <input-text
-                        v-model="form.data.position"
-                        type="number"
-                        min="0"
-                    />
-                    <input-error :message="form.errors.position" />
-                </div>
-
-                <div class="mb-0">
-                    <div
-                        class="status-toggle modal-status d-flex justify-content-between align-items-center"
-                    >
-                        <span class="status-label">Enabled</span>
-                        <input
-                            v-model="form.data.enabled"
-                            type="checkbox"
-                            id="enabled"
-                            class="check"
-                        />
-                        <label for="enabled" class="checktoggle"></label>
-                    </div>
                 </div>
             </div>
 
@@ -99,7 +50,7 @@
                         Cancel
                     </button>
                     <submit-btn :loading="form.processing">
-                        Create Category
+                        Create Collection
                     </submit-btn>
                 </div>
             </div>
@@ -113,24 +64,16 @@ import * as alert from '@/helpers/alert';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, useTemplateRef } from 'vue';
 
-const props = defineProps({
-    typeOptions: Object,
-});
-
 const modalRef = useTemplateRef('modalRef');
 const createAnother = ref(false);
 
 const form = useAxiosForm({
     name: '',
     notes: '',
-    slug: '',
-    type: 'regular',
-    position: 0,
-    enabled: true,
 });
 
 const submitForm = () => {
-    form.post(route('brand-partner.categories.store'), {
+    form.post(route('brand-partner.product-options.collections.store'), {
         onSuccess: ({ data }) => {
             if (createAnother.value) {
                 form.reset();
@@ -138,7 +81,7 @@ const submitForm = () => {
             } else {
                 modalRef.value.close();
             }
-            alert.showSuccess(data.message || 'Category created successfully.');
+            alert.showSuccess(data.message || 'Collection created successfully.');
         },
     });
 };

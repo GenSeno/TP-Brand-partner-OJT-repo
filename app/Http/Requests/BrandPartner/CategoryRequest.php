@@ -27,6 +27,7 @@ class CategoryRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
+            'notes' => ['nullable', 'string'],
             'slug' => [
                 'nullable',
                 'string',

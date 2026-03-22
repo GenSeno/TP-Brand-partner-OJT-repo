@@ -30,6 +30,7 @@ class BrandPartnerCategory extends Model
         'brand_partner_id',
         'name',
         'slug',
+        'notes',
         'type',
         'enabled',
         'position',

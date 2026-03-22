@@ -6,6 +6,7 @@ use App\Enums\BrandPartnerProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandPartner\ProductRequest;
 use App\Models\BrandPartnerProduct;
+use App\Models\BrandPartnerProductOption;
 use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,12 +66,11 @@ class ProductController extends Controller
     public function create()
     {
         $categories = $this->brandPartner()->categories()->enabled()->ordered()->get();
-        $events = $this->brandPartner()->events()->enabled()->get();
+        $collections = $this->getCollectionValues();
 
         return Inertia::modal('product/create', [
             'categories' => $categories,
-            'events' => $events,
-            'statusOptions' => BrandPartnerProductStatus::getOptions(),
+            'collections' => $collections,
         ])->baseRoute('brand-partner.products.index');
     }
 
@@ -83,7 +83,7 @@ class ProductController extends Controller
             $product = $this->brandPartner()->products()->create([
                 ...$request->validated(),
                 'slug'            => $request->slug ?? Str::slug($request->name),
-                'price'           => (int) ($request->price * 100),
+                'price'           => (int) (($request->price ?? 0) * 100),
                 'compare_price'   => $request->compare_price ? (int) ($request->compare_price * 100) : null,
                 // New products always start as draft pending admin approval
                 'status'          => \App\Enums\BrandPartnerProductStatus::DRAFT,
@@ -125,14 +125,16 @@ class ProductController extends Controller
     {
         $this->authorize($product);
 
-        $product->load(['category', 'event', 'images']);
+        $product->load(['category', 'event', 'images', 'collection']);
         $categories = $this->brandPartner()->categories()->enabled()->ordered()->get();
         $events = $this->brandPartner()->events()->enabled()->get();
+        $collections = $this->getCollectionValues();
 
         return Inertia::modal('product/edit', [
             'product' => $product,
             'categories' => $categories,
             'events' => $events,
+            'collections' => $collections,
             'statusOptions' => BrandPartnerProductStatus::getOptions(),
         ])->baseRoute('brand-partner.products.index');
     }
@@ -195,6 +197,18 @@ class ProductController extends Controller
 
         return to_route('brand-partner.products.index')
             ->with('success', __('crud.deleted', ['record' => 'Product']));
+    }
+
+    /**
+     * Get the collection option values for the current brand partner.
+     */
+    protected function getCollectionValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Collection')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
     }
 
     /**
