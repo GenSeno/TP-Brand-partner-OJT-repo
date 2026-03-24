@@ -48,7 +48,7 @@ class ProductController extends Controller
             ->paginate($request->input('per_page', $this->defaultPerPage))
             ->withQueryString();
 
-        $categories = $this->brandPartner()->categories()->enabled()->ordered()->get();
+        $categories = $this->getCategoryValues();
         $events = $this->brandPartner()->events()->enabled()->get();
 
         return Inertia::render('product/index', [
@@ -65,7 +65,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = $this->brandPartner()->categories()->enabled()->ordered()->get();
+        $categories = $this->getCategoryValues();
         $collections = $this->getCollectionValues();
 
         return Inertia::modal('product/create', [
@@ -85,11 +85,12 @@ class ProductController extends Controller
                 'slug'            => $request->slug ?? Str::slug($request->name),
                 'price'           => (int) (($request->price ?? 0) * 100),
                 'compare_price'   => $request->compare_price ? (int) ($request->compare_price * 100) : null,
-                // New products always start as draft pending admin approval
-                'status'          => \App\Enums\BrandPartnerProductStatus::DRAFT,
-                'approval_status' => 'pending',
+                'status'          => config('store.brand_partner_product_approval', true)
+                    ? \App\Enums\BrandPartnerProductStatus::DRAFT
+                    : \App\Enums\BrandPartnerProductStatus::PUBLISHED,
+                'approval_status' => config('store.brand_partner_product_approval', true) ? 'pending' : 'approved',
                 'approval_notes'  => null,
-                'approved_at'     => null,
+                'approved_at'     => config('store.brand_partner_product_approval', true) ? null : now(),
             ]);
 
             return $product;
@@ -126,7 +127,7 @@ class ProductController extends Controller
         $this->authorize($product);
 
         $product->load(['category', 'event', 'images', 'collection']);
-        $categories = $this->brandPartner()->categories()->enabled()->ordered()->get();
+        $categories = $this->getCategoryValues();
         $events = $this->brandPartner()->events()->enabled()->get();
         $collections = $this->getCollectionValues();
 
@@ -146,8 +147,9 @@ class ProductController extends Controller
     {
         $this->authorize($product);
 
-        // Prevent publishing without approval
-        if ($request->status === 'published' && ! $product->canBePublished()) {
+        // Prevent publishing without approval (unless approval feature is disabled)
+        $approvalEnabled = config('store.brand_partner_product_approval', true);
+        if ($request->status === 'published' && $approvalEnabled && ! $product->canBePublished()) {
             return response()->json([
                 'message' => 'Product must be approved by TPInkAdmin before it can be published.',
                 'errors'  => ['status' => ['Product requires TPInkAdmin approval before publishing.']],
@@ -161,6 +163,11 @@ class ProductController extends Controller
 
             $product->update($data);
         });
+
+        // Sync published status to TPInkAdmin so the front store reflects the change
+        if ($request->status === 'published') {
+            app(TpinkLabService::class)->syncProductStatus($product->fresh());
+        }
 
         return response()->json([
             'product' => $product->fresh(['category', 'event', 'images']),
@@ -206,6 +213,18 @@ class ProductController extends Controller
     {
         $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
             ->where('name', 'Collection')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
+    }
+
+    /**
+     * Get the category option values for the current brand partner.
+     */
+    protected function getCategoryValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Category')
             ->first();
 
         return $option ? $option->values()->orderBy('position')->get() : collect();

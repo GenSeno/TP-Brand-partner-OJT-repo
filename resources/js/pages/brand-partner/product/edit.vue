@@ -136,7 +136,7 @@
                     <div class="col-md-4">
                         <!-- Approval Status Banner -->
                         <div
-                            v-if="product.approval_status !== 'approved'"
+                            v-if="$page.props.features?.product_approval && product.approval_status !== 'approved'"
                             class="alert d-flex align-items-start gap-2 mb-3 p-2"
                             :class="product.approval_status === 'rejected' ? 'alert-danger' : 'alert-warning'"
                             style="font-size: 13px;"
@@ -168,7 +168,7 @@
                                     :key="cat.id"
                                     :value="cat.id"
                                 >
-                                    {{ cat.name }} ({{ cat.type }})
+                                    {{ cat.label }}
                                 </option>
                             </select>
                             <input-error :message="form.errors.category_id" />
@@ -202,9 +202,9 @@
                                     v-for="(label, value) in statusOptions"
                                     :key="value"
                                     :value="value"
-                                    :disabled="value === 'published' && product.approval_status !== 'approved'"
+                                    :disabled="value === 'published' && $page.props.features?.product_approval && product.approval_status !== 'approved'"
                                 >
-                                    {{ label }}{{ value === 'published' && product.approval_status !== 'approved' ? ' (requires approval)' : '' }}
+                                    {{ label }}{{ value === 'published' && $page.props.features?.product_approval && product.approval_status !== 'approved' ? ' (requires approval)' : '' }}
                                 </option>
                             </select>
                             <input-error :message="form.errors.status" />

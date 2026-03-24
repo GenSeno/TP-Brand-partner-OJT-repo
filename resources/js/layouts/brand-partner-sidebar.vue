@@ -60,27 +60,6 @@
                                 <li
                                     :class="{
                                         active: isActive(
-                                            '/brand-partner/categories',
-                                        ),
-                                    }"
-                                >
-                                    <Link
-                                        :href="
-                                            route(
-                                                'brand-partner.categories.index',
-                                            )
-                                        "
-                                    >
-                                        <vue-feather
-                                            type="layers"
-                                            class="feather-16 me-2"
-                                        ></vue-feather>
-                                        <span>Categories</span>
-                                    </Link>
-                                </li>
-                                <li
-                                    :class="{
-                                        active: isActive(
                                             '/brand-partner/events',
                                         ),
                                     }"

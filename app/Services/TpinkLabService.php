@@ -64,6 +64,41 @@ class TpinkLabService
         }
     }
 
+    /**
+     * Sync a product's status to TPInkAdmin so the front store reflects changes.
+     */
+    public function syncProductStatus(BrandPartnerProduct $product): void
+    {
+        $url = config('services.tpinklab.admin_api_url');
+        $baseUrl = rtrim(preg_replace('#/api/.*#', '', $url), '/');
+        $endpoint = $baseUrl . '/api/brand-partner-products/' . $product->id . '/status';
+
+        try {
+            $product->loadMissing('brandPartner');
+            $bp = $product->brandPartner;
+
+            $response = Http::withHeaders([
+                'X-API-Key' => config('services.tpinklab.api_key'),
+            ])->put($endpoint, [
+                'brand_partner_slug' => $bp?->slug,
+                'status'             => $product->status instanceof \BackedEnum ? $product->status->value : $product->status,
+            ]);
+
+            if ($response->failed()) {
+                Log::error('TpinkLab Admin API: product status sync failed', [
+                    'product_id'  => $product->id,
+                    'http_status' => $response->status(),
+                    'body'        => $response->body(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('TpinkLab Admin API: product status sync exception', [
+                'product_id' => $product->id,
+                'error'      => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function sendOrder(Order|BrandPartnerOrder $order): void
     {
         $isBrandPartner = $order instanceof BrandPartnerOrder;

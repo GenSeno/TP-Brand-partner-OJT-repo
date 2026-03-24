@@ -111,7 +111,7 @@ const collectionOptions = computed(() =>
 );
 
 const categoryOptions = computed(() =>
-    (props.categories || []).map((c) => ({ label: c.name, value: c.id })),
+    (props.categories || []).map((c) => ({ label: c.label, value: c.id })),
 );
 
 const submitForm = () => {

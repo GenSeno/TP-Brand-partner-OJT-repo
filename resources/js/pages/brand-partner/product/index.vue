@@ -70,17 +70,16 @@
                 :links="products.links"
                 @change="submitFilters"
             >
+                <template #image="{ row }">
+                    <img
+                        :src="getProductImage(row)"
+                        :alt="row.name"
+                        style="width:48px;height:48px;object-fit:cover;border-radius:6px;"
+                    />
+                </template>
+
                 <template #name="{ row, value }">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-light me-2">
-                            <img
-                                :src="getProductImage(row)"
-                                :alt="value"
-                                class="img-fluid rounded"
-                            />
-                        </div>
-                        <span>{{ value }}</span>
-                    </div>
+                    {{ value }}
                 </template>
 
                 <template #price="{ row }">
@@ -157,6 +156,7 @@ const approvalEnabled = computed(() => page.props.features?.product_approval ?? 
 
 const columns = computed(() => {
     const cols = [
+        { title: 'Image', dataIndex: 'image_url', key: 'image' },
         { title: 'Product', dataIndex: 'name', key: 'name', sortable: true },
         { title: 'Category', dataIndex: 'category.name', key: 'category' },
         { title: 'Price', dataIndex: 'price', key: 'price', sortable: true },
@@ -172,7 +172,7 @@ const columns = computed(() => {
 
 const categoryOptions = computed(() => {
     return props.categories.reduce((acc, cat) => {
-        acc[cat.id] = cat.name;
+        acc[cat.id] = cat.label;
         return acc;
     }, {});
 });

@@ -38,8 +38,7 @@ class ProductRequest extends FormRequest
             'category_id' => [
                 'required',
                 'integer',
-                Rule::exists('brand_partner_categories', 'id')
-                    ->where('brand_partner_id', $brandPartnerId),
+                Rule::exists('brand_partner_product_option_values', 'id'),
             ],
             'collection_id' => [
                 'nullable',
