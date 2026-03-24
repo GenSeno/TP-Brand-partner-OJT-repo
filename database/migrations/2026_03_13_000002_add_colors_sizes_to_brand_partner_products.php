@@ -8,8 +8,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('brand_partner_products', function (Blueprint $table) {
-            $table->text('colors')->nullable()->after('sku'); // comma-separated, e.g. "Red,Blue,Green"
-            $table->text('sizes')->nullable()->after('colors');  // comma-separated, e.g. "S,M,L,XL"
+            if (!Schema::hasColumn('brand_partner_products', 'colors')) {
+                $table->text('colors')->nullable()->after('sku');
+            }
+            if (!Schema::hasColumn('brand_partner_products', 'sizes')) {
+                $table->text('sizes')->nullable()->after('colors');
+            }
         });
 
         Schema::dropIfExists('brand_partner_product_variations');
