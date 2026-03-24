@@ -10,7 +10,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brand_partner_products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
+            $fks = collect(DB::select("SELECT CONSTRAINT_NAME FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_NAME = 'brand_partner_products' AND CONSTRAINT_TYPE = 'FOREIGN KEY' AND CONSTRAINT_NAME = 'brand_partner_products_category_id_foreign'"));
+            if ($fks->isNotEmpty()) {
+                $table->dropForeign(['category_id']);
+            }
             $table->unsignedBigInteger('category_id')->nullable()->change();
         });
 
@@ -22,12 +25,15 @@ return new class extends Migration
               AND category_id NOT IN (SELECT id FROM brand_partner_product_option_values)
         ');
 
-        Schema::table('brand_partner_products', function (Blueprint $table) {
-            $table->foreign('category_id')
-                ->references('id')
-                ->on('brand_partner_product_option_values')
-                ->nullOnDelete();
-        });
+        $fkExists = collect(DB::select("SELECT CONSTRAINT_NAME FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_NAME = 'brand_partner_products' AND CONSTRAINT_TYPE = 'FOREIGN KEY' AND CONSTRAINT_NAME = 'brand_partner_products_category_id_foreign'"))->isNotEmpty();
+        if (!$fkExists) {
+            Schema::table('brand_partner_products', function (Blueprint $table) {
+                $table->foreign('category_id')
+                    ->references('id')
+                    ->on('brand_partner_product_option_values')
+                    ->nullOnDelete();
+            });
+        }
     }
 
     public function down(): void
