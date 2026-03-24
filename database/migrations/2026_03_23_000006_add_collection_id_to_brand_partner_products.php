@@ -9,11 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brand_partner_products', function (Blueprint $table) {
-            $table->foreignId('collection_id')
-                ->nullable()
-                ->after('category_id')
-                ->constrained('brand_partner_product_option_values')
-                ->nullOnDelete();
+            if (!Schema::hasColumn('brand_partner_products', 'collection_id')) {
+                $table->foreignId('collection_id')
+                    ->nullable()
+                    ->after('category_id')
+                    ->constrained('brand_partner_product_option_values')
+                    ->nullOnDelete();
+            }
         });
     }
 

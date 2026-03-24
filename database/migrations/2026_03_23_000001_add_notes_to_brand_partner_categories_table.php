@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('brand_partner_categories', function (Blueprint $table) {
-            $table->text('notes')->nullable()->after('slug');
+            if (!Schema::hasColumn('brand_partner_categories', 'notes')) {
+                $table->text('notes')->nullable()->after('slug');
+            }
         });
     }
 

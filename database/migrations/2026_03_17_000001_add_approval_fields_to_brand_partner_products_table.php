@@ -9,9 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brand_partner_products', function (Blueprint $table) {
-            $table->string('approval_status')->default('pending')->after('status');
-            $table->text('approval_notes')->nullable()->after('approval_status');
-            $table->timestamp('approved_at')->nullable()->after('approval_notes');
+            if (!Schema::hasColumn('brand_partner_products', 'approval_status')) {
+                $table->string('approval_status')->default('pending')->after('status');
+            }
+            if (!Schema::hasColumn('brand_partner_products', 'approval_notes')) {
+                $table->text('approval_notes')->nullable()->after('approval_status');
+            }
+            if (!Schema::hasColumn('brand_partner_products', 'approved_at')) {
+                $table->timestamp('approved_at')->nullable()->after('approval_notes');
+            }
         });
     }
 
