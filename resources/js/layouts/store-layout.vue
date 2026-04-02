@@ -1,8 +1,9 @@
 <template>
     <div class="grocery-color public-san-body">
         <!-- Header Start -->
-        <header class="header-style-6">
+        <header class="header-style-6 dark-theme-header">
             <div class="header-inner">
+                <!-- Brand Logo (Left) -->
                 <div class="left-header">
                     <Link
                         v-if="brandPartner"
@@ -15,83 +16,56 @@
                         class="brand-link"
                     >
                         <img
-                            v-if="brandPartner.logo_url"
-                            :src="brandPartner.logo_url"
-                            :alt="brandPartner.name"
-                            class="img-fluid brand-logo"
+                            src="/img/logo/pakaras_logo.png"
+                            alt="Pakaras Logo"
+                            class="img-fluid brand-logo-raw"
                         />
-                        <span class="brand-name">{{
-                            brandPartner.name || 'Store'
-                        }}</span>
                     </Link>
                     <span v-else class="brand-link">
-                        <span class="brand-name">Store</span>
+                        <span class="brand-name text-white">Store</span>
                     </span>
                 </div>
 
+                <!-- Center Nav Links -->
+                <div class="center-nav-wrapper d-none d-lg-block">
+                    <nav class="center-nav">
+                        <Link 
+                            :href="brandPartner ? route('store.brand-partner.index', brandPartner.slug) : '#'" 
+                            class="nav-item">SHOP <i class="ri-arrow-down-s-line"></i>
+                        </Link>
+                        <a href="javascript:void(0)" class="nav-item">COLLECTIONS <i class="ri-arrow-down-s-line"></i></a>
+                        <a href="javascript:void(0)" class="nav-item">ABOUT US</a>
+                        <a href="javascript:void(0)" class="nav-item">CONTACT US</a>
+                    </nav>
+                </div>
+
+                <!-- Right Utility Icons & CTA -->
+                <div class="right-nav-wrapper d-none d-lg-block">
+                    <nav class="right-nav">
+                        <a href="javascript:void(0)" class="utility-link"><i class="ri-user-line"></i> Account</a>
+                        <a href="javascript:void(0)" class="utility-link"><i class="ri-heart-line"></i> Wishlist</a>
+                        <Link
+                            :href="
+                                brandPartner ? route('store.brand-partner.cart', brandPartner.slug) : '#'
+                            "
+                            class="utility-link cart-link"
+                        >
+                            <i class="ri-shopping-cart-2-line"></i> Cart
+                            <span class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</span>
+                        </Link>
+                        <a href="javascript:void(0)" class="race-cta-btn">RACE WITH US</a>
+                    </nav>
+                </div>
+
                 <!-- Mobile Menu Button -->
-                <div class="mobile-menu-header">
+                <div class="mobile-menu-header d-lg-none">
                     <button
                         type="button"
-                        class="btn menu-btn"
+                        class="btn menu-btn text-white"
                         @click="toggleSideMenu"
                     >
                         <i class="ri-menu-line"></i>
                     </button>
-                </div>
-
-                <!-- Desktop Nav -->
-                <div class="desktop-nav-wrapper" v-if="brandPartner">
-                    <nav class="desktop-nav">
-                        <Link
-                            :href="
-                                route(
-                                    'store.brand-partner.index',
-                                    brandPartner.slug,
-                                )
-                            "
-                            class="nav-shop"
-                            :class="{
-                                active: isRoute('store.brand-partner.index'),
-                            }"
-                        >
-                            <i class="ri-shopping-bag-3-line"></i>
-                            Shop
-                        </Link>
-                        <Link
-                            :href="
-                                route(
-                                    'store.brand-partner.cart',
-                                    brandPartner.slug,
-                                )
-                            "
-                            class="nav-cart"
-                            :class="{
-                                active: isRoute('store.brand-partner.cart'),
-                            }"
-                        >
-                            <i class="ri-shopping-cart-line"></i>
-                            Cart
-                            <span class="cart-badge" v-if="cartCount > 0">{{
-                                cartCount
-                            }}</span>
-                        </Link>
-                        <Link
-                            :href="
-                                route(
-                                    'store.brand-partner.checkout',
-                                    brandPartner.slug,
-                                )
-                            "
-                            class="nav-checkout"
-                            :class="{
-                                active: isRoute('store.brand-partner.checkout'),
-                            }"
-                        >
-                            <i class="ri-file-list-3-line"></i>
-                            Checkout
-                        </Link>
-                    </nav>
                 </div>
             </div>
         </header>
@@ -385,189 +359,126 @@ const focusSearchField = () => {
 }
 
 /* ============================================
-   HEADER - header-style-6
+   HEADER - Tribu Pakaras Dark Theme
    ============================================ */
-.header-style-6 {
-    background: #fff;
-    position: sticky;
+.dark-theme-header {
+    background-color: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: absolute;
     top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    border-bottom: 1px solid rgb(var(--grocery-border));
-    width: 100%;
     left: 0;
     right: 0;
+    z-index: 1000;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-inner {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 4px 15px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 42px;
 }
 
 .left-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
     flex: 0 0 auto;
-    order: 1; /* Brand on left */
-}
-
-.menu-btn {
-    background: none;
-    border: none;
-    padding: 8px;
-    font-size: 22px;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    line-height: 1;
-    border-radius: 8px;
-    transition: background 0.2s ease;
-}
-
-.menu-btn:hover {
-    background: rgba(var(--grocery-theme), 0.08);
+    order: 1;
 }
 
 .brand-link {
+    text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: inherit;
-    transition: opacity 0.2s ease;
-    align-self: flex-start;
 }
 
-.brand-link:hover {
-    opacity: 0.8;
+.brand-logo-raw {
+    height: 40px;
+    object-fit: contain;
 }
 
-.brand-logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid rgb(var(--grocery-border));
-}
-
-.brand-name {
-    font-size: 20px;
-    font-weight: 700;
-    color: rgb(var(--grocery-title));
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-}
-
-.menu-btn {
-    background: none;
-    border: none;
-    padding: 6px;
-    font-size: 22px;
-    color: var(--grocery-dark);
-    cursor: pointer;
-    line-height: 1;
-}
-
-.brand-link {
+/* Center Nav */
+.center-nav-wrapper {
+    flex: 1;
     display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: inherit;
+    justify-content: flex-start;
+    padding-left: 40px;
+    order: 2;
 }
 
-.brand-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.brand-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--grocery-dark);
-}
-
-/* Desktop Nav Wrapper */
-.desktop-nav-wrapper {
-    display: none;
-    margin-left: auto;
-    order: 3; /* Position on right */
-}
-
-/* Desktop Nav - Professional Top Navigation */
-.desktop-nav {
+.center-nav {
     display: flex;
+    gap: 30px;
     align-items: center;
-    background: transparent;
-    border-radius: 0;
-    padding: 0;
-    box-shadow: none;
-    border: none;
-    gap: 4px;
-    max-width: 300px;
-    width: fit-content;
 }
 
-/* Professional navigation items */
-.desktop-nav a {
+.center-nav .nav-item {
+    color: #fff;
     text-decoration: none;
-    color: rgb(var(--grocery-content));
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    position: relative;
-    white-space: nowrap;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
+}
+
+.center-nav .nav-item:hover {
+    color: rgb(var(--grocery-primary));
+}
+
+.center-nav .nav-item i {
+    font-size: 18px;
+    margin-top: -2px;
+}
+
+/* Right Nav */
+.right-nav-wrapper {
+    flex: 0 0 auto;
+    order: 3;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.utility-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 6px;
-    flex: 1;
-    justify-content: center;
-    text-align: center;
+    transition: color 0.2s ease;
+    position: relative;
+    font-family: 'Public Sans', sans-serif;
 }
 
-.desktop-nav a:hover {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.08);
+.utility-link:hover {
+    color: rgb(var(--grocery-primary));
 }
 
-.desktop-nav a.active {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.12);
-    font-weight: 700;
+.utility-link i {
+    font-size: 18px;
 }
 
-/* Desktop Nav - Show only Shop and Cart */
-.desktop-nav .nav-checkout {
-    display: none; /* Hide Checkout in desktop nav */
-}
-
-.desktop-nav .nav-shop,
-.desktop-nav .nav-cart {
-    display: flex; /* Show Shop and Cart */
-    min-width: 80px; /* Ensure consistent button widths */
-}
-
-/* Cart icon styling in desktop nav */
-.desktop-nav .nav-cart {
+.cart-link {
     position: relative;
 }
 
-.desktop-nav .nav-cart .cart-badge {
+.cart-badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: rgb(var(--grocery-primary)); /* Yellow accent */
-    color: #fff;
+    top: -8px;
+    left: 8px;
+    background: rgb(var(--grocery-primary));
+    color: #000;
     font-size: 10px;
     font-weight: 700;
     min-width: 16px;
@@ -576,79 +487,37 @@ const focusSearchField = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
-    box-shadow: 0 2px 4px rgba(var(--grocery-primary), 0.3);
-    border: 2px solid #fff;
 }
 
-.desktop-nav a {
-    text-decoration: none;
-    color: rgb(var(--grocery-content));
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 16px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    position: relative;
-    background: transparent;
-}
-
-.desktop-nav a:hover {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.08);
-    border-color: rgba(var(--grocery-theme), 0.2);
-    transform: translateY(-1px);
-}
-
-.desktop-nav a.active {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.1);
-    border-color: rgb(var(--grocery-theme));
-    font-weight: 700;
-}
-
-.desktop-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: rgb(var(--grocery-theme));
-    transition: width 0.25s ease;
-}
-
-.desktop-nav a.active::after {
-    width: 30px;
-}
-
-/* Mobile Menu Button - Only visible on mobile */
-.mobile-menu-header {
-    display: none;
-    order: 3;
-}
-
-.cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: rgb(
-        var(--grocery-primary)
-    ); /* Using yellow accent for visibility */
+/* CTA Button */
+.race-cta-btn {
+    background-color: #f39c12;
     color: #fff;
-    font-size: 10px;
     font-weight: 700;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    box-shadow: 0 2px 6px rgba(var(--grocery-primary), 0.3);
-    border: 2px solid #fff;
+    font-size: 14px;
+    padding: 10px 24px;
+    border-radius: 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.race-cta-btn:hover {
+    background-color: #f39c12;
+    color: #fff;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 991px) {
+    .header-inner {
+        padding: 10px 15px;
+    }
 }
 
 /* ============================================
@@ -912,6 +781,8 @@ const focusSearchField = () => {
    ============================================ */
 .store-main {
     flex: 1;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 /* ============================================
