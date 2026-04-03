@@ -4,42 +4,98 @@
     <div class="grocery-store-page">
         <!-- Hero Carousel Section -->
         <section class="hero-carousel-section">
-            <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+            <div
+                id="heroCarousel"
+                class="carousel slide hero-carousel"
+                data-bs-ride="carousel"
+                data-bs-interval="3000"
+            >
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide-to="0"
+                        class="active"
+                        aria-current="true"
+                        aria-label="Slide 1"
+                    ></button>
+                    <button
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide-to="1"
+                        aria-label="Slide 2"
+                    ></button>
+                    <button
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide-to="2"
+                        aria-label="Slide 3"
+                    ></button>
+                    <button
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide-to="3"
+                        aria-label="Slide 4"
+                    ></button>
                 </div>
                 <div class="carousel-inner">
-                    
                     <!-- Slide 1: Collection -->
                     <div class="carousel-item active slide-1-bg">
                         <div class="slide-layout">
                             <div class="slide-content-left px-5">
-                                <h1 class="slide-title text-white">HUGIS<br>COLLECTION V2</h1>
-                                <p class="slide-subtitle text-white">HUGIS COLLECTION V2 celebrates this collective energy. It honors individuality while embracing the beauty of community, proving that when runners move as one, their diversity becomes the masterpiece.</p>
-                                <a href="#" class="btn slide-btn-outline">VIEW ALL PRODUCTS</a>
+                                <h1 class="slide-title text-white">
+                                    HUGIS<br />COLLECTION V2
+                                </h1>
+                                <p class="slide-subtitle text-white">
+                                    HUGIS COLLECTION V2 celebrates this
+                                    collective energy. It honors individuality
+                                    while embracing the beauty of community,
+                                    proving that when runners move as one, their
+                                    diversity becomes the masterpiece.
+                                </p>
+                                <a href="#" class="btn slide-btn-outline"
+                                    >VIEW ALL PRODUCTS</a
+                                >
                             </div>
-                        </div>  
+                        </div>
                     </div>
 
                     <!-- Slide 2: Keep On Breaking Boundaries  -->
                     <div class="carousel-item slide-2-bg">
                         <div class="slide-overlay-left-dark"></div>
                         <div class="slide-layout">
-                            <div class="slide-content-left px-5" style="z-index: 2">
-                                <h1 class="slide-title text-white">KEEP ON<br>BREAKING THE<br>BOUNDARIES.</h1>
-                                <p class="slide-subtitle text-white mt-3">Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.</p>
-                                <a href="#" class="btn slide-btn-outline mt-4">VIEW ALL PRODUCTS</a>
+                            <div
+                                class="slide-content-left px-5"
+                                style="z-index: 2"
+                            >
+                                <h1 class="slide-title text-white">
+                                    KEEP ON<br />BREAKING THE<br />BOUNDARIES.
+                                </h1>
+                                <p class="slide-subtitle text-white mt-3">
+                                    Tribu Pakaras is launching its official
+                                    eCommerce platform soon, powered by upgraded
+                                    production, improved quality, and expanded
+                                    product offerings designed for athletes who
+                                    demand more.
+                                </p>
+                                <a href="#" class="btn slide-btn-outline mt-4"
+                                    >VIEW ALL PRODUCTS</a
+                                >
                             </div>
                         </div>
                     </div>
 
                     <!-- Slide 3: Believe In Your Dreams  -->
                     <div class="carousel-item slide-3-bg">
-                        <div class="slide-layout justify-content-center w-100 text-center flex-column">
-                            <h1 class="slide-title-large text-white" style="z-index: 2">BELIEVE IN<br>YOUR DREAMS</h1>
+                        <div
+                            class="slide-layout justify-content-center w-100 text-center flex-column"
+                        >
+                            <h1
+                                class="slide-title-large text-white"
+                                style="z-index: 2"
+                            >
+                                BELIEVE IN<br />YOUR DREAMS
+                            </h1>
                         </div>
                     </div>
 
@@ -47,17 +103,30 @@
                     <div class="carousel-item slide-4-bg">
                         <div class="slide-overlay-left-orange"></div>
                         <div class="slide-layout">
-                            <div class="slide-content-left px-5" style="z-index: 2">
-                                <h1 class="slide-title text-white">DARE TO DREAM BIG<br>— KEEP ON BREAKING<br>THE BOUNDARIES.</h1>
-                                <p class="slide-subtitle text-white mt-3">Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.</p>
-                                <a href="#" class="btn slide-btn-outline mt-4">VIEW ALL PRODUCTS</a>
+                            <div
+                                class="slide-content-left px-5"
+                                style="z-index: 2"
+                            >
+                                <h1 class="slide-title text-white">
+                                    DARE TO DREAM BIG<br />— KEEP ON BREAKING<br />THE
+                                    BOUNDARIES.
+                                </h1>
+                                <p class="slide-subtitle text-white mt-3">
+                                    Tribu Pakaras is launching its official
+                                    eCommerce platform soon, powered by upgraded
+                                    production, improved quality, and expanded
+                                    product offerings designed for athletes who
+                                    demand more.
+                                </p>
+                                <a href="#" class="btn slide-btn-outline mt-4"
+                                    >VIEW ALL PRODUCTS</a
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
 
         <!-- Search Section -->
         <section id="search" class="grocery-search-section">
@@ -169,7 +238,10 @@
                             <div class="product-image">
                                 <Link
                                     :href="
-                                        route('store.brand-partner.product', product.slug)
+                                        route(
+                                            'store.brand-partner.product',
+                                            product.slug,
+                                        )
                                     "
                                     class="product-image-link"
                                 >
@@ -205,7 +277,10 @@
                             <div class="product-content">
                                 <Link
                                     :href="
-                                        route('store.brand-partner.product', product.slug)
+                                        route(
+                                            'store.brand-partner.product',
+                                            product.slug,
+                                        )
                                     "
                                     class="product-name-link"
                                 >
@@ -239,23 +314,43 @@
                                     </span>
                                 </h5>
                                 <!-- Color & Size chips -->
-                                <div v-if="product.colors_array?.length || product.sizes_array?.length" class="product-options-chips">
+                                <div
+                                    v-if="
+                                        product.colors_array?.length ||
+                                        product.sizes_array?.length
+                                    "
+                                    class="product-options-chips"
+                                >
                                     <span
-                                        v-for="color in (product.colors_array ?? []).slice(0, 4)"
+                                        v-for="color in (
+                                            product.colors_array ?? []
+                                        ).slice(0, 4)"
                                         :key="color"
                                         class="option-chip color-chip"
-                                    >{{ color }}</span>
+                                        >{{ color }}</span
+                                    >
                                     <span
-                                        v-for="size in (product.sizes_array ?? []).slice(0, 4)"
+                                        v-for="size in (
+                                            product.sizes_array ?? []
+                                        ).slice(0, 4)"
                                         :key="size"
                                         class="option-chip size-chip"
-                                    >{{ size }}</span>
+                                        >{{ size }}</span
+                                    >
                                 </div>
 
                                 <div class="add-quantity-wrap">
                                     <Link
-                                        v-if="product.colors_array?.length || product.sizes_array?.length"
-                                        :href="route('store.brand-partner.product', product.slug)"
+                                        v-if="
+                                            product.colors_array?.length ||
+                                            product.sizes_array?.length
+                                        "
+                                        :href="
+                                            route(
+                                                'store.brand-partner.product',
+                                                product.slug,
+                                            )
+                                        "
                                         class="btn-add-quantity"
                                         title="Select options"
                                     >
@@ -326,24 +421,33 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- Check Our Collections Section -->
         <section class="collections-section">
-            
             <!-- THE Collection Banner -->
             <div class="dreamer-banner">
                 <div class="dreamer-banner-images">
-                    <img src="/img/img_front.png" alt="Shirt Front" class="dreamer-shirt dreamer-shirt-left">
-                    <img src="/img/img_back.png" alt="Shirt Back" class="dreamer-shirt dreamer-shirt-right">
+                    <img
+                        src="/img/img_front.png"
+                        alt="Shirt Front"
+                        class="dreamer-shirt dreamer-shirt-left"
+                    />
+                    <img
+                        src="/img/img_back.png"
+                        alt="Shirt Back"
+                        class="dreamer-shirt dreamer-shirt-right"
+                    />
                 </div>
                 <div class="dreamer-content">
                     <span class="dreamer-label">THE</span>
                     <h2 class="dreamer-title">DREAMER</h2>
                     <p class="dreamer-description">
-                        <strong>Dare to Dream Big</strong> with our first shirt collection for 2026 —
-                        <strong>The Dreamer</strong> — featuring the blend of milky way &amp; outer space patterns,
-                        vectors of limitless adventures and shades of greens and cloud dancer
-                        which represent the colors of 2026.
+                        <strong>Dare to Dream Big</strong> with our first shirt
+                        collection for 2026 — <strong>The Dreamer</strong> —
+                        featuring the blend of milky way &amp; outer space
+                        patterns, vectors of limitless adventures and shades of
+                        greens and cloud dancer which represent the colors of
+                        2026.
                     </p>
                     <a href="#" class="dreamer-btn">CHECK OUR COLLECTIONS</a>
                 </div>
@@ -351,14 +455,22 @@
 
             <!-- 3-Panel Grid -->
             <div class="collections-panels">
-
                 <!-- Panel 1: HUGIS -->
-                <div class="col-panel panel-dark" style="background-image: url('')">
+                <div
+                    class="col-panel panel-dark"
+                    style="background-image: url('')"
+                >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body">
                         <h3 class="col-panel-title">HUGIS Collection v2</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-outline">VIEW COLLECTION</a>
+                        <p class="col-panel-desc">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam.
+                        </p>
+                        <a href="#" class="col-panel-btn col-panel-btn-outline"
+                            >VIEW COLLECTION</a
+                        >
                     </div>
                 </div>
 
@@ -367,37 +479,57 @@
                     <div class="col-panel-body col-panel-body-center">
                         <div class="kuris-logo">
                             <span class="kuris-script">Kuris</span>
-                            <span class="kuris-script kuris-script-bold">Koleksyon</span>
+                            <span class="kuris-script kuris-script-bold"
+                                >Koleksyon</span
+                            >
                         </div>
                         <h3 class="col-panel-title">Kuris Koleksyon</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-outline-dark">VIEW COLLECTION</a>
+                        <p class="col-panel-desc">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam.
+                        </p>
+                        <a
+                            href="#"
+                            class="col-panel-btn col-panel-btn-outline-dark"
+                            >VIEW COLLECTION</a
+                        >
                     </div>
                 </div>
 
                 <!-- Panel 3: Discover CTA -->
                 <div class="col-panel panel-orange">
                     <div class="col-panel-body col-panel-body-center">
-                        <h3 class="col-panel-cta-title">Discover about <br>Our Collections</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-white">VIEW OUR COLLECTIONS</a>
+                        <h3 class="col-panel-cta-title">
+                            Discover about <br />Our Collections
+                        </h3>
+                        <p class="col-panel-desc">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam.
+                        </p>
+                        <a href="#" class="col-panel-btn col-panel-btn-white"
+                            >VIEW OUR COLLECTIONS</a
+                        >
                     </div>
                 </div>
-
             </div>
-
         </section>
-
 
         <!-- Reviews Section -->
         <section class="reviews-section">
             <div class="reviews-header">
-                <h2 class="reviews-title">Read reviews,<br>Run with confidence</h2>
+                <h2 class="reviews-title">
+                    Read reviews,<br />Run with confidence
+                </h2>
                 <div class="reviews-nav">
                     <button class="reviews-nav-btn" id="reviewsPrev">
                         <i class="ri-arrow-left-line"></i>
                     </button>
-                    <button class="reviews-nav-btn reviews-nav-btn-active" id="reviewsNext">
+                    <button
+                        class="reviews-nav-btn reviews-nav-btn-active"
+                        id="reviewsNext"
+                    >
                         <i class="ri-arrow-right-line"></i>
                     </button>
                 </div>
@@ -405,13 +537,28 @@
 
             <div class="reviews-track-wrap">
                 <div class="reviews-track" id="reviewsTrack">
-                    <div class="review-card" v-for="review in reviews" :key="review.id">
+                    <div
+                        class="review-card"
+                        v-for="review in reviews"
+                        :key="review.id"
+                    >
                         <p class="review-text">{{ review.comment }}</p>
                         <div class="review-author">
-                            <img :src="review.avatar_url || '/img/avatar-placeholder.png'" :alt="review.name" class="review-avatar">
+                            <img
+                                :src="
+                                    review.avatar_url ||
+                                    '/img/avatar-placeholder.png'
+                                "
+                                :alt="review.name"
+                                class="review-avatar"
+                            />
                             <div class="review-author-info">
-                                <span class="review-name">{{ review.name }}</span>
-                                <span class="review-role">{{ review.role }}</span>
+                                <span class="review-name">{{
+                                    review.name
+                                }}</span>
+                                <span class="review-role">{{
+                                    review.role
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -419,13 +566,29 @@
                     <!-- Static fallback cards if no reviews prop -->
                     <template v-if="!reviews || reviews.length === 0">
                         <div class="review-card" v-for="n in 4" :key="n">
-                            <h4 class="review-headline">Cras amet ultricies pellentesque aliquam varius.</h4>
-                            <p class="review-text">Mauris id non nunc laoreet proin morbi faucibus id a. Donec gravida at sed auctor amet platea ac sed. Est tincidunt morbi tortor fermentum elementum platea. Erat id vestibulum duis turpis.</p>
+                            <h4 class="review-headline">
+                                Cras amet ultricies pellentesque aliquam varius.
+                            </h4>
+                            <p class="review-text">
+                                Mauris id non nunc laoreet proin morbi faucibus
+                                id a. Donec gravida at sed auctor amet platea ac
+                                sed. Est tincidunt morbi tortor fermentum
+                                elementum platea. Erat id vestibulum duis
+                                turpis.
+                            </p>
                             <div class="review-author">
-                                <img src="/img/avatar-placeholder.png" alt="Reviewer" class="review-avatar">
+                                <img
+                                    src="/img/avatar-placeholder.png"
+                                    alt="Reviewer"
+                                    class="review-avatar"
+                                />
                                 <div class="review-author-info">
-                                    <span class="review-name">Iris Connelly</span>
-                                    <span class="review-role">42k Finisher</span>
+                                    <span class="review-name"
+                                        >Iris Connelly</span
+                                    >
+                                    <span class="review-role"
+                                        >42k Finisher</span
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -434,16 +597,21 @@
             </div>
         </section>
 
-
         <!-- Marathon Countdown Section -->
         <section class="marathon-section">
             <div class="marathon-overlay"></div>
             <div class="marathon-content">
                 <h2 class="marathon-title">
-                    Prepare for the <span class="marathon-highlight">Biggest<br>Marathon</span> of the Year
+                    Prepare for the
+                    <span class="marathon-highlight"
+                        >Biggest<br />Marathon</span
+                    >
+                    of the Year
                 </h2>
                 <p class="marathon-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam.
                 </p>
 
                 <!-- Countdown Timer -->
@@ -467,39 +635,45 @@
                 </div>
 
                 <p class="marathon-note">
-                    Note: Donec euismod lectus pellentesque mi neque turpis. Praesent adipiscing mauris ut
-                    ut vel nunc. Elit eu gravida ut sit.
+                    Note: Donec euismod lectus pellentesque mi neque turpis.
+                    Praesent adipiscing mauris ut ut vel nunc. Elit eu gravida
+                    ut sit.
                 </p>
 
                 <a href="#" class="marathon-btn">REGISTER NOW</a>
             </div>
         </section>
 
-
         <!-- What's Happening Section -->
         <section class="events-happening-section">
             <div class="events-happening-inner">
-
                 <!-- Header -->
                 <div class="events-happening-header">
                     <h2 class="events-happening-title">What's Happening</h2>
                     <div class="events-happening-tabs">
-                        <button 
+                        <button
                             class="events-tab-btn"
                             :class="{ active: activeEventTab === 'upcoming' }"
                             @click="activeEventTab = 'upcoming'"
-                        >UPCOMING EVENTS</button>
-                        <button 
+                        >
+                            UPCOMING EVENTS
+                        </button>
+                        <button
                             class="events-tab-btn"
                             :class="{ active: activeEventTab === 'past' }"
                             @click="activeEventTab = 'past'"
-                        >PAST EVENTS</button>
+                        >
+                            PAST EVENTS
+                        </button>
                     </div>
                 </div>
 
                 <!-- Events Scroll with Arrow Buttons -->
                 <div class="events-scroll-container">
-                    <button class="events-arrow-btn events-arrow-left" id="eventsArrowLeft">
+                    <button
+                        class="events-arrow-btn events-arrow-left"
+                        id="eventsArrowLeft"
+                    >
                         <i class="ri-arrow-left-s-line"></i>
                     </button>
 
@@ -511,8 +685,14 @@
                                     <div class="event-img-placeholder"></div>
                                     <div class="event-card-hover-overlay">
                                         <div class="event-hover-actions">
-                                            <a href="#" class="event-hover-btn">REGISTER</a>
-                                            <a href="#" class="event-hover-btn event-hover-btn-outline">VIEW EVENT INFO</a>
+                                            <a href="#" class="event-hover-btn"
+                                                >REGISTER</a
+                                            >
+                                            <a
+                                                href="#"
+                                                class="event-hover-btn event-hover-btn-outline"
+                                                >VIEW EVENT INFO</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -525,7 +705,9 @@
                                     <span class="event-tag">5KM</span>
                                 </div>
 
-                                <h3 class="event-card-title">Gensan Half Marathon 2026</h3>
+                                <h3 class="event-card-title">
+                                    Gensan Half Marathon 2026
+                                </h3>
 
                                 <div class="event-card-meta">
                                     <div class="event-meta-row">
@@ -538,19 +720,29 @@
                                         <div class="event-meta-icon">
                                             <i class="ri-map-pin-line"></i>
                                         </div>
-                                        <span>Gaisano Mall of Gensan, General Santos City</span>
+                                        <span
+                                            >Gaisano Mall of Gensan, General
+                                            Santos City</span
+                                        >
                                     </div>
                                 </div>
 
                                 <div class="event-card-actions">
-                                    <a href="#" class="event-action-link">REGISTER</a>
-                                    <a href="#" class="event-action-link">VIEW EVENT INFO</a>
+                                    <a href="#" class="event-action-link"
+                                        >REGISTER</a
+                                    >
+                                    <a href="#" class="event-action-link"
+                                        >VIEW EVENT INFO</a
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button class="events-arrow-btn events-arrow-right" id="eventsArrowRight">
+                    <button
+                        class="events-arrow-btn events-arrow-right"
+                        id="eventsArrowRight"
+                    >
                         <i class="ri-arrow-right-s-line"></i>
                     </button>
                 </div>
@@ -559,10 +751,9 @@
                 <div class="events-view-all-wrap">
                     <a href="#" class="events-view-all-btn">VIEW ALL EVENTS</a>
                 </div>
-
             </div>
         </section>
-        
+
         <!-- Driven by Quality Section -->
         <section class="quality-section">
             <div class="quality-image">
@@ -570,13 +761,18 @@
                 <!-- Replace with: <img src="/img/your-image.jpg" alt="Tribu Pakaras Team"> -->
             </div>
             <div class="quality-content">
-                <h2 class="quality-title">Driven by Quality.<br>Powered by Purpose.</h2>
+                <h2 class="quality-title">
+                    Driven by Quality.<br />Powered by Purpose.
+                </h2>
                 <p class="quality-desc">
-                    At Tribu Pakaras, we believe that what you wear should never hold you back. That's why we've invested
-                    in better technology, better processes, and better materials — so you can focus on pushing your limits.
+                    At Tribu Pakaras, we believe that what you wear should never
+                    hold you back. That's why we've invested in better
+                    technology, better processes, and better materials — so you
+                    can focus on pushing your limits.
                 </p>
                 <p class="quality-subdesc">
-                    We are committed to delivering products that match your performance.
+                    We are committed to delivering products that match your
+                    performance.
                 </p>
                 <ul class="quality-list">
                     <li>
@@ -603,7 +799,6 @@
             </div>
         </section>
 
-
         <!-- Run Wild Section -->
         <section class="runwild-section">
             <h2 class="runwild-title">Run Wild. Live Pakaras.</h2>
@@ -624,7 +819,6 @@
             </div>
         </section>
 
-
         <!-- Cart Bottom Bar -->
         <div class="product-cart-box" v-if="cartCount > 0">
             <div class="custom-container">
@@ -634,7 +828,7 @@
                             {{ cartCount }}
                             {{ cartCount === 1 ? 'item' : 'items' }}
                         </h5>
-                        <h4 class="cart-bar-title">View Cart</h4>   
+                        <h4 class="cart-bar-title">View Cart</h4>
                     </div>
                     <Link
                         :href="route('store.brand-partner.cart')"
@@ -785,7 +979,7 @@ const props = defineProps({
     products: Object,
     categories: Array,
     events: Array,
-    reviews: { 
+    reviews: {
         type: Array,
         default: () => [],
     },
@@ -807,7 +1001,9 @@ let searchTimeout = null;
 const sectionLabel = computed(() => {
     if (searchQuery.value) return `Results for "${searchQuery.value}"`;
     if (selectedCategory.value) {
-        const cat = props.categories.find((c) => c.id == selectedCategory.value);
+        const cat = props.categories.find(
+            (c) => c.id == selectedCategory.value,
+        );
         return cat?.name || 'Products';
     }
     if (selectedEvent.value) {
@@ -919,7 +1115,9 @@ onMounted(() => {
         const diff = targetDate - now;
         if (diff <= 0) return;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const hours = Math.floor(
+            (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         const pad = (n) => String(n).padStart(2, '0');
@@ -946,7 +1144,8 @@ onMounted(() => {
     const updateEventsArrows = () => {
         const maxIndex = (eventsTrack?.children.length || 0) - 3;
         if (eventsArrowLeft) eventsArrowLeft.disabled = eventsIndex <= 0;
-        if (eventsArrowRight) eventsArrowRight.disabled = eventsIndex >= maxIndex;
+        if (eventsArrowRight)
+            eventsArrowRight.disabled = eventsIndex >= maxIndex;
     };
 
     eventsArrowRight?.addEventListener('click', () => {
@@ -997,7 +1196,9 @@ const confirmAddToCart = () => {
             preserveScroll: true,
             onSuccess: () => cartModal?.hide(),
             onError: (errors) => console.error('Error adding to cart:', errors),
-            onFinish: () => { isAddingToCart.value = false; },
+            onFinish: () => {
+                isAddingToCart.value = false;
+            },
         },
     );
 };
@@ -1116,7 +1317,7 @@ const confirmAddToCart = () => {
 
 /* Slide 2 specifics */
 .slide-2-bg {
-    background-color: #444; 
+    background-color: #444;
 }
 .slide-overlay-left-dark {
     position: absolute;
@@ -1124,7 +1325,12 @@ const confirmAddToCart = () => {
     left: 0;
     width: 60%;
     height: 100%;
-    background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.6) 60%,
+        rgba(0, 0, 0, 0) 100%
+    );
     z-index: 1;
 }
 
@@ -1145,7 +1351,11 @@ const confirmAddToCart = () => {
     left: 0;
     width: 55%;
     height: 100%;
-    background: linear-gradient(110deg, rgb(var(--grocery-primary)) 85%, transparent 85%);
+    background: linear-gradient(
+        110deg,
+        rgb(var(--grocery-primary)) 85%,
+        transparent 85%
+    );
     z-index: 1;
 }
 
@@ -1182,13 +1392,14 @@ const confirmAddToCart = () => {
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        position: relative; 
+        position: relative;
         overflow: hidden;
         width: 100%;
     }
-    .slide-overlay-left-dark, .slide-overlay-left-orange {
+    .slide-overlay-left-dark,
+    .slide-overlay-left-orange {
         width: 100%;
-        background: rgba(0,0,0,0.7);
+        background: rgba(0, 0, 0, 0.7);
     }
     .slide-4-bg .slide-overlay-left-orange {
         background: rgba(var(--grocery-primary), 0.9);
@@ -1213,8 +1424,6 @@ const confirmAddToCart = () => {
     --grocery-light-bg: 247, 247, 247; /* Light gray background */
     --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
 }
-
-
 
 /* Responsive adjustments */
 @media (max-width: 991px) {
@@ -1769,7 +1978,7 @@ const confirmAddToCart = () => {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 0;   /* change from -80px back to 0 */
+    margin-bottom: 0; /* change from -80px back to 0 */
     z-index: 1;
 }
 
@@ -1790,7 +1999,10 @@ const confirmAddToCart = () => {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.07) 1px,
+        transparent 1px
+    );
     background-size: 28px 28px;
     pointer-events: none;
 }
@@ -1807,7 +2019,7 @@ const confirmAddToCart = () => {
     height: 320px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
 }
 
 .dreamer-shirt-left {
@@ -1830,7 +2042,7 @@ const confirmAddToCart = () => {
     display: block;
     font-size: 13px;
     letter-spacing: 6px;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255, 255, 255, 0.55);
     font-weight: 400;
     margin-bottom: 4px;
     text-transform: uppercase;
@@ -1849,17 +2061,17 @@ const confirmAddToCart = () => {
 .dreamer-description {
     font-size: 13px;
     line-height: 1.75;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255, 255, 255, 0.65);
     margin-bottom: 28px;
 }
 
 .dreamer-description strong {
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .dreamer-btn {
     display: inline-block;
-    border: 1.5px solid rgba(255,255,255,0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     color: #fff;
     padding: 11px 26px;
     font-size: 11px;
@@ -1898,7 +2110,12 @@ const confirmAddToCart = () => {
 .col-panel-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.75) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
     z-index: 1;
 }
 
@@ -1995,7 +2212,7 @@ const confirmAddToCart = () => {
 }
 
 .panel-dark .col-panel-desc {
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .panel-mid .col-panel-desc {
@@ -2003,7 +2220,7 @@ const confirmAddToCart = () => {
 }
 
 .panel-orange .col-panel-desc {
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* Panel buttons */
@@ -2021,7 +2238,7 @@ const confirmAddToCart = () => {
 }
 
 .col-panel-btn-outline {
-    border: 1.5px solid rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
     color: #fff;
     background: transparent;
 }
@@ -2044,7 +2261,7 @@ const confirmAddToCart = () => {
 }
 
 .col-panel-btn-white {
-    border: 1.5px solid rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
     color: #fff;
     background: transparent;
 }
@@ -2125,7 +2342,6 @@ const confirmAddToCart = () => {
     }
 }
 
-
 /* ===== Reviews Section ===== */
 .reviews-section {
     width: 100vw;
@@ -2137,7 +2353,7 @@ const confirmAddToCart = () => {
     padding: 60px 0 70px;
     overflow: hidden;
     z-index: 1;
-    margin-top: 8px; 
+    margin-top: 8px;
 }
 
 .reviews-header {
@@ -2168,7 +2384,7 @@ const confirmAddToCart = () => {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     background: transparent;
     color: #fff;
     font-size: 20px;
@@ -2180,7 +2396,7 @@ const confirmAddToCart = () => {
 }
 
 .reviews-nav-btn:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .reviews-nav-btn-active {
@@ -2448,7 +2664,6 @@ const confirmAddToCart = () => {
     }
 }
 
-
 /* ===== What's Happening Section ===== */
 .events-happening-section {
     width: 100vw;
@@ -2533,14 +2748,14 @@ const confirmAddToCart = () => {
     flex-shrink: 0;
     transition: all 0.25s;
     z-index: 2;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .events-arrow-btn:hover {
     background: #e84b0f;
     border-color: #e84b0f;
     color: #fff;
-    box-shadow: 0 4px 14px rgba(232,75,15,0.3);
+    box-shadow: 0 4px 14px rgba(232, 75, 15, 0.3);
 }
 
 .events-arrow-btn:disabled {
@@ -2552,7 +2767,7 @@ const confirmAddToCart = () => {
     background: #fff;
     border-color: #e0e0e0;
     color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Scroll Wrap */
@@ -2806,7 +3021,6 @@ const confirmAddToCart = () => {
         font-size: 18px;
     }
 }
-
 
 /* ===== Driven by Quality Section ===== */
 .quality-section {
