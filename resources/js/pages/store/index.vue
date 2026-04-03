@@ -128,34 +128,6 @@
             </div>
         </section>
 
-        <!-- Search Section -->
-        <section id="search" class="grocery-search-section">
-            <div class="custom-container">
-                <div class="search-box">
-                    <form class="form-style-7" @submit.prevent="applySearch">
-                        <div class="search-input-wrap">
-                            <i class="ri-search-line search-icon"></i>
-                            <input
-                                type="text"
-                                class="form-control"
-                                v-model="searchQuery"
-                                placeholder="Search for products..."
-                                @input="debounceSearch"
-                            />
-                            <button
-                                v-if="searchQuery"
-                                type="button"
-                                class="clear-search-btn"
-                                @click="clearSearch"
-                            >
-                                <i class="ri-close-line"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
         <!-- Category Section -->
         <section
             id="categories"
@@ -372,8 +344,12 @@
                     </li>
                 </ul>
 
-                <!-- Empty State -->
+                <!-- View products section
+                 -->
+
                 <div v-else class="grocery-empty-state">
+                    <h1 cl>Our Products</h1>
+
                     <div class="empty-icon-circle">
                         <i class="ri-shopping-bag-line"></i>
                     </div>
@@ -1411,7 +1387,6 @@ const confirmAddToCart = () => {
 /* ===== Grocery Template Styles ===== */
 .grocery-store-page {
     font-family: 'Public Sans', sans-serif;
-    background: #f7f7f7;
     min-height: 100vh;
     overflow-x: visible;
     max-width: 100%;
@@ -1901,17 +1876,15 @@ const confirmAddToCart = () => {
     align-items: center;
     gap: 6px;
     padding: 10px 22px;
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-    border: none;
-    border-radius: 14px;
+    color: #005523;
+    border: 1 solid #005523;
+    border-radius: 0;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.25s ease;
     font-family: 'Public Sans', sans-serif;
     text-decoration: none;
-    box-shadow: 0 3px 10px rgba(var(--grocery-theme), 0.25);
 }
 
 .btn-grocery-primary:hover {
