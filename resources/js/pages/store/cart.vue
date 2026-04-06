@@ -1,6 +1,6 @@
 <template>
     <Head :title="`Cart - ${brandPartner.name}`" />
-
+    
     <div class="grocery-cart-section">
         <!-- Header -->
         <div class="grocery-header">
@@ -260,6 +260,7 @@ const clearCart = () => {
 .grocery-cart-section {
     min-height: 60vh;
     padding-bottom: 40px;
+    margin-top: 80px;
     font-family: 'Public Sans', sans-serif;
     background: rgb(var(--grocery-light-bg));
     /* Grocery Theme Color Variables */

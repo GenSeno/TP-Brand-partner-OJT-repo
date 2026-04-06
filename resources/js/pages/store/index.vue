@@ -59,74 +59,6 @@
         </section>
 
 
-        <!-- Search Section -->
-        <section id="search" class="grocery-search-section">
-            <div class="custom-container">
-                <div class="search-box">
-                    <form class="form-style-7" @submit.prevent="applySearch">
-                        <div class="search-input-wrap">
-                            <i class="ri-search-line search-icon"></i>
-                            <input
-                                type="text"
-                                class="form-control"
-                                v-model="searchQuery"
-                                placeholder="Search for products..."
-                                @input="debounceSearch"
-                            />
-                            <button
-                                v-if="searchQuery"
-                                type="button"
-                                class="clear-search-btn"
-                                @click="clearSearch"
-                            >
-                                <i class="ri-close-line"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Category Section -->
-        <section
-            id="categories"
-            class="grocery-category-section"
-            v-if="categories.length > 0"
-        >
-            <div class="custom-container">
-                <div class="grocery-category-slider">
-                    <div class="category-scroll-wrap">
-                        <a
-                            href="javascript:void(0)"
-                            class="grocery-category-box"
-                            :class="{
-                                active: !selectedCategory && !selectedEvent,
-                            }"
-                            @click="clearFilters"
-                        >
-                            <div class="category-icon-wrap">
-                                <i class="ri-apps-line"></i>
-                            </div>
-                            <h5>All</h5>
-                        </a>
-                        <a
-                            v-for="category in categories"
-                            :key="category.id"
-                            href="javascript:void(0)"
-                            class="grocery-category-box"
-                            :class="{ active: selectedCategory == category.id }"
-                            @click="selectCategory(category)"
-                        >
-                            <div class="category-icon-wrap">
-                                <i class="ri-price-tag-3-line"></i>
-                            </div>
-                            <h5>{{ category.name }}</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Event Tabs -->
         <section class="grocery-events-section" v-if="events.length > 0">
             <div class="custom-container">
@@ -152,151 +84,89 @@
         <!-- Products Grid -->
         <section class="grocery-products-section">
             <div class="custom-container">
-                <div class="section-header" v-if="products.data.length > 0">
-                    <h4 class="section-title">{{ sectionLabel }}</h4>
-                    <span class="product-count">
-                        {{ products.total || products.data.length }} items
-                    </span>
+                <div class="section-header">
+                    <h2 class="section-title-main">Built Stronger. Made Better.</h2>
                 </div>
 
-                <ul class="product-offer-list" v-if="products.data.length > 0">
-                    <li
-                        v-for="product in products.data"
-                        :key="product.id"
-                        class="product-offer-item"
-                    >
-                        <div class="product-box">
-                            <div class="product-image">
-                                <Link
-                                    :href="
-                                        route('store.brand-partner.product', product.slug)
-                                    "
-                                    class="product-image-link"
-                                >
-                                    <img
-                                        :src="
-                                            product.image_url ||
-                                            '/img/tshirt-placeholder.svg'
-                                        "
-                                        :alt="product.name"
-                                        class="img-fluid"
-                                    />
-                                    <div
-                                        class="discount-badge"
-                                        v-if="
-                                            product.compare_price &&
-                                            product.compare_price >
-                                                product.price
-                                        "
-                                    >
-                                        <span>
-                                            {{
-                                                Math.round(
-                                                    (1 -
-                                                        product.price /
-                                                            product.compare_price) *
-                                                        100,
-                                                )
-                                            }}% OFF
-                                        </span>
-                                    </div>
-                                </Link>
+                <!-- Products Grid -->
+                <div class="products-grid-wrapper">
+                    <div class="products-grid" v-if="sampleProductsData.data.length > 0">
+                        <div
+                            v-for="product in sampleProductsData.data"
+                            :key="product.id"
+                            class="product-card"
+                        >
+                            <!-- Sale Badge -->
+                            <div class="product-badge" v-if="product.compare_price && product.compare_price > product.price">
+                                SALE
                             </div>
-                            <div class="product-content">
-                                <Link
-                                    :href="
-                                        route('store.brand-partner.product', product.slug)
-                                    "
-                                    class="product-name-link"
-                                >
-                                    <h5 class="product-name">
-                                        {{ product.name }}
-                                    </h5>
-                                </Link>
-                                <h5
-                                    class="product-category"
-                                    v-if="product.short_description"
-                                >
-                                    {{
-                                        truncate(product.short_description, 40)
-                                    }}
-                                </h5>
-                                <h5 class="product-price">
-                                    {{ formatCurrency(product.price) }}
-                                    <span
-                                        v-if="
-                                            product.compare_price &&
-                                            product.compare_price >
-                                                product.price
-                                        "
-                                        class="old-price"
-                                    >
-                                        {{
-                                            formatCurrency(
-                                                product.compare_price,
-                                            )
-                                        }}
-                                    </span>
-                                </h5>
-                                <!-- Color & Size chips -->
-                                <div v-if="product.colors_array?.length || product.sizes_array?.length" class="product-options-chips">
-                                    <span
-                                        v-for="color in (product.colors_array ?? []).slice(0, 4)"
-                                        :key="color"
-                                        class="option-chip color-chip"
-                                    >{{ color }}</span>
-                                    <span
-                                        v-for="size in (product.sizes_array ?? []).slice(0, 4)"
-                                        :key="size"
-                                        class="option-chip size-chip"
-                                    >{{ size }}</span>
+                            
+                            <!-- Product Image -->
+                            <Link
+                                :href="route('store.brand-partner.product', product.slug)"
+                                class="product-image-link"
+                            >
+                                <div class="product-image-wrapper">
+                                    <img
+                                        :src="product.image_url || '/img/tshirt-placeholder.svg'"
+                                        :alt="product.name"
+                                        class="product-img"
+                                    />
                                 </div>
-
-                                <div class="add-quantity-wrap">
-                                    <Link
-                                        v-if="product.colors_array?.length || product.sizes_array?.length"
-                                        :href="route('store.brand-partner.product', product.slug)"
-                                        class="btn-add-quantity"
-                                        title="Select options"
-                                    >
-                                        <i class="ri-equalizer-line"></i>
-                                    </Link>
-                                    <button
-                                        v-else-if="product.in_stock"
-                                        class="btn-add-quantity"
-                                        @click.prevent="addToCart(product)"
-                                    >
-                                        <i class="ri-add-line"></i>
-                                    </button>
-                                    <span v-else class="out-of-stock-badge">
-                                        Out of Stock
+                            </Link>
+                            
+                            <!-- Product Info -->
+                            <div class="product-info">
+                                <h3 class="product-name">{{ product.name }}</h3>
+                                <p class="product-collection">{{ product.short_description || 'COLLECTION' }}</p>
+                                
+                                <!-- Rating Stars -->
+                                <div class="product-rating">
+                                    <i class="ri-star-fill" v-for="n in 5" :key="n"></i>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="product-pricing">
+                                    <span class="product-price">PHP {{ formatCurrencySimple(product.price) }}</span>
+                                    <span class="product-old-price" v-if="product.compare_price && product.compare_price > product.price">
+                                        PHP {{ formatCurrencySimple(product.compare_price) }}
                                     </span>
                                 </div>
+                                
+                                <!-- Add to Cart Button -->
+                                <button 
+                                    class="add-to-cart-btn"
+                                    @click="addToCart(product)"
+                                    :disabled="!product.in_stock"
+                                >
+                                    ADD TO CART
+                                </button>
                             </div>
                         </div>
-                    </li>
-                </ul>
-
-                <!-- Empty State -->
-                <div v-else class="grocery-empty-state">
-                    <div class="empty-icon-circle">
-                        <i class="ri-shopping-bag-line"></i>
                     </div>
-                    <h4>No products found</h4>
-                    <p>Try adjusting your filters or search query.</p>
-                    <button
-                        class="btn btn-grocery-primary"
-                        @click="clearFilters"
-                    >
-                        <i class="ri-store-2-line"></i> View All Products
-                    </button>
+
+                    <!-- Empty State -->
+                    <div v-else class="grocery-empty-state">
+                        <div class="empty-icon-circle">
+                            <i class="ri-shopping-bag-line"></i>
+                        </div>
+                        <h4>No products found</h4>
+                        <p>Try adjusting your filters or search query.</p>
+                        <button class="btn btn-grocery-primary" @click="clearFilters">
+                            <i class="ri-store-2-line"></i> View All Products
+                        </button>
+                    </div>
+                </div>
+
+                <!-- View All Button -->
+                <div class="view-all-wrapper" v-if="sampleProductsData.data.length > 0">
+                    <Link :href="route('store.brand-partner.index')" class="view-all-btn">
+                        VIEW ALL PRODUCTS
+                    </Link>
                 </div>
 
                 <!-- Pagination -->
-                <div
-                    class="grocery-pagination"
-                    v-if="products.links && products.links.length > 3"
-                >
+                <div class="grocery-pagination" v-if="products.links && products.links.length > 3">
                     <nav>
                         <ul class="pagination">
                             <li
@@ -315,11 +185,7 @@
                                     v-html="link.label"
                                     preserve-scroll
                                 />
-                                <span
-                                    v-else
-                                    class="page-link"
-                                    v-html="link.label"
-                                />
+                                <span v-else class="page-link" v-html="link.label" />
                             </li>
                         </ul>
                     </nav>
@@ -389,6 +255,212 @@
         </section>
 
 
+        <!-- Search Section -->
+        <section id="search" class="grocery-search-section">
+            <div class="custom-container">
+                <div class="search-box">
+                    <form class="form-style-7" @submit.prevent="applySearch">
+                        <div class="search-input-wrap">
+                            <i class="ri-search-line search-icon"></i>
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="searchQuery"
+                                placeholder="Search for products..."
+                                @input="debounceSearch"
+                            />
+                            <button
+                                v-if="searchQuery"
+                                type="button"
+                                class="clear-search-btn"
+                                @click="clearSearch"
+                            >
+                                <i class="ri-close-line"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Section -->
+        <section
+            id="categories"
+            class="grocery-category-section"
+            v-if="categories.length > 0"
+        >
+            <div class="custom-container">
+                <div class="grocery-category-slider">
+                    <div class="category-scroll-wrap">
+                        <a
+                            href="javascript:void(0)"
+                            class="grocery-category-box"
+                            :class="{
+                                active: !selectedCategory && !selectedEvent,
+                            }"
+                            @click="clearFilters"
+                        >
+                            <div class="category-icon-wrap">
+                                <i class="ri-apps-line"></i>
+                            </div>
+                            <h5>All</h5>
+                        </a>
+                        <a
+                            v-for="category in categories"
+                            :key="category.id"
+                            href="javascript:void(0)"
+                            class="grocery-category-box"
+                            :class="{ active: selectedCategory == category.id }"
+                            @click="selectCategory(category)"
+                        >
+                            <div class="category-icon-wrap">
+                                <i class="ri-price-tag-3-line"></i>
+                            </div>
+                            <h5>{{ category.name }}</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Products Grid -->
+        <section class="grocery-products-section">
+            <div class="custom-container">
+                <div class="section-header">
+                    <h2 class="section-title-main">Built Stronger. Made Better.</h2>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="category-pills-wrapper">
+                    <div class="category-pills-scroll">
+                        <button 
+                            class="category-pill"
+                            :class="{ active: !selectedCategory && !selectedEvent }"
+                            @click="clearFilters"
+                        >
+                            ALL
+                        </button>
+                        <button 
+                            v-for="category in displayCategories"
+                            :key="category.id"
+                            class="category-pill"
+                            :class="{ active: selectedCategory == category.id }"
+                            @click="selectCategory(category)"
+                        >
+                            {{ category.name }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid-wrapper">
+                    <div class="products-grid" v-if="sampleProductsData.data.length > 0">
+                        <div
+                            v-for="product in sampleProductsData.data"
+                            :key="product.id"
+                            class="product-card"
+                        >
+                            <!-- Sale Badge -->
+                            <div class="product-badge" v-if="product.compare_price && product.compare_price > product.price">
+                                SALE
+                            </div>
+                            
+                            <!-- Product Image -->
+                            <Link
+                                :href="route('store.brand-partner.product', product.slug)"
+                                class="product-image-link"
+                            >
+                                <div class="product-image-wrapper">
+                                    <img
+                                        :src="product.image_url || '/img/tshirt-placeholder.svg'"
+                                        :alt="product.name"
+                                        class="product-img"
+                                    />
+                                </div>
+                            </Link>
+                            
+                            <!-- Product Info -->
+                            <div class="product-info">
+                                <h3 class="product-name">{{ product.name }}</h3>
+                                <p class="product-collection">{{ product.short_description || 'COLLECTION' }}</p>
+                                
+                                <!-- Rating Stars -->
+                                <div class="product-rating">
+                                    <i class="ri-star-fill" v-for="n in 5" :key="n"></i>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="product-pricing">
+                                    <span class="product-price">PHP {{ formatCurrencySimple(product.price) }}</span>
+                                    <span class="product-old-price" v-if="product.compare_price && product.compare_price > product.price">
+                                        PHP {{ formatCurrencySimple(product.compare_price) }}
+                                    </span>
+                                </div>
+                                
+                                <!-- Add to Cart Button -->
+                                <button 
+                                    class="add-to-cart-btn"
+                                    @click="addToCart(product)"
+                                    :disabled="!product.in_stock"
+                                >
+                                    ADD TO CART
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div v-else class="grocery-empty-state">
+                        <div class="empty-icon-circle">
+                            <i class="ri-shopping-bag-line"></i>
+                        </div>
+                        <h4>No products found</h4>
+                        <p>Try adjusting your filters or search query.</p>
+                        <button class="btn btn-grocery-primary" @click="clearFilters">
+                            <i class="ri-store-2-line"></i> View All Products
+                        </button>
+                    </div>
+                </div>
+
+                <!-- View All Button -->
+                <div class="view-all-wrapper" v-if="sampleProductsData.data.length > 0">
+                    <Link :href="route('store.brand-partner.index')" class="view-all-btn">
+                        VIEW ALL PRODUCTS
+                    </Link>
+                </div>
+
+                <!-- Pagination -->
+                <div class="grocery-pagination" v-if="products.links && products.links.length > 3">
+                    <nav>
+                        <ul class="pagination">
+                            <li
+                                v-for="link in products.links"
+                                :key="link.label"
+                                class="page-item"
+                                :class="{
+                                    active: link.active,
+                                    disabled: !link.url,
+                                }"
+                            >
+                                <Link
+                                    v-if="link.url"
+                                    :href="link.url"
+                                    class="page-link"
+                                    v-html="link.label"
+                                    preserve-scroll
+                                />
+                                <span v-else class="page-link" v-html="link.label" />
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+
+        
+
         <!-- Reviews Section -->
         <section class="reviews-section">
             <div class="reviews-header">
@@ -435,6 +507,7 @@
         </section>
 
 
+        
         <!-- Marathon Countdown Section -->
         <section class="marathon-section">
             <div class="marathon-overlay"></div>
@@ -614,12 +687,15 @@
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
+                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
+                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
+                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
                 </div>
             </div>
         </section>
@@ -776,6 +852,120 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
+
+const formatCurrencySimple = (amount) => {
+    return (amount / 100).toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+};
+
+// Add this SAMPLE PRODUCTS data right after the opening <script setup> tag
+// This will show sample products while your database is empty
+
+// SAMPLE PRODUCTS FOR TESTING - Remove this when you have real products
+const sampleProductsData = ref({
+    data: [
+        {
+            id: 1,
+            name: "HUGIS V2 TEE - BLACK",
+            slug: "hugis-v2-tee-black",
+            price: 89900,
+            compare_price: 129900,
+            short_description: "Premium quality running shirt",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Black", "White", "Gray"],
+            sizes_array: ["S", "M", "L", "XL"],
+            in_stock: true
+        },
+        {
+            id: 2,
+            name: "BREAKING BOUNDARIES SINGLET",
+            slug: "breaking-boundaries-singlet",
+            price: 79900,
+            compare_price: 0,
+            short_description: "Lightweight racing singlet",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Navy", "Red"],
+            sizes_array: ["S", "M", "L", "XL"],
+            in_stock: true
+        },
+        {
+            id: 3,
+            name: "PAKARAS RUNNING SHORTS",
+            slug: "pakaras-running-shorts",
+            price: 129900,
+            compare_price: 179900,
+            short_description: "2-in-1 running shorts with built-in liner",
+            iimage_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Black", "Charcoal"],
+            sizes_array: ["S", "M", "L", "XL"],
+            in_stock: true
+        },
+        {
+            id: 4,
+            name: "TRIBU PAKARAS CAP",
+            slug: "tribu-pakaras-cap",
+            price: 59900,
+            compare_price: 0,
+            short_description: "Performance running cap",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Black", "White"],
+            sizes_array: ["One Size"],
+            in_stock: true
+        },
+        {
+            id: 5,
+            name: "HUGIS COMPRESSION TIGHTS",
+            slug: "hugis-compression-tights",
+            price: 149900,
+            compare_price: 199900,
+            short_description: "High compression running tights",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Black"],
+            sizes_array: ["S", "M", "L", "XL"],
+            in_stock: true
+        },
+        {
+            id: 6,
+            name: "RACE DAY TANK TOP",
+            slug: "race-day-tank-top",
+            price: 69900,
+            compare_price: 0,
+            short_description: "Breathable mesh tank top for race day",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Neon Yellow", "Black", "White"],
+            sizes_array: ["S", "M", "L", "XL"],
+            in_stock: true
+        },
+        {
+            id: 7,
+            name: "PAKARAS RUNNING SOCKS",
+            slug: "pakaras-running-socks",
+            price: 34900,
+            compare_price: 0,
+            short_description: "Anti-blister running socks with cushioning",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Black/White", "Navy/Yellow"],
+            sizes_array: ["S/M", "L/XL"],
+            in_stock: true
+        },
+        {
+            id: 8,
+            name: "LIMITED EDITION RACING VEST",
+            slug: "limited-edition-racing-vest",
+            price: 99900,
+            compare_price: 149900,
+            short_description: "Limited edition race day vests",
+            image_url: "/img/tshirt-placeholder.svg",
+            colors_array: ["Orange/Black"],
+            sizes_array: ["M", "L", "XL"],
+            in_stock: true
+        }
+    ],
+    total: 8,
+    links: []
+});
 
 const activeEventTab = ref('upcoming');
 let countdownInterval = null;
@@ -1449,204 +1639,236 @@ const confirmAddToCart = () => {
     font-weight: 500;
 }
 
-/* Product Grid - product-offer-list */
-.product-offer-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* ===== Products Section - New Design ===== */
+.grocery-products-section {
+    padding: 40px 0;
+    background: #f5f5f5;
+}
+
+.section-title-main {
+    font-size: 64px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #535353;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    display: block;
+    width: 100%;
+}
+
+/* Category Pills */
+.category-pills-wrapper {
+    margin-bottom: 30px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.category-pills-scroll {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.category-pill {
+    padding: 8px 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.category-pill:hover {
+    border-color: #333;
+    color: #333;
+}
+
+.category-pill.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
+}
+
+/* Products Grid */
+.products-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 20px;
+    margin-bottom: 40px;
 }
 
-.product-offer-item {
-    display: flex;
+@media (min-width: 576px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.product-box {
-    width: 100%;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--grocery-theme), 0.05) 61.46%,
-        rgba(245, 249, 250, 0) 100%
-    );
-    border-radius: 6px;
+@media (min-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+}
+
+/* Product Card */
+.product-card {
+    background: #fff;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    transition: all 0.25s ease;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(var(--grocery-border));
-}
-
-.product-box:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-}
-
-.product-image {
     position: relative;
-    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Sale Badge */
+.product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #e53935;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    z-index: 2;
+    text-transform: uppercase;
+}
+
+/* Product Image */
+.product-image-link {
+    display: block;
+    text-decoration: none;
+}
+
+.product-image-wrapper {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #f8f8f8;
 }
 
-.product-image-link {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-}
-
-.product-image img {
+.product-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.product-box:hover .product-image img {
+.product-card:hover .product-img {
     transform: scale(1.05);
 }
 
-.discount-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-}
-
-.discount-badge span {
-    display: inline-block;
-    background: linear-gradient(135deg, #ff4757 0%, #ff3344 100%);
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-}
-
-.product-options-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 6px;
-}
-.option-chip {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 10px;
-    letter-spacing: 0.2px;
-}
-.color-chip {
-    background: rgba(var(--grocery-theme), 0.1);
-    color: rgb(var(--grocery-theme));
-}
-.size-chip {
-    background: #f0f0f0;
-    color: #555;
-}
-
-.product-content {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    position: relative;
-}
-
-.product-name-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-.product-name-link:hover .product-name {
-    color: rgb(var(--grocery-theme));
+/* Product Info */
+.product-info {
+    padding: 14px;
 }
 
 .product-name {
     font-size: 14px;
-    font-weight: 700;
-    color: rgb(var(--grocery-title));
+    font-weight: 600;
+    color: #1a1a1a;
     margin: 0 0 4px;
     line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    font-family: 'Public Sans', sans-serif;
-    transition: color 0.2s;
 }
 
-.product-category {
-    font-size: 11px;
-    color: rgb(var(--grocery-content));
+.product-collection {
+    font-size: 12px;
+    color: #999;
     margin: 0 0 8px;
-    font-weight: 400;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    letter-spacing: 0.3px;
+}
+
+/* Rating Stars */
+.product-rating {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 8px;
+}
+
+.product-rating i {
+    font-size: 12px;
+    color: #ffc107;
+}
+
+/* Pricing */
+.product-pricing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 .product-price {
     font-size: 16px;
-    font-weight: 800;
-    color: rgb(var(--grocery-theme));
-    margin: 0 0 8px;
-    font-family: 'Public Sans', sans-serif;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
-.old-price {
-    font-size: 12px;
-    font-weight: 400;
-    color: #bdbdbd;
+.product-old-price {
+    font-size: 13px;
+    color: #bbb;
     text-decoration: line-through;
-    margin-left: 4px;
 }
 
-.add-quantity-wrap {
-    margin-top: auto;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.btn-add-quantity {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
+/* Add to Cart Button */
+.add-to-cart-btn {
+    width: 100%;
+    padding: 10px;
+    background: #1a1a1a;
     border: none;
-    background: rgb(var(--grocery-theme));
     color: #fff;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 3px 10px rgba(var(--grocery-theme), 0.25);
-}
-
-.btn-add-quantity:hover {
-    transform: scale(1.08);
-    box-shadow: 0 4px 14px rgba(var(--grocery-theme), 0.35);
-}
-
-.btn-add-quantity:active {
-    transform: scale(0.96);
-}
-
-.out-of-stock-badge {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
-    color: rgb(var(--grocery-content));
-    padding: 5px 10px;
-    background: rgba(var(--grocery-content), 0.1);
-    border-radius: 8px;
-    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-radius: 6px;
+}
+
+.add-to-cart-btn:hover {
+    background: #333;
+}
+
+.add-to-cart-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* View All Button */
+.view-all-wrapper {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.view-all-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    background: transparent;
+    border: 2px solid #1a1a1a;
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background: #1a1a1a;
+    color: #fff;
 }
 
 /* ===== Empty State ===== */

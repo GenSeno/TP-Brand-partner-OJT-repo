@@ -4,6 +4,9 @@ use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Store\BrandPartnerCartController;
 use App\Http\Controllers\Store\BrandPartnerCheckoutController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
+use App\Http\Controllers\Store\BrandPartnerCollectionController;
+use App\Http\Controllers\Store\BrandPartnerAboutController;
+use App\Http\Controllers\Store\BrandPartnerContactController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -22,6 +25,18 @@ Route::group([
     // Product detail page
     Route::get('/product/{productSlug}', [BrandPartnerStoreController::class, 'product'])
         ->name('brand-partner.product');
+
+    // Collections page
+    Route::get('/collections', [BrandPartnerCollectionController::class, 'index'])
+        ->name('brand-partner.collections');
+
+    // About Us page
+    Route::get('/about', [BrandPartnerAboutController::class, 'index'])
+        ->name('brand-partner.about');
+
+    // Contact Us page
+    Route::get('/contact', [BrandPartnerContactController::class, 'index'])
+        ->name('brand-partner.contact');
 
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])

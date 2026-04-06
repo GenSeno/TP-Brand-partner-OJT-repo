@@ -31,11 +31,27 @@
                     <nav class="center-nav">
                         <Link 
                             :href="brandPartner ? route('store.brand-partner.index', brandPartner.slug) : '#'" 
-                            class="nav-item">SHOP <i class="ri-arrow-down-s-line"></i>
+                            class="nav-item">
+                            SHOP <i class="ri-arrow-down-s-line"></i>
                         </Link>
-                        <a href="javascript:void(0)" class="nav-item">COLLECTIONS <i class="ri-arrow-down-s-line"></i></a>
-                        <a href="javascript:void(0)" class="nav-item">ABOUT US</a>
-                        <a href="javascript:void(0)" class="nav-item">CONTACT US</a>
+                        
+                        <Link 
+                            :href="brandPartner ? route('store.brand-partner.collections', brandPartner.slug) : '#'" 
+                            class="nav-item">
+                            COLLECTIONS <i class="ri-arrow-down-s-line"></i>
+                        </Link>
+                        
+                        <Link 
+                            :href="brandPartner ? route('store.brand-partner.about', brandPartner.slug) : '#'" 
+                            class="nav-item">
+                            ABOUT US
+                        </Link>
+                        
+                        <Link 
+                            :href="brandPartner ? route('store.brand-partner.contact', brandPartner.slug) : '#'" 
+                            class="nav-item">
+                            CONTACT US
+                        </Link>
                     </nav>
                 </div>
 
