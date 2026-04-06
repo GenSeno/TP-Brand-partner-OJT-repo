@@ -47,7 +47,10 @@
                             <div class="cart-box-left">
                                 <Link
                                     :href="
-                                        route('store.brand-partner.product', item.product.slug)
+                                        route(
+                                            'store.brand-partner.product',
+                                            item.product.slug,
+                                        )
                                     "
                                     class="product-image"
                                 >
@@ -72,11 +75,28 @@
                                             {{ item.product.name }}
                                         </Link>
                                     </h5>
-                                    <h6 v-if="item.color || item.size" class="text-muted" style="font-size:12px;">
-                                        <span v-if="item.color">Color: <strong>{{ item.color }}</strong></span>
-                                        <span v-if="item.size" class="ms-2">Size: <strong>{{ item.size }}</strong></span>
+                                    <h6
+                                        v-if="item.color || item.size"
+                                        class="text-muted"
+                                        style="font-size: 12px"
+                                    >
+                                        <span v-if="item.color"
+                                            >Color:
+                                            <strong>{{
+                                                item.color
+                                            }}</strong></span
+                                        >
+                                        <span v-if="item.size" class="ms-2"
+                                            >Size:
+                                            <strong>{{
+                                                item.size
+                                            }}</strong></span
+                                        >
                                     </h6>
-                                    <h6 v-else-if="item.product.sku" style="font-size:12px;">
+                                    <h6
+                                        v-else-if="item.product.sku"
+                                        style="font-size: 12px"
+                                    >
                                         SKU: {{ item.product.sku }}
                                     </h6>
                                     <div class="qty-controls">
@@ -193,9 +213,7 @@
                 <h3>Your cart is empty</h3>
                 <p>Looks like you haven't added any products yet.</p>
                 <Link
-                    :href="
-                        route('store.brand-partner.index')
-                    "
+                    :href="route('store.brand-partner.index')"
                     class="grocery-btn theme-btn"
                 >
                     <i class="ri-store-2-line"></i> Start Shopping
@@ -238,20 +256,16 @@ const updateQuantity = (itemId, quantity) => {
 };
 
 const removeItem = (itemId) => {
-    router.delete(
-        route('store.brand-partner.cart.remove', itemId),
-        { preserveScroll: true },
-    );
+    router.delete(route('store.brand-partner.cart.remove', itemId), {
+        preserveScroll: true,
+    });
 };
 
 const clearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
-        router.delete(
-            route('store.brand-partner.cart.clear'),
-            {
-                preserveScroll: true,
-            },
-        );
+        router.delete(route('store.brand-partner.cart.clear'), {
+            preserveScroll: true,
+        });
     }
 };
 </script>
