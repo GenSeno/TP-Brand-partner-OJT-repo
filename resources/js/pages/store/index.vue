@@ -563,18 +563,6 @@
                     <div class="empty-icon-circle">
                         <i class="ri-shopping-bag-line"></i>
                     </div>
-
-                    <!-- Empty State -->
-                    <div v-else class="grocery-empty-state">
-                        <div class="empty-icon-circle">
-                            <i class="ri-shopping-bag-line"></i>
-                        </div>
-                        <h4>No products found</h4>
-                        <p>Try adjusting your filters or search query.</p>
-                        <button class="btn btn-grocery-primary" @click="clearFilters">
-                            <i class="ri-store-2-line"></i> View All Products
-                        </button>
-                    </div>
                 </div>
 
                 <!-- View All Button -->

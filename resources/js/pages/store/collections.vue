@@ -10,7 +10,6 @@
             </div>
             <div class="collections-hero-overlay"></div>
             <div class="collections-hero-content">
-                <p class="collections-breadcrumb">Home › Collections</p>
                 <h1 class="collections-hero-title">OUR COLLECTION</h1>
                 <p class="collections-hero-desc">
                     Tribu Pakaras is launching its official eCommerce platform soon, powered by
@@ -113,7 +112,7 @@ import { Head } from '@inertiajs/vue3';
 /* Hero */
 .collections-hero {
     position: relative;
-    height: 420px;
+    height: 700px;
     padding-top: 80px;
     display: flex;
     align-items: center;
@@ -147,13 +146,6 @@ import { Head } from '@inertiajs/vue3';
     z-index: 2;
     max-width: 600px;
     padding: 0 24px;
-}
-
-.collections-breadcrumb {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    margin: 0 0 12px;
-    letter-spacing: 0.5px;
 }
 
 .collections-hero-title {

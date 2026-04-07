@@ -7,6 +7,8 @@ use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerCollectionController;
 use App\Http\Controllers\Store\BrandPartnerAboutController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
+use App\Http\Controllers\Store\BrandPartnerShopController;
+use App\Http\Controllers\Store\BrandPartnerLoginController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -21,6 +23,10 @@ Route::group([
     // Store home page
     Route::get('/', [BrandPartnerStoreController::class, 'index'])
         ->name('brand-partner.index');
+
+    // Shop page
+    Route::get('/shop', [BrandPartnerShopController::class, 'index'])
+        ->name('brand-partner.shop');
 
     // Product detail page
     Route::get('/product/{productSlug}', [BrandPartnerStoreController::class, 'product'])
@@ -37,6 +43,13 @@ Route::group([
     // Contact Us page
     Route::get('/contact', [BrandPartnerContactController::class, 'index'])
         ->name('brand-partner.contact');
+
+    // ========== LOGIN ROUTES ==========
+    Route::get('/{brandPartner}/login', function ($brandPartner) {
+        return Inertia::render('Auth/Login', [
+            'brandPartner' => BrandPartner::where('slug', $brandPartner)->first()
+        ]);
+    })->name('store.brand-partner.login');
 
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])
@@ -61,7 +74,7 @@ Route::group([
     Route::post('/checkout', [BrandPartnerCheckoutController::class, 'store'])
         ->name('brand-partner.checkout.store');
 
-    // Address lookup routes (public, used by checkout form)
+    // Address lookup routes
     Route::get('/address/provinces', [AddressController::class, 'provinces'])->name('address.provinces');
     Route::get('/address/cities', [AddressController::class, 'cities'])->name('address.cities');
     Route::post('/address/states', [AddressController::class, 'states'])->name('address.states');
@@ -69,5 +82,4 @@ Route::group([
     // Order confirmation
     Route::get('/order/{reference}', [BrandPartnerCheckoutController::class, 'confirmation'])
         ->name('brand-partner.order.confirmation');
-
 });

@@ -9,7 +9,6 @@
             </div>
             <div class="about-hero-overlay"></div>
             <div class="about-hero-content">
-                <p class="about-breadcrumb">Home › About</p>
                 <h1 class="about-hero-title">About Us</h1>
             </div>
         </section>
@@ -140,7 +139,7 @@ import { Head } from '@inertiajs/vue3';
 /* Hero */
 .about-hero {
     position: relative;
-    height: 420px;
+    height: 450px;
     padding-top: 80px;
     display: flex;
     align-items: center;
@@ -175,20 +174,17 @@ import { Head } from '@inertiajs/vue3';
     padding: 0 24px;
 }
 
-.about-breadcrumb {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    margin: 0 0 12px;
-    letter-spacing: 0.5px;
-}
-
 .about-hero-title {
-    font-size: 52px;
-    font-weight: 900;
-    color: #fff;
-    margin: 0;
-    letter-spacing: 2px;
-    font-family: 'Public Sans', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    text-align: left;
+    margin-bottom: 40px;
+    color: #ffffff;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+    display: block;
+    width: 100%;
 }
 
 /* Inner Container */
@@ -205,11 +201,16 @@ import { Head } from '@inertiajs/vue3';
 }
 
 .about-intro-title {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 800;
-    color: #111;
-    margin: 0 0 20px;
-    font-family: 'Public Sans', sans-serif;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #535353;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+    display: block;
+    width: 100%;
 }
 
 .about-intro-text {
@@ -217,6 +218,7 @@ import { Head } from '@inertiajs/vue3';
     color: #555;
     line-height: 1.7;
     max-width: 800px;
+    font-family: 'Poppins', sans-serif;
     margin: 0 auto 20px;
 }
 
@@ -224,6 +226,8 @@ import { Head } from '@inertiajs/vue3';
 .about-story,
 .about-whatwedo {
     padding: 60px 0;
+    color: #555;    
+    font-family: 'Poppins', sans-serif;
 }
 
 .about-story-grid {
@@ -262,7 +266,7 @@ import { Head } from '@inertiajs/vue3';
 .about-section-title {
     font-size: 28px;
     font-weight: 800;
-    color: #111;
+    color: #535353;
     margin: 0 0 20px;
     font-family: 'Public Sans', sans-serif;
 }

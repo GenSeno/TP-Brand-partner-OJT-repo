@@ -25,12 +25,12 @@
                         <span class="brand-name text-white">Store</span>
                     </span>
                 </div>
-
+                
                 <!-- Center Nav Links -->
                 <div class="center-nav-wrapper d-none d-lg-block">
                     <nav class="center-nav">
                         <Link 
-                            :href="brandPartner ? route('store.brand-partner.index', brandPartner.slug) : '#'" 
+                            :href="brandPartner ? route('store.brand-partner.shop', brandPartner.slug) : '#'" 
                             class="nav-item">
                             SHOP <i class="ri-arrow-down-s-line"></i>
                         </Link>
@@ -58,7 +58,12 @@
                 <!-- Right Utility Icons & CTA -->
                 <div class="right-nav-wrapper d-none d-lg-block">
                     <nav class="right-nav">
-                        <a href="javascript:void(0)" class="utility-link"><i class="ri-user-line"></i> Account</a>
+                        <Link
+                            :href="brandPartner ? route('store.brand-partner.login', brandPartner.slug) : '#'"
+                            class="utility-link"
+                        >
+                            <i class="ri-user-line"></i> Account
+                        </Link>
                         <a href="javascript:void(0)" class="utility-link"><i class="ri-heart-line"></i> Wishlist</a>
                         <Link
                             :href="

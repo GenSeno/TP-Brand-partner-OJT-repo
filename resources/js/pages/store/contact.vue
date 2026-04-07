@@ -10,7 +10,6 @@
             </div>
             <div class="contact-hero-overlay"></div>
             <div class="contact-hero-content">
-                <p class="contact-breadcrumb">Home › Contact Us</p>
                 <h1 class="contact-hero-title">Contact us</h1>
             </div>
         </section>
@@ -62,71 +61,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Footer -->
-        <footer class="contact-footer">
-            <div class="contact-footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <!-- Replace with: <img src="/img/logo-white.png" alt="Tribu Pakaras"> -->
-                        <span class="footer-logo-text">✦ TRIBU<br>PAKARAS</span>
-                    </div>
-                    <p class="footer-tagline">Pakaras /pa-kah-ras/<br><em>adjective</em></p>
-                    <p class="footer-tagline-desc">
-                        Showing fearlessness and determination without thinking or caring about the
-                        probable consequences of their action.
-                    </p>
-                </div>
-
-                <div class="footer-col">
-                    <h5 class="footer-col-title">Sitemap</h5>
-                    <ul>
-                        <li><a href="#">Shop</a></li>
-                        <li><a href="#">Collections</a></li>
-                        <li><a href="#">Header 1</a></li>
-                        <li><a href="#">Header 2</a></li>
-                        <li><a href="#">Header 3</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h5 class="footer-col-title">Account</h5>
-                    <ul>
-                        <li><a href="#">Wishlist</a></li>
-                        <li><a href="#">Cart</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h5 class="footer-col-title">Contact Information</h5>
-                    <ul class="footer-contact-list">
-                        <li><i class="ri-map-pin-line"></i> Davao City, Philippines</li>
-                        <li><i class="ri-mail-line"></i> tribupakarasph@gmail.com</li>
-                        <li><i class="ri-phone-line"></i> 0906 486 1393</li>
-                    </ul>
-                    <h5 class="footer-col-title mt-3">Social</h5>
-                    <div class="footer-socials">
-                        <a href="#"><i class="ri-facebook-fill"></i></a>
-                        <a href="#"><i class="ri-tiktok-fill"></i></a>
-                        <a href="#"><i class="ri-youtube-fill"></i></a>
-                        <a href="#"><i class="ri-instagram-line"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-col footer-newsletter">
-                    <h5 class="footer-col-title">Be among the first to experience it.</h5>
-                    <p>From rugged trails to everyday runs, we've got you covered.</p>
-                    <div class="footer-subscribe">
-                        <input type="email" placeholder="Enter Address" />
-                        <button>SUBSCRIBE</button>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>All right reserved 2026.</p>
-            </div>
-        </footer>
-
     </div>
 </template>
 
@@ -144,7 +78,7 @@ import { Head } from '@inertiajs/vue3';
 /* Hero */
 .contact-hero {
     position: relative;
-    height: 300px;
+    height: 450px;
     display: flex;
     align-items: flex-end;
     overflow: hidden;
@@ -176,18 +110,16 @@ import { Head } from '@inertiajs/vue3';
     padding: 0 60px 36px;
 }
 
-.contact-breadcrumb {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    margin: 0 0 8px;
-}
-
 .contact-hero-title {
-    font-size: 38px;
-    font-weight: 900;
-    color: #fff;
-    margin: 0;
-    font-family: 'Public Sans', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    text-align: left;
+    color: #ffffff;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+    display: block;
+    width: 100%;
 }
 
 /* Inner container */
@@ -328,204 +260,5 @@ import { Head } from '@inertiajs/vue3';
     transform: translateY(-1px);
 }
 
-/* Footer */
-.contact-footer {
-    background: #111;
-    padding: 60px 0 0;
-}
 
-.contact-footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr;
-    gap: 40px;
-}
-
-.footer-logo-text {
-    font-size: 18px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.2;
-    display: block;
-    margin-bottom: 16px;
-}
-
-.footer-tagline {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    margin: 0 0 6px;
-    line-height: 1.5;
-}
-
-.footer-tagline-desc {
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
-    line-height: 1.6;
-    margin: 0;
-}
-
-.footer-col-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0 0 16px;
-    font-family: 'Public Sans', sans-serif;
-}
-
-.footer-col ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.footer-col ul li a {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.footer-col ul li a:hover {
-    color: #fff;
-}
-
-.footer-contact-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.footer-contact-list li {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.footer-contact-list li i {
-    color: #e84b0f;
-    font-size: 14px;
-}
-
-.mt-3 {
-    margin-top: 24px !important;
-}
-
-.footer-socials {
-    display: flex;
-    gap: 12px;
-}
-
-.footer-socials a {
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.6);
-    font-size: 16px;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.footer-socials a:hover {
-    border-color: #e84b0f;
-    color: #e84b0f;
-}
-
-.footer-newsletter p {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    margin: 0 0 14px;
-    line-height: 1.6;
-}
-
-.footer-subscribe {
-    display: flex;
-    gap: 0;
-}
-
-.footer-subscribe input {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-    font-size: 12px;
-    outline: none;
-    font-family: 'Public Sans', sans-serif;
-}
-
-.footer-subscribe input::placeholder {
-    color: rgba(255,255,255,0.3);
-}
-
-.footer-subscribe button {
-    background: #e84b0f;
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    font-family: 'Public Sans', sans-serif;
-    white-space: nowrap;
-    transition: background 0.2s;
-}
-
-.footer-subscribe button:hover {
-    background: #d04010;
-}
-
-.footer-bottom {
-    margin-top: 48px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding: 18px 40px;
-    text-align: center;
-}
-
-.footer-bottom p {
-    font-size: 12px;
-    color: rgba(255,255,255,0.3);
-    margin: 0;
-}
-
-/* Responsive */
-@media (max-width: 991px) {
-    .contact-footer-inner {
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
-    }
-}
-
-@media (max-width: 768px) {
-    .contact-hero-content {
-        padding: 0 24px 28px;
-    }
-
-    .contact-hero-title {
-        font-size: 28px;
-    }
-
-    .contact-info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-footer-inner {
-        grid-template-columns: 1fr;
-        padding: 0 24px;
-    }
-}
 </style>
