@@ -121,9 +121,7 @@ th {
                                         New Billing
                                     </ModalLink>
                                 </div>
-                                <div
-                                    class="border-end pe-1 me-1"
-                                >
+                                <div class="border-end pe-1 me-1">
                                     <ModalLink
                                         navigate
                                         :href="
@@ -141,14 +139,15 @@ th {
                                         Payment
                                     </ModalLink>
                                 </div>
-                                <div
-                                    class="border-end pe-1 me-1"
-                                    >
+                                <div class="border-end pe-1 me-1">
                                     <ModalLink
                                         v-if="!hasShipping"
                                         navigate
                                         :href="
-                                            route('admin.shipping.edit', invoice.id)
+                                            route(
+                                                'admin.shipping.edit',
+                                                invoice.id,
+                                            )
                                         "
                                         class="btn btn-sm btn-light-ghost"
                                     >
@@ -162,7 +161,10 @@ th {
                                         v-else
                                         navigate
                                         :href="
-                                            route('admin.shipping.edit', invoice.id)
+                                            route(
+                                                'admin.shipping.edit',
+                                                invoice.id,
+                                            )
                                         "
                                         class="btn btn-sm btn-light-ghost"
                                     >
@@ -185,7 +187,10 @@ th {
                                                 data-feather="share-2"
                                                 class="feather-share-2"
                                             ></i>
-                                            <span class="d-none d-lg-inline ms-2">Share</span>
+                                            <span
+                                                class="d-none d-lg-inline ms-2"
+                                                >Share</span
+                                            >
                                         </loading-text>
                                     </a>
                                 </div>
@@ -446,15 +451,13 @@ th {
                                             <td
                                                 colspan="3"
                                                 class="bg-light fw-bold"
-                                                >
+                                            >
                                                 TOTAL
                                             </td>
                                             <td class="text-end fw-bold">
                                                 {{ invoice.total.formatted }}
                                             </td>
                                         </tr>
-
-                                       
 
                                         <!-- Amount Due -->
                                         <tr>
@@ -493,10 +496,13 @@ th {
                                                 Total Amount Due
                                             </td>
                                             <td class="text-end fw-bold">
-                                                  {{ invoice.summary.with_shipping.formatted }}
+                                                {{
+                                                    invoice.summary
+                                                        .with_shipping.formatted
+                                                }}
                                             </td>
                                         </tr>
-                                        <tr  v-if="billing?.length == 0">
+                                        <tr v-if="billing?.length == 0">
                                             <td colspan="4" class="border-0">
                                                 &nbsp;
                                             </td>
@@ -539,7 +545,12 @@ th {
                                                     }}
                                                 </td>
                                             </tr>
-                                            <tr  v-if="invoice.type != 'down-payment'">
+                                            <tr
+                                                v-if="
+                                                    invoice.type !=
+                                                    'down-payment'
+                                                "
+                                            >
                                                 <td
                                                     colspan="3"
                                                     class="fw-bold bg-light"
@@ -547,31 +558,34 @@ th {
                                                     Total Amount Billed
                                                 </td>
                                                 <td class="text-end fw-bold">
-                                                    {{
-                                                        totalBilled
-                                                            .formatted
-                                                    }}
+                                                    {{ totalBilled.formatted }}
                                                 </td>
                                             </tr>
-                                            <tr v-if="invoice.type != 'down-payment'">
+                                            <tr
+                                                v-if="
+                                                    invoice.type !=
+                                                    'down-payment'
+                                                "
+                                            >
                                                 <td
                                                     colspan="3"
                                                     class="bg-light text-danger"
                                                 >
                                                     Unbilled Amount
                                                 </td>
-                                                <td class="text-end text-danger">
+                                                <td
+                                                    class="text-end text-danger"
+                                                >
                                                     {{
-                                                        unbilledAmount
-                                                            .formatted
+                                                        unbilledAmount.formatted
                                                     }}
                                                 </td>
                                             </tr>
-                                            <br/>
+                                            <br />
                                         </template>
                                     </template>
                                 </PrintTable>
-                                
+
                                 <div class="small">
                                     <h6>HOW TO MAKE PAYMENT?</h6>
                                     <p>
@@ -719,12 +733,11 @@ const props = defineProps({
     unbilledAmount: Object,
 });
 const dateFormat = ref('DD MMM YYYY');
-console.log('invoice', props.invoice );
+console.log('invoice', props.invoice);
 
 const hasShipping = computed(() => {
     return (
-        props.invoice?.shipping_total &&
-        props.invoice.shipping_total.value > 0
+        props.invoice?.shipping_total && props.invoice.shipping_total.value > 0
     );
 });
 
@@ -744,20 +757,16 @@ const sharing = ref(false);
 
 const shareBilling = () => {
     sharing.value = true;
-    axios
-        .post(route('admin.billing.share', props.invoice.id))
-        .then((res) => {
-            navigator.clipboard.writeText(res.data.url);
-            sharing.value = false;
-            alert.showSuccess('Share link copied!');
-        });
+    axios.post(route('admin.billing.share', props.invoice.id)).then((res) => {
+        navigator.clipboard.writeText(res.data.url);
+        sharing.value = false;
+        alert.showSuccess('Share link copied!');
+    });
 };
 
 const handlePrint = () => {
     window.print();
 };
-
-
 
 onMounted(() => {
     emitter.on('note:created', () => {
@@ -770,5 +779,4 @@ onMounted(() => {
         router.reload();
     });
 });
-
 </script>

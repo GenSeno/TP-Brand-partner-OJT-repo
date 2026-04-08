@@ -5,7 +5,7 @@
         <!-- Hero -->
         <section class="about-hero">
             <div class="about-hero-bg">
-                <img src="/img/img-about1.png" alt="About Hero">
+                <img src="/img/img-about1.png" alt="About Hero" />
             </div>
             <div class="about-hero-overlay"></div>
             <div class="about-hero-content">
@@ -18,13 +18,16 @@
             <div class="about-inner">
                 <h2 class="about-intro-title">About Us Tribu Pakaras</h2>
                 <p class="about-intro-text">
-                    Tribu Pakaras Outdoor is more than a brand—it's a community built for those who move with purpose,
-                    passion, and courage. Inspired by the meaning of <strong>"pakaras"</strong>—fearless and determined—we exist for
-                    individuals who choose adventure without hesitation.
+                    Tribu Pakaras Outdoor is more than a brand—it's a community
+                    built for those who move with purpose, passion, and courage.
+                    Inspired by the meaning of
+                    <strong>"pakaras"</strong>—fearless and determined—we exist
+                    for individuals who choose adventure without hesitation.
                 </p>
                 <p class="about-intro-text">
-                    Rooted in the spirit of the Filipino outdoors, we bring together athletes, explorers, and everyday
-                    adventurers who share one mindset: to keep going, no matter the terrain.
+                    Rooted in the spirit of the Filipino outdoors, we bring
+                    together athletes, explorers, and everyday adventurers who
+                    share one mindset: to keep going, no matter the terrain.
                 </p>
             </div>
         </section>
@@ -33,20 +36,23 @@
         <section class="about-story">
             <div class="about-inner about-story-grid">
                 <div class="about-story-image">
-                    <img src="/img/img-about2.png" alt="Our Story">
+                    <img src="/img/img-about2.png" alt="Our Story" />
                 </div>
                 <div class="about-story-content">
                     <h2 class="about-section-title">Our Story</h2>
                     <p class="about-section-text">
-                        Born from the growing trail run and trail running culture in the Philippines,
-                        Tribu Pakaras started as a passion-driven movement supporting local athletes
-                        and the outdoor community. From trail races to everyday training, we built a
-                        space where people can connect, grow, and push beyond limits.
+                        Born from the growing trail run and trail running
+                        culture in the Philippines, Tribu Pakaras started as a
+                        passion-driven movement supporting local athletes and
+                        the outdoor community. From trail races to everyday
+                        training, we built a space where people can connect,
+                        grow, and push beyond limits.
                     </p>
                     <p class="about-section-text">
-                        What began as a small initiative has evolved into a trusted team for outdoor
-                        gear, performance athleti, and community-driven experiences—serving
-                        adventurers across the country.
+                        What began as a small initiative has evolved into a
+                        trusted team for outdoor gear, performance athleti, and
+                        community-driven experiences—serving adventurers across
+                        the country.
                     </p>
                 </div>
             </div>
@@ -58,18 +64,21 @@
                 <div class="about-story-content">
                     <h2 class="about-section-title">What We Do</h2>
                     <p class="about-section-text">
-                        We provide curated outdoor and performance products designed for real-world
-                        adventure—from trail running and hiking to endurance sports. Whether you're
-                        preparing for your first race or your next ultra stop, we keep you with gear
-                        that supports your journey.
+                        We provide curated outdoor and performance products
+                        designed for real-world adventure—from trail running and
+                        hiking to endurance sports. Whether you're preparing for
+                        your first race or your next ultra stop, we keep you
+                        with gear that supports your journey.
                     </p>
                     <p class="about-section-text">
-                        Beyond products, we actively support the outdoor brave—collaborating with events,
-                        athletes, and organizations that promote passion, resilience, and exploration.
+                        Beyond products, we actively support the outdoor
+                        brave—collaborating with events, athletes, and
+                        organizations that promote passion, resilience, and
+                        exploration.
                     </p>
                 </div>
                 <div class="about-story-image">
-                    <img src="/img/img-about3.png" alt="What We Do">
+                    <img src="/img/img-about3.png" alt="What We Do" />
                 </div>
             </div>
         </section>
@@ -79,28 +88,30 @@
             <div class="about-mv-grid">
                 <div class="about-mv-panel">
                     <div class="about-mv-bg">
-                        <img src="/img/img-about4.png" alt="">
+                        <img src="/img/img-about4.png" alt="" />
                     </div>
                     <div class="about-mv-overlay"></div>
                     <div class="about-mv-content">
                         <h3 class="about-mv-title">Our Mission</h3>
                         <p class="about-mv-text">
-                            To empower every Filipino adventurer to move with puso (heart) and
-                            galing (excellence)—on the trail, on the road, and in life.
+                            To empower every Filipino adventurer to move with
+                            puso (heart) and galing (excellence)—on the trail,
+                            on the road, and in life.
                         </p>
                     </div>
                 </div>
                 <div class="about-mv-panel">
                     <div class="about-mv-bg">
-                       <img src="/img/img-about5.png" alt="">
+                        <img src="/img/img-about5.png" alt="" />
                     </div>
                     <div class="about-mv-overlay"></div>
                     <div class="about-mv-content">
                         <h3 class="about-mv-title">Our Vision</h3>
                         <p class="about-mv-text">
-                            To become a leading outdoor lifestyle brand in the Philippines—building a
-                            strong, united tribe of explorers who inspire others to embrace the
-                            outdoors and live fearlessly.
+                            To become a leading outdoor lifestyle brand in the
+                            Philippines—building a strong, united tribe of
+                            explorers who inspire others to embrace the outdoors
+                            and live fearlessly.
                         </p>
                     </div>
                 </div>
@@ -110,14 +121,15 @@
         <!-- Join the Tribe -->
         <section class="about-join">
             <div class="about-join-bg">
-                <img src="/img/img-about6.png" alt="">
+                <img src="/img/img-about6.png" alt="" />
             </div>
             <div class="about-join-overlay"></div>
             <div class="about-join-inner">
                 <h2 class="about-join-title">Join the Tribe</h2>
                 <p class="about-join-desc">
-                    At Tribu Pakaras Outdoor, you're not just buying gear—you're becoming part of a movement. A tribe that
-                    runs with heart, climbs with purpose, and explores without limits.
+                    At Tribu Pakaras Outdoor, you're not just buying gear—you're
+                    becoming part of a movement. A tribe that runs with heart,
+                    climbs with purpose, and explores without limits.
                 </p>
                 <p class="about-join-tagline">Puso. Galing. Pakaras.</p>
             </div>
@@ -226,7 +238,7 @@ import { Head } from '@inertiajs/vue3';
 .about-story,
 .about-whatwedo {
     padding: 60px 0;
-    color: #555;    
+    color: #555;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -288,7 +300,7 @@ import { Head } from '@inertiajs/vue3';
     grid-template-columns: 1fr 1fr;
     min-height: 420px;
     gap: 8px;
-     background: #fff;
+    background: #fff;
 }
 
 .about-mv-panel {

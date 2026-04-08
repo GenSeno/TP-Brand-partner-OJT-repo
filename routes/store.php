@@ -10,6 +10,8 @@ use App\Http\Controllers\Store\BrandPartnerContactController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerLoginController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Models\BrandPartner;
 
 /**
  * Front Store Routes for Brand Partners
@@ -46,10 +48,14 @@ Route::group([
 
     // ========== LOGIN ROUTES ==========
     Route::get('/{brandPartner}/login', function ($brandPartner) {
-        return Inertia::render('Auth/Login', [
+        return Inertia::render('store/login', [
             'brandPartner' => BrandPartner::where('slug', $brandPartner)->first()
         ]);
-    })->name('store.brand-partner.login');
+    })->name('brand-partner.login');
+    
+    Route::post('/{brandPartner}/login', function () {
+        // Placeholder for login submission
+    })->name('brand-partner.login.submit');
 
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])

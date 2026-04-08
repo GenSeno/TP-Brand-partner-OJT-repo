@@ -60,11 +60,14 @@ const form = useAxiosForm({
 });
 
 const submitForm = () => {
-    form.put(route('brand-partner.product-options.sizes.update', props.size.id), {
-        onSuccess: ({ data }) => {
-            modalRef.value.close();
-            alert.showSuccess(data.message || 'Size updated successfully.');
+    form.put(
+        route('brand-partner.product-options.sizes.update', props.size.id),
+        {
+            onSuccess: ({ data }) => {
+                modalRef.value.close();
+                alert.showSuccess(data.message || 'Size updated successfully.');
+            },
         },
-    });
+    );
 };
 </script>

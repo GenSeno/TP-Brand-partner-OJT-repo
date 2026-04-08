@@ -17,15 +17,22 @@
                     <tr>
                         <td colspan="5" class="text-center">
                             No Item Selected, Please click the
-                             <button
+                            <button
                                 @click="gotoItems"
                                 class="btn btn-sm btn-light"
                                 :class="
-                                    route().current('admin.expense.item') ? 'disabled' : ''
+                                    route().current('admin.expense.item')
+                                        ? 'disabled'
+                                        : ''
                                 "
+                            >
+                                <i
+                                    data-feather="edit"
+                                    class="feather-edit px-1"
+                                ></i>
+                                <span class="d-none d-lg-inline ms-1"
+                                    >Edit</span
                                 >
-                                <i data-feather="edit" class="feather-edit px-1"></i>
-                                <span class="d-none d-lg-inline ms-1">Edit</span>
                             </button>
                             button.
                         </td>
@@ -214,5 +221,4 @@ const discountLines = ref(props.expense?.discount_breakdown);
 function gotoItems() {
     router.get(route('admin.expense.item', { expense: props?.expense?.id }));
 }
-
 </script>

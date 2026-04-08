@@ -2,11 +2,10 @@
     <Head title="Contact Us" />
 
     <div class="contact-page">
-
         <!-- Hero -->
         <section class="contact-hero">
             <div class="contact-hero-bg">
-                <img src="/img/img-contact.png" alt="">
+                <img src="/img/img-contact.png" alt="" />
             </div>
             <div class="contact-hero-overlay"></div>
             <div class="contact-hero-content">
@@ -23,14 +22,18 @@
                             <i class="ri-map-pin-line"></i>
                         </div>
                         <p class="contact-info-label">ADDRESS</p>
-                        <p class="contact-info-value">Davao City, Philippines</p>
+                        <p class="contact-info-value">
+                            Davao City, Philippines
+                        </p>
                     </div>
                     <div class="contact-info-card">
                         <div class="contact-info-icon">
                             <i class="ri-mail-line"></i>
                         </div>
                         <p class="contact-info-label">EMAIL ADDRESS</p>
-                        <p class="contact-info-value">tribupakarasph@gmail.com</p>
+                        <p class="contact-info-value">
+                            tribupakarasph@gmail.com
+                        </p>
                     </div>
                     <div class="contact-info-card">
                         <div class="contact-info-icon">
@@ -48,15 +51,34 @@
             <div class="contact-inner">
                 <h2 class="contact-form-title">Send Us a Message</h2>
                 <p class="contact-form-subtitle">
-                    Have something specific in mind? Fill out the form below and we'll get back to you as soon as possible.
+                    Have something specific in mind? Fill out the form below and
+                    we'll get back to you as soon as possible.
                 </p>
                 <div class="contact-form">
-                    <input type="text" class="contact-input" placeholder="Full Name" />
-                    <input type="email" class="contact-input" placeholder="Email Address" />
-                    <input type="text" class="contact-input" placeholder="Subject" />
-                    <textarea class="contact-textarea" placeholder="Message" rows="6"></textarea>
+                    <input
+                        type="text"
+                        class="contact-input"
+                        placeholder="Full Name"
+                    />
+                    <input
+                        type="email"
+                        class="contact-input"
+                        placeholder="Email Address"
+                    />
+                    <input
+                        type="text"
+                        class="contact-input"
+                        placeholder="Subject"
+                    />
+                    <textarea
+                        class="contact-textarea"
+                        placeholder="Message"
+                        rows="6"
+                    ></textarea>
                     <div class="contact-submit-wrap">
-                        <button class="contact-submit-btn">SEND US MESSAGE</button>
+                        <button class="contact-submit-btn">
+                            SEND US MESSAGE
+                        </button>
                     </div>
                 </div>
             </div>
@@ -100,7 +122,7 @@ import { Head } from '@inertiajs/vue3';
 .contact-hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 1;
 }
 
@@ -259,6 +281,4 @@ import { Head } from '@inertiajs/vue3';
     background: #144d30;
     transform: translateY(-1px);
 }
-
-
 </style>

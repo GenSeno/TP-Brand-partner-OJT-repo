@@ -67,8 +67,8 @@ th {
                                     <img
                                         :src="
                                             productLines[0]?.purchasable
-                                            ?.product?.image
-                                            ?.original_url || ''
+                                                ?.product?.image
+                                                ?.original_url || ''
                                         "
                                         class="rounded border"
                                         style="
@@ -80,7 +80,8 @@ th {
                                     />
                                     <div class="small fw-bold mt-1">
                                         {{
-                                            productLines[0]?.purchasable?.product?.name
+                                            productLines[0]?.purchasable
+                                                ?.product?.name
                                         }}
                                     </div>
                                 </div>
@@ -113,14 +114,15 @@ th {
                                         >
                                             <!-- Size + Quantity -->
                                             <div>
-                                                <span>{{ size }}</span>:
+                                                <span>{{ size }}</span
+                                                >:
                                                 {{
                                                     getTotalQuantity(
                                                         linesBySize,
                                                     )
                                                 }}
                                             </div>
-                                            
+
                                             <!-- Delete button beside size -->
                                             <dt-bulk-delete3
                                                 :ids="
@@ -141,12 +143,22 @@ th {
                                         <!-- Names -->
 
                                         <div v-if="groupKey === 'withName'">
-                                            <div v-for="line in linesBySize" :key="line.id" class="mb-1 text-muted ms-3">
+                                            <div
+                                                v-for="line in linesBySize"
+                                                :key="line.id"
+                                                class="mb-1 text-muted ms-3"
+                                            >
                                                 <!-- Show custom dimension above names if OTHERS -->
-                                                <div v-for="item in line.namesWithNumbers" :key="item.number">
+                                                <div
+                                                    v-for="item in line.namesWithNumbers"
+                                                    :key="item.number"
+                                                >
                                                     {{ item.number }}.)
                                                     <span
-                                                    v-html="item.name ?? '<i class=\'text-danger\'>Please set name</i>'"
+                                                        v-html="
+                                                            item.name ??
+                                                            '<i class=\'text-danger\'>Please set name</i>'
+                                                        "
                                                     ></span>
                                                 </div>
                                             </div>
@@ -213,7 +225,9 @@ th {
                                             'admin.quotation.lines.edit.product',
                                             {
                                                 quotation: quotation.id,
-                                                product: productLines[0]?.purchasable?.product_id,
+                                                product:
+                                                    productLines[0]?.purchasable
+                                                        ?.product_id,
                                             },
                                         )
                                     "
@@ -249,8 +263,8 @@ th {
                             This is a system generated Quotation, no signature
                             is required.
                         </td>
-                         <td colspan="1" class="fw-bold bg-light text-center">
-                             {{
+                        <td colspan="1" class="fw-bold bg-light text-center">
+                            {{
                                 Object.values(lines).reduce(
                                     (total, productLines) =>
                                         total +
@@ -262,9 +276,7 @@ th {
                                 )
                             }}
                         </td>
-                        <td colspan="2" class="fw-bold bg-light">
-                            Total
-                        </td>
+                        <td colspan="2" class="fw-bold bg-light">Total</td>
                         <td class="text-end fw-bold">
                             {{ quotation.sub_total.formatted }}
                         </td>
@@ -429,9 +441,11 @@ th {
                             "
                         ></td>
                         <td colspan="3" class="fw-bold bg-light">
-                           Grand Total
+                            Grand Total
                         </td>
-                        <td class="text-end fw-bold">{{ quotation.total.formatted }}</td>
+                        <td class="text-end fw-bold">
+                            {{ quotation.total.formatted }}
+                        </td>
                         <td class="fw-bold"></td>
                     </tr>
                 </tbody>

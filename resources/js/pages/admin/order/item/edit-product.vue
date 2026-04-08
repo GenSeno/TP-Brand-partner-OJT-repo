@@ -18,7 +18,7 @@
                     <!-- LEFT SIDE: Product Info -->
                     <div class="col-md-5">
                         <!-- Category -->
-                         <div class="mb-3">
+                        <div class="mb-3">
                             <label class="form-label">Category</label>
                             <input
                                 type="text"
@@ -40,15 +40,21 @@
                                 </option>
                             </select>
                         </div>
-                         <div class="mb-3">
-                             <p v-if="props.product?.description">
-                               {{props.product?.description }}
+                        <div class="mb-3">
+                            <p v-if="props.product?.description">
+                                {{ props.product?.description }}
                             </p>
                         </div>
                     </div>
 
                     <!-- RIGHT SIDE: Variant Details -->
-                    <div class="col-md-7" v-if="groupedVariants.withName.length || groupedVariants.noName.length">
+                    <div
+                        class="col-md-7"
+                        v-if="
+                            groupedVariants.withName.length ||
+                            groupedVariants.noName.length
+                        "
+                    >
                         <h6 class="mb-2">Selected Variants</h6>
                         <span class="text-info">
                             <i
@@ -58,185 +64,217 @@
                             Set Names, Input Quantity and Price
                         </span>
                         <hr />
-                         <div v-if="groupedVariants.withName.length">
+                        <div v-if="groupedVariants.withName.length">
                             <h6 class="fw-bold text-dark">WITH NAME</h6>
-                        <div
-                            v-for="variant in groupedVariants.withName"
-                            :key="variant.order_line_id"
-                            class="mb-3"
-                        >
-                            <div class="d-flex align-items-center">
-                                <!-- Variant description -->
-                                <div class="flex-grow-1">
-                                    {{ variant.size }}
-                                </div>
-
-                                <!-- Set Names button -->
-                                <button
-                                    v-if="needsSetNames(variant.description)"
-                                    type="button"
-                                    class="btn btn-xs btn-dark mx-2"
-                                    @click="openSetNamesOverlay(variant)"
-                                >
-                                    {{
-                                        variantQuantities[
-                                            variant.order_line_id
-                                        ] > 1
-                                            ? 'Set Names'
-                                            : 'Set Name'
-                                    }}
-                                </button>
-
-                                <!-- Quantity input -->
-                                <input
-                                    type="number"
-                                    min="1"
-                                    class="form-control w-25 ms-3"
-                                    v-model.number="
-                                        variantQuantities[variant.order_line_id]
-                                    "
-                                />
-
-                                <!-- Price input beside quantity -->
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    class="form-control w-25 ms-2"
-                                    v-model.number="
-                                        variantPrices[variant.order_line_id]
-                                    "
-                                />
-                            </div>
                             <div
-                                v-if="isOthersSize(variant.size)"
-                                class="mt-3"
-                                >
-                                <p class="small text-muted mb-1">
-                                    Dimension (W × H)
-                                </p>
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <input
-                                        v-model.number="variantDimensions[variant.order_line_id].width"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="W"
-                                    />
-
-                                    <span class="fw-bold text-muted">×</span>
-
-                                    <input
-                                        v-model.number="variantDimensions[variant.order_line_id].height"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="H"
-                                    />
-
-                                    <small class="text-muted">inches</small>
-                                </div>
-                            </div>
-
-                            <!-- Display names if any -->
-                            <div
-                                v-if="
-                                    variantNames[variant.order_line_id]?.length
-                                "
-                                class="mt-1 small text-muted"
+                                v-for="variant in groupedVariants.withName"
+                                :key="variant.order_line_id"
+                                class="mb-3"
                             >
-                                <span
-                                    v-for="(name, idx) in variantNames[
-                                        variant.order_line_id
-                                    ]"
-                                    :key="idx"
-                                >
-                                    {{ idx + 1 }}. {{ name || '—'
-                                    }}<span
+                                <div class="d-flex align-items-center">
+                                    <!-- Variant description -->
+                                    <div class="flex-grow-1">
+                                        {{ variant.size }}
+                                    </div>
+
+                                    <!-- Set Names button -->
+                                    <button
                                         v-if="
-                                            idx <
-                                            variantNames[variant.order_line_id]
-                                                .length -
-                                                1
+                                            needsSetNames(variant.description)
                                         "
-                                        >,
+                                        type="button"
+                                        class="btn btn-xs btn-dark mx-2"
+                                        @click="openSetNamesOverlay(variant)"
+                                    >
+                                        {{
+                                            variantQuantities[
+                                                variant.order_line_id
+                                            ] > 1
+                                                ? 'Set Names'
+                                                : 'Set Name'
+                                        }}
+                                    </button>
+
+                                    <!-- Quantity input -->
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        class="form-control w-25 ms-3"
+                                        v-model.number="
+                                            variantQuantities[
+                                                variant.order_line_id
+                                            ]
+                                        "
+                                    />
+
+                                    <!-- Price input beside quantity -->
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control w-25 ms-2"
+                                        v-model.number="
+                                            variantPrices[variant.order_line_id]
+                                        "
+                                    />
+                                </div>
+                                <div
+                                    v-if="isOthersSize(variant.size)"
+                                    class="mt-3"
+                                >
+                                    <p class="small text-muted mb-1">
+                                        Dimension (W × H)
+                                    </p>
+
+                                    <div
+                                        class="d-flex align-items-center gap-2"
+                                    >
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.order_line_id
+                                                ].width
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="W"
+                                        />
+
+                                        <span class="fw-bold text-muted"
+                                            >×</span
+                                        >
+
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.order_line_id
+                                                ].height
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="H"
+                                        />
+
+                                        <small class="text-muted">inches</small>
+                                    </div>
+                                </div>
+
+                                <!-- Display names if any -->
+                                <div
+                                    v-if="
+                                        variantNames[variant.order_line_id]
+                                            ?.length
+                                    "
+                                    class="mt-1 small text-muted"
+                                >
+                                    <span
+                                        v-for="(name, idx) in variantNames[
+                                            variant.order_line_id
+                                        ]"
+                                        :key="idx"
+                                    >
+                                        {{ idx + 1 }}. {{ name || '—'
+                                        }}<span
+                                            v-if="
+                                                idx <
+                                                variantNames[
+                                                    variant.order_line_id
+                                                ].length -
+                                                    1
+                                            "
+                                            >,
+                                        </span>
                                     </span>
-                                </span>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                         <hr />
-                         <div v-if="groupedVariants.noName.length">
+                        <hr />
+                        <div v-if="groupedVariants.noName.length">
                             <h6 class="fw-bold text-dark">NO NAME</h6>
                             <div
-                            v-for="variant in groupedVariants.noName"
-                            :key="variant.order_line_id"
-                            class="mb-3"
-                             >
-                            <div class="d-flex align-items-center">
-                                <!-- Variant description -->
-                                <div class="flex-grow-1">
-                                    {{ variant.size }}
-                                </div>
-                                <!-- Quantity input -->
-                                <input
-                                    type="number"
-                                    min="1"
-                                    class="form-control w-25 ms-3"
-                                    v-model.number="
-                                        variantQuantities[variant.order_line_id]
-                                    "
-                                />
+                                v-for="variant in groupedVariants.noName"
+                                :key="variant.order_line_id"
+                                class="mb-3"
+                            >
+                                <div class="d-flex align-items-center">
+                                    <!-- Variant description -->
+                                    <div class="flex-grow-1">
+                                        {{ variant.size }}
+                                    </div>
+                                    <!-- Quantity input -->
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        class="form-control w-25 ms-3"
+                                        v-model.number="
+                                            variantQuantities[
+                                                variant.order_line_id
+                                            ]
+                                        "
+                                    />
 
-                                <!-- Price input beside quantity -->
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    class="form-control w-25 ms-2"
-                                    v-model.number="
-                                        variantPrices[variant.order_line_id]
-                                    "
-                                />
-                            </div>
-                               <div
-                                v-if="isOthersSize(variant.size)"
-                                class="mt-3"
+                                    <!-- Price input beside quantity -->
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control w-25 ms-2"
+                                        v-model.number="
+                                            variantPrices[variant.order_line_id]
+                                        "
+                                    />
+                                </div>
+                                <div
+                                    v-if="isOthersSize(variant.size)"
+                                    class="mt-3"
                                 >
-                                <p class="small text-muted mb-1">
-                                    Dimension (W × H)
-                                </p>
+                                    <p class="small text-muted mb-1">
+                                        Dimension (W × H)
+                                    </p>
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <input
-                                        v-model.number="variantDimensions[variant.order_line_id].width"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="W"
-                                    />
+                                    <div
+                                        class="d-flex align-items-center gap-2"
+                                    >
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.order_line_id
+                                                ].width
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="W"
+                                        />
 
-                                    <span class="fw-bold text-muted">×</span>
+                                        <span class="fw-bold text-muted"
+                                            >×</span
+                                        >
 
-                                    <input
-                                        v-model.number="variantDimensions[variant.order_line_id].height"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="H"
-                                    />
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.order_line_id
+                                                ].height
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="H"
+                                        />
 
-                                    <small class="text-muted">inches</small>
+                                        <small class="text-muted">inches</small>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
-                         <hr />
+                        <hr />
                         <div class="mb-3">
                             <label class="form-label required"
                                 >Reason for changes</label
@@ -334,57 +372,55 @@ const variantPrices = reactive({});
 const variantNames = reactive({});
 const variantDimensions = reactive({});
 
-
-
 props.lines.forEach((line) => {
     variantQuantities[line.id] = line.quantity;
     variantPrices[line.id] = line.unit_price?.decimal || 0;
     variantNames[line.id] = line.meta?.names || [];
     const dimension = line.meta?.custom_dimension || '';
-    const [w, h] = dimension.split('x').map(v => v?.trim() || '');
+    const [w, h] = dimension.split('x').map((v) => v?.trim() || '');
     variantDimensions[line.id] = { width: w, height: h };
 });
 
 const groupedVariants = computed(() => {
-  const groups = { withName: [], noName: [] };
+    const groups = { withName: [], noName: [] };
 
-  // Loop through order lines
-  props.lines.forEach((line) => {
-    const description = line.purchasable?.description || '';
+    // Loop through order lines
+    props.lines.forEach((line) => {
+        const description = line.purchasable?.description || '';
 
-    // Find the corresponding print_line for this order line
-    const printLine = props.order?.print_lines?.find(
-      (pl) => pl.order_line_id === line.id
-    );
+        // Find the corresponding print_line for this order line
+        const printLine = props.order?.print_lines?.find(
+            (pl) => pl.order_line_id === line.id,
+        );
 
-    // Get the size from printLine if available
-    const size = printLine?.size || description?.split('/')[1]?.trim() || 'N/A';
+        // Get the size from printLine if available
+        const size =
+            printLine?.size || description?.split('/')[1]?.trim() || 'N/A';
 
-    const variantObject = {
-      ...line.purchasable,
-      order_line_id: line.id,
-      description,
-      size,
-      quantity: line.quantity,
-      unit_price: line.unit_price?.decimal || 0,
-      names: line.meta?.names || [],
-    };
+        const variantObject = {
+            ...line.purchasable,
+            order_line_id: line.id,
+            description,
+            size,
+            quantity: line.quantity,
+            unit_price: line.unit_price?.decimal || 0,
+            names: line.meta?.names || [],
+        };
 
-    // Group by printing option
-    if (description.toUpperCase().includes('WITH NAME')) {
-      groups.withName.push(variantObject);
-    } else {
-      groups.noName.push(variantObject);
-    }
-  });
+        // Group by printing option
+        if (description.toUpperCase().includes('WITH NAME')) {
+            groups.withName.push(variantObject);
+        } else {
+            groups.noName.push(variantObject);
+        }
+    });
 
-  return groups;
+    return groups;
 });
 
 const isOthersSize = (description) => {
     return description.toLowerCase() === 'custom';
 };
-
 
 // Overlay for setting names
 const showSetNamesOverlay = ref(false);
@@ -428,7 +464,7 @@ const submitForm = () => {
         quantity: variantQuantities[line.id],
         price: variantPrices[line.id],
         meta: {
-             ...line.meta,
+            ...line.meta,
             names: variantNames[line.id] ?? [],
             custom_dimension: `${variantDimensions[line.id].width} x ${variantDimensions[line.id].height}`,
         },

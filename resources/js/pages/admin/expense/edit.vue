@@ -94,7 +94,10 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Payment Reference </label>
-                        <input-text v-model="form.data.reference_no" autofocus />
+                        <input-text
+                            v-model="form.data.reference_no"
+                            autofocus
+                        />
                         <input-error :message="form.errors.reference_no" />
                     </div>
                     <!-- Status -->

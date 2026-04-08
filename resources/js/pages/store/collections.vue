@@ -2,19 +2,19 @@
     <Head title="Collections" />
 
     <div class="collections-page">
-
         <!-- Hero Banner -->
         <section class="collections-hero">
             <div class="collections-hero-bg">
-                <img src="/img/img-collection1.png" alt="Collections Hero"> 
+                <img src="/img/img-collection1.png" alt="Collections Hero" />
             </div>
             <div class="collections-hero-overlay"></div>
             <div class="collections-hero-content">
                 <h1 class="collections-hero-title">OUR COLLECTION</h1>
                 <p class="collections-hero-desc">
-                    Tribu Pakaras is launching its official eCommerce platform soon, powered by
-                    upgraded production, improved quality, and expanded product offerings
-                    designed for athletes who demand more.
+                    Tribu Pakaras is launching its official eCommerce platform
+                    soon, powered by upgraded production, improved quality, and
+                    expanded product offerings designed for athletes who demand
+                    more.
                 </p>
                 <a href="#collections-grid" class="collections-scroll-btn">
                     <i class="ri-arrow-down-s-line"></i>
@@ -26,75 +26,104 @@
         <section class="collections-grid-section" id="collections-grid">
             <div class="collections-grid-inner">
                 <div class="collections-grid">
-
                     <!-- Collection Item 1 - img-collection2.png -->
                     <div class="collection-item">
                         <div class="collection-item-image">
-                            <img src="/img/img-collection2.png" alt="Collection 2">
+                            <img
+                                src="/img/img-collection2.png"
+                                alt="Collection 2"
+                            />
                         </div>
                         <div class="collection-item-body">
-                            <h3 class="collection-item-title">Running Collection</h3>
+                            <h3 class="collection-item-title">
+                                Running Collection
+                            </h3>
                             <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel cras. Magna egestas enim tortor
-                                accumsan varius pellentesque amet dolor hac. Lorem sed fermentum sapien facilisi
-                                at magna pulvinar pretium.
+                                Pellentesque molestie lectus condimentum vel
+                                cras. Magna egestas enim tortor accumsan varius
+                                pellentesque amet dolor hac. Lorem sed fermentum
+                                sapien facilisi at magna pulvinar pretium.
                             </p>
-                            <a href="#" class="collection-item-btn">VIEW COLLECTION</a>
+                            <a href="#" class="collection-item-btn"
+                                >VIEW COLLECTION</a
+                            >
                         </div>
                     </div>
 
                     <!-- Collection Item 2 - img-collection3.png -->
                     <div class="collection-item">
                         <div class="collection-item-image">
-                            <img src="/img/img-collection3.png" alt="Collection 3">
+                            <img
+                                src="/img/img-collection3.png"
+                                alt="Collection 3"
+                            />
                         </div>
                         <div class="collection-item-body">
-                            <h3 class="collection-item-title">Training Collection</h3>
+                            <h3 class="collection-item-title">
+                                Training Collection
+                            </h3>
                             <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel cras. Magna egestas enim tortor
-                                accumsan varius pellentesque amet dolor hac. Lorem sed fermentum sapien facilisi
-                                at magna pulvinar pretium.
+                                Pellentesque molestie lectus condimentum vel
+                                cras. Magna egestas enim tortor accumsan varius
+                                pellentesque amet dolor hac. Lorem sed fermentum
+                                sapien facilisi at magna pulvinar pretium.
                             </p>
-                            <a href="#" class="collection-item-btn">VIEW COLLECTION</a>
+                            <a href="#" class="collection-item-btn"
+                                >VIEW COLLECTION</a
+                            >
                         </div>
                     </div>
 
                     <!-- Collection Item 3 - img-collection4.png -->
                     <div class="collection-item">
                         <div class="collection-item-image">
-                            <img src="/img/img-collection4.png" alt="Collection 4">
+                            <img
+                                src="/img/img-collection4.png"
+                                alt="Collection 4"
+                            />
                         </div>
                         <div class="collection-item-body">
-                            <h3 class="collection-item-title">Lifestyle Collection</h3>
+                            <h3 class="collection-item-title">
+                                Lifestyle Collection
+                            </h3>
                             <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel cras. Magna egestas enim tortor
-                                accumsan varius pellentesque amet dolor hac. Lorem sed fermentum sapien facilisi
-                                at magna pulvinar pretium.
+                                Pellentesque molestie lectus condimentum vel
+                                cras. Magna egestas enim tortor accumsan varius
+                                pellentesque amet dolor hac. Lorem sed fermentum
+                                sapien facilisi at magna pulvinar pretium.
                             </p>
-                            <a href="#" class="collection-item-btn">VIEW COLLECTION</a>
+                            <a href="#" class="collection-item-btn"
+                                >VIEW COLLECTION</a
+                            >
                         </div>
                     </div>
 
                     <!-- Collection Item 4 - img-collection5.png -->
                     <div class="collection-item">
                         <div class="collection-item-image">
-                            <img src="/img/img-collection5.png" alt="Collection 5">
+                            <img
+                                src="/img/img-collection5.png"
+                                alt="Collection 5"
+                            />
                         </div>
                         <div class="collection-item-body">
-                            <h3 class="collection-item-title">Limited Edition</h3>
+                            <h3 class="collection-item-title">
+                                Limited Edition
+                            </h3>
                             <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel cras. Magna egestas enim tortor
-                                accumsan varius pellentesque amet dolor hac. Lorem sed fermentum sapien facilisi
-                                at magna pulvinar pretium.
+                                Pellentesque molestie lectus condimentum vel
+                                cras. Magna egestas enim tortor accumsan varius
+                                pellentesque amet dolor hac. Lorem sed fermentum
+                                sapien facilisi at magna pulvinar pretium.
                             </p>
-                            <a href="#" class="collection-item-btn">VIEW COLLECTION</a>
+                            <a href="#" class="collection-item-btn"
+                                >VIEW COLLECTION</a
+                            >
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
-
     </div>
 </template>
 
@@ -159,7 +188,7 @@ import { Head } from '@inertiajs/vue3';
 
 .collections-hero-desc {
     font-size: 13px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.7;
     margin: 0 0 24px;
 }
@@ -170,7 +199,7 @@ import { Head } from '@inertiajs/vue3';
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 2px solid rgba(255,255,255,0.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     color: #fff;
     font-size: 20px;
@@ -179,7 +208,7 @@ import { Head } from '@inertiajs/vue3';
 }
 
 .collections-scroll-btn:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
 }
 
@@ -273,7 +302,7 @@ import { Head } from '@inertiajs/vue3';
     .collections-hero {
         height: 350px;
     }
-    
+
     .collections-hero-title {
         font-size: 36px;
     }
@@ -282,7 +311,7 @@ import { Head } from '@inertiajs/vue3';
         grid-template-columns: 1fr;
         gap: 32px;
     }
-    
+
     .collection-item-body {
         padding: 20px 16px 24px;
     }
@@ -292,7 +321,7 @@ import { Head } from '@inertiajs/vue3';
     .collections-hero-title {
         font-size: 28px;
     }
-    
+
     .collections-hero-desc {
         font-size: 12px;
     }

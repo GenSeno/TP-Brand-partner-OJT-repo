@@ -4,17 +4,12 @@
     <div class="grocery-product-page">
         <!-- Header with back arrow -->
         <div class="product-header px-15">
-            <Link
-                :href="route('store.brand-partner.index')"
-                class="back-arrow"
-            >
+            <Link :href="route('store.brand-partner.index')" class="back-arrow">
                 <i class="ri-arrow-left-s-line"></i>
             </Link>
             <h6 class="header-title">Product Details</h6>
             <Link
-                :href="
-                    route('store.brand-partner.cart')
-                "
+                :href="route('store.brand-partner.cart')"
                 class="cart-icon-link"
             >
                 <i class="ri-shopping-cart-2-line"></i>
@@ -122,7 +117,8 @@
                     <!-- Variations: Colors -->
                     <div v-if="hasColors" class="variation-section">
                         <div class="variation-label">
-                            Color: <strong>{{ selectedColor || 'Select' }}</strong>
+                            Color:
+                            <strong>{{ selectedColor || 'Select' }}</strong>
                         </div>
                         <div class="color-swatches">
                             <button
@@ -132,7 +128,9 @@
                                 class="color-swatch-btn"
                                 :class="{ active: selectedColor === color }"
                                 @click="selectColor(color)"
-                            >{{ color }}</button>
+                            >
+                                {{ color }}
+                            </button>
                         </div>
                     </div>
 
@@ -147,12 +145,19 @@
                                 class="size-btn"
                                 :class="{ active: selectedSize === size }"
                                 @click="selectSize(size)"
-                            >{{ size }}</button>
+                            >
+                                {{ size }}
+                            </button>
                         </div>
                     </div>
 
-                    <p v-if="hasVariations && !variationReady" class="variation-hint">
-                        Please select{{ hasColors ? ' a color' : '' }}{{ hasColors && hasSizes ? ' and' : '' }}{{ hasSizes ? ' a size' : '' }} to continue.
+                    <p
+                        v-if="hasVariations && !variationReady"
+                        class="variation-hint"
+                    >
+                        Please select{{ hasColors ? ' a color' : ''
+                        }}{{ hasColors && hasSizes ? ' and' : ''
+                        }}{{ hasSizes ? ' a size' : '' }} to continue.
                     </p>
 
                     <!-- Desktop Add to Cart (hidden on mobile) -->
@@ -177,7 +182,11 @@
                         </div>
                         <button
                             class="add-cart-btn"
-                            :disabled="!currentInStock || isAddingToCart || !variationReady"
+                            :disabled="
+                                !currentInStock ||
+                                isAddingToCart ||
+                                !variationReady
+                            "
                             @click="showConfirmModal"
                         >
                             <i class="ri-shopping-cart-2-line"></i>
@@ -342,9 +351,17 @@
                                 }}</span>
                             </div>
                         </div>
-                        <div v-if="selectedColor || selectedSize" class="confirm-variation">
-                            <span v-if="selectedColor">Color: <strong>{{ selectedColor }}</strong></span>
-                            <span v-if="selectedSize" class="ms-2">Size: <strong>{{ selectedSize }}</strong></span>
+                        <div
+                            v-if="selectedColor || selectedSize"
+                            class="confirm-variation"
+                        >
+                            <span v-if="selectedColor"
+                                >Color:
+                                <strong>{{ selectedColor }}</strong></span
+                            >
+                            <span v-if="selectedSize" class="ms-2"
+                                >Size: <strong>{{ selectedSize }}</strong></span
+                            >
                         </div>
                         <div class="confirm-summary">
                             <div class="summary-row">

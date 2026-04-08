@@ -2,14 +2,16 @@
     <Head title="Our Products" />
 
     <div class="shop-page">
-
         <div class="shop-inner">
             <h1 class="shop-title">Our Products</h1>
 
             <!-- Toolbar -->
             <div class="shop-toolbar">
                 <div class="shop-toolbar-left">
-                    <button class="toolbar-btn" @click="showFilters = !showFilters">
+                    <button
+                        class="toolbar-btn"
+                        @click="showFilters = !showFilters"
+                    >
                         <i class="ri-filter-3-line"></i> Filter
                     </button>
                     <button class="toolbar-btn">
@@ -20,19 +22,38 @@
             </div>
 
             <div class="shop-layout">
-
                 <!-- Sidebar Filters -->
                 <aside class="shop-sidebar" :class="{ open: showFilters }">
-
                     <!-- Categories -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('categories')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('categories')"
+                        >
                             <span>CATEGORIES</span>
-                            <i :class="openGroups.categories ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.categories
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.categories">
-                            <label class="filter-radio" v-for="cat in sampleCategories" :key="cat.id">
-                                <input type="radio" name="category" :value="cat.id" v-model="selectedCategory">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.categories"
+                        >
+                            <label
+                                class="filter-radio"
+                                v-for="cat in sampleCategories"
+                                :key="cat.id"
+                            >
+                                <input
+                                    type="radio"
+                                    name="category"
+                                    :value="cat.id"
+                                    v-model="selectedCategory"
+                                />
                                 <span>{{ cat.name }}</span>
                             </label>
                         </div>
@@ -40,18 +61,34 @@
 
                     <!-- Color -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('colors')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('colors')"
+                        >
                             <span>COLOR</span>
-                            <i :class="openGroups.colors ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.colors
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.colors">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.colors"
+                        >
                             <div class="color-swatches">
                                 <button
                                     v-for="color in sampleColors"
                                     :key="color.value"
                                     class="color-swatch"
                                     :style="{ background: color.hex }"
-                                    :class="{ active: selectedColors.includes(color.value) }"
+                                    :class="{
+                                        active: selectedColors.includes(
+                                            color.value,
+                                        ),
+                                    }"
                                     @click="toggleColor(color.value)"
                                     :title="color.name"
                                 ></button>
@@ -61,51 +98,105 @@
 
                     <!-- Size -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('sizes')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('sizes')"
+                        >
                             <span>SIZE</span>
-                            <i :class="openGroups.sizes ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.sizes
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.sizes">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.sizes"
+                        >
                             <div class="size-chips">
                                 <button
                                     v-for="size in sampleSizes"
                                     :key="size"
                                     class="size-chip"
-                                    :class="{ active: selectedSizes.includes(size) }"
+                                    :class="{
+                                        active: selectedSizes.includes(size),
+                                    }"
                                     @click="toggleSize(size)"
-                                >{{ size }}</button>
+                                >
+                                    {{ size }}
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Collection -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('collections')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('collections')"
+                        >
                             <span>COLLECTION</span>
-                            <i :class="openGroups.collections ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.collections
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.collections">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.collections"
+                        >
                             <div class="collection-chips">
                                 <button
                                     v-for="col in sampleCollections"
                                     :key="col.id"
                                     class="collection-chip"
-                                    :class="{ active: selectedCollections.includes(col.id) }"
+                                    :class="{
+                                        active: selectedCollections.includes(
+                                            col.id,
+                                        ),
+                                    }"
                                     @click="toggleCollection(col.id)"
-                                >{{ col.name }}</button>
+                                >
+                                    {{ col.name }}
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Garment -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('garments')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('garments')"
+                        >
                             <span>GARMENT</span>
-                            <i :class="openGroups.garments ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.garments
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.garments">
-                            <label class="filter-checkbox" v-for="g in sampleGarments" :key="g">
-                                <input type="checkbox" :value="g" v-model="selectedGarments">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.garments"
+                        >
+                            <label
+                                class="filter-checkbox"
+                                v-for="g in sampleGarments"
+                                :key="g"
+                            >
+                                <input
+                                    type="checkbox"
+                                    :value="g"
+                                    v-model="selectedGarments"
+                                />
                                 <span>{{ g }}</span>
                             </label>
                             <div class="garment-chips">
@@ -113,20 +204,42 @@
                                     v-for="g in sampleGarmentChips"
                                     :key="g"
                                     class="garment-chip"
-                                >{{ g }}</button>
+                                >
+                                    {{ g }}
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Product Type -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('productTypes')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('productTypes')"
+                        >
                             <span>PRODUCT TYPE</span>
-                            <i :class="openGroups.productTypes ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.productTypes
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.productTypes">
-                            <label class="filter-checkbox" v-for="pt in sampleProductTypes" :key="pt">
-                                <input type="checkbox" :value="pt" v-model="selectedProductTypes">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.productTypes"
+                        >
+                            <label
+                                class="filter-checkbox"
+                                v-for="pt in sampleProductTypes"
+                                :key="pt"
+                            >
+                                <input
+                                    type="checkbox"
+                                    :value="pt"
+                                    v-model="selectedProductTypes"
+                                />
                                 <span>{{ pt }}</span>
                             </label>
                         </div>
@@ -134,11 +247,23 @@
 
                     <!-- Price Filter -->
                     <div class="filter-group">
-                        <div class="filter-group-header" @click="toggleGroup('price')">
+                        <div
+                            class="filter-group-header"
+                            @click="toggleGroup('price')"
+                        >
                             <span>PRICE FILTER</span>
-                            <i :class="openGroups.price ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"></i>
+                            <i
+                                :class="
+                                    openGroups.price
+                                        ? 'ri-arrow-up-s-line'
+                                        : 'ri-arrow-down-s-line'
+                                "
+                            ></i>
                         </div>
-                        <div class="filter-group-body" v-show="openGroups.price">
+                        <div
+                            class="filter-group-body"
+                            v-show="openGroups.price"
+                        >
                             <div class="price-range-wrap">
                                 <input
                                     type="range"
@@ -148,23 +273,31 @@
                                     v-model="priceMax"
                                 />
                                 <div class="price-range-labels">
-                                    <span>PHP 100.00 - {{ formatPrice(priceMax) }}</span>
+                                    <span
+                                        >PHP 100.00 -
+                                        {{ formatPrice(priceMax) }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </aside>
 
                 <!-- Products Grid -->
                 <div class="shop-products">
-                    <div class="products-grid">
-                        <div class="product-card" v-for="product in sampleProducts" :key="product.id">
-
+                    <div class="products-grid" v-if="products.data.length > 0">
+                        <div
+                            class="product-card"
+                            v-for="product in products.data"
+                            :key="product.id"
+                        >
                             <!-- Badges -->
                             <div class="product-card-badges">
-                                <span class="badge-sale" v-if="product.badge === 'sale'">Sale</span>
-                                <span class="badge-new" v-if="product.badge === 'new'">New</span>
+                                <span
+                                    class="badge-sale"
+                                    v-if="product.compare_price && product.compare_price > product.price"
+                                    >Sale</span
+                                >
                             </div>
 
                             <!-- Wishlist -->
@@ -174,49 +307,84 @@
 
                             <!-- Image -->
                             <div class="product-card-image">
-                                <div class="product-card-img-placeholder"></div>
-                                <!-- Replace with: <img :src="product.image_url" :alt="product.name"> -->
+                                <Link :href="route('store.brand-partner.product', product.slug)">
+                                    <img 
+                                        :src="product.image_url || '/img/tshirt-placeholder.svg'" 
+                                        :alt="product.name" 
+                                        class="img-fluid w-100" 
+                                        style="object-fit: contain; max-height: 250px;" 
+                                    />
+                                </Link>
                             </div>
 
                             <!-- Info -->
                             <div class="product-card-body">
-                                <p class="product-card-collection">{{ product.collection }}</p>
-                                <h3 class="product-card-name">{{ product.name }}</h3>
+                                <p class="product-card-collection text-uppercase">
+                                    {{ product.short_description ? product.short_description.substring(0, 30) : 'COLLECTION' }}
+                                </p>
+                                <Link :href="route('store.brand-partner.product', product.slug)" style="text-decoration: none; color: inherit;">
+                                    <h3 class="product-card-name">
+                                        {{ product.name || 'Product Name Goes Here' }}
+                                    </h3>
+                                </Link>
 
                                 <!-- Stars -->
                                 <div class="product-card-stars">
-                                    <i class="ri-star-fill" v-for="n in 5" :key="n" :class="n <= product.rating ? 'star-filled' : 'star-empty'"></i>
+                                    <i
+                                        class="ri-star-fill star-filled"
+                                        v-for="n in 5"
+                                        :key="n"
+                                    ></i>
                                 </div>
 
                                 <!-- Price -->
                                 <div class="product-card-price-row">
-                                    <span class="product-card-price" :class="{ 'has-sale': product.original_price }">
-                                        PHP {{ product.price.toFixed(2) }}
+                                    <span
+                                        class="product-card-price"
+                                        :class="{
+                                            'has-sale': product.compare_price && product.compare_price > product.price,
+                                        }"
+                                    >
+                                        PHP {{ Number(product.price).toFixed(2) }}
                                     </span>
-                                    <span class="product-card-original" v-if="product.original_price">
-                                        PHP {{ product.original_price.toFixed(2) }}
-                                    </span>
-                                    <span class="product-card-saved" v-if="product.saved">
-                                        Save {{ product.saved }}
+                                    <span
+                                        class="product-card-original"
+                                        v-if="product.compare_price && product.compare_price > product.price"
+                                    >
+                                        PHP {{ Number(product.compare_price).toFixed(2) }}
                                     </span>
                                 </div>
 
                                 <!-- Add to Cart -->
-                                <button class="product-card-atc">ADD TO CART</button>
+                                <button class="product-card-atc" :disabled="!product.in_stock" @click.prevent="addToCart(product)">
+                                    ADD TO CART
+                                </button>
                             </div>
-
                         </div>
                     </div>
+                    <!-- Empty State if no products -->
+                    <div v-else class="text-center py-5">
+                        <i class="ri-shopping-bag-line" style="font-size: 40px; color: #ccc;"></i>
+                        <h4 class="mt-3">No products available.</h4>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, reactive } from 'vue';
+
+const props = defineProps({
+    brandPartner: Object,
+    categories: Array,
+    events: Array,
+    products: Object,
+    filter: Object,
+    cartCount: Number,
+});
 
 const showFilters = ref(true);
 
@@ -261,7 +429,21 @@ const toggleCollection = (val) => {
     else selectedCollections.value.push(val);
 };
 
-const formatPrice = (val) => `PHP ${Number(val).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+const formatPrice = (val) =>
+    `PHP ${Number(val).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+
+const addToCart = (product) => {
+    router.post(
+        route('store.brand-partner.cart.add'),
+        {
+            product_id: product.id,
+            quantity: 1,
+            color: product.colors_array?.[0] || null,
+            size: product.sizes_array?.[0] || null,
+        },
+        { preserveScroll: true, onSuccess: () => alert('Product added to cart!') }
+    );
+};
 
 // ===== SAMPLE DATA (remove when backend is connected) =====
 const sampleCategories = [
@@ -300,23 +482,8 @@ const sampleCollections = [
 const sampleGarments = ['Singlet', 'Tee Shirt', 'Longsleeves', 'Jersey'];
 const sampleGarmentChips = ['Singlet', 'Tee Shirt', 'LongSleeves', 'Jersey'];
 
-const sampleProductTypes = ['Running', 'Trail', 'Cycling', 'Casual'];
-
-const sampleProducts = [
-    { id: 1, name: 'Product Name Goes Here', collection: 'HUGIS', price: 220.00, original_price: 420.00, saved: null, rating: 5, badge: 'sale' },
-    { id: 2, name: 'Product Name Goes Here', collection: 'MOUNTAIN DREAM', price: 220.00, original_price: 420.00, saved: null, rating: 5, badge: null },
-    { id: 3, name: 'Product Name Goes Here', collection: 'FUNNY SOCKS', price: 220.00, original_price: null, saved: null, rating: 5, badge: null },
-    { id: 4, name: 'Product Name Goes Here', collection: 'THE DREAMER', price: 220.00, original_price: 420.00, saved: '₱20', rating: 4, badge: null },
-    { id: 5, name: 'Product Name Goes Here', collection: 'KURIS KOLEKSYON', price: 220.00, original_price: 420.00, saved: null, rating: 5, badge: 'new' },
-    { id: 6, name: 'Product Name Goes Here', collection: 'HUGIS V2', price: 220.00, original_price: 420.00, saved: null, rating: 4, badge: null },
-    { id: 7, name: 'Product Name Goes Here', collection: 'HUGIS', price: 220.00, original_price: 420.00, saved: null, rating: 5, badge: 'sale' },
-    { id: 8, name: 'Product Name Goes Here', collection: 'KURIS KOLEKSYON', price: 220.00, original_price: 420.00, saved: null, rating: 4, badge: 'new' },
-    { id: 9, name: 'Product Name Goes Here', collection: 'HUGIS V2', price: 220.00, original_price: 420.00, saved: null, rating: 5, badge: null },
-    { id: 10, name: 'Product Name Goes Here', collection: 'FUNNY SOCKS', price: 220.00, original_price: null, saved: null, rating: 5, badge: null },
-    { id: 11, name: 'Product Name Goes Here', collection: 'THE DREAMER', price: 220.00, original_price: 420.00, saved: null, rating: 4, badge: null },
-    { id: 12, name: 'Product Name Goes Here', collection: 'MOUNTAIN DREAM', price: 225.00, original_price: 420.00, saved: null, rating: 5, badge: null },
-];
-// ===== END SAMPLE DATA =====
+// ===== REMOVED SAMPLE PRODUCTS =====
+// Using real backend products data via props.products
 </script>
 
 <style scoped>
@@ -594,11 +761,13 @@ const sampleProducts = [
     flex-direction: column;
     background: #fff;
     border: 1px solid #f0f0f0;
-    transition: box-shadow 0.25s, transform 0.25s;
+    transition:
+        box-shadow 0.25s,
+        transform 0.25s;
 }
 
 .product-card:hover {
-    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
     transform: translateY(-3px);
 }
 
@@ -649,7 +818,7 @@ const sampleProducts = [
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     font-size: 16px;
     color: #888;
     transition: all 0.2s;
@@ -657,7 +826,7 @@ const sampleProducts = [
 
 .product-wishlist-btn:hover {
     color: #e84b0f;
-    box-shadow: 0 2px 12px rgba(232,75,15,0.2);
+    box-shadow: 0 2px 12px rgba(232, 75, 15, 0.2);
 }
 
 /* Image */

@@ -81,7 +81,9 @@ const submitForm = () => {
             } else {
                 modalRef.value.close();
             }
-            alert.showSuccess(data.message || 'Collection created successfully.');
+            alert.showSuccess(
+                data.message || 'Collection created successfully.',
+            );
         },
     });
 };

@@ -139,7 +139,7 @@
                     </span>
                     <span v-else>-</span>
                 </template>
-                
+
                 <template #action="{ row, value }">
                     <div class="d-flex align-items-center gap-2">
                         <!-- Adjustments → Delete button -->

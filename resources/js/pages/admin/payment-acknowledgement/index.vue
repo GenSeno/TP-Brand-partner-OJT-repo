@@ -79,17 +79,15 @@
                     <ModalLink
                         navigate
                         :href="
-                            route(
-                                'admin.billing.payment.edit',
-                                { billing:row.invoice.id, 
-                                  payment:row.id
-                                },
-                            )
+                            route('admin.billing.payment.edit', {
+                                billing: row.invoice.id,
+                                payment: row.id,
+                            })
                         "
                         class="btn btn-sm btn-light-ghost text-primary"
                     >
-                         <!-- PA-{{ String(row.id).padStart(4, '0') }} -->
-                        {{ row.internal_reference }} 
+                        <!-- PA-{{ String(row.id).padStart(4, '0') }} -->
+                        {{ row.internal_reference }}
                     </ModalLink>
                 </template>
                 <template #customer="{ row }">
@@ -116,18 +114,14 @@
                 <template #billing_date="{ row }">
                     {{
                         row.invoice?.invoiced_at
-                            ? dayjs(row.invoice.invoiced_at).format(
-                                  dateFormat,
-                              )
+                            ? dayjs(row.invoice.invoiced_at).format(dateFormat)
                             : '—'
                     }}
                 </template>
                 <template #billing_no="{ row }">
                     <Link
                         v-if="row.invoice"
-                        :href="
-                            route('admin.billing.show', row.invoice.id)
-                        "
+                        :href="route('admin.billing.show', row.invoice.id)"
                         class="link-primary fw-medium"
                     >
                         {{ row.invoice.reference }}
@@ -239,7 +233,7 @@ const refreshPage = () =>
     );
 
 const cards = computed(() => [
-     {
+    {
         key: 'overdue',
         label: 'Receipts Created (This Month)',
         amount: props.stats.acknowledgment,
@@ -267,6 +261,5 @@ const cards = computed(() => [
         color: 'bg-warning-gradient',
         icon: 'clock',
     },
-   
 ]);
 </script>

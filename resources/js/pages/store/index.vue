@@ -118,16 +118,16 @@
                                     product offerings designed for athletes who
                                     demand more.
                                 </p>
-                                <a href="#" class="btn slide-btn-outline mt-4"
-                                    >VIEW ALL PRODUCTS</a
+                                <Link :href="route('store.brand-partner.shop', brandPartner?.slug)" class="btn slide-btn-outline mt-4"
+                                    >VIEW ALL PRODUCTS</Link
                                 >
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
 
         <!-- Event Tabs -->
         <section class="grocery-events-section" v-if="events.length > 0">
@@ -150,180 +150,6 @@
                 </ul>
             </div>
         </section>
-
-        <!-- Products Grid -->
-        <section class="grocery-products-section">
-            <div class="custom-container">
-                <div class="section-header">
-                    <h2 class="section-title-main">Built Stronger. Made Better.</h2>
-                </div>
-
-                <!-- Products Grid -->
-                <div class="products-grid-wrapper">
-                    <div class="products-grid" v-if="sampleProductsData.data.length > 0">
-                        <div
-                            v-for="product in sampleProductsData.data"
-                            :key="product.id"
-                            class="product-card"
-                        >
-                            <!-- Sale Badge -->
-                            <div class="product-badge" v-if="product.compare_price && product.compare_price > product.price">
-                                SALE
-                            </div>
-                            
-                            <!-- Product Image -->
-                            <Link
-                                :href="route('store.brand-partner.product', product.slug)"
-                                class="product-image-link"
-                            >
-                                <div class="product-image-wrapper">
-                                    <img
-                                        :src="product.image_url || '/img/tshirt-placeholder.svg'"
-                                        :alt="product.name"
-                                        class="product-img"
-                                    />
-                                </div>
-                            </Link>
-                            
-                            <!-- Product Info -->
-                            <div class="product-info">
-                                <h3 class="product-name">{{ product.name }}</h3>
-                                <p class="product-collection">{{ product.short_description || 'COLLECTION' }}</p>
-                                
-                                <!-- Rating Stars -->
-                                <div class="product-rating">
-                                    <i class="ri-star-fill" v-for="n in 5" :key="n"></i>
-                                </div>
-                                
-                                <!-- Price -->
-                                <div class="product-pricing">
-                                    <span class="product-price">PHP {{ formatCurrencySimple(product.price) }}</span>
-                                    <span class="product-old-price" v-if="product.compare_price && product.compare_price > product.price">
-                                        PHP {{ formatCurrencySimple(product.compare_price) }}
-                                    </span>
-                                </div>
-                                
-                                <!-- Add to Cart Button -->
-                                <button 
-                                    class="add-to-cart-btn"
-                                    @click="addToCart(product)"
-                                    :disabled="!product.in_stock"
-                                >
-                                    ADD TO CART
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div v-else class="grocery-empty-state">
-                        <div class="empty-icon-circle">
-                            <i class="ri-shopping-bag-line"></i>
-                        </div>
-                        <h4>No products found</h4>
-                        <p>Try adjusting your filters or search query.</p>
-                        <button class="btn btn-grocery-primary" @click="clearFilters">
-                            <i class="ri-store-2-line"></i> View All Products
-                        </button>
-                    </div>
-                </div>
-
-                <!-- View All Button -->
-                <div class="view-all-wrapper" v-if="sampleProductsData.data.length > 0">
-                    <Link :href="route('store.brand-partner.index')" class="view-all-btn">
-                        VIEW ALL PRODUCTS
-                    </Link>
-                </div>
-
-                <!-- Pagination -->
-                <div class="grocery-pagination" v-if="products.links && products.links.length > 3">
-                    <nav>
-                        <ul class="pagination">
-                            <li
-                                v-for="link in products.links"
-                                :key="link.label"
-                                class="page-item"
-                                :class="{
-                                    active: link.active,
-                                    disabled: !link.url,
-                                }"
-                            >
-                                <Link
-                                    v-if="link.url"
-                                    :href="link.url"
-                                    class="page-link"
-                                    v-html="link.label"
-                                    preserve-scroll
-                                />
-                                <span v-else class="page-link" v-html="link.label" />
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Check Our Collections Section -->
-        <section class="collections-section">
-            
-            <!-- THE Collection Banner -->
-            <div class="dreamer-banner">
-                <div class="dreamer-banner-images">
-                    <img src="/img/img_front.png" alt="Shirt Front" class="dreamer-shirt dreamer-shirt-left">
-                    <img src="/img/img_back.png" alt="Shirt Back" class="dreamer-shirt dreamer-shirt-right">
-                </div>
-                <div class="dreamer-content">
-                    <span class="dreamer-label">THE</span>
-                    <h2 class="dreamer-title">DREAMER</h2>
-                    <p class="dreamer-description">
-                        <strong>Dare to Dream Big</strong> with our first shirt collection for 2026 —
-                        <strong>The Dreamer</strong> — featuring the blend of milky way &amp; outer space patterns,
-                        vectors of limitless adventures and shades of greens and cloud dancer
-                        which represent the colors of 2026.
-                    </p>
-                    <a href="#" class="dreamer-btn">CHECK OUR COLLECTIONS</a>
-                </div>
-            </div>
-
-            <!-- 3-Panel Grid -->
-            <div class="collections-panels">
-
-                <!-- Panel 1: HUGIS -->
-                <div class="col-panel panel-dark" style="background-image: url('')">
-                    <div class="col-panel-overlay"></div>
-                    <div class="col-panel-body">
-                        <h3 class="col-panel-title">HUGIS Collection v2</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-outline">VIEW COLLECTION</a>
-                    </div>
-                </div>
-
-                <!-- Panel 2: Kuris Koleksyon -->
-                <div class="col-panel panel-mid">
-                    <div class="col-panel-body col-panel-body-center">
-                        <div class="kuris-logo">
-                            <span class="kuris-script">Kuris</span>
-                            <span class="kuris-script kuris-script-bold">Koleksyon</span>
-                        </div>
-                        <h3 class="col-panel-title">Kuris Koleksyon</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-outline-dark">VIEW COLLECTION</a>
-                    </div>
-                </div>
-
-                <!-- Panel 3: Discover CTA -->
-                <div class="col-panel panel-orange">
-                    <div class="col-panel-body col-panel-body-center">
-                        <h3 class="col-panel-cta-title">Discover about <br>Our Collections</h3>
-                        <p class="col-panel-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                        <a href="#" class="col-panel-btn col-panel-btn-white">VIEW OUR COLLECTIONS</a>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
 
         <!-- Search Section -->
         <section id="search" class="grocery-search-section">
@@ -393,12 +219,13 @@
             </div>
         </section>
 
-
         <!-- Products Grid -->
         <section class="grocery-products-section">
             <div class="custom-container">
                 <div class="section-header">
-                    <h2 class="section-title-main">Built Stronger. Made Better.</h2>
+                    <h2 class="section-title-main">
+                        Built Stronger. Made Better.
+                    </h2>
                 </div>
 
                 <ul class="product-offer-list" v-if="products.data.length > 0">
@@ -408,7 +235,12 @@
                         class="product-offer-item"
                     >
                         <div class="product-box">
-                            <div class="product-image">
+                            <div class="product-image-wrap">
+                                <div class="product-badges">
+                                    <span class="badge sale-badge" v-if="product.compare_price && product.compare_price > product.price">SALE</span>
+                                    <span class="badge new-badge" v-else>NEW</span>
+                                </div>
+                                <button class="wishlist-btn"><i class="ri-heart-line"></i></button>
                                 <Link
                                     :href="
                                         route(
@@ -426,25 +258,6 @@
                                         :alt="product.name"
                                         class="img-fluid"
                                     />
-                                    <div
-                                        class="discount-badge"
-                                        v-if="
-                                            product.compare_price &&
-                                            product.compare_price >
-                                                product.price
-                                        "
-                                    >
-                                        <span>
-                                            {{
-                                                Math.round(
-                                                    (1 -
-                                                        product.price /
-                                                            product.compare_price) *
-                                                        100,
-                                                )
-                                            }}% OFF
-                                        </span>
-                                    </div>
                                 </Link>
                             </div>
                             <div class="product-content">
@@ -458,93 +271,45 @@
                                     class="product-name-link"
                                 >
                                     <h5 class="product-name">
-                                        {{ product.name }}
+                                        {{ product.name || 'Product Name Goes Here' }}
                                     </h5>
                                 </Link>
-                                <h5
-                                    class="product-category"
-                                    v-if="product.short_description"
-                                >
-                                    {{
-                                        truncate(product.short_description, 40)
-                                    }}
-                                </h5>
-                                <h5 class="product-price">
-                                    {{ formatCurrency(product.price) }}
+                                
+                                <p class="product-subtitle text-muted text-uppercase mb-2" style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">
+                                    {{ product.short_description ? truncate(product.short_description, 30) : 'WILDLIFE' }}
+                                </p>
+                                
+                                <div class="product-rating mb-2">
+                                    <i class="ri-star-fill text-warning"></i>
+                                    <i class="ri-star-fill text-warning"></i>
+                                    <i class="ri-star-fill text-warning"></i>
+                                    <i class="ri-star-fill text-warning"></i>
+                                    <i class="ri-star-fill text-warning"></i>
+                                </div>
+
+                                <div class="product-price-row mb-3 d-flex align-items-center gap-2">
+                                    <span class="current-price" style="font-size: 12px; font-weight: 700; color: #111;">
+                                        {{ formatCurrency(product.price) }}
+                                    </span>
                                     <span
                                         v-if="
                                             product.compare_price &&
                                             product.compare_price >
                                                 product.price
                                         "
-                                        class="old-price"
+                                        class="old-price text-muted text-decoration-line-through"
+                                        style="font-size: 11px;"
                                     >
-                                        {{
-                                            formatCurrency(
-                                                product.compare_price,
-                                            )
-                                        }}
+                                        {{ formatCurrency(product.compare_price) }}
                                     </span>
-                                </h5>
-                                <!-- Color & Size chips -->
-                                <div
-                                    v-if="
-                                        product.colors_array?.length ||
-                                        product.sizes_array?.length
-                                    "
-                                    class="product-options-chips"
-                                >
-                                    <span
-                                        v-for="color in (
-                                            product.colors_array ?? []
-                                        ).slice(0, 4)"
-                                        :key="color"
-                                        class="option-chip color-chip"
-                                        >{{ color }}</span
-                                    >
-                                    <span
-                                        v-for="size in (
-                                            product.sizes_array ?? []
-                                        ).slice(0, 4)"
-                                        :key="size"
-                                        class="option-chip size-chip"
-                                        >{{ size }}</span
-                                    >
+                                    <span class="badge bg-warning text-dark pre-order-badge" style="font-size: 8px; border-radius: 12px; padding: 3px 8px; font-weight: 800; background-color: #ff9800 !important; color: #fff !important;">
+                                        PRE-ORDER
+                                    </span>
                                 </div>
 
-                                <div class="add-quantity-wrap">
-                                    <Link
-                                        v-if="
-                                            product.colors_array?.length ||
-                                            product.sizes_array?.length
-                                        "
-                                        :href="
-                                            route(
-                                                'store.brand-partner.product',
-                                                product.slug,
-                                            )
-                                        "
-                                        class="btn-add-quantity"
-                                        title="Select options"
-                                    >
-                                        <i class="ri-equalizer-line"></i>
-                                    </Link>
-                                    <button
-                                        v-else-if="product.in_stock"
-                                        class="btn-add-quantity"
-                                        @click.prevent="addToCart(product)"
-                                    >
-                                        <i class="ri-add-line"></i>
-                                    </button>
-                                    <span v-else class="out-of-stock-badge">
-                                        Out of Stock
-                                    </span>
-                                </div>
-                                
-                                <!-- Add to Cart Button -->
-                                <button 
-                                    class="add-to-cart-btn"
-                                    @click="addToCart(product)"
+                                <button
+                                    class="btn add-to-cart-outline-btn w-100"
+                                    @click.prevent="addToCart(product)"
                                     :disabled="!product.in_stock"
                                 >
                                     ADD TO CART
@@ -554,26 +319,36 @@
                     </li>
                 </ul>
 
-                <!-- View products section
-                 -->
-
+                <!-- Empty State -->
                 <div v-else class="grocery-empty-state">
-                    <h1 cl>Our Products</h1>
-
                     <div class="empty-icon-circle">
                         <i class="ri-shopping-bag-line"></i>
                     </div>
+                    <h4>No products found</h4>
+                    <p>Try adjusting your filters or search query.</p>
+                    <button
+                        class="btn btn-grocery-primary"
+                        @click="clearFilters"
+                    >
+                        <i class="ri-store-2-line"></i> View All Products
+                    </button>
                 </div>
 
                 <!-- View All Button -->
-                <div class="view-all-wrapper" v-if="sampleProductsData.data.length > 0">
-                    <Link :href="route('store.brand-partner.index')" class="view-all-btn">
+                <div class="view-all-wrapper" v-if="products.data.length > 0">
+                    <Link
+                        :href="route('store.brand-partner.shop', brandPartner.slug)"
+                        class="view-all-btn"
+                    >
                         VIEW ALL PRODUCTS
                     </Link>
                 </div>
 
                 <!-- Pagination -->
-                <div class="grocery-pagination" v-if="products.links && products.links.length > 3">
+                <div
+                    class="grocery-pagination"
+                    v-if="products.links && products.links.length > 3"
+                >
                     <nav>
                         <ul class="pagination">
                             <li
@@ -592,7 +367,11 @@
                                     v-html="link.label"
                                     preserve-scroll
                                 />
-                                <span v-else class="page-link" v-html="link.label" />
+                                <span
+                                    v-else
+                                    class="page-link"
+                                    v-html="link.label"
+                                />
                             </li>
                         </ul>
                     </nav>
@@ -600,8 +379,6 @@
             </div>
         </section>
 
-
-        
         <!-- Check Our Collections Section -->
         <section class="collections-section">
             <!-- THE Collection Banner -->
@@ -638,7 +415,7 @@
                 <!-- Panel 1: HUGIS -->
                 <div
                     class="col-panel panel-dark"
-                    style="background-image: url('')"
+                    style="background-image: url('/img/img-indexcollection1.png')"
                 >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body">
@@ -655,12 +432,13 @@
                 </div>
 
                 <!-- Panel 2: Kuris Koleksyon -->
-                <div class="col-panel panel-mid">
+                <div
+                    class="col-panel panel-mid"
+                    style="background-image: url('/img/img-indexcollection2.png')"
+                >
+                    <div class="col-panel-overlay"></div>
                     <div class="col-panel-body col-panel-body-center">
                         <div class="kuris-logo">
-                            <span class="kuris-script">Kuris</span>
-                            <span class="kuris-script kuris-script-bold"
-                                >Koleksyon</span
                             >
                         </div>
                         <h3 class="col-panel-title">Kuris Koleksyon</h3>
@@ -678,7 +456,11 @@
                 </div>
 
                 <!-- Panel 3: Discover CTA -->
-                <div class="col-panel panel-orange">
+                <div
+                    class="col-panel panel-orange"
+                    style="background-image: url('/img/img-indexcollection3.png')"
+                >
+                    <div class="col-panel-overlay"></div>
                     <div class="col-panel-body col-panel-body-center">
                         <h3 class="col-panel-cta-title">
                             Discover about <br />Our Collections
@@ -777,8 +559,6 @@
             </div>
         </section>
 
-
-        
         <!-- Marathon Countdown Section -->
         <section class="marathon-section">
             <div class="marathon-overlay"></div>
@@ -1159,7 +939,7 @@ import { Modal } from 'bootstrap';
 const formatCurrencySimple = (amount) => {
     return (amount / 100).toLocaleString('en-PH', {
         minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        maximumFractionDigits: 2,
     });
 };
 
@@ -1171,103 +951,103 @@ const sampleProductsData = ref({
     data: [
         {
             id: 1,
-            name: "HUGIS V2 TEE - BLACK",
-            slug: "hugis-v2-tee-black",
+            name: 'HUGIS V2 TEE - BLACK',
+            slug: 'hugis-v2-tee-black',
             price: 89900,
             compare_price: 129900,
-            short_description: "Premium quality running shirt",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Black", "White", "Gray"],
-            sizes_array: ["S", "M", "L", "XL"],
-            in_stock: true
+            short_description: 'Premium quality running shirt',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Black', 'White', 'Gray'],
+            sizes_array: ['S', 'M', 'L', 'XL'],
+            in_stock: true,
         },
         {
             id: 2,
-            name: "BREAKING BOUNDARIES SINGLET",
-            slug: "breaking-boundaries-singlet",
+            name: 'BREAKING BOUNDARIES SINGLET',
+            slug: 'breaking-boundaries-singlet',
             price: 79900,
             compare_price: 0,
-            short_description: "Lightweight racing singlet",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Navy", "Red"],
-            sizes_array: ["S", "M", "L", "XL"],
-            in_stock: true
+            short_description: 'Lightweight racing singlet',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Navy', 'Red'],
+            sizes_array: ['S', 'M', 'L', 'XL'],
+            in_stock: true,
         },
         {
             id: 3,
-            name: "PAKARAS RUNNING SHORTS",
-            slug: "pakaras-running-shorts",
+            name: 'PAKARAS RUNNING SHORTS',
+            slug: 'pakaras-running-shorts',
             price: 129900,
             compare_price: 179900,
-            short_description: "2-in-1 running shorts with built-in liner",
-            iimage_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Black", "Charcoal"],
-            sizes_array: ["S", "M", "L", "XL"],
-            in_stock: true
+            short_description: '2-in-1 running shorts with built-in liner',
+            iimage_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Black', 'Charcoal'],
+            sizes_array: ['S', 'M', 'L', 'XL'],
+            in_stock: true,
         },
         {
             id: 4,
-            name: "TRIBU PAKARAS CAP",
-            slug: "tribu-pakaras-cap",
+            name: 'TRIBU PAKARAS CAP',
+            slug: 'tribu-pakaras-cap',
             price: 59900,
             compare_price: 0,
-            short_description: "Performance running cap",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Black", "White"],
-            sizes_array: ["One Size"],
-            in_stock: true
+            short_description: 'Performance running cap',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Black', 'White'],
+            sizes_array: ['One Size'],
+            in_stock: true,
         },
         {
             id: 5,
-            name: "HUGIS COMPRESSION TIGHTS",
-            slug: "hugis-compression-tights",
+            name: 'HUGIS COMPRESSION TIGHTS',
+            slug: 'hugis-compression-tights',
             price: 149900,
             compare_price: 199900,
-            short_description: "High compression running tights",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Black"],
-            sizes_array: ["S", "M", "L", "XL"],
-            in_stock: true
+            short_description: 'High compression running tights',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Black'],
+            sizes_array: ['S', 'M', 'L', 'XL'],
+            in_stock: true,
         },
         {
             id: 6,
-            name: "RACE DAY TANK TOP",
-            slug: "race-day-tank-top",
+            name: 'RACE DAY TANK TOP',
+            slug: 'race-day-tank-top',
             price: 69900,
             compare_price: 0,
-            short_description: "Breathable mesh tank top for race day",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Neon Yellow", "Black", "White"],
-            sizes_array: ["S", "M", "L", "XL"],
-            in_stock: true
+            short_description: 'Breathable mesh tank top for race day',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Neon Yellow', 'Black', 'White'],
+            sizes_array: ['S', 'M', 'L', 'XL'],
+            in_stock: true,
         },
         {
             id: 7,
-            name: "PAKARAS RUNNING SOCKS",
-            slug: "pakaras-running-socks",
+            name: 'PAKARAS RUNNING SOCKS',
+            slug: 'pakaras-running-socks',
             price: 34900,
             compare_price: 0,
-            short_description: "Anti-blister running socks with cushioning",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Black/White", "Navy/Yellow"],
-            sizes_array: ["S/M", "L/XL"],
-            in_stock: true
+            short_description: 'Anti-blister running socks with cushioning',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Black/White', 'Navy/Yellow'],
+            sizes_array: ['S/M', 'L/XL'],
+            in_stock: true,
         },
         {
             id: 8,
-            name: "LIMITED EDITION RACING VEST",
-            slug: "limited-edition-racing-vest",
+            name: 'LIMITED EDITION RACING VEST',
+            slug: 'limited-edition-racing-vest',
             price: 99900,
             compare_price: 149900,
-            short_description: "Limited edition race day vests",
-            image_url: "/img/tshirt-placeholder.svg",
-            colors_array: ["Orange/Black"],
-            sizes_array: ["M", "L", "XL"],
-            in_stock: true
-        }
+            short_description: 'Limited edition race day vests',
+            image_url: '/img/tshirt-placeholder.svg',
+            colors_array: ['Orange/Black'],
+            sizes_array: ['M', 'L', 'XL'],
+            in_stock: true,
+        },
     ],
     total: 8,
-    links: []
+    links: [],
 });
 
 const activeEventTab = ref('upcoming');
@@ -2040,7 +1820,9 @@ const confirmAddToCart = () => {
     border-radius: 12px;
     overflow: hidden;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .product-card:hover {
@@ -2481,18 +2263,12 @@ const confirmAddToCart = () => {
 }
 
 /* Kuris logo text */
-.kuris-logo {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 16px;
-    line-height: 1;
-}
 
 .kuris-script {
     font-family: 'Georgia', serif;
     font-style: italic;
     font-size: 40px;
-    color: #111;
+    color: #ffffff;
     line-height: 1.1;
 }
 
@@ -2500,7 +2276,7 @@ const confirmAddToCart = () => {
     font-size: 52px;
     font-weight: 900;
     font-style: italic;
-    color: #111;
+    color: #ffffff;
 }
 
 .col-panel-title {
@@ -2517,7 +2293,7 @@ const confirmAddToCart = () => {
 }
 
 .panel-mid .col-panel-title {
-    color: #111;
+    color: #ffffff;
 }
 
 .panel-orange .col-panel-title {
@@ -2544,7 +2320,7 @@ const confirmAddToCart = () => {
 }
 
 .panel-mid .col-panel-desc {
-    color: #444;
+    color: #ffffff;
 }
 
 .panel-orange .col-panel-desc {
@@ -2574,17 +2350,17 @@ const confirmAddToCart = () => {
 .col-panel-btn-outline:hover {
     background: #fff;
     border-color: #fff;
-    color: #111;
+    color: #ffffff;
 }
 
 .col-panel-btn-outline-dark {
-    border: 1.5px solid #333;
-    color: #333;
+    border: 1.5px solid #ffffff;
+    color: #ffffff;
     background: transparent;
 }
 
 .col-panel-btn-outline-dark:hover {
-    background: #333;
+    background: #ffffff;
     color: #fff;
 }
 
@@ -3872,6 +3648,147 @@ const confirmAddToCart = () => {
     .grocery-modal-content {
         border-radius: 24px 24px 0 0;
         width: 100%;
+    }
+}
+
+/* ===== INSP/MOCKUP Product Grid Styles ===== */
+.product-box {
+    margin-bottom: 30px;
+    background: #fff;
+    position: relative;
+}
+
+.product-image-wrap {
+    position: relative;
+    background-color: #f7f7f7;
+    margin-bottom: 12px;
+    padding: 20px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.product-image-wrap .img-fluid {
+    max-height: 250px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-image-wrap:hover .img-fluid {
+    transform: scale(1.05);
+}
+
+.product-badges {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+}
+
+.product-badges .badge {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+}
+
+.sale-badge {
+    background-color: #ff5722 !important;
+    color: #fff !important;
+}
+
+.new-badge {
+    background-color: #1976d2 !important;
+    color: #fff !important;
+}
+
+.wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #666;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.wishlist-btn:hover {
+    color: #ff5722;
+    transform: scale(1.1);
+}
+
+.product-content {
+    text-align: left;
+    padding: 0;
+}
+
+.product-name-link {
+    text-decoration: none;
+    color: #111;
+}
+
+.product-name-link:hover .product-name {
+    color: #198754;
+}
+
+.product-name {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    font-family: 'Public Sans', sans-serif;
+}
+
+.product-subtitle {
+    display: block;
+}
+
+.add-to-cart-outline-btn {
+    text-transform: uppercase;
+    border: 1px solid #198754 !important;
+    color: #198754 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 10px !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-outline-btn:hover {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+/* Grid layout for products */
+.product-offer-list {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width: 991px) {
+    .product-offer-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .product-offer-list {
+        grid-template-columns: 1fr !important;
     }
 }
 </style>

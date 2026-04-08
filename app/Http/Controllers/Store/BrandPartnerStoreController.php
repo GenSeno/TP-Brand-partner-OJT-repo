@@ -67,7 +67,7 @@ class BrandPartnerStoreController extends Controller
             $productsQuery->search($request->search);
         }
 
-        $products = $productsQuery->latest()->paginate(12)->withQueryString();
+        $products = $productsQuery->latest()->paginate(8)->withQueryString();
 
         return Inertia::render('store/index', [
             'brandPartner' => $brandPartner,

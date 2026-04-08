@@ -346,7 +346,9 @@
 
                     <!-- Shipping Option -->
                     <div class="mb-3 mt-3">
-                        <label class="form-label required">Shipping Option</label>
+                        <label class="form-label required"
+                            >Shipping Option</label
+                        >
                         <div class="d-flex gap-4">
                             <label class="form-check mb-0">
                                 <input
@@ -382,7 +384,12 @@
                     </div>
 
                     <!-- Shipping Fields -->
-                    <div v-if="shippingOption === 'delivery' && differentShipping" class="shipping-fields">
+                    <div
+                        v-if="
+                            shippingOption === 'delivery' && differentShipping
+                        "
+                        class="shipping-fields"
+                    >
                         <h6 class="mb-3">Shipping Address</h6>
 
                         <div class="row">
@@ -876,7 +883,10 @@ const submitForm = () => {
     const payload = {
         customer_id: form.data.orderable_id || null,
         address: form.data.address,
-        shipping: shippingOption.value === 'delivery' && differentShipping.value ? form.data.shipping : null,
+        shipping:
+            shippingOption.value === 'delivery' && differentShipping.value
+                ? form.data.shipping
+                : null,
         need: form.data.need,
         shipping_option: shippingOption.value,
     };

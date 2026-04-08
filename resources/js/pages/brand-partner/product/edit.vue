@@ -60,39 +60,63 @@
 
                         <div class="mb-3">
                             <label class="form-label">Product Images</label>
-                            <div v-if="productImages.length" class="d-flex flex-wrap gap-2 mb-2">
+                            <div
+                                v-if="productImages.length"
+                                class="d-flex flex-wrap gap-2 mb-2"
+                            >
                                 <div
                                     v-for="image in productImages"
                                     :key="image.id"
                                     class="position-relative"
-                                    style="width: 80px;"
+                                    style="width: 80px"
                                 >
                                     <img
                                         :src="image.url"
-                                        style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 2px solid;"
-                                        :style="{ borderColor: image.is_primary ? '#0d6efd' : '#dee2e6' }"
+                                        style="
+                                            width: 80px;
+                                            height: 80px;
+                                            object-fit: cover;
+                                            border-radius: 6px;
+                                            border: 2px solid;
+                                        "
+                                        :style="{
+                                            borderColor: image.is_primary
+                                                ? '#0d6efd'
+                                                : '#dee2e6',
+                                        }"
                                     />
                                     <span
                                         v-if="image.is_primary"
                                         class="badge bg-primary position-absolute bottom-0 start-0"
-                                        style="font-size: 9px;"
-                                    >Primary</span>
+                                        style="font-size: 9px"
+                                        >Primary</span
+                                    >
                                     <div class="d-flex gap-1 mt-1">
                                         <button
                                             v-if="!image.is_primary"
                                             type="button"
                                             class="btn btn-outline-primary btn-sm flex-fill"
-                                            style="font-size: 10px; padding: 1px 2px;"
+                                            style="
+                                                font-size: 10px;
+                                                padding: 1px 2px;
+                                            "
                                             :disabled="imageActionLoading"
                                             @click="setPrimary(image)"
-                                        >★</button>
+                                        >
+                                            ★
+                                        </button>
                                         <button
                                             type="button"
                                             class="btn btn-outline-danger btn-sm flex-fill"
-                                            style="font-size: 10px; padding: 1px 2px;"
+                                            style="
+                                                font-size: 10px;
+                                                padding: 1px 2px;
+                                            "
                                             :disabled="imageActionLoading"
                                             @click="deleteImage(image)"
-                                        >×</button>
+                                        >
+                                            ×
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +129,9 @@
                                 :disabled="imageActionLoading"
                                 @change="uploadNewImages"
                             />
-                            <small class="text-muted">Upload additional images.</small>
+                            <small class="text-muted"
+                                >Upload additional images.</small
+                            >
                         </div>
 
                         <div class="mb-3">
@@ -116,7 +142,9 @@
                                 class="form-control"
                                 placeholder="e.g. Red, Blue, Green"
                             />
-                            <small class="text-muted">Separate with commas.</small>
+                            <small class="text-muted"
+                                >Separate with commas.</small
+                            >
                             <input-error :message="form.errors.colors" />
                         </div>
 
@@ -128,7 +156,9 @@
                                 class="form-control"
                                 placeholder="e.g. S, M, L, XL"
                             />
-                            <small class="text-muted">Separate with commas.</small>
+                            <small class="text-muted"
+                                >Separate with commas.</small
+                            >
                             <input-error :message="form.errors.sizes" />
                         </div>
                     </div>
@@ -136,20 +166,46 @@
                     <div class="col-md-4">
                         <!-- Approval Status Banner -->
                         <div
-                            v-if="$page.props.features?.product_approval && product.approval_status !== 'approved'"
+                            v-if="
+                                $page.props.features?.product_approval &&
+                                product.approval_status !== 'approved'
+                            "
                             class="alert d-flex align-items-start gap-2 mb-3 p-2"
-                            :class="product.approval_status === 'rejected' ? 'alert-danger' : 'alert-warning'"
-                            style="font-size: 13px;"
+                            :class="
+                                product.approval_status === 'rejected'
+                                    ? 'alert-danger'
+                                    : 'alert-warning'
+                            "
+                            style="font-size: 13px"
                         >
-                            <vue-feather type="info" size="16" class="flex-shrink-0 mt-1" />
+                            <vue-feather
+                                type="info"
+                                size="16"
+                                class="flex-shrink-0 mt-1"
+                            />
                             <div>
-                                <template v-if="product.approval_status === 'pending'">
-                                    <strong>Pending Approval</strong> — This product is awaiting TPInkAdmin review. Publishing is disabled until approved.
+                                <template
+                                    v-if="product.approval_status === 'pending'"
+                                >
+                                    <strong>Pending Approval</strong> — This
+                                    product is awaiting TPInkAdmin review.
+                                    Publishing is disabled until approved.
                                 </template>
-                                <template v-else-if="product.approval_status === 'rejected'">
-                                    <strong>Rejected</strong> — This product was rejected by TPInkAdmin.
-                                    <div v-if="product.approval_notes" class="mt-1">
-                                        <em>Reason: {{ product.approval_notes }}</em>
+                                <template
+                                    v-else-if="
+                                        product.approval_status === 'rejected'
+                                    "
+                                >
+                                    <strong>Rejected</strong> — This product was
+                                    rejected by TPInkAdmin.
+                                    <div
+                                        v-if="product.approval_notes"
+                                        class="mt-1"
+                                    >
+                                        <em
+                                            >Reason:
+                                            {{ product.approval_notes }}</em
+                                        >
                                     </div>
                                 </template>
                             </div>
@@ -202,9 +258,22 @@
                                     v-for="(label, value) in statusOptions"
                                     :key="value"
                                     :value="value"
-                                    :disabled="value === 'published' && $page.props.features?.product_approval && product.approval_status !== 'approved'"
+                                    :disabled="
+                                        value === 'published' &&
+                                        $page.props.features
+                                            ?.product_approval &&
+                                        product.approval_status !== 'approved'
+                                    "
                                 >
-                                    {{ label }}{{ value === 'published' && $page.props.features?.product_approval && product.approval_status !== 'approved' ? ' (requires approval)' : '' }}
+                                    {{ label
+                                    }}{{
+                                        value === 'published' &&
+                                        $page.props.features
+                                            ?.product_approval &&
+                                        product.approval_status !== 'approved'
+                                            ? ' (requires approval)'
+                                            : ''
+                                    }}
                                 </option>
                             </select>
                             <input-error :message="form.errors.status" />
@@ -383,16 +452,24 @@ const uploadNewImages = async (e) => {
 const deleteImage = async (image) => {
     imageActionLoading.value = true;
     await axios.delete(
-        route('brand-partner.products.images.destroy', [props.product.id, image.id]),
+        route('brand-partner.products.images.destroy', [
+            props.product.id,
+            image.id,
+        ]),
     );
-    productImages.value = productImages.value.filter((img) => img.id !== image.id);
+    productImages.value = productImages.value.filter(
+        (img) => img.id !== image.id,
+    );
     imageActionLoading.value = false;
 };
 
 const setPrimary = async (image) => {
     imageActionLoading.value = true;
     await axios.post(
-        route('brand-partner.products.images.primary', [props.product.id, image.id]),
+        route('brand-partner.products.images.primary', [
+            props.product.id,
+            image.id,
+        ]),
     );
     productImages.value.forEach((img) => {
         img.is_primary = img.id === image.id;

@@ -25,33 +25,72 @@
                         <span class="brand-name text-white">Store</span>
                     </span>
                 </div>
-                
+
                 <!-- Center Nav Links -->
                 <div class="center-nav-wrapper d-none d-lg-block">
                     <nav class="center-nav">
-                        <Link 
-                            :href="brandPartner ? route('store.brand-partner.shop', brandPartner.slug) : '#'" 
-                            class="nav-item">
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.shop',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
                             SHOP <i class="ri-arrow-down-s-line"></i>
                         </Link>
-                        
-                        <Link 
-                            :href="brandPartner ? route('store.brand-partner.collections', brandPartner.slug) : '#'" 
-                            class="nav-item">
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.collections',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
                             COLLECTIONS <i class="ri-arrow-down-s-line"></i>
                         </Link>
-                        
-                        <Link 
-                            :href="brandPartner ? route('store.brand-partner.about', brandPartner.slug) : '#'" 
-                            class="nav-item">
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.about',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
                             ABOUT US
                         </Link>
-                        
-                        <Link 
-                            :href="brandPartner ? route('store.brand-partner.contact', brandPartner.slug) : '#'" 
-                            class="nav-item">
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.contact',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
                             CONTACT US
                         </Link>
+
+                        <a
+                            href="javascript:void(0)"
+                            class="nav-item"
+                        >
+                            BE OUR PARTNER
+                        </a>
                     </nav>
                 </div>
 
@@ -59,22 +98,40 @@
                 <div class="right-nav-wrapper d-none d-lg-block">
                     <nav class="right-nav">
                         <Link
-                            :href="brandPartner ? route('store.brand-partner.login', brandPartner.slug) : '#'"
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.login',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
                             class="utility-link"
                         >
                             <i class="ri-user-line"></i> Account
                         </Link>
-                        <a href="javascript:void(0)" class="utility-link"><i class="ri-heart-line"></i> Wishlist</a>
+                        <a href="javascript:void(0)" class="utility-link"
+                            ><i class="ri-heart-line"></i> Wishlist</a
+                        >
                         <Link
                             :href="
-                                brandPartner ? route('store.brand-partner.cart', brandPartner.slug) : '#'
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.cart',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
                             "
                             class="utility-link cart-link"
                         >
                             <i class="ri-shopping-cart-2-line"></i> Cart
-                            <span class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</span>
+                            <span class="cart-badge" v-if="cartCount > 0">{{
+                                cartCount
+                            }}</span>
                         </Link>
-                        <a href="javascript:void(0)" class="race-cta-btn">RACE WITH US</a>
+                        <a href="javascript:void(0)" class="race-cta-btn"
+                            >RACE WITH US</a
+                        >
                     </nav>
                 </div>
 

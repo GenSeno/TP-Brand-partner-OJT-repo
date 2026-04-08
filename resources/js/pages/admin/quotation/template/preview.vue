@@ -46,9 +46,9 @@ th {
                                 <div>
                                     <img
                                         :src="
-                                           productLines[0]?.purchasable
-                                            ?.product?.image
-                                            ?.original_url || ''
+                                            productLines[0]?.purchasable
+                                                ?.product?.image
+                                                ?.original_url || ''
                                         "
                                         class="rounded border"
                                         style="
@@ -60,7 +60,8 @@ th {
                                     />
                                     <div class="small fw-bold mt-1">
                                         {{
-                                            productLines[0]?.purchasable?.product?.name
+                                            productLines[0]?.purchasable
+                                                ?.product?.name
                                         }}
                                     </div>
                                 </div>
@@ -103,10 +104,12 @@ th {
                                             >
                                                 <div
                                                     v-for="item in line.namesWithNumbers"
-                                                    :key="item.number" class="ms-2 text-muted"
+                                                    :key="item.number"
+                                                    class="ms-2 text-muted"
                                                 >
                                                     {{ item.number }}.)
-                                                    <span class="mb-0"
+                                                    <span
+                                                        class="mb-0"
                                                         v-html="
                                                             item.name ??
                                                             '<i class=\'text-danger\'>Please set name</i>'
@@ -184,7 +187,7 @@ th {
                             is required.
                         </td>
                         <td colspan="1" class="fw-bold bg-light text-center">
-                             {{
+                            {{
                                 Object.values(lines).reduce(
                                     (total, productLines) =>
                                         total +
@@ -196,9 +199,7 @@ th {
                                 )
                             }}
                         </td>
-                        <td colspan="2" class="fw-bold bg-light">
-                            Total
-                        </td>
+                        <td colspan="2" class="fw-bold bg-light">Total</td>
                         <td class="text-end fw-bold">
                             {{ quotation.sub_total.formatted }}
                         </td>
@@ -272,7 +273,7 @@ th {
                                     border-bottom: 1px solid white !important;
                                 "
                             ></td>
-                            <td colspan="3" class="bg-light  text-muted">
+                            <td colspan="3" class="bg-light text-muted">
                                 <i
                                     >{{ tax.identifier
                                     }}<span class="px-1" v-if="tax.percentage"
@@ -319,7 +320,7 @@ th {
                                     border-bottom: 1px solid white !important;
                                 "
                             ></td>
-                            <td colspan="3" class="bg-light  text-muted">
+                            <td colspan="3" class="bg-light text-muted">
                                 <i
                                     >{{ discount.description
                                     }}<span
@@ -345,9 +346,11 @@ th {
                             "
                         ></td>
                         <td colspan="3" class="fw-bold bg-light">
-                           Grand Total
+                            Grand Total
                         </td>
-                        <td class="text-end fw-bold">{{ quotation.total.formatted }}</td>
+                        <td class="text-end fw-bold">
+                            {{ quotation.total.formatted }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -387,7 +390,7 @@ const props = defineProps({
 });
 
 const quotation = reactive({ ...props.quotation });
-const lines = reactive({...props.lines}); 
+const lines = reactive({ ...props.lines });
 const address = quotation?.billing_address;
 const currency = quotation?.currency;
 const dateFormat = ref('MMM. DD, YYYY');

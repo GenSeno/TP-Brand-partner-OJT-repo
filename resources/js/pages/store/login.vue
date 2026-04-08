@@ -11,7 +11,6 @@
 
         <!-- LOGIN CARD -->
         <div class="auth-card login-card" v-if="!showRegister">
-
             <!-- Left: Form -->
             <div class="auth-card-left">
                 <h2 class="auth-title">Welcome, Runner</h2>
@@ -45,22 +44,37 @@
 
                     <div class="auth-remember-row">
                         <label class="auth-remember">
-                            <input type="checkbox" v-model="loginForm.remember" />
+                            <input
+                                type="checkbox"
+                                v-model="loginForm.remember"
+                            />
                             <span>Remember Password?</span>
                         </label>
                         <a href="#" class="auth-forgot">Forgot Password?</a>
                     </div>
 
-                    <button type="submit" class="auth-btn-primary">LOGIN</button>
+                    <button type="submit" class="auth-btn-primary">
+                        LOGIN
+                    </button>
 
                     <button type="button" class="auth-btn-google">
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="google-icon" />
+                        <img
+                            src="https://www.svgrepo.com/show/475656/google-color.svg"
+                            alt="Google"
+                            class="google-icon"
+                        />
                         LOGIN WITH GOOGLE
                     </button>
 
                     <p class="auth-switch">
                         Don't have an account?
-                        <button type="button" class="auth-link-btn" @click="showRegister = true">SignUp</button>
+                        <button
+                            type="button"
+                            class="auth-link-btn"
+                            @click="showRegister = true"
+                        >
+                            SignUp
+                        </button>
                     </p>
 
                     <div class="auth-do-later">
@@ -74,31 +88,47 @@
                 <div class="auth-card-img-placeholder"></div>
                 <!-- Replace with: <img src="/img/login-side.jpg" alt=""> -->
             </div>
-
         </div>
 
         <!-- REGISTER CARD -->
         <div class="auth-card register-card" v-else>
-
             <!-- Left: Info -->
             <div class="auth-card-left register-left">
-                <button type="button" class="auth-back" @click="showRegister = false">← Back</button>
+                <button
+                    type="button"
+                    class="auth-back"
+                    @click="showRegister = false"
+                >
+                    ← Back
+                </button>
 
                 <div class="register-left-content">
-                    <h2 class="auth-title register-title">Start Your Journey</h2>
+                    <h2 class="auth-title register-title">
+                        Start Your Journey
+                    </h2>
                     <p class="auth-subtitle">
-                        Run with heart. Move with purpose. Join Tribu
-                        Pakaras and conquer every trail ahead.
+                        Run with heart. Move with purpose. Join Tribu Pakaras
+                        and conquer every trail ahead.
                     </p>
 
                     <button type="button" class="auth-btn-google">
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="google-icon" />
+                        <img
+                            src="https://www.svgrepo.com/show/475656/google-color.svg"
+                            alt="Google"
+                            class="google-icon"
+                        />
                         LOGIN WITH GOOGLE
                     </button>
 
                     <p class="auth-switch">
                         Already have an account?
-                        <button type="button" class="auth-link-btn" @click="showRegister = false">Log In</button>
+                        <button
+                            type="button"
+                            class="auth-link-btn"
+                            @click="showRegister = false"
+                        >
+                            Log In
+                        </button>
                     </p>
                 </div>
             </div>
@@ -151,19 +181,28 @@
                     </div>
 
                     <label class="auth-terms">
-                        <input type="checkbox" v-model="registerForm.terms" required />
+                        <input
+                            type="checkbox"
+                            v-model="registerForm.terms"
+                            required
+                        />
                         <span>
                             By creating an account, you agree to our
-                            <a href="#" class="auth-terms-link">Terms &amp; Conditions</a>
+                            <a href="#" class="auth-terms-link"
+                                >Terms &amp; Conditions</a
+                            >
                             and
-                            <a href="#" class="auth-terms-link">Privacy Policy</a>.
+                            <a href="#" class="auth-terms-link"
+                                >Privacy Policy</a
+                            >.
                         </span>
                     </label>
 
-                    <button type="submit" class="auth-btn-primary">CREATE ACCOUNT</button>
+                    <button type="submit" class="auth-btn-primary">
+                        CREATE ACCOUNT
+                    </button>
                 </form>
             </div>
-
         </div>
     </div>
 </template>
@@ -173,13 +212,12 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineOptions({
-    layout: null
+    layout: null,
 });
-
 
 // Add props to receive brandPartner
 const props = defineProps({
-    brandPartner: Object
+    brandPartner: Object,
 });
 
 const showRegister = ref(false);
@@ -200,16 +238,23 @@ const registerForm = useForm({
 
 // Update submitLogin to use brand partner route
 const submitLogin = () => {
-    loginForm.post(route('store.brand-partner.login.submit', props.brandPartner.slug), {
-        onFinish: () => loginForm.reset('password'),
-    });
+    loginForm.post(
+        route('store.brand-partner.login.submit', props.brandPartner.slug),
+        {
+            onFinish: () => loginForm.reset('password'),
+        },
+    );
 };
 
 // Update submitRegister to use brand partner route
 const submitRegister = () => {
-    registerForm.post(route('store.brand-partner.register.submit', props.brandPartner.slug), {
-        onFinish: () => registerForm.reset('password', 'password_confirmation'),
-    });
+    registerForm.post(
+        route('store.brand-partner.register.submit', props.brandPartner.slug),
+        {
+            onFinish: () =>
+                registerForm.reset('password', 'password_confirmation'),
+        },
+    );
 };
 </script>
 
@@ -222,6 +267,7 @@ const submitRegister = () => {
     justify-content: center;
     position: relative;
     padding: 40px 16px;
+    padding-top: 80px;
 }
 
 /* Background */
@@ -260,7 +306,7 @@ const submitRegister = () => {
     overflow: hidden;
     display: grid;
     width: 100%;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 }
 
 /* Login card */
@@ -451,13 +497,15 @@ const submitRegister = () => {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
     margin-bottom: 20px;
 }
 
 .auth-btn-google:hover {
     border-color: #3d8bf0;
-    box-shadow: 0 2px 8px rgba(61,139,240,0.12);
+    box-shadow: 0 2px 8px rgba(61, 139, 240, 0.12);
 }
 
 .google-icon {

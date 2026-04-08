@@ -32,7 +32,9 @@
             </Link>
             <ModalLink
                 navigate
-                :href="route('brand-partner.product-options.collections.create')"
+                :href="
+                    route('brand-partner.product-options.collections.create')
+                "
                 class="btn btn-added"
                 #default="{ loading }"
             >
@@ -70,7 +72,11 @@
             >
                 <template #notes="{ value }">
                     <span v-if="value" :title="value">
-                        {{ value.length > 60 ? value.substring(0, 60) + '…' : value }}
+                        {{
+                            value.length > 60
+                                ? value.substring(0, 60) + '…'
+                                : value
+                        }}
                     </span>
                     <span v-else class="text-muted">—</span>
                 </template>

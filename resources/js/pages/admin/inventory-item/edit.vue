@@ -54,8 +54,8 @@
                         />
                         <input-error :message="form.errors.reorder_qty" />
                     </div>
-                    <div class="col-md-12  mb-3">
-                         <label class="form-label required"
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label required"
                             >Unit of Measure</label
                         >
                         <vue-select
@@ -88,7 +88,9 @@
             </div>
             <div class="page-footer-buttons">
                 <div class="me-auto">
-                    <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                    <div
+                        class="status-toggle modal-status d-flex justify-content-between align-items-center"
+                    >
                         <input
                             v-model="form.data.enabled"
                             type="checkbox"
@@ -103,11 +105,11 @@
                 </div>
                 <div>
                     <button
-                    type="button"
-                    class="btn btn-secondary me-2"
-                    @click="close()"
-                     >
-                    Cancel
+                        type="button"
+                        class="btn btn-secondary me-2"
+                        @click="close()"
+                    >
+                        Cancel
                     </button>
                     <submit-btn :loading="form.processing">
                         Update Item
@@ -130,7 +132,7 @@ const props = defineProps({
     inventoryTypes: Object,
     unitMeasures: Object,
 });
-console.log('data',props.inventoryItem);
+console.log('data', props.inventoryItem);
 const modalRef = useTemplateRef('modalRef');
 
 const form = useAxiosForm({

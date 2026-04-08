@@ -103,11 +103,11 @@
                             <div
                                 v-show="selected"
                                 class="col-xl-6 bg-secondary-transparent"
-                                >
+                            >
                                 <aside
                                     class="product-order-list bg-secondary-transparent flex-fill"
                                     style="height: 100%"
-                                    >
+                                >
                                     <div class="card">
                                         <div class="card-body">
                                             <div
@@ -139,164 +139,258 @@
                                                 <div v-if="selected?.options">
                                                     <!-- PRINTING OPTION -->
                                                     <div
-                                                    v-for="option in selected.options.filter(o => o.name === 'Printing Option')"
-                                                    :key="option.id"
-                                                    class="mb-3"
+                                                        v-for="option in selected.options.filter(
+                                                            (o) =>
+                                                                o.name ===
+                                                                'Printing Option',
+                                                        )"
+                                                        :key="option.id"
+                                                        class="mb-3"
                                                     >
-                                                        <p class="small fw-bold mb-1">
-                                                            {{ option.pluralized_name }}
+                                                        <p
+                                                            class="small fw-bold mb-1"
+                                                        >
+                                                            {{
+                                                                option.pluralized_name
+                                                            }}
                                                         </p>
 
-                                                        <div class="d-flex flex-wrap gap-2">
+                                                        <div
+                                                            class="d-flex flex-wrap gap-2"
+                                                        >
                                                             <button
                                                                 v-for="value in option.values"
                                                                 :key="value.id"
                                                                 type="button"
                                                                 class="btn btn-secondary-ghost"
-                                                                :class="{ active: selectedPrintingValue === value.id }"
-                                                                @click="selectPrinting(value)"
+                                                                :class="{
+                                                                    active:
+                                                                        selectedPrintingValue ===
+                                                                        value.id,
+                                                                }"
+                                                                @click="
+                                                                    selectPrinting(
+                                                                        value,
+                                                                    )
+                                                                "
                                                             >
-                                                                {{ value.label }}
+                                                                {{
+                                                                    value.label
+                                                                }}
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- SIZE BUTTONS -->
-                                                    <div v-if="availableSizes.length" class="mb-3">
-                                                        <p class="small fw-bold mb-1">Sizes</p>
-                                                        <div class="d-flex flex-wrap gap-2">
-                                                            <button
-                                                                v-for="size in availableSizes"
-                                                                :key="size.variant_id"
-                                                                type="button"
-                                                                class="btn btn-secondary-ghost"
-                                                                :class="{ active: isSelectedSize(size.variant_id) }"
-                                                                @click="toggleSize(size)"
-                                                            >
-                                                                {{ size.label }}
-                                                            </button>
-                                                        </div>
-                                                        <div
-                                                            v-if="isOthersSelected"
-                                                            class="mt-3"
-                                                        >
-                                                            <p class="small text-muted mb-1">
-                                                                Dimension (W × H)
-                                                            </p>
-
-                                                            <div class="d-flex align-items-center gap-2">
-
-                                                                <input
-                                                                    v-model="customWidth"
-                                                                    type="number"
-                                                                    min="1"
-                                                                    class="form-control form-control-sm text-center"
-                                                                    style="max-width: 5rem"
-                                                                    placeholder="W"
-                                                                />
-
-                                                                <span class="fw-bold text-muted">×</span>
-
-                                                                <input
-                                                                    v-model="customHeight"
-                                                                    type="number"
-                                                                    min="1"
-                                                                    class="form-control form-control-sm text-center"
-                                                                    style="max-width: 5rem"
-                                                                    placeholder="H"
-                                                                />
-
-                                                                <small class="text-muted">inches</small>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                     <div class="mb-3">
-                                                        <label class="form-check">
-                                                            <input
-                                                            type="checkbox"
-                                                            v-model="samePriceForAll"
-                                                            class="form-check-input"
-                                                            />
-                                                            <span class="text-muted">Apply same price to all sizes</span>
-                                                        </label>
-                                                          <label class="form-check d-block mt-2">
-                                                            <input
-                                                                type="checkbox"
-                                                                v-model="sameQtyAndNamesForAll"
-                                                                class="form-check-input"
-                                                            />
-                                                                <span class="text-muted">
-                                                                    Apply same quantity and names to all sizes
-                                                                </span>
-                                                        </label>
-                                                    </div>
-                                                </div>
                                                 <div
-                                                    v-for="row in sizeRows"
-                                                    :key="row.variant_id"
+                                                    v-if="availableSizes.length"
                                                     class="mb-3"
                                                 >
-
-                                                    <div class="fw-bold mb-2">
-                                                        Size: {{ row.size }}
-                                                    </div>
-
-                                                    <div class="row align-items-center mb-1">
-
-                                                        <div class="col-md-5">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text required">Qty</span>
-                                                                <input
-                                                                    v-model.number="row.quantity"
-                                                                    type="number"
-                                                                    min="1"
-                                                                    class="form-control text-center"
-                                                                />
-                                                            </div>
-                                                        </div>
-
-                                                        <span class="col-auto">×</span>
-
-                                                        <div class="col-md-6">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text">
-                                                                    {{ quotation.currency.symbol }}
-                                                                </span>
-                                                                <input
-                                                                    v-model.number="row.price"
-                                                                    type="number"
-                                                                    class="form-control text-end"
-                                                                />
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <!-- NAMES -->
+                                                    <p
+                                                        class="small fw-bold mb-1"
+                                                    >
+                                                        Sizes
+                                                    </p>
                                                     <div
-                                                        class="row g-2"
-                                                        v-if="printingOptionLabel == 'WITH name'"
+                                                        class="d-flex flex-wrap gap-2"
+                                                    >
+                                                        <button
+                                                            v-for="size in availableSizes"
+                                                            :key="
+                                                                size.variant_id
+                                                            "
+                                                            type="button"
+                                                            class="btn btn-secondary-ghost"
+                                                            :class="{
+                                                                active: isSelectedSize(
+                                                                    size.variant_id,
+                                                                ),
+                                                            }"
+                                                            @click="
+                                                                toggleSize(size)
+                                                            "
                                                         >
-                                                        <p class="mb-0" v-if="row?.quantity">Names</p>
+                                                            {{ size.label }}
+                                                        </button>
+                                                    </div>
+                                                    <div
+                                                        v-if="isOthersSelected"
+                                                        class="mt-3"
+                                                    >
+                                                        <p
+                                                            class="small text-muted mb-1"
+                                                        >
+                                                            Dimension (W × H)
+                                                        </p>
+
                                                         <div
-                                                            v-for="n in row.quantity"
-                                                            :key="n"
-                                                            class="col-md-4"
+                                                            class="d-flex align-items-center gap-2"
+                                                        >
+                                                            <input
+                                                                v-model="
+                                                                    customWidth
+                                                                "
+                                                                type="number"
+                                                                min="1"
+                                                                class="form-control form-control-sm text-center"
+                                                                style="
+                                                                    max-width: 5rem;
+                                                                "
+                                                                placeholder="W"
+                                                            />
+
+                                                            <span
+                                                                class="fw-bold text-muted"
+                                                                >×</span
+                                                            >
+
+                                                            <input
+                                                                v-model="
+                                                                    customHeight
+                                                                "
+                                                                type="number"
+                                                                min="1"
+                                                                class="form-control form-control-sm text-center"
+                                                                style="
+                                                                    max-width: 5rem;
+                                                                "
+                                                                placeholder="H"
+                                                            />
+
+                                                            <small
+                                                                class="text-muted"
+                                                                >inches</small
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-check">
+                                                        <input
+                                                            type="checkbox"
+                                                            v-model="
+                                                                samePriceForAll
+                                                            "
+                                                            class="form-check-input"
+                                                        />
+                                                        <span class="text-muted"
+                                                            >Apply same price to
+                                                            all sizes</span
+                                                        >
+                                                    </label>
+                                                    <label
+                                                        class="form-check d-block mt-2"
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            v-model="
+                                                                sameQtyAndNamesForAll
+                                                            "
+                                                            class="form-check-input"
+                                                        />
+                                                        <span
+                                                            class="text-muted"
+                                                        >
+                                                            Apply same quantity
+                                                            and names to all
+                                                            sizes
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div
+                                                v-for="row in sizeRows"
+                                                :key="row.variant_id"
+                                                class="mb-3"
+                                            >
+                                                <div class="fw-bold mb-2">
+                                                    Size: {{ row.size }}
+                                                </div>
+
+                                                <div
+                                                    class="row align-items-center mb-1"
+                                                >
+                                                    <div class="col-md-5">
+                                                        <div
+                                                            class="input-group"
+                                                        >
+                                                            <span
+                                                                class="input-group-text required"
+                                                                >Qty</span
                                                             >
                                                             <input
-                                                                v-model="row.names[n - 1]"
-                                                                type="text"
-                                                                class="form-control"
-                                                                :placeholder="`Name #${n}`"
+                                                                v-model.number="
+                                                                    row.quantity
+                                                                "
+                                                                type="number"
+                                                                min="1"
+                                                                class="form-control text-center"
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <hr/>
+                                                    <span class="col-auto"
+                                                        >×</span
+                                                    >
+
+                                                    <div class="col-md-6">
+                                                        <div
+                                                            class="input-group"
+                                                        >
+                                                            <span
+                                                                class="input-group-text"
+                                                            >
+                                                                {{
+                                                                    quotation
+                                                                        .currency
+                                                                        .symbol
+                                                                }}
+                                                            </span>
+                                                            <input
+                                                                v-model.number="
+                                                                    row.price
+                                                                "
+                                                                type="number"
+                                                                class="form-control text-end"
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
+
+                                                <!-- NAMES -->
+                                                <div
+                                                    class="row g-2"
+                                                    v-if="
+                                                        printingOptionLabel ==
+                                                        'WITH name'
+                                                    "
+                                                >
+                                                    <p
+                                                        class="mb-0"
+                                                        v-if="row?.quantity"
+                                                    >
+                                                        Names
+                                                    </p>
+                                                    <div
+                                                        v-for="n in row.quantity"
+                                                        :key="n"
+                                                        class="col-md-4"
+                                                    >
+                                                        <input
+                                                            v-model="
+                                                                row.names[n - 1]
+                                                            "
+                                                            type="text"
+                                                            class="form-control"
+                                                            :placeholder="`Name #${n}`"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <hr />
                                             </div>
                                         </div>
+                                    </div>
                                 </aside>
                             </div>
                         </div>
@@ -361,8 +455,8 @@ const sizeRows = ref([]);
 const availableSizes = ref([]);
 const selectedPrintingValue = ref(null);
 const printingOptionLabel = ref(null);
-const samePriceForAll = ref(false)
-const sameQtyAndNamesForAll = ref(false)
+const samePriceForAll = ref(false);
+const sameQtyAndNamesForAll = ref(false);
 
 const filterForm = useForm({
     filter: {
@@ -377,17 +471,15 @@ const form = useAxiosForm({
     product_id: null,
     names: [],
     custom_dimension: '',
-}); 
+});
 
 // CUSTOM DIMENSION
 const customWidth = ref('');
 const customHeight = ref('');
 
 const isOthersSelected = computed(() => {
-    return sizeRows.value.some(
-        row => row.size?.toLowerCase() === 'custom'
-    )
-})
+    return sizeRows.value.some((row) => row.size?.toLowerCase() === 'custom');
+});
 
 watch([customWidth, customHeight], ([w, h]) => {
     form.data.custom_dimension = w && h ? `${w}x${h}` : '';
@@ -395,21 +487,21 @@ watch([customWidth, customHeight], ([w, h]) => {
 
 // CHECK IF CAN ADD ITEM
 const canAddItem = computed(() => {
-  if (!form.data.product_id || !selectedPrintingValue) return false
+    if (!form.data.product_id || !selectedPrintingValue.value) return false;
 
-  if (sizeRows.value.length === 0) return false
+    if (sizeRows.value.length === 0) return false;
 
-for (const row of sizeRows.value) {
-    if (!row.quantity || row.quantity <= 0) return false
-    if (!row.price || row.price <= 0) return false
-  }
-  return true
-})
+    for (const row of sizeRows.value) {
+        if (!row.quantity || row.quantity <= 0) return false;
+        if (!row.price || row.price <= 0) return false;
+    }
+    return true;
+});
 
 // SELECT PRINTING OPTIONS
 function selectPrinting(value) {
-    selectedPrintingValue.value = value.id
-    printingOptionLabel.value = value.label
+    selectedPrintingValue.value = value.id;
+    printingOptionLabel.value = value.label;
 }
 
 const submitFilters = () => {
@@ -454,105 +546,98 @@ watch(
 
 // UPDATE ROWS IF CHECKBOX TICKED
 watch(
-  () => sizeRows.value[0],
-  (firstRow) => {
-    if (!firstRow) return
+    () => sizeRows.value[0],
+    (firstRow) => {
+        if (!firstRow) return;
 
-      sizeRows.value.forEach((row, index) => {
-      if (index === 0) return 
+        sizeRows.value.forEach((row, index) => {
+            if (index === 0) return;
 
-      if (samePriceForAll.value) row.price = firstRow.price
-      if (sameQtyAndNamesForAll.value) {
-        row.quantity = firstRow.quantity
-        row.names = [...firstRow.names]
-      }
-    })
-  },
-  { deep: true }
-)
+            if (samePriceForAll.value) row.price = firstRow.price;
+            if (sameQtyAndNamesForAll.value) {
+                row.quantity = firstRow.quantity;
+                row.names = [...firstRow.names];
+            }
+        });
+    },
+    { deep: true },
+);
 
 // TOGGLE SIZE FUNCTION
 function toggleSize(size) {
-  const index = sizeRows.value.findIndex(r => r.variant_id === size.variant_id)
+    const index = sizeRows.value.findIndex(
+        (r) => r.variant_id === size.variant_id,
+    );
 
-  if (index !== -1) {
-    sizeRows.value.splice(index, 1)
-    return
-  }
+    if (index !== -1) {
+        sizeRows.value.splice(index, 1);
+        return;
+    }
 
-  const firstRow = sizeRows.value[0]
+    const firstRow = sizeRows.value[0];
 
-  sizeRows.value.push({
-    product_id: selected?.id,
-    variant_id: size.variant_id,
-    size: size.label,
-    quantity: (sameQtyAndNamesForAll.value && firstRow) ? firstRow.quantity : 1,
-    price: (samePriceForAll.value && firstRow) ? firstRow.price : size.price,
-    names: (sameQtyAndNamesForAll.value && firstRow) ? [...firstRow.names] : []
-  })
+    sizeRows.value.push({
+        product_id: selected.value?.id,
+        variant_id: size.variant_id,
+        size: size.label,
+        quantity:
+            sameQtyAndNamesForAll.value && firstRow ? firstRow.quantity : 1,
+        price: samePriceForAll.value && firstRow ? firstRow.price : size.price,
+        names:
+            sameQtyAndNamesForAll.value && firstRow ? [...firstRow.names] : [],
+    });
 }
 
 watch(selected, () => {
     // When user selects a new product, reset printing option and sizes
-    selectedPrintingValue.value = null
-    sizeRows.value = []
-    availableSizes.value = []
-})
+    selectedPrintingValue.value = null;
+    sizeRows.value = [];
+    availableSizes.value = [];
+});
 
 watch(selectedPrintingValue, async (valueId) => {
-
     // Reset rows whenever printing option changes
-    sizeRows.value = []
-    availableSizes.value = []
+    sizeRows.value = [];
+    availableSizes.value = [];
 
     // Only proceed if product and printing option are selected
-    if (!selected.value || !valueId) return
+    if (!selected.value || !valueId) return;
 
     try {
         const url = route('admin.products.variants.by-option', [
             selected.value.id,
-            valueId
-        ])
-        const { data } = await axios.get(url)
+            valueId,
+        ]);
+        const { data } = await axios.get(url);
 
-        buildAvailableSizes(data)
+        buildAvailableSizes(data);
     } catch (error) {
-        console.error('Failed to load sizes:', error)
+        console.error('Failed to load sizes:', error);
     }
-
-})
+});
 
 function buildAvailableSizes(variants) {
+    availableSizes.value = variants.map((variant) => {
+        const sizeValue = variant.values.find((v) => v.option?.name === 'Size');
 
-    availableSizes.value = variants.map(variant => {
-
-        const sizeValue = variant.values.find(
-            v => v.option?.name === 'Size'
-        )
-
-        let label = sizeValue?.label ?? variant.description
+        let label = sizeValue?.label ?? variant.description;
 
         // Remove "NO name / " or "WITH name / "
         if (label.includes('/')) {
-            label = label.split('/')[1].trim()
+            label = label.split('/')[1].trim();
         }
 
         return {
             variant_id: variant.id,
             label: label,
-            price: variant.price
-        }
-    })
+            price: variant.price,
+        };
+    });
 }
-
-
 
 function isSelectedSize(variantId) {
-    return sizeRows.value.some(
-        r => r.variant_id === variantId
-    )
+    return sizeRows.value.some((r) => r.variant_id === variantId);
 }
-
 
 // watch(selected, (product) => {
 
@@ -578,25 +663,24 @@ function isSelectedSize(variantId) {
 
 // }, { immediate: true })
 
-
 const submitForm = () => {
     const payload = {
         product_id: form.data.product_id,
-        printing_option_id: selectedPrintingValue.value, 
-        printing_option_value: printingOptionLabel.value, 
+        printing_option_id: selectedPrintingValue.value,
+        printing_option_value: printingOptionLabel.value,
         custom_dimension: form.data.custom_dimension,
-        sizes: sizeRows.value.map(row => ({
-            variant_id: row.variant_id,             
-            product_id: form.data.product_id,       
-            size_label: row.size,                  
+        sizes: sizeRows.value.map((row) => ({
+            variant_id: row.variant_id,
+            product_id: form.data.product_id,
+            size_label: row.size,
             quantity: row.quantity,
             price: row.price,
-            names: row.names?.filter(n => n && n.trim() !== '') || [], 
-        }))
-    }
+            names: row.names?.filter((n) => n && n.trim() !== '') || [],
+        })),
+    };
 
     form.post(route('admin.quotation.lines', props.quotation.id), {
-        data: payload,  
+        data: payload,
         onSuccess: ({ data }) => {
             if (createAnother.value) form.reset();
             else modalRef.value.close();
