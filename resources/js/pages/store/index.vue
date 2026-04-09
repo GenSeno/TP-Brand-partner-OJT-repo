@@ -39,29 +39,8 @@
                     ></button>
                 </div>
                 <div class="carousel-inner">
-                    <!-- Slide 1: Collection -->
+                    <!-- Slide 1: Keep On Breaking Boundaries (img-carousel1) -->
                     <div class="carousel-item active slide-1-bg">
-                        <div class="slide-layout">
-                            <div class="slide-content-left px-5">
-                                <h1 class="slide-title text-white">
-                                    HUGIS<br />COLLECTION V2
-                                </h1>
-                                <p class="slide-subtitle text-white">
-                                    HUGIS COLLECTION V2 celebrates this
-                                    collective energy. It honors individuality
-                                    while embracing the beauty of community,
-                                    proving that when runners move as one, their
-                                    diversity becomes the masterpiece.
-                                </p>
-                                <a href="#" class="btn slide-btn-outline"
-                                    >VIEW ALL PRODUCTS</a
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 2: Keep On Breaking Boundaries  -->
-                    <div class="carousel-item slide-2-bg">
                         <div class="slide-overlay-left-dark"></div>
                         <div class="slide-layout">
                             <div
@@ -85,22 +64,29 @@
                         </div>
                     </div>
 
-                    <!-- Slide 3: Believe In Your Dreams  -->
-                    <div class="carousel-item slide-3-bg">
-                        <div
-                            class="slide-layout justify-content-center w-100 text-center flex-column"
-                        >
-                            <h1
-                                class="slide-title-large text-white"
-                                style="z-index: 2"
-                            >
-                                BELIEVE IN<br />YOUR DREAMS
-                            </h1>
+                    <!-- Slide 2: Collection (img-carousel2) -->
+                    <div class="carousel-item slide-2-bg">
+                        <div class="slide-layout">
+                            <div class="slide-content-left px-5">
+                                <h1 class="slide-title text-white">
+                                    HUGIS<br />COLLECTION V2
+                                </h1>
+                                <p class="slide-subtitle text-white">
+                                    HUGIS COLLECTION V2 celebrates this
+                                    collective energy. It honors individuality
+                                    while embracing the beauty of community,
+                                    proving that when runners move as one, their
+                                    diversity becomes the masterpiece.
+                                </p>
+                                <a href="#" class="btn slide-btn-outline"
+                                    >VIEW ALL PRODUCTS</a
+                                >
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Slide 4: Dare To Dream Big  -->
-                    <div class="carousel-item slide-4-bg">
+                    <!-- Slide 3: Dare To Dream Big (img-carousel3) -->
+                    <div class="carousel-item slide-3-bg">
                         <div class="slide-overlay-left-orange"></div>
                         <div class="slide-layout">
                             <div
@@ -123,6 +109,14 @@
                                 >
                                 
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: Believe In Your Dreams (img-carousel4) -->
+                    <div class="carousel-item slide-4-bg">
+                        <div
+                            class="slide-layout justify-content-center w-100 text-center flex-column"
+                        >
                         </div>
                     </div>
                 </div>
@@ -720,7 +714,7 @@
         <section class="quality-section">
             <div class="quality-image">
                 <div class="quality-img-placeholder"></div>
-                <!-- Replace with: <img src="/img/your-image.jpg" alt="Tribu Pakaras Team"> -->
+                <img src="/img/your-image.jpg" alt="Tribu Pakaras Team">
             </div>
             <div class="quality-content">
                 <h2 class="quality-title">
@@ -1380,8 +1374,9 @@ const confirmAddToCart = () => {
 
 /* Slide 1 specifics */
 .slide-1-bg {
-    background-color: #222;
-    background: linear-gradient(110deg, #1f1f1f 55%, #111 55%);
+    background-image: url('/img/img-carousel2.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .empty-product-image-container {
@@ -1396,7 +1391,9 @@ const confirmAddToCart = () => {
 
 /* Slide 2 specifics */
 .slide-2-bg {
-    background-color: #444;
+    background-image: url('/img/img-carousel1.png');
+    background-size: cover;
+    background-position: center;
 }
 .slide-overlay-left-dark {
     position: absolute;
@@ -1415,14 +1412,16 @@ const confirmAddToCart = () => {
 
 /* Slide 3 specifics */
 .slide-3-bg {
-    background-color: #0d1b2a;
-    background-image: radial-gradient(#ffffff 1px, transparent 1px);
-    background-size: 50px 50px;
+    background-image: url('/img/img-carousel4.png');
+    background-size: cover;
+    background-position: center;
 }
 
 /* Slide 4 specifics */
 .slide-4-bg {
-    background-color: #333;
+    background-image: url('/img/img-carousel3.png');
+    background-size: cover;
+    background-position: center;
 }
 .slide-overlay-left-orange {
     position: absolute;
@@ -1432,7 +1431,7 @@ const confirmAddToCart = () => {
     height: 100%;
     background: linear-gradient(
         110deg,
-        rgb(var(--grocery-primary)) 85%,
+        #EC4E20 85%,
         transparent 85%
     );
     z-index: 1;
@@ -2286,6 +2285,7 @@ const confirmAddToCart = () => {
     font-family: 'Public Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-top: 220px;
 }
 
 .panel-dark .col-panel-title {
@@ -2307,6 +2307,7 @@ const confirmAddToCart = () => {
     margin: 0 0 14px;
     line-height: 1.3;
     font-family: 'Public Sans', sans-serif;
+    margin-top: 200px;
 }
 
 .col-panel-desc {
@@ -2620,7 +2621,7 @@ const confirmAddToCart = () => {
     left: 50%;
     margin-left: -50vw;
     min-height: 680px;
-    background-image: url('/img/img_marathonsample.jpg');
+    background-image: url('/img/img-marathon.png');
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
