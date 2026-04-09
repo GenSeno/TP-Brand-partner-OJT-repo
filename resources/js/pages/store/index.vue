@@ -104,10 +104,16 @@
                                     product offerings designed for athletes who
                                     demand more.
                                 </p>
-                                <Link :href="route('store.brand-partner.shop', brandPartner?.slug)" class="btn slide-btn-outline mt-4"
+                                <Link
+                                    :href="
+                                        route(
+                                            'store.brand-partner.shop',
+                                            brandPartner?.slug,
+                                        )
+                                    "
+                                    class="btn slide-btn-outline mt-4"
                                     >VIEW ALL PRODUCTS</Link
                                 >
-                                
                             </div>
                         </div>
                     </div>
@@ -116,8 +122,7 @@
                     <div class="carousel-item slide-4-bg">
                         <div
                             class="slide-layout justify-content-center w-100 text-center flex-column"
-                        >
-                        </div>
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -142,34 +147,6 @@
                         </button>
                     </li>
                 </ul>
-            </div>
-        </section>
-
-        <!-- Search Section -->
-        <section id="search" class="grocery-search-section">
-            <div class="custom-container">
-                <div class="search-box">
-                    <form class="form-style-7" @submit.prevent="applySearch">
-                        <div class="search-input-wrap">
-                            <i class="ri-search-line search-icon"></i>
-                            <input
-                                type="text"
-                                class="form-control"
-                                v-model="searchQuery"
-                                placeholder="Search for products..."
-                                @input="debounceSearch"
-                            />
-                            <button
-                                v-if="searchQuery"
-                                type="button"
-                                class="clear-search-btn"
-                                @click="clearSearch"
-                            >
-                                <i class="ri-close-line"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </section>
 
@@ -217,9 +194,7 @@
         <section class="grocery-products-section">
             <div class="custom-container">
                 <div class="section-header">
-                    <h2 class="section-title-main">
-                        Built Stronger. Made Better.
-                    </h2>
+                    <h2 class="section-title-main">Our Products</h2>
                 </div>
 
                 <ul class="product-offer-list" v-if="products.data.length > 0">
@@ -231,10 +206,22 @@
                         <div class="product-box">
                             <div class="product-image-wrap">
                                 <div class="product-badges">
-                                    <span class="badge sale-badge" v-if="product.compare_price && product.compare_price > product.price">SALE</span>
-                                    <span class="badge new-badge" v-else>NEW</span>
+                                    <span
+                                        class="badge sale-badge"
+                                        v-if="
+                                            product.compare_price &&
+                                            product.compare_price >
+                                                product.price
+                                        "
+                                        >SALE</span
+                                    >
+                                    <span class="badge new-badge" v-else
+                                        >NEW</span
+                                    >
                                 </div>
-                                <button class="wishlist-btn"><i class="ri-heart-line"></i></button>
+                                <button class="wishlist-btn">
+                                    <i class="ri-heart-line"></i>
+                                </button>
                                 <Link
                                     :href="
                                         route(
@@ -265,14 +252,31 @@
                                     class="product-name-link"
                                 >
                                     <h5 class="product-name">
-                                        {{ product.name || 'Product Name Goes Here' }}
+                                        {{
+                                            product.name ||
+                                            'Product Name Goes Here'
+                                        }}
                                     </h5>
                                 </Link>
-                                
-                                <p class="product-subtitle text-muted text-uppercase mb-2" style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px;">
-                                    {{ product.short_description ? truncate(product.short_description, 30) : 'WILDLIFE' }}
+
+                                <p
+                                    class="product-subtitle text-muted text-uppercase mb-2"
+                                    style="
+                                        font-size: 10px;
+                                        font-weight: 700;
+                                        letter-spacing: 0.5px;
+                                    "
+                                >
+                                    {{
+                                        product.short_description
+                                            ? truncate(
+                                                  product.short_description,
+                                                  30,
+                                              )
+                                            : 'WILDLIFE'
+                                    }}
                                 </p>
-                                
+
                                 <div class="product-rating mb-2">
                                     <i class="ri-star-fill text-warning"></i>
                                     <i class="ri-star-fill text-warning"></i>
@@ -281,8 +285,17 @@
                                     <i class="ri-star-fill text-warning"></i>
                                 </div>
 
-                                <div class="product-price-row mb-3 d-flex align-items-center gap-2">
-                                    <span class="current-price" style="font-size: 12px; font-weight: 700; color: #111;">
+                                <div
+                                    class="product-price-row mb-3 d-flex align-items-center gap-2"
+                                >
+                                    <span
+                                        class="current-price"
+                                        style="
+                                            font-size: 12px;
+                                            font-weight: 700;
+                                            color: #111;
+                                        "
+                                    >
                                         {{ formatCurrency(product.price) }}
                                     </span>
                                     <span
@@ -292,11 +305,25 @@
                                                 product.price
                                         "
                                         class="old-price text-muted text-decoration-line-through"
-                                        style="font-size: 11px;"
+                                        style="font-size: 11px"
                                     >
-                                        {{ formatCurrency(product.compare_price) }}
+                                        {{
+                                            formatCurrency(
+                                                product.compare_price,
+                                            )
+                                        }}
                                     </span>
-                                    <span class="badge bg-warning text-dark pre-order-badge" style="font-size: 8px; border-radius: 12px; padding: 3px 8px; font-weight: 800; background-color: #ff9800 !important; color: #fff !important;">
+                                    <span
+                                        class="badge bg-warning text-dark pre-order-badge"
+                                        style="
+                                            font-size: 8px;
+                                            border-radius: 12px;
+                                            padding: 3px 8px;
+                                            font-weight: 800;
+                                            background-color: #ff9800 !important;
+                                            color: #fff !important;
+                                        "
+                                    >
                                         PRE-ORDER
                                     </span>
                                 </div>
@@ -331,7 +358,9 @@
                 <!-- View All Button -->
                 <div class="view-all-wrapper" v-if="products.data.length > 0">
                     <Link
-                        :href="route('store.brand-partner.shop', brandPartner.slug)"
+                        :href="
+                            route('store.brand-partner.shop', brandPartner.slug)
+                        "
                         class="view-all-btn"
                     >
                         VIEW ALL PRODUCTS
@@ -409,7 +438,9 @@
                 <!-- Panel 1: HUGIS -->
                 <div
                     class="col-panel panel-dark"
-                    style="background-image: url('/img/img-indexcollection1.png')"
+                    style="
+                        background-image: url('/img/img-indexcollection1.png');
+                    "
                 >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body">
@@ -428,13 +459,13 @@
                 <!-- Panel 2: Kuris Koleksyon -->
                 <div
                     class="col-panel panel-mid"
-                    style="background-image: url('/img/img-indexcollection2.png')"
+                    style="
+                        background-image: url('/img/img-indexcollection2.png');
+                    "
                 >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body col-panel-body-center">
-                        <div class="kuris-logo">
-                            >
-                        </div>
+                        <div class="kuris-logo">></div>
                         <h3 class="col-panel-title">Kuris Koleksyon</h3>
                         <p class="col-panel-desc">
                             Lorem ipsum dolor sit amet, consectetur adipiscing
@@ -452,7 +483,9 @@
                 <!-- Panel 3: Discover CTA -->
                 <div
                     class="col-panel panel-orange"
-                    style="background-image: url('/img/img-indexcollection3.png')"
+                    style="
+                        background-image: url('/img/img-indexcollection3.png');
+                    "
                 >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body col-panel-body-center">
@@ -714,7 +747,7 @@
         <section class="quality-section">
             <div class="quality-image">
                 <div class="quality-img-placeholder"></div>
-                <img src="/img/your-image.jpg" alt="Tribu Pakaras Team">
+                <img src="/img/your-image.jpg" alt="Tribu Pakaras Team" />
             </div>
             <div class="quality-content">
                 <h2 class="quality-title">
@@ -936,113 +969,6 @@ const formatCurrencySimple = (amount) => {
         maximumFractionDigits: 2,
     });
 };
-
-// Add this SAMPLE PRODUCTS data right after the opening <script setup> tag
-// This will show sample products while your database is empty
-
-// SAMPLE PRODUCTS FOR TESTING - Remove this when you have real products
-const sampleProductsData = ref({
-    data: [
-        {
-            id: 1,
-            name: 'HUGIS V2 TEE - BLACK',
-            slug: 'hugis-v2-tee-black',
-            price: 89900,
-            compare_price: 129900,
-            short_description: 'Premium quality running shirt',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Black', 'White', 'Gray'],
-            sizes_array: ['S', 'M', 'L', 'XL'],
-            in_stock: true,
-        },
-        {
-            id: 2,
-            name: 'BREAKING BOUNDARIES SINGLET',
-            slug: 'breaking-boundaries-singlet',
-            price: 79900,
-            compare_price: 0,
-            short_description: 'Lightweight racing singlet',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Navy', 'Red'],
-            sizes_array: ['S', 'M', 'L', 'XL'],
-            in_stock: true,
-        },
-        {
-            id: 3,
-            name: 'PAKARAS RUNNING SHORTS',
-            slug: 'pakaras-running-shorts',
-            price: 129900,
-            compare_price: 179900,
-            short_description: '2-in-1 running shorts with built-in liner',
-            iimage_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Black', 'Charcoal'],
-            sizes_array: ['S', 'M', 'L', 'XL'],
-            in_stock: true,
-        },
-        {
-            id: 4,
-            name: 'TRIBU PAKARAS CAP',
-            slug: 'tribu-pakaras-cap',
-            price: 59900,
-            compare_price: 0,
-            short_description: 'Performance running cap',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Black', 'White'],
-            sizes_array: ['One Size'],
-            in_stock: true,
-        },
-        {
-            id: 5,
-            name: 'HUGIS COMPRESSION TIGHTS',
-            slug: 'hugis-compression-tights',
-            price: 149900,
-            compare_price: 199900,
-            short_description: 'High compression running tights',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Black'],
-            sizes_array: ['S', 'M', 'L', 'XL'],
-            in_stock: true,
-        },
-        {
-            id: 6,
-            name: 'RACE DAY TANK TOP',
-            slug: 'race-day-tank-top',
-            price: 69900,
-            compare_price: 0,
-            short_description: 'Breathable mesh tank top for race day',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Neon Yellow', 'Black', 'White'],
-            sizes_array: ['S', 'M', 'L', 'XL'],
-            in_stock: true,
-        },
-        {
-            id: 7,
-            name: 'PAKARAS RUNNING SOCKS',
-            slug: 'pakaras-running-socks',
-            price: 34900,
-            compare_price: 0,
-            short_description: 'Anti-blister running socks with cushioning',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Black/White', 'Navy/Yellow'],
-            sizes_array: ['S/M', 'L/XL'],
-            in_stock: true,
-        },
-        {
-            id: 8,
-            name: 'LIMITED EDITION RACING VEST',
-            slug: 'limited-edition-racing-vest',
-            price: 99900,
-            compare_price: 149900,
-            short_description: 'Limited edition race day vests',
-            image_url: '/img/tshirt-placeholder.svg',
-            colors_array: ['Orange/Black'],
-            sizes_array: ['M', 'L', 'XL'],
-            in_stock: true,
-        },
-    ],
-    total: 8,
-    links: [],
-});
 
 const activeEventTab = ref('upcoming');
 let countdownInterval = null;
@@ -1429,11 +1355,7 @@ const confirmAddToCart = () => {
     left: 0;
     width: 55%;
     height: 100%;
-    background: linear-gradient(
-        110deg,
-        #EC4E20 85%,
-        transparent 85%
-    );
+    background: linear-gradient(110deg, #ec4e20 85%, transparent 85%);
     z-index: 1;
 }
 
@@ -1450,6 +1372,7 @@ const confirmAddToCart = () => {
     margin: 0 6px;
     background-color: rgba(255, 255, 255, 0.4);
     border: none;
+    transition: all 0.3s ease;
 }
 
 .hero-carousel .carousel-indicators button.active {
@@ -1738,7 +1661,6 @@ const confirmAddToCart = () => {
 /* ===== Products Section - New Design ===== */
 .grocery-products-section {
     padding: 40px 0;
-    background: #f5f5f5;
 }
 
 .section-title-main {
@@ -3718,7 +3640,7 @@ const confirmAddToCart = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: #666;
     z-index: 2;
     transition: all 0.2s ease;

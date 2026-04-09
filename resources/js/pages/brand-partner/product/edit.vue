@@ -444,6 +444,7 @@ const uploadNewImages = async (e) => {
             route('brand-partner.products.images.store', props.product.id),
             formData,
         );
+        console.log(response.data.image);
         productImages.value.push(response.data.image);
     }
     imageActionLoading.value = false;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BrandPartnerProductImage;
 use App\Enums\BrandPartnerProductApprovalStatus;
 use App\Enums\BrandPartnerProductStatus;
 use App\Lunar\Traits\LogsActivity;

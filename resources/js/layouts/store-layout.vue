@@ -1,7 +1,10 @@
 <template>
     <div class="grocery-color public-san-body">
         <!-- Header Start -->
-        <header class="header-style-6 dark-theme-header">
+        <header
+            class="header-style-6 dark-theme-header"
+            :class="{ 'header-hidden': headerHide }"
+        >
             <div class="header-inner">
                 <!-- Brand Logo (Left) -->
                 <div class="left-header">
@@ -85,10 +88,7 @@
                             CONTACT US
                         </Link>
 
-                        <a
-                            href="javascript:void(0)"
-                            class="nav-item"
-                        >
+                        <a href="javascript:void(0)" class="nav-item">
                             BE OUR PARTNER
                         </a>
                     </nav>
@@ -327,7 +327,7 @@
 
 <script setup>
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 const page = usePage();
 
@@ -345,6 +345,24 @@ const toggleSideMenu = () => {
         sideMenuOpen.value = !sideMenuOpen.value;
     }
 };
+
+const headerHide = ref(false);
+let lastScrollY = 0;
+
+const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        headerHide.value = true;
+    } else {
+        headerHide.value = false;
+    }
+
+    lastScrollY = currentScrollY;
+};
+
+onMounted(() => window.addEventListener('scroll', handleScroll));
+onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
 const focusSearchOnPage = () => {
     setTimeout(() => {
@@ -443,13 +461,18 @@ const focusSearchField = () => {
     background-color: rgba(26, 26, 26, 0.5);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 999;
     width: 100%;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.header-hidden {
+    transform: translateY(-100%);
 }
 
 .header-inner {
