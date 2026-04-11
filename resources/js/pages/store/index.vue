@@ -3267,11 +3267,10 @@ const confirmAddToCart = () => {
     bottom: 60px;
     left: 0;
     right: 0;
-    background: #fff;
+    background: #ff9505;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
     z-index: 998;
     padding: 14px 0;
-    border-top: 1px solid #f0f0f0;
 }
 
 .cart-bar-inner {
@@ -3282,7 +3281,7 @@ const confirmAddToCart = () => {
 
 .cart-item-count {
     font-size: 12px;
-    color: rgb(var(--grocery-content));
+    color: white(var(--grocery-content));
     margin: 0;
     font-weight: 500;
 }

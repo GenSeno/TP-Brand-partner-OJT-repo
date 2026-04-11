@@ -3,11 +3,6 @@
 
     <div class="account-cart-section">
         <div class="custom-container container">
-            <!-- Breadcrumbs -->
-            <div class="breadcrumbs mt-4 mb-5">
-                <span class="text-muted" style="font-size: 12px">Home > </span>
-                <span style="font-size: 12px; color: #111">My Cart</span>
-            </div>
 
             <div class="row">
                 <!-- Sidebar -->
@@ -368,7 +363,7 @@ const clearCart = () => {
     padding-top: 50px;
     font-family: 'Public Sans', sans-serif;
     background: #fff;
-    padding-top: 100px;
+    padding-top: 135px;
 }
 
 .account-title {

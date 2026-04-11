@@ -537,7 +537,7 @@ const addToCart = () => {
     padding: 6px 14px;
     border-radius: 8px;
     border: 1.5px solid rgb(var(--grocery-border));
-    background: #fff;
+    background: #1a1a1a;
     font-size: 13px;
     font-weight: 600;
     color: rgb(var(--grocery-title));
@@ -559,7 +559,7 @@ const addToCart = () => {
     padding: 6px 14px;
     border-radius: 8px;
     border: 1.5px solid rgb(var(--grocery-border));
-    background: #fff;
+    background: #1a1a1a;
     font-size: 13px;
     font-weight: 600;
     color: rgb(var(--grocery-title));
@@ -588,17 +588,17 @@ const addToCart = () => {
    ======================== */
 .grocery-product-page {
     font-family: 'Public Sans', sans-serif;
-    background: #f9f9f9;
+    background: #111;
     min-height: 100vh;
     padding-bottom: 100px;
     /* Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
-    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
-    --grocery-border: 232, 232, 232; /* Light gray borders */
-    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
-    --grocery-light-bg: 247, 247, 247; /* Light gray background */
-    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+    --grocery-theme: 255, 149, 5; /* Main teal/cyan color: rgb(60, 133, 153) */
+    --grocery-content: 200, 200, 200; /* Light gray-blue content text */
+    --grocery-title: 255, 255, 255; /* Dark blue-gray for titles */
+    --grocery-border: 68, 68, 68; /* Light gray borders */
+    --grocery-primary: 255, 149, 5; /* Yellow/orange accent */
+    --grocery-light-bg: 34, 34, 34; /* Light gray background */
+    --grocery-rating: 255, 149, 5; /* Gold/yellow for ratings */
 }
 
 /* Header */
@@ -608,11 +608,11 @@ const addToCart = () => {
     justify-content: space-between;
     padding-top: 16px;
     padding-bottom: 12px;
-    background: #fff;
+    background: transparent;
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgb(var(--grocery-border));
+    border-bottom: none;
 }
 
 .product-header .px-15 {
@@ -627,7 +627,7 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: #f5f5f5;
+    background: #2a2a2a;
     color: rgb(var(--grocery-title));
     text-decoration: none;
     font-size: 22px;
@@ -641,7 +641,8 @@ const addToCart = () => {
 
 .header-title {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 800;
+    text-transform: uppercase;
     color: rgb(var(--grocery-title));
     margin: 0;
 }
@@ -654,7 +655,7 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: #f5f5f5;
+    background: #2a2a2a;
     color: rgb(var(--grocery-title));
     text-decoration: none;
     font-size: 20px;
@@ -691,7 +692,7 @@ const addToCart = () => {
 
 /* Main Product Section */
 .main-product-section {
-    background: #fff;
+    background: transparent;
     margin-bottom: 10px;
 }
 
@@ -703,7 +704,7 @@ const addToCart = () => {
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    background: #f8f8f8;
+    background: transparent;
     cursor: pointer;
 }
 
@@ -738,7 +739,7 @@ const addToCart = () => {
     width: 64px;
     height: 64px;
     min-width: 64px;
-    border: 2px solid #eee;
+    border: 2px solid #333;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -775,7 +776,7 @@ const addToCart = () => {
     background: rgb(var(--grocery-border));
     font-size: 12px;
     font-weight: 600;
-    color: #777;
+    color: #ccc;
 }
 
 .ptag-event {
@@ -785,7 +786,8 @@ const addToCart = () => {
 
 .product-title {
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 900;
+    text-transform: uppercase;
     color: rgb(var(--grocery-title));
     margin: 0 0 10px;
     line-height: 1.3;
@@ -807,7 +809,7 @@ const addToCart = () => {
 
 .old-price {
     font-size: 15px;
-    color: #bbb;
+    color: #888;
 }
 
 .save-badge {
@@ -843,14 +845,14 @@ const addToCart = () => {
 
 .short-description {
     font-size: 14px;
-    color: #777;
+    color: #ccc;
     line-height: 1.6;
     margin: 0 0 12px;
 }
 
 .sku-info {
     font-size: 13px;
-    color: #aaa;
+    color: #999;
     margin-bottom: 16px;
 }
 
@@ -865,10 +867,12 @@ const addToCart = () => {
 }
 
 .description-box {
-    background: #fff;
+    background: transparent;
     border-radius: 16px;
-    padding: 20px 15px;
+    padding: 0 15px;
     margin: 0 15px;
+    border-top: 1px solid #333;
+    margin-top: 20px;
 }
 
 .desc-title {
@@ -883,14 +887,14 @@ const addToCart = () => {
     border: none;
     border-radius: 12px;
     overflow: hidden;
-    background: #fafafa;
+    background: #2a2a2a;
 }
 
 .accordion-style-1 .accordion-button {
     font-size: 14px;
     font-weight: 700;
-    color: #333;
-    background: #fafafa;
+    color: #fff;
+    background: #2a2a2a;
     padding: 14px 16px;
     box-shadow: none;
 }
@@ -907,7 +911,7 @@ const addToCart = () => {
 .accordion-style-1 .accordion-body {
     padding: 0 16px 16px;
     font-size: 14px;
-    color: #555;
+    color: #ddd;
     line-height: 1.7;
 }
 
@@ -931,10 +935,11 @@ const addToCart = () => {
 }
 
 .product-box {
-    background: #fff;
+    background: transparent;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
+    border: 1px solid #333;
     position: relative;
     transition: all 0.2s;
 }
@@ -952,7 +957,7 @@ const addToCart = () => {
 .product-box-img {
     aspect-ratio: 1;
     overflow: hidden;
-    background: #f8f8f8;
+    background: transparent;
 }
 
 .product-box-img img {
@@ -1021,19 +1026,21 @@ const addToCart = () => {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #fff;
+    background: rgba(17, 17, 17, 0.95);
     padding: 12px 15px;
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
     z-index: 999;
     display: flex;
     align-items: center;
     gap: 12px;
+    border-top: 1px solid #333;
+    backdrop-filter: blur(8px);
 }
 
 .mobile-qty-control {
     display: flex;
     align-items: center;
-    background: #f5f5f5;
+    background: #2a2a2a;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -1063,7 +1070,7 @@ const addToCart = () => {
     text-align: center;
     font-weight: 700;
     font-size: 15px;
-    color: #333;
+    color: #fff;
     outline: none;
     -moz-appearance: textfield;
 }
@@ -1096,7 +1103,8 @@ const addToCart = () => {
 }
 
 .add-cart-mobile-btn:disabled {
-    background: #ddd;
+    background: #333;
+    color: #888;
     cursor: not-allowed;
 }
 
@@ -1145,7 +1153,7 @@ const addToCart = () => {
     height: 70px;
     object-fit: cover;
     border-radius: 12px;
-    background: #f8f8f8;
+    background: #222;
 }
 
 .confirm-info h6 {
@@ -1164,7 +1172,7 @@ const addToCart = () => {
 .confirm-summary {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #f5f5f5;
+    border-top: 1px solid #333;
 }
 
 .summary-row {
@@ -1173,7 +1181,7 @@ const addToCart = () => {
     align-items: center;
     padding: 6px 0;
     font-size: 14px;
-    color: #777;
+    color: #ccc;
 }
 
 .summary-row.total {
@@ -1191,9 +1199,9 @@ const addToCart = () => {
 .btn-cancel {
     flex: 1;
     height: 44px;
-    border: 1.5px solid #e0e0e0;
-    background: #fff;
-    color: #555;
+    border: 1.5px solid #333;
+    background: #1a1a1a;
+    color: #ddd;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 700;
@@ -1203,7 +1211,7 @@ const addToCart = () => {
 
 .btn-cancel:hover {
     border-color: #ccc;
-    background: #f9f9f9;
+    background: #111;
 }
 
 .btn-confirm {
@@ -1224,7 +1232,8 @@ const addToCart = () => {
 }
 
 .btn-confirm:disabled {
-    background: #ddd;
+    background: #333;
+    color: #888;
     cursor: not-allowed;
 }
 
@@ -1234,6 +1243,7 @@ const addToCart = () => {
 @media (min-width: 768px) {
     .grocery-product-page {
         padding-bottom: 40px;
+        padding-top: 120px;
     }
 
     .product-header {
@@ -1285,7 +1295,7 @@ const addToCart = () => {
     .qty-box {
         display: flex;
         align-items: center;
-        background: #f5f5f5;
+        background: #2a2a2a;
         border-radius: 12px;
         overflow: hidden;
     }
@@ -1320,7 +1330,7 @@ const addToCart = () => {
         text-align: center;
         font-weight: 700;
         font-size: 15px;
-        color: #333;
+        color: #fff;
         outline: none;
         -moz-appearance: textfield;
     }
@@ -1353,7 +1363,8 @@ const addToCart = () => {
     }
 
     .add-cart-btn:disabled {
-        background: #ddd;
+        background: #333;
+        color: #888;
         cursor: not-allowed;
     }
 
