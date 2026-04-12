@@ -57,7 +57,16 @@
                                     product offerings designed for athletes who
                                     demand more.
                                 </p>
-                                <a href="#" class="btn slide-btn-outline mt-4"
+                                <a
+                                    :href="
+                                        brandPartner
+                                            ? route(
+                                                  'store.brand-partner.shop',
+                                                  brandPartner.slug,
+                                              )
+                                            : '#'
+                                    "
+                                    class="btn slide-btn-outline mt-4"
                                     >VIEW ALL PRODUCTS</a
                                 >
                             </div>
@@ -69,7 +78,7 @@
                         <div class="slide-layout">
                             <div class="slide-content-left px-5">
                                 <h1 class="slide-title text-white">
-                                    HUGIS<br />COLLECTION V2
+                                    HUGIS COLLECTION V2
                                 </h1>
                                 <p class="slide-subtitle text-white">
                                     HUGIS COLLECTION V2 celebrates this
@@ -78,7 +87,16 @@
                                     proving that when runners move as one, their
                                     diversity becomes the masterpiece.
                                 </p>
-                                <a href="#" class="btn slide-btn-outline"
+                                <a
+                                    :href="
+                                        brandPartner
+                                            ? route(
+                                                  'store.brand-partner.collections',
+                                                  brandPartner.slug,
+                                              )
+                                            : '#'
+                                    "
+                                    class="btn slide-btn-outline"
                                     >VIEW ALL PRODUCTS</a
                                 >
                             </div>
@@ -270,7 +288,7 @@
                                                   product.short_description,
                                                   30,
                                               )
-                                            : 'WILDLIFE'
+                                            : ' '
                                     }}
                                 </p>
 
@@ -426,7 +444,18 @@
                         greens and cloud dancer which represent the colors of
                         2026.
                     </p>
-                    <a href="#" class="dreamer-btn">CHECK OUR COLLECTIONS</a>
+                    <a
+                        :href="
+                            brandPartner
+                                ? route(
+                                      'store.brand-partner.collections',
+                                      brandPartner.slug,
+                                  )
+                                : '#'
+                        "
+                        class="dreamer-btn"
+                        >CHECK OUR COLLECTIONS</a
+                    >
                 </div>
             </div>
 
@@ -447,7 +476,16 @@
                             elit, sed do eiusmod tempor incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam.
                         </p>
-                        <a href="#" class="col-panel-btn col-panel-btn-outline"
+                        <a
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.collections',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="col-panel-btn col-panel-btn-outline"
                             >VIEW COLLECTION</a
                         >
                     </div>
@@ -470,7 +508,14 @@
                             dolore magna aliqua. Ut enim ad minim veniam.
                         </p>
                         <a
-                            href="#"
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.collections',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
                             class="col-panel-btn col-panel-btn-outline-dark"
                             >VIEW COLLECTION</a
                         >
@@ -494,7 +539,16 @@
                             elit, sed do eiusmod tempor incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam.
                         </p>
-                        <a href="#" class="col-panel-btn col-panel-btn-white"
+                        <a
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.collections',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="col-panel-btn col-panel-btn-white"
                             >VIEW OUR COLLECTIONS</a
                         >
                     </div>
@@ -1884,7 +1938,8 @@ const confirmAddToCart = () => {
 }
 
 .view-all-btn:hover {
-    background: #1a1a1a;
+    background: #ff9505;
+    border: 2px solid #ff9505;
     color: #fff;
 }
 
@@ -3577,6 +3632,7 @@ const confirmAddToCart = () => {
 }
 
 .product-image-wrap {
+    position: relative;
     margin-bottom: 12px;
     height: 300px;
     display: flex;
@@ -3584,6 +3640,15 @@ const confirmAddToCart = () => {
     justify-content: center;
     transition: background 0.3s ease;
     overflow: hidden;
+}
+
+.product-image-wrap img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .product-image-wrap .img-fluid {

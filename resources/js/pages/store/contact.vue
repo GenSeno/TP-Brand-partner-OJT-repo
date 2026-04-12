@@ -176,7 +176,7 @@ import { Head } from '@inertiajs/vue3';
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    border: 1.5px solid #e84b0f;
+    background-color: #f4e4e0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -278,7 +278,7 @@ import { Head } from '@inertiajs/vue3';
 }
 
 .contact-submit-btn:hover {
-    background: #144d30;
+    background: #ff5722;
     transform: translateY(-1px);
 }
 </style>

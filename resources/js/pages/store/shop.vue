@@ -295,7 +295,10 @@
                             <div class="product-card-badges">
                                 <span
                                     class="badge-sale"
-                                    v-if="product.compare_price && product.compare_price > product.price"
+                                    v-if="
+                                        product.compare_price &&
+                                        product.compare_price > product.price
+                                    "
                                     >Sale</span
                                 >
                             </div>
@@ -307,24 +310,55 @@
 
                             <!-- Image -->
                             <div class="product-card-image">
-                                <Link :href="route('store.brand-partner.product', product.slug)">
-                                    <img 
-                                        :src="product.image_url || '/img/tshirt-placeholder.svg'" 
-                                        :alt="product.name" 
-                                        class="img-fluid w-100" 
-                                        style="object-fit: contain; max-height: 250px;" 
+                                <Link
+                                    :href="
+                                        route(
+                                            'store.brand-partner.product',
+                                            product.slug,
+                                        )
+                                    "
+                                >
+                                    <img
+                                        :src="
+                                            product.image_url ||
+                                            '/img/tshirt-placeholder.svg'
+                                        "
+                                        :alt="product.name"
                                     />
                                 </Link>
                             </div>
 
                             <!-- Info -->
                             <div class="product-card-body">
-                                <p class="product-card-collection text-uppercase">
-                                    {{ product.short_description ? product.short_description.substring(0, 30) : 'COLLECTION' }}
+                                <p
+                                    class="product-card-collection text-uppercase"
+                                >
+                                    {{
+                                        product.short_description
+                                            ? product.short_description.substring(
+                                                  0,
+                                                  30,
+                                              )
+                                            : 'COLLECTION'
+                                    }}
                                 </p>
-                                <Link :href="route('store.brand-partner.product', product.slug)" style="text-decoration: none; color: inherit;">
+                                <Link
+                                    :href="
+                                        route(
+                                            'store.brand-partner.product',
+                                            product.slug,
+                                        )
+                                    "
+                                    style="
+                                        text-decoration: none;
+                                        color: inherit;
+                                    "
+                                >
                                     <h3 class="product-card-name">
-                                        {{ product.name || 'Product Name Goes Here' }}
+                                        {{
+                                            product.name ||
+                                            'Product Name Goes Here'
+                                        }}
                                     </h3>
                                 </Link>
 
@@ -342,21 +376,38 @@
                                     <span
                                         class="product-card-price"
                                         :class="{
-                                            'has-sale': product.compare_price && product.compare_price > product.price,
+                                            'has-sale':
+                                                product.compare_price &&
+                                                product.compare_price >
+                                                    product.price,
                                         }"
                                     >
-                                        PHP {{ Number(product.price).toFixed(2) }}
+                                        PHP
+                                        {{ Number(product.price).toFixed(2) }}
                                     </span>
                                     <span
                                         class="product-card-original"
-                                        v-if="product.compare_price && product.compare_price > product.price"
+                                        v-if="
+                                            product.compare_price &&
+                                            product.compare_price >
+                                                product.price
+                                        "
                                     >
-                                        PHP {{ Number(product.compare_price).toFixed(2) }}
+                                        PHP
+                                        {{
+                                            Number(
+                                                product.compare_price,
+                                            ).toFixed(2)
+                                        }}
                                     </span>
                                 </div>
 
                                 <!-- Add to Cart -->
-                                <button class="product-card-atc" :disabled="!product.in_stock" @click.prevent="addToCart(product)">
+                                <button
+                                    class="product-card-atc"
+                                    :disabled="!product.in_stock"
+                                    @click.prevent="addToCart(product)"
+                                >
                                     ADD TO CART
                                 </button>
                             </div>
@@ -364,7 +415,10 @@
                     </div>
                     <!-- Empty State if no products -->
                     <div v-else class="text-center py-5">
-                        <i class="ri-shopping-bag-line" style="font-size: 40px; color: #ccc;"></i>
+                        <i
+                            class="ri-shopping-bag-line"
+                            style="font-size: 40px; color: #ccc"
+                        ></i>
                         <h4 class="mt-3">No products available.</h4>
                     </div>
                 </div>
@@ -441,7 +495,10 @@ const addToCart = (product) => {
             color: product.colors_array?.[0] || null,
             size: product.sizes_array?.[0] || null,
         },
-        { preserveScroll: true, onSuccess: () => alert('Product added to cart!') }
+        {
+            preserveScroll: true,
+            onSuccess: () => alert('Product added to cart!'),
+        },
     );
 };
 
@@ -831,10 +888,10 @@ const sampleGarmentChips = ['Singlet', 'Tee Shirt', 'LongSleeves', 'Jersey'];
 
 /* Image */
 .product-card-image {
+    position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: #f5f5f5;
+    aspect-ratio: 1 / 1;
 }
 
 .product-card-img-placeholder {
@@ -845,11 +902,13 @@ const sampleGarmentChips = ['Singlet', 'Tee Shirt', 'LongSleeves', 'Jersey'];
 }
 
 .product-card-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.4s ease;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
 }
 
 .product-card:hover .product-card-image img,
@@ -941,11 +1000,11 @@ const sampleGarmentChips = ['Singlet', 'Tee Shirt', 'LongSleeves', 'Jersey'];
     width: 100%;
     padding: 11px;
     background: #fff;
-    border: 1.5px solid #ddd;
+    border: 1.5px solid #198754;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 1.5px;
-    color: #333;
+    color: #198754;
     cursor: pointer;
     font-family: 'Public Sans', sans-serif;
     transition: all 0.25s;
@@ -953,8 +1012,8 @@ const sampleGarmentChips = ['Singlet', 'Tee Shirt', 'LongSleeves', 'Jersey'];
 }
 
 .product-card-atc:hover {
-    background: #111;
-    border-color: #111;
+    background: #ff9505;
+    border: 1px solid #ff9505;
     color: #fff;
 }
 
