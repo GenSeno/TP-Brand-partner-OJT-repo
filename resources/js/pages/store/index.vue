@@ -130,7 +130,7 @@
 
         <!-- Event Tabs -->
         <section class="grocery-events-section" v-if="events.length > 0">
-            <div class="custom-container">
+            <div>
                 <ul class="nav nav-pills tab-style-5">
                     <li
                         class="nav-item"
@@ -156,7 +156,7 @@
             class="grocery-category-section"
             v-if="categories.length > 0"
         >
-            <div class="custom-container">
+            <div>
                 <div class="grocery-category-slider">
                     <div class="category-scroll-wrap">
                         <a
@@ -192,7 +192,7 @@
 
         <!-- Products Grid -->
         <section class="grocery-products-section">
-            <div class="custom-container">
+            <div>
                 <div class="section-header">
                     <h2 class="section-title-main">Our Products</h2>
                 </div>
@@ -216,8 +216,8 @@
                                         >SALE</span
                                     >
                                     <span class="badge new-badge" v-else
-                                        >NEW</span
-                                    >
+                                        >NEW
+                                    </span>
                                 </div>
                                 <button class="wishlist-btn">
                                     <i class="ri-heart-line"></i>
@@ -252,10 +252,7 @@
                                     class="product-name-link"
                                 >
                                     <h5 class="product-name">
-                                        {{
-                                            product.name ||
-                                            'Product Name Goes Here'
-                                        }}
+                                        {{ product.name }}
                                     </h5>
                                 </Link>
 
@@ -813,7 +810,7 @@
 
         <!-- Cart Bottom Bar -->
         <div class="product-cart-box" v-if="cartCount > 0">
-            <div class="custom-container">
+            <div>
                 <div class="cart-bar-inner">
                     <div class="cart-bar-info">
                         <h5 class="cart-item-count">
@@ -1876,8 +1873,8 @@ const confirmAddToCart = () => {
     display: inline-block;
     padding: 12px 32px;
     background: transparent;
-    border: 2px solid #1a1a1a;
-    color: #1a1a1a;
+    border: 2px solid #198754;
+    color: #198754;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
@@ -2547,7 +2544,6 @@ const confirmAddToCart = () => {
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
-    /* Replace with your image: background-image: url('/img/marathon-bg.jpg'); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3267,10 +3263,11 @@ const confirmAddToCart = () => {
     bottom: 60px;
     left: 0;
     right: 0;
-    background: #ff9505;
+    background: #fff;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
     z-index: 998;
     padding: 14px 0;
+    border-top: 1px solid #f0f0f0;
 }
 
 .cart-bar-inner {
@@ -3281,7 +3278,7 @@ const confirmAddToCart = () => {
 
 .cart-item-count {
     font-size: 12px;
-    color: white(var(--grocery-content));
+    color: rgb(var(--grocery-content));
     margin: 0;
     font-weight: 500;
 }
@@ -3573,7 +3570,6 @@ const confirmAddToCart = () => {
     }
 }
 
-/* ===== INSP/MOCKUP Product Grid Styles ===== */
 .product-box {
     margin-bottom: 30px;
     background: #fff;
@@ -3581,20 +3577,16 @@ const confirmAddToCart = () => {
 }
 
 .product-image-wrap {
-    position: relative;
-    background-color: #f7f7f7;
     margin-bottom: 12px;
-    padding: 20px;
     height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.3s ease;
+    overflow: hidden;
 }
 
 .product-image-wrap .img-fluid {
-    max-height: 250px;
-    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
@@ -3604,17 +3596,18 @@ const confirmAddToCart = () => {
 
 .product-badges {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 10px;
+    left: 0;
+    border-radius: 0 50px 50px 0;
     z-index: 2;
 }
 
 .product-badges .badge {
-    font-size: 9px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 12px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 5px 10px;
     letter-spacing: 0.5px;
+    border-radius: 0 50px 50px 0;
 }
 
 .sale-badge {
@@ -3688,7 +3681,8 @@ const confirmAddToCart = () => {
 }
 
 .add-to-cart-outline-btn:hover {
-    background-color: #198754 !important;
+    background-color: #ff9505 !important;
+    border: 1px solid #ff9505 !important;
     color: #fff !important;
 }
 
