@@ -741,20 +741,20 @@ const focusSearchField = () => {
     flex: 1;
     display: flex;
     justify-content: flex-start;
-    padding-left: 40px;
+    padding-left: 5px;
     order: 2;
 }
 
 .center-nav {
     display: flex;
-    gap: 30px;
+    gap: 15px;
     align-items: center;
 }
 
 .center-nav .nav-item {
     color: #fff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;

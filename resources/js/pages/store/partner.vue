@@ -85,7 +85,7 @@
         <!-- ===== RUN STRONGER TOGETHER CTA ===== -->
         <section class="partner-run">
             <div class="partner-run-bg">
-                <!-- Replace with: <img src="/img/partner-run-bg.jpg" alt=""> -->
+                <img src="/img/img-partner4.png" alt="">
             </div>
             <div class="partner-run-overlay"></div>
             <div class="partner-run-inner">
@@ -95,6 +95,21 @@
                     support—built for smooth execution and happy runners.
                 </p>
                 <a href="#" class="partner-run-btn">START YOUR EVENT WITH US</a>
+            </div>
+        </section>
+
+        <!-- ===== NEED HELP CTA ===== -->
+        <section class="partner-help">
+            <div class="partner-help-bg">
+                <img src="/img/img-partner5.png" alt="">
+            </div>
+            <div class="partner-help-card">
+                <h2 class="partner-help-title">Need Help For Your Printing Ideas?</h2>
+                <p class="partner-help-text">
+                    Our team is always happy to assist and provide the support you need. Send us a
+                    message today and we'll get right back to you
+                </p>
+                <a href="#" class="partner-help-btn">MESSAGE NOW</a>
             </div>
         </section>
 
@@ -109,7 +124,7 @@
                     </p>
                     <div class="partner-easy-image">
                         <div class="img-placeholder tall">
-                            <!-- Replace with: <img src="/img/partner-easy.jpg" alt="Easy to work with us"> -->
+                            <img src="/img/img-partner6.png" alt="Easy to work with us">
                         </div>
                     </div>
                 </div>
@@ -121,7 +136,7 @@
                         </div>
                         <div class="easy-step-image">
                             <div class="img-placeholder square">
-                                <!-- Replace with: <img :src="step.image" :alt="step.title"> -->
+                                <img :src="step.image" :alt="step.title">
                             </div>
                         </div>
                     </div>
@@ -166,7 +181,7 @@
         <!-- ===== BRING IDEAS TO LIFE CTA ===== -->
         <section class="partner-ideas">
             <div class="partner-ideas-bg">
-                <!-- Replace with: <img src="/img/partner-ideas-bg.jpg" alt=""> -->
+                <img src="/img/img-partner10.png" alt="Bring Ideas to Life">
             </div>
             <div class="partner-ideas-overlay"></div>
             <div class="partner-ideas-inner">
@@ -175,22 +190,6 @@
                 <a href="#" class="partner-ideas-btn">GET STARTED TODAY</a>
             </div>
         </section>
-
-        <!-- ===== NEED HELP CTA ===== -->
-        <section class="partner-help">
-            <div class="partner-help-bg">
-                <!-- Replace with: <img src="/img/partner-clothes-bg.jpg" alt=""> -->
-            </div>
-            <div class="partner-help-card">
-                <h2 class="partner-help-title">Need Help For Your Printing Ideas?</h2>
-                <p class="partner-help-text">
-                    Our team is always happy to assist and provide the support you need. Send us a
-                    message today and we'll get right back to you
-                </p>
-                <a href="#" class="partner-help-btn">MESSAGE NOW</a>
-            </div>
-        </section>
-
     </div>
 </template>
 
@@ -201,17 +200,17 @@ const steps = [
     {
         title: 'Connect & Collaborate',
         text: "Just reach out to us! We'll talk about your brand, products, and goals — and start planning how to bring your designs to life.",
-        image: '/img/partner-step1.jpg',
+        image: '/img/img-partner7.png',
     },
     {
         title: 'Create & Customize',
         text: 'Send your designs or let our creative team help you develop stunning pieces. We handle everything — from printing to packing!',
-        image: '/img/partner-step2.jpg',
+        image: '/img/img-partner8.png',
     },
     {
         title: 'Launch & Earn',
         text: "Your products go live on your dedicated eCommerce store, ready for your customers to shop. We print, ship, and make sure they're happy while you grow your brand!",
-        image: '/img/partner-step3.jpg',
+        image: '/img/img-partner9.png',
     },
 ];
 </script>
@@ -229,6 +228,17 @@ const steps = [
     height: 100%;
     background: #ccc;
     min-height: 420px;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.img-placeholder img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
 }
 
@@ -320,6 +330,7 @@ const steps = [
 
 .partner-grow-image {
     overflow: hidden;
+    height: 420px;
 }
 
 /* ===== WHY PARTNER ===== */
@@ -525,6 +536,8 @@ const steps = [
 
 .partner-easy-image {
     overflow: hidden;
+    height: 380px;
+
 }
 
 /* Steps */
