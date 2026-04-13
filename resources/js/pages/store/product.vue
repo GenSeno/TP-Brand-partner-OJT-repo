@@ -8,14 +8,9 @@
                 <i class="ri-arrow-left-s-line"></i>
             </Link>
             <h6 class="header-title">Product Details</h6>
-            <Link
-                :href="route('store.brand-partner.cart')"
-                class="cart-icon-link"
-            >
+            <Link :href="route('store.brand-partner.cart')" class="cart-icon-link">
                 <i class="ri-shopping-cart-2-line"></i>
-                <span v-if="cartCount > 0" class="cart-badge">{{
-                    cartCount
-                }}</span>
+                <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
             </Link>
         </div>
 
@@ -24,16 +19,9 @@
             <!-- Main Product Section -->
             <section class="main-product-section">
                 <div class="slider-box">
-                    <div
-                        class="main-product-image"
-                        @click="selectedImage = product.image_url"
-                    >
+                    <div class="main-product-image" @click="selectedImage = product.image_url">
                         <img
-                            :src="
-                                selectedImage ||
-                                product.image_url ||
-                                '/img/tshirt-placeholder.svg'
-                            "
+                            :src="selectedImage || product.image_url || '/img/tshirt-placeholder.svg'"
                             :alt="product.name"
                         />
                         <span v-if="discountPercent > 0" class="discount-badge">
@@ -41,10 +29,7 @@
                         </span>
                     </div>
                     <!-- Thumbnail Row -->
-                    <div
-                        class="thumbnail-strip"
-                        v-if="product.images && product.images.length > 1"
-                    >
+                    <div class="thumbnail-strip" v-if="product.images && product.images.length > 1">
                         <div
                             v-for="(image, index) in product.images"
                             :key="index"
@@ -52,46 +37,27 @@
                             :class="{ active: selectedImage === image.url }"
                             @click="selectedImage = image.url"
                         >
-                            <img
-                                :src="image.url"
-                                :alt="`${product.name} ${index + 1}`"
-                            />
+                            <img :src="image.url" :alt="`${product.name} ${index + 1}`" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Container -->
                 <div class="product-container px-15">
-                    <div
-                        class="product-tags"
-                        v-if="product.category || product.event"
-                    >
-                        <span class="ptag" v-if="product.category">{{
-                            product.category.name
-                        }}</span>
-                        <span class="ptag ptag-event" v-if="product.event">{{
-                            product.event.name
-                        }}</span>
+                    <div class="product-tags" v-if="product.category || product.event">
+                        <span class="ptag" v-if="product.category">{{ product.category.name }}</span>
+                        <span class="ptag ptag-event" v-if="product.event">{{ product.event.name }}</span>
                     </div>
 
                     <h4 class="product-title">{{ product.name }}</h4>
 
                     <div class="product-price-row">
-                        <span class="current-price">{{
-                            formatCurrency(product.price)
-                        }}</span>
+                        <span class="current-price">{{ formatCurrency(product.price) }}</span>
                         <del
-                            v-if="
-                                product.compare_price &&
-                                product.compare_price > product.price
-                            "
+                            v-if="product.compare_price && product.compare_price > product.price"
                             class="old-price"
-                        >
-                            {{ formatCurrency(product.compare_price) }}
-                        </del>
-                        <span v-if="discountPercent > 0" class="save-badge"
-                            >Save {{ discountPercent }}%</span
-                        >
+                        >{{ formatCurrency(product.compare_price) }}</del>
+                        <span v-if="discountPercent > 0" class="save-badge">Save {{ discountPercent }}%</span>
                     </div>
 
                     <div class="stock-indicator">
@@ -103,10 +69,7 @@
                         </span>
                     </div>
 
-                    <p
-                        class="short-description"
-                        v-if="product.short_description"
-                    >
+                    <p class="short-description" v-if="product.short_description">
                         {{ product.short_description }}
                     </p>
 
@@ -117,8 +80,7 @@
                     <!-- Variations: Colors -->
                     <div v-if="hasColors" class="variation-section">
                         <div class="variation-label">
-                            Color:
-                            <strong>{{ selectedColor || 'Select' }}</strong>
+                            Color: <strong>{{ selectedColor || 'Select' }}</strong>
                         </div>
                         <div class="color-swatches">
                             <button
@@ -128,9 +90,7 @@
                                 class="color-swatch-btn"
                                 :class="{ active: selectedColor === color }"
                                 @click="selectColor(color)"
-                            >
-                                {{ color }}
-                            </button>
+                            >{{ color }}</button>
                         </div>
                     </div>
 
@@ -145,48 +105,28 @@
                                 class="size-btn"
                                 :class="{ active: selectedSize === size }"
                                 @click="selectSize(size)"
-                            >
-                                {{ size }}
-                            </button>
+                            >{{ size }}</button>
                         </div>
                     </div>
 
-                    <p
-                        v-if="hasVariations && !variationReady"
-                        class="variation-hint"
-                    >
-                        Please select{{ hasColors ? ' a color' : ''
-                        }}{{ hasColors && hasSizes ? ' and' : ''
-                        }}{{ hasSizes ? ' a size' : '' }} to continue.
+                    <p v-if="hasVariations && !variationReady" class="variation-hint">
+                        Please select{{ hasColors ? ' a color' : '' }}{{ hasColors && hasSizes ? ' and' : '' }}{{ hasSizes ? ' a size' : '' }} to continue.
                     </p>
 
-                    <!-- Desktop Add to Cart (hidden on mobile) -->
+                    <!-- Desktop Add to Cart -->
                     <div class="desktop-add-section">
                         <div class="qty-box">
-                            <button
-                                class="qty-btn"
-                                @click="decrementQuantity"
-                                :disabled="quantity <= 1"
-                            >
+                            <button class="qty-btn" @click="decrementQuantity" :disabled="quantity <= 1">
                                 <i class="ri-subtract-line"></i>
                             </button>
-                            <input
-                                type="number"
-                                v-model.number="quantity"
-                                min="1"
-                                class="qty-input"
-                            />
+                            <input type="number" v-model.number="quantity" min="1" class="qty-input" />
                             <button class="qty-btn" @click="incrementQuantity">
                                 <i class="ri-add-line"></i>
                             </button>
                         </div>
                         <button
                             class="add-cart-btn"
-                            :disabled="
-                                !currentInStock ||
-                                isAddingToCart ||
-                                !variationReady
-                            "
+                            :disabled="!currentInStock || isAddingToCart || !variationReady"
                             @click="showConfirmModal"
                         >
                             <i class="ri-shopping-cart-2-line"></i>
@@ -202,10 +142,7 @@
         <section class="section-t-space-3" v-if="product.description">
             <div class="description-box px-15">
                 <h5 class="desc-title">Description</h5>
-                <div
-                    class="accordion accordion-style-1"
-                    id="descriptionAccordion"
-                >
+                <div class="accordion accordion-style-1" id="descriptionAccordion">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="descHeading">
                             <button
@@ -215,9 +152,7 @@
                                 data-bs-target="#descCollapse"
                                 aria-expanded="true"
                                 aria-controls="descCollapse"
-                            >
-                                Product Details
-                            </button>
+                            >Product Details</button>
                         </h2>
                         <div
                             id="descCollapse"
@@ -225,10 +160,7 @@
                             aria-labelledby="descHeading"
                             data-bs-parent="#descriptionAccordion"
                         >
-                            <div
-                                class="accordion-body"
-                                v-html="product.description"
-                            ></div>
+                            <div class="accordion-body" v-html="product.description"></div>
                         </div>
                     </div>
                 </div>
@@ -241,41 +173,22 @@
                 <h4>Similar Products</h4>
             </div>
             <div class="similar-grid px-15">
-                <div
-                    v-for="related in relatedProducts"
-                    :key="related.id"
-                    class="product-box"
-                >
-                    <Link
-                        :href="
-                            route('store.brand-partner.product', related.slug)
-                        "
-                        class="product-box-link"
-                    >
+                <div v-for="related in relatedProducts" :key="related.id" class="product-box">
+                    <Link :href="route('store.brand-partner.product', related.slug)" class="product-box-link">
                         <div class="product-box-img">
                             <img
-                                :src="
-                                    related.image_url ||
-                                    '/img/tshirt-placeholder.svg'
-                                "
+                                :src="related.image_url || '/img/tshirt-placeholder.svg'"
                                 :alt="related.name"
                             />
                         </div>
                         <div class="product-box-detail">
                             <h5 class="product-box-name">{{ related.name }}</h5>
                             <div class="product-box-price-row">
-                                <span class="product-box-price">{{
-                                    formatCurrency(related.price)
-                                }}</span>
+                                <span class="product-box-price">{{ formatCurrency(related.price) }}</span>
                             </div>
                         </div>
                     </Link>
-                    <Link
-                        :href="
-                            route('store.brand-partner.product', related.slug)
-                        "
-                        class="add-cart-icon"
-                    >
+                    <Link :href="route('store.brand-partner.product', related.slug)" class="add-cart-icon">
                         <i class="ri-add-line"></i>
                     </Link>
                 </div>
@@ -285,19 +198,10 @@
         <!-- Bottom Cart Box (Mobile Only) -->
         <div class="product-cart-box">
             <div class="mobile-qty-control">
-                <button
-                    class="qty-btn-mobile"
-                    @click="decrementQuantity"
-                    :disabled="quantity <= 1"
-                >
+                <button class="qty-btn-mobile" @click="decrementQuantity" :disabled="quantity <= 1">
                     <i class="ri-subtract-line"></i>
                 </button>
-                <input
-                    type="number"
-                    v-model.number="quantity"
-                    min="1"
-                    class="qty-input-mobile"
-                />
+                <input type="number" v-model.number="quantity" min="1" class="qty-input-mobile" />
                 <button class="qty-btn-mobile" @click="incrementQuantity">
                     <i class="ri-add-line"></i>
                 </button>
@@ -309,59 +213,33 @@
             >
                 <i class="ri-shopping-cart-2-line"></i>
                 <span v-if="isAddingToCart">Adding...</span>
-                <span v-else
-                    >Add to Cart |
-                    {{ formatCurrency(product.price * quantity) }}</span
-                >
+                <span v-else>Add to Cart | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
 
         <!-- Confirm Modal -->
-        <div
-            class="modal fade"
-            id="addToCartConfirmModal"
-            tabindex="-1"
-            aria-hidden="true"
-        >
+        <div class="modal fade" id="addToCartConfirmModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content grocery-modal">
                     <div class="modal-header">
                         <h5 class="modal-title">Confirm Add to Cart</h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            @click="confirmModal?.hide()"
-                        ></button>
+                        <button type="button" class="btn-close" @click="confirmModal?.hide()"></button>
                     </div>
                     <div class="modal-body">
                         <div class="confirm-product">
                             <img
-                                :src="
-                                    selectedImage ||
-                                    product.image_url ||
-                                    '/img/tshirt-placeholder.svg'
-                                "
+                                :src="selectedImage || product.image_url || '/img/tshirt-placeholder.svg'"
                                 :alt="product.name"
                                 class="confirm-img"
                             />
                             <div class="confirm-info">
                                 <h6>{{ product.name }}</h6>
-                                <span class="confirm-price">{{
-                                    formatCurrency(product.price)
-                                }}</span>
+                                <span class="confirm-price">{{ formatCurrency(product.price) }}</span>
                             </div>
                         </div>
-                        <div
-                            v-if="selectedColor || selectedSize"
-                            class="confirm-variation"
-                        >
-                            <span v-if="selectedColor"
-                                >Color:
-                                <strong>{{ selectedColor }}</strong></span
-                            >
-                            <span v-if="selectedSize" class="ms-2"
-                                >Size: <strong>{{ selectedSize }}</strong></span
-                            >
+                        <div v-if="selectedColor || selectedSize" class="confirm-variation">
+                            <span v-if="selectedColor">Color: <strong>{{ selectedColor }}</strong></span>
+                            <span v-if="selectedSize" class="ms-2">Size: <strong>{{ selectedSize }}</strong></span>
                         </div>
                         <div class="confirm-summary">
                             <div class="summary-row">
@@ -370,26 +248,13 @@
                             </div>
                             <div class="summary-row total">
                                 <span>Total</span>
-                                <strong>{{
-                                    formatCurrency(product.price * quantity)
-                                }}</strong>
+                                <strong>{{ formatCurrency(product.price * quantity) }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn-cancel"
-                            @click="confirmModal?.hide()"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            class="btn-confirm"
-                            @click="addToCart"
-                            :disabled="isAddingToCart"
-                        >
+                        <button type="button" class="btn-cancel" @click="confirmModal?.hide()">Cancel</button>
+                        <button type="button" class="btn-confirm" @click="addToCart" :disabled="isAddingToCart">
                             <span v-if="isAddingToCart">Adding...</span>
                             <span v-else>Confirm</span>
                         </button>
@@ -422,7 +287,6 @@ const quantity = ref(1);
 const isAddingToCart = ref(false);
 const selectedImage = ref(props.product.image_url);
 
-// Variations
 const selectedColor = ref(null);
 const selectedSize = ref(null);
 
@@ -450,14 +314,8 @@ const selectSize = (size) => {
 };
 
 const discountPercent = computed(() => {
-    if (
-        !props.product.compare_price ||
-        props.product.compare_price <= props.product.price
-    )
-        return 0;
-    return Math.round(
-        (1 - props.product.price / props.product.compare_price) * 100,
-    );
+    if (!props.product.compare_price || props.product.compare_price <= props.product.price) return 0;
+    return Math.round((1 - props.product.price / props.product.compare_price) * 100);
 });
 
 const formatCurrency = (amount) => {
@@ -468,17 +326,13 @@ const formatCurrency = (amount) => {
 };
 
 const incrementQuantity = () => quantity.value++;
-const decrementQuantity = () => {
-    if (quantity.value > 1) quantity.value--;
-};
+const decrementQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
 let confirmModal = null;
 
 onMounted(() => {
     const modalEl = document.getElementById('addToCartConfirmModal');
-    if (modalEl) {
-        confirmModal = new Modal(modalEl);
-    }
+    if (modalEl) confirmModal = new Modal(modalEl);
 });
 
 onBeforeUnmount(() => {
@@ -488,9 +342,7 @@ onBeforeUnmount(() => {
     }
 });
 
-const showConfirmModal = () => {
-    confirmModal?.show();
-};
+const showConfirmModal = () => confirmModal?.show();
 
 const addToCart = () => {
     isAddingToCart.value = true;
@@ -504,12 +356,8 @@ const addToCart = () => {
         },
         {
             preserveScroll: true,
-            onSuccess: () => {
-                confirmModal?.hide();
-            },
-            onFinish: () => {
-                isAddingToCart.value = false;
-            },
+            onSuccess: () => confirmModal?.hide(),
+            onFinish: () => { isAddingToCart.value = false; },
         },
     );
 };
@@ -517,105 +365,39 @@ const addToCart = () => {
 
 <style scoped>
 /* ========================
-   Variation Selectors
-   ======================== */
-.variation-section {
-    margin: 12px 0;
-}
-.variation-label {
-    font-size: 13px;
-    color: rgb(var(--grocery-title));
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-.color-swatches {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-.color-swatch-btn {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1.5px solid rgb(var(--grocery-border));
-    background: #1a1a1a;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.color-swatch-btn.active,
-.color-swatch-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-}
-.size-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-.size-btn {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1.5px solid rgb(var(--grocery-border));
-    background: #1a1a1a;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.size-btn.active,
-.size-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-}
-.variation-hint {
-    font-size: 12px;
-    color: #e57373;
-    margin: 6px 0 0;
-}
-.confirm-variation {
-    font-size: 13px;
-    color: rgb(var(--grocery-content));
-    margin-bottom: 10px;
-}
-
-/* ========================
-   Grocery Product Page
+   Theme Variables
    ======================== */
 .grocery-product-page {
     font-family: 'Public Sans', sans-serif;
-    background: #111;
+    background: #f7f7f7;
     min-height: 100vh;
     padding-bottom: 100px;
-    /* Grocery Theme Color Variables */
-    --grocery-theme: 255, 149, 5; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 200, 200, 200; /* Light gray-blue content text */
-    --grocery-title: 255, 255, 255; /* Dark blue-gray for titles */
-    --grocery-border: 68, 68, 68; /* Light gray borders */
-    --grocery-primary: 255, 149, 5; /* Yellow/orange accent */
-    --grocery-light-bg: 34, 34, 34; /* Light gray background */
-    --grocery-rating: 255, 149, 5; /* Gold/yellow for ratings */
+    --grocery-theme: 60, 133, 153;
+    --grocery-content: 143, 143, 178;
+    --grocery-title: 27, 27, 62;
+    --grocery-border: 232, 232, 232;
+    --grocery-primary: 254, 175, 24;
+    --grocery-light-bg: 247, 247, 247;
+    --grocery-rating: 255, 191, 19;
 }
 
-/* Header */
+/* ========================
+   Header
+   ======================== */
 .product-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 16px;
     padding-bottom: 12px;
-    background: transparent;
+    background: #fff;
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: none;
+    border-bottom: 1px solid rgb(var(--grocery-border));
 }
 
-.product-header .px-15 {
+.px-15 {
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -627,7 +409,7 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: #2a2a2a;
+    background: #f5f5f5;
     color: rgb(var(--grocery-title));
     text-decoration: none;
     font-size: 22px;
@@ -641,10 +423,10 @@ const addToCart = () => {
 
 .header-title {
     font-size: 16px;
-    font-weight: 800;
-    text-transform: uppercase;
+    font-weight: 700;
     color: rgb(var(--grocery-title));
     margin: 0;
+    text-transform: uppercase;
 }
 
 .cart-icon-link {
@@ -655,7 +437,7 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: #2a2a2a;
+    background: #f5f5f5;
     color: rgb(var(--grocery-title));
     text-decoration: none;
     font-size: 20px;
@@ -684,15 +466,11 @@ const addToCart = () => {
     line-height: 1;
 }
 
-/* Utility */
-.px-15 {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Main Product Section */
+/* ========================
+   Main Product Section
+   ======================== */
 .main-product-section {
-    background: transparent;
+    background: #fff;
     margin-bottom: 10px;
 }
 
@@ -704,8 +482,9 @@ const addToCart = () => {
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    background: transparent;
+    background: #f8f8f8;
     cursor: pointer;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .main-product-image img {
@@ -739,7 +518,7 @@ const addToCart = () => {
     width: 64px;
     height: 64px;
     min-width: 64px;
-    border: 2px solid #333;
+    border: 2px solid rgb(var(--grocery-border));
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -757,7 +536,9 @@ const addToCart = () => {
     object-fit: cover;
 }
 
-/* Product Container */
+/* ========================
+   Product Info
+   ======================== */
 .product-container {
     padding-bottom: 20px;
 }
@@ -773,24 +554,24 @@ const addToCart = () => {
     display: inline-block;
     padding: 3px 12px;
     border-radius: 20px;
-    background: rgb(var(--grocery-border));
+    background: #f0f0f0;
     font-size: 12px;
     font-weight: 600;
-    color: #ccc;
+    color: #777;
 }
 
 .ptag-event {
-    background: #fff5ec;
+    background: #e8f4f7;
     color: rgb(var(--grocery-theme));
 }
 
 .product-title {
     font-size: 20px;
-    font-weight: 900;
-    text-transform: uppercase;
+    font-weight: 800;
     color: rgb(var(--grocery-title));
     margin: 0 0 10px;
     line-height: 1.3;
+    text-transform: uppercase;
 }
 
 .product-price-row {
@@ -809,11 +590,11 @@ const addToCart = () => {
 
 .old-price {
     font-size: 15px;
-    color: #888;
+    color: #bbb;
 }
 
 .save-badge {
-    background: #fff0e6;
+    background: rgba(var(--grocery-theme), 0.1);
     color: rgb(var(--grocery-theme));
     padding: 3px 10px;
     border-radius: 6px;
@@ -826,7 +607,7 @@ const addToCart = () => {
 }
 
 .stock-in {
-    color: #2ed573;
+    color: #27ae60;
     font-weight: 700;
     font-size: 14px;
     display: inline-flex;
@@ -835,7 +616,7 @@ const addToCart = () => {
 }
 
 .stock-out {
-    color: #ff4757;
+    color: #e74c3c;
     font-weight: 700;
     font-size: 14px;
     display: inline-flex;
@@ -845,34 +626,111 @@ const addToCart = () => {
 
 .short-description {
     font-size: 14px;
-    color: #ccc;
+    color: rgb(var(--grocery-content));
     line-height: 1.6;
     margin: 0 0 12px;
 }
 
 .sku-info {
     font-size: 13px;
-    color: #999;
+    color: #aaa;
     margin-bottom: 16px;
 }
 
-/* Desktop Add-to-Cart Section */
+/* ========================
+   Variations
+   ======================== */
+.variation-section {
+    margin: 12px 0;
+}
+
+.variation-label {
+    font-size: 13px;
+    color: rgb(var(--grocery-title));
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.color-swatch-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-swatch-btn.active,
+.color-swatch-btn:hover {
+    border-color: rgb(var(--grocery-theme));
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+
+.size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.size-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.size-btn.active,
+.size-btn:hover {
+    border-color: rgb(var(--grocery-theme));
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+
+.variation-hint {
+    font-size: 12px;
+    color: #e74c3c;
+    margin: 6px 0 0;
+}
+
+.confirm-variation {
+    font-size: 13px;
+    color: rgb(var(--grocery-content));
+    margin-bottom: 10px;
+}
+
+/* Desktop Add to Cart - hidden on mobile */
 .desktop-add-section {
     display: none;
 }
 
-/* Description Section */
+/* ========================
+   Description
+   ======================== */
 .section-t-space-3 {
     padding-top: 10px;
 }
 
 .description-box {
-    background: transparent;
+    background: #fff;
     border-radius: 16px;
-    padding: 0 15px;
+    padding: 20px 15px;
     margin: 0 15px;
-    border-top: 1px solid #333;
-    margin-top: 20px;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .desc-title {
@@ -882,40 +740,37 @@ const addToCart = () => {
     margin: 0 0 14px;
 }
 
-/* Accordion Style 1 */
 .accordion-style-1 .accordion-item {
     border: none;
     border-radius: 12px;
     overflow: hidden;
-    background: #2a2a2a;
+    background: #fafafa;
 }
 
 .accordion-style-1 .accordion-button {
     font-size: 14px;
     font-weight: 700;
-    color: #fff;
-    background: #2a2a2a;
+    color: rgb(var(--grocery-title));
+    background: #fafafa;
     padding: 14px 16px;
     box-shadow: none;
 }
 
 .accordion-style-1 .accordion-button:not(.collapsed) {
     color: rgb(var(--grocery-theme));
-    background: #fff8f2;
-}
-
-.accordion-style-1 .accordion-button::after {
-    background-size: 16px;
+    background: rgba(var(--grocery-theme), 0.05);
 }
 
 .accordion-style-1 .accordion-body {
     padding: 0 16px 16px;
     font-size: 14px;
-    color: #ddd;
+    color: #555;
     line-height: 1.7;
 }
 
-/* Similar Products Section */
+/* ========================
+   Similar Products
+   ======================== */
 .section-t-space-4 {
     padding-top: 20px;
     padding-bottom: 10px;
@@ -935,11 +790,11 @@ const addToCart = () => {
 }
 
 .product-box {
-    background: transparent;
+    background: #fff;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: none;
-    border: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgb(var(--grocery-border));
     position: relative;
     transition: all 0.2s;
 }
@@ -957,7 +812,7 @@ const addToCart = () => {
 .product-box-img {
     aspect-ratio: 1;
     overflow: hidden;
-    background: transparent;
+    background: #f8f8f8;
 }
 
 .product-box-img img {
@@ -1016,33 +871,35 @@ const addToCart = () => {
 }
 
 .add-cart-icon:hover {
-    background: #e67a1f;
+    background: rgba(var(--grocery-theme), 0.8);
     color: #fff;
 }
 
-/* Bottom Cart Box (Mobile) */
+/* ========================
+   Mobile Bottom Cart
+   ======================== */
 .product-cart-box {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(17, 17, 17, 0.95);
+    background: #fff;
     padding: 12px 15px;
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgb(var(--grocery-border));
     z-index: 999;
     display: flex;
     align-items: center;
     gap: 12px;
-    border-top: 1px solid #333;
-    backdrop-filter: blur(8px);
 }
 
 .mobile-qty-control {
     display: flex;
     align-items: center;
-    background: #2a2a2a;
+    background: #f5f5f5;
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .qty-btn-mobile {
@@ -1070,7 +927,7 @@ const addToCart = () => {
     text-align: center;
     font-weight: 700;
     font-size: 15px;
-    color: #fff;
+    color: rgb(var(--grocery-title));
     outline: none;
     -moz-appearance: textfield;
 }
@@ -1099,12 +956,11 @@ const addToCart = () => {
 }
 
 .add-cart-mobile-btn:hover {
-    background: #e67a1f;
+    background: rgba(var(--grocery-theme), 0.85);
 }
 
 .add-cart-mobile-btn:disabled {
-    background: #333;
-    color: #888;
+    background: #ddd;
     cursor: not-allowed;
 }
 
@@ -1112,17 +968,21 @@ const addToCart = () => {
     font-size: 18px;
 }
 
-/* Confirm Modal - Grocery Style */
+/* ========================
+   Confirm Modal
+   ======================== */
 .grocery-modal {
     border: none;
     border-radius: 20px;
     overflow: hidden;
     font-family: 'Public Sans', sans-serif;
+    background: #fff;
 }
 
 .grocery-modal .modal-header {
     border-bottom: 1px solid rgb(var(--grocery-border));
     padding: 16px 20px;
+    background: #fff;
 }
 
 .grocery-modal .modal-title {
@@ -1133,6 +993,7 @@ const addToCart = () => {
 
 .grocery-modal .modal-body {
     padding: 20px;
+    background: #fff;
 }
 
 .grocery-modal .modal-footer {
@@ -1140,12 +1001,14 @@ const addToCart = () => {
     padding: 14px 20px;
     gap: 10px;
     display: flex;
+    background: #fafafa;
 }
 
 .confirm-product {
     display: flex;
     gap: 14px;
     align-items: center;
+    margin-bottom: 14px;
 }
 
 .confirm-img {
@@ -1153,7 +1016,8 @@ const addToCart = () => {
     height: 70px;
     object-fit: cover;
     border-radius: 12px;
-    background: #222;
+    background: #f8f8f8;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .confirm-info h6 {
@@ -1169,10 +1033,16 @@ const addToCart = () => {
     font-size: 15px;
 }
 
+.confirm-variation {
+    font-size: 13px;
+    color: rgb(var(--grocery-content));
+    margin-bottom: 10px;
+}
+
 .confirm-summary {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #333;
+    border-top: 1px solid rgb(var(--grocery-border));
 }
 
 .summary-row {
@@ -1181,7 +1051,7 @@ const addToCart = () => {
     align-items: center;
     padding: 6px 0;
     font-size: 14px;
-    color: #ccc;
+    color: rgb(var(--grocery-content));
 }
 
 .summary-row.total {
@@ -1199,19 +1069,20 @@ const addToCart = () => {
 .btn-cancel {
     flex: 1;
     height: 44px;
-    border: 1.5px solid #333;
-    background: #1a1a1a;
-    color: #ddd;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    color: rgb(var(--grocery-title));
     border-radius: 12px;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .btn-cancel:hover {
-    border-color: #ccc;
-    background: #111;
+    border-color: #bbb;
+    background: #f9f9f9;
 }
 
 .btn-confirm {
@@ -1225,20 +1096,20 @@ const addToCart = () => {
     font-weight: 700;
     cursor: pointer;
     transition: background 0.2s;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .btn-confirm:hover {
-    background: #e67a1f;
+    background: rgba(var(--grocery-theme), 0.85);
 }
 
 .btn-confirm:disabled {
-    background: #333;
-    color: #888;
+    background: #ddd;
     cursor: not-allowed;
 }
 
 /* ========================
-   Desktop Layout (768px+)
+   Desktop (768px+)
    ======================== */
 @media (min-width: 768px) {
     .grocery-product-page {
@@ -1262,9 +1133,10 @@ const addToCart = () => {
     .main-product-section {
         display: flex;
         gap: 40px;
-        padding: 20px;
+        padding: 32px;
         border-radius: 16px;
         margin: 0 20px;
+        border: 1px solid rgb(var(--grocery-border));
     }
 
     .slider-box {
@@ -1295,9 +1167,10 @@ const addToCart = () => {
     .qty-box {
         display: flex;
         align-items: center;
-        background: #2a2a2a;
+        background: #f5f5f5;
         border-radius: 12px;
         overflow: hidden;
+        border: 1px solid rgb(var(--grocery-border));
     }
 
     .qty-btn {
@@ -1315,7 +1188,7 @@ const addToCart = () => {
     }
 
     .qty-btn:hover {
-        background: #fff0e6;
+        background: rgba(var(--grocery-theme), 0.08);
     }
 
     .qty-btn:disabled {
@@ -1330,7 +1203,7 @@ const addToCart = () => {
         text-align: center;
         font-weight: 700;
         font-size: 15px;
-        color: #fff;
+        color: rgb(var(--grocery-title));
         outline: none;
         -moz-appearance: textfield;
     }
@@ -1356,15 +1229,15 @@ const addToCart = () => {
         justify-content: center;
         gap: 8px;
         transition: background 0.2s;
+        font-family: 'Public Sans', sans-serif;
     }
 
     .add-cart-btn:hover {
-        background: #e67a1f;
+        background: rgba(var(--grocery-theme), 0.85);
     }
 
     .add-cart-btn:disabled {
-        background: #333;
-        color: #888;
+        background: #ddd;
         cursor: not-allowed;
     }
 
@@ -1372,12 +1245,10 @@ const addToCart = () => {
         font-size: 18px;
     }
 
-    /* Hide mobile bottom cart box on desktop */
     .product-cart-box {
         display: none;
     }
 
-    /* Sections layout */
     .section-t-space-3,
     .section-t-space-4 {
         max-width: 1200px;
@@ -1406,22 +1277,12 @@ const addToCart = () => {
     }
 }
 
-/* Large Screens */
-@media (min-width: 1024px) {
-    .similar-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Small screens (up to 767px) */
+/* ========================
+   Mobile (max 767px)
+   ======================== */
 @media (max-width: 767px) {
     .grocery-product-page {
         padding-bottom: 80px;
-    }
-
-    .product-header {
-        position: sticky;
-        top: 0;
     }
 
     .main-product-image img {
@@ -1452,7 +1313,6 @@ const addToCart = () => {
     }
 }
 
-/* Extra small screens */
 @media (max-width: 374px) {
     .add-cart-mobile-btn {
         font-size: 12px;

@@ -112,7 +112,7 @@
                                 style="z-index: 2"
                             >
                                 <h1 class="slide-title text-white">
-                                    DARE TO DREAM BIG<br />— KEEP ON BREAKING<br />THE
+                                    DARE TO DREAM BIG — KEEP ON BREAKING THE
                                     BOUNDARIES.
                                 </h1>
                                 <p class="slide-subtitle text-white mt-3">
@@ -420,42 +420,17 @@
         <!-- Check Our Collections Section -->
         <section class="collections-section">
             <!-- THE Collection Banner -->
-            <div class="dreamer-banner">
-                <div class="dreamer-banner-images">
-                    <img
-                        src="/img/img_front.png"
-                        alt="Shirt Front"
-                        class="dreamer-shirt dreamer-shirt-left"
-                    />
-                    <img
-                        src="/img/img_back.png"
-                        alt="Shirt Back"
-                        class="dreamer-shirt dreamer-shirt-right"
-                    />
-                </div>
+            <div class="dreamer-banner" style="background-image: url('/img/img-dreamercollection.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                 <div class="dreamer-content">
                     <span class="dreamer-label">THE</span>
                     <h2 class="dreamer-title">DREAMER</h2>
                     <p class="dreamer-description">
-                        <strong>Dare to Dream Big</strong> with our first shirt
-                        collection for 2026 — <strong>The Dreamer</strong> —
-                        featuring the blend of milky way &amp; outer space
-                        patterns, vectors of limitless adventures and shades of
-                        greens and cloud dancer which represent the colors of
-                        2026.
+                        <strong>Dare to Dream Big</strong> with our first shirt collection for 2026 — 
+                        <strong>The Dreamer</strong> — featuring the blend of milky way &amp; outer space 
+                        patterns, vectors of limitless adventures and shades of greens and cloud dancer 
+                        which represent the colors of 2026.
                     </p>
-                    <a
-                        :href="
-                            brandPartner
-                                ? route(
-                                      'store.brand-partner.collections',
-                                      brandPartner.slug,
-                                  )
-                                : '#'
-                        "
-                        class="dreamer-btn"
-                        >CHECK OUR COLLECTIONS</a
-                    >
+                    <a href="#" class="dreamer-btn">CHECK OUR COLLECTIONS</a>
                 </div>
             </div>
 
@@ -552,6 +527,103 @@
                             >VIEW OUR COLLECTIONS</a
                         >
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products Section -->
+        <section class="featured-products-section">
+            <div class="featured-products-inner">
+                <h2 class="featured-products-title">Better Build. Made Better</h2>
+
+                <ul class="featured-product-list" v-if="products.data.length > 0">
+                    <li
+                        v-for="product in products.data.slice(0, 8)"
+                        :key="'featured-' + product.id"
+                        class="featured-product-item"
+                    >
+                        <div class="featured-product-box">
+                            <!-- Badges -->
+                            <div class="featured-product-badges">
+                                <span class="featured-badge-sale" v-if="product.compare_price && product.compare_price > product.price">SALE</span>
+                                <span class="featured-badge-new" v-else>NEW</span>
+                            </div>
+
+                            <!-- Wishlist -->
+                            <button class="featured-wishlist-btn">
+                                <i class="ri-heart-line"></i>
+                            </button>
+
+                            <!-- Image -->
+                            <Link
+                                :href="route('store.brand-partner.product', product.slug)"
+                                class="featured-product-image-link"
+                            >
+                                <div class="featured-product-image">
+                                    <img
+                                        :src="product.image_url || '/img/tshirt-placeholder.svg'"
+                                        :alt="product.name"
+                                    />
+                                </div>
+                            </Link>
+
+                            <!-- Info -->
+                            <div class="featured-product-info">
+                                <p class="featured-product-collection">
+                                    {{ product.short_description ? truncate(product.short_description, 30) : '&nbsp;' }}
+                                </p>
+
+                                <Link
+                                    :href="route('store.brand-partner.product', product.slug)"
+                                    class="featured-product-name-link"
+                                >
+                                    <h5 class="featured-product-name">{{ product.name }}</h5>
+                                </Link>
+
+                                <!-- Stars -->
+                                <div class="featured-product-stars">
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="featured-product-price-row">
+                                    <span class="featured-product-price">
+                                        {{ formatCurrency(product.price) }}
+                                    </span>
+                                    <span
+                                        v-if="product.compare_price && product.compare_price > product.price"
+                                        class="featured-product-old-price"
+                                    >
+                                        {{ formatCurrency(product.compare_price) }}
+                                    </span>
+                                    <span class="featured-preorder-badge">PRE-ORDER</span>
+                                </div>
+
+                                <!-- Add to Cart -->
+                                <button
+                                    class="featured-atc-btn"
+                                    @click.prevent="addToCart(product)"
+                                    :disabled="!product.in_stock"
+                                >
+                                    ADD TO CART
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- View All -->
+                <div class="featured-view-all-wrap" v-if="products.data.length > 0">
+                    <Link
+                        :href="route('store.brand-partner.shop', brandPartner.slug)"
+                        class="featured-view-all-btn"
+                    >
+                        VIEW ALL PRODUCTS
+                    </Link>
                 </div>
             </div>
         </section>
@@ -797,8 +869,7 @@
         <!-- Driven by Quality Section -->
         <section class="quality-section">
             <div class="quality-image">
-                <div class="quality-img-placeholder"></div>
-                <img src="/img/your-image.jpg" alt="Tribu Pakaras Team" />
+                <img src="/img/img-team.png" alt="Tribu Pakaras Team" />
             </div>
             <div class="quality-content">
                 <h2 class="quality-title">
@@ -845,19 +916,19 @@
             <div class="runwild-grid">
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
+                    <img src="/img/img-section1.png" alt="Section 1">
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
+                    <img src="/img/img-section2.png" alt="Section 2">
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
+                    <img src="/img/img-section3.png" alt="Section 3">
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <!-- Replace with: <img src="/img/photo1.jpg" alt=""> -->
+                    <img src="/img/img-collection1.png" alt="Section 4">
                 </div>
             </div>
         </section>
@@ -1310,24 +1381,22 @@ const confirmAddToCart = () => {
 }
 
 .slide-title {
-    font-size: 3.5rem;
+    font-family: 'Poppins', sans-serif;
     font-weight: 800;
+    font-size: 3.5rem;
     line-height: 1.1;
-    margin-bottom: 20px;
     letter-spacing: -1px;
-}
-
-.slide-title-large {
-    font-size: 5.5rem;
-    font-weight: 900;
-    letter-spacing: -2px;
-    margin: 0;
-    line-height: 1;
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 .slide-subtitle {
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: 0;
     margin-bottom: 30px;
     max-width: 500px;
 }
@@ -1435,9 +1504,6 @@ const confirmAddToCart = () => {
 @media (max-width: 991px) {
     .slide-title {
         font-size: 2.5rem;
-    }
-    .slide-title-large {
-        font-size: 3.5rem;
     }
     .hero-carousel .carousel-item {
         height: 600px;
@@ -2070,7 +2136,6 @@ const confirmAddToCart = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: radial-gradient(ellipse at center, #0d3b2e 0%, #071a13 100%);
     min-height: 420px;
     padding: 60px 80px;
     position: relative;
@@ -2078,16 +2143,13 @@ const confirmAddToCart = () => {
     gap: 40px;
 }
 
+/* Overlay to ensure text readability over the background image */
 .dreamer-banner::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(
-        rgba(255, 255, 255, 0.07) 1px,
-        transparent 1px
-    );
-    background-size: 28px 28px;
     pointer-events: none;
+    z-index: 1;
 }
 
 .dreamer-banner-images {
@@ -2098,26 +2160,13 @@ const confirmAddToCart = () => {
     z-index: 2;
 }
 
-.dreamer-shirt {
-    height: 320px;
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
-}
 
-.dreamer-shirt-left {
-    transform: rotate(-5deg) translateY(10px);
-}
-
-.dreamer-shirt-right {
-    transform: rotate(3deg);
-}
 
 .dreamer-content {
     flex: 1;
     z-index: 2;
     text-align: right;
-    max-width: 420px;
+    max-width: 500px;
     margin-left: auto;
 }
 
@@ -2125,31 +2174,43 @@ const confirmAddToCart = () => {
     display: block;
     font-size: 13px;
     letter-spacing: 6px;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 400;
     margin-bottom: 4px;
     text-transform: uppercase;
 }
 
 .dreamer-title {
-    font-size: 64px;
+    font-size: 72px;
     font-weight: 900;
     color: #fff;
-    letter-spacing: 6px;
-    margin: 0 0 18px;
+    letter-spacing: 8px;
+    margin: 0 0 20px;
     line-height: 1;
     font-family: 'Public Sans', sans-serif;
+    text-transform: uppercase;
 }
 
 .dreamer-description {
     font-size: 13px;
     line-height: 1.75;
-    color: rgba(255, 255, 255, 0.65);
-    margin-bottom: 28px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 12px;
 }
 
 .dreamer-description strong {
-    color: rgba(255, 255, 255, 0.9);
+    color: #fff;
+    font-weight: 700;
+}
+
+/* "SPACE FOR ADVENTURE" accent text */
+.dreamer-accent {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    margin: 16px 0 24px;
 }
 
 .dreamer-btn {
@@ -2357,10 +2418,6 @@ const confirmAddToCart = () => {
         min-height: auto;
     }
 
-    .dreamer-shirt {
-        height: 220px;
-    }
-
     .dreamer-title {
         font-size: 48px;
     }
@@ -2391,10 +2448,6 @@ const confirmAddToCart = () => {
 
     .dreamer-banner-images {
         justify-content: center;
-    }
-
-    .dreamer-shirt {
-        height: 160px;
     }
 
     .dreamer-title {
@@ -2585,6 +2638,306 @@ const confirmAddToCart = () => {
         min-width: 300px;
         max-width: 300px;
         padding: 24px 20px;
+    }
+}
+
+/* ===== Featured Products Section ===== */
+.featured-products-section {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    background: #fff;
+    padding: 70px 0 80px;
+    z-index: 1;
+    margin-top: 8px;
+}
+
+.featured-products-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.featured-products-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: #111;
+    text-align: center;
+    margin: 0 0 48px;
+    font-family: 'Public Sans', sans-serif;
+    letter-spacing: -1px;
+}
+
+/* Grid */
+.featured-product-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.featured-product-item {
+    display: flex;
+}
+
+/* Card */
+.featured-product-box {
+    width: 100%;
+    position: relative;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.featured-product-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+}
+
+/* Badges */
+.featured-product-badges {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    z-index: 2;
+}
+
+.featured-badge-sale {
+    display: inline-block;
+    background: #ff5722;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px 5px 10px;
+    border-radius: 0 50px 50px 0;
+    letter-spacing: 0.5px;
+}
+
+.featured-badge-new {
+    display: inline-block;
+    background: #1976d2;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px 5px 10px;
+    border-radius: 0 50px 50px 0;
+    letter-spacing: 0.5px;
+}
+
+/* Wishlist */
+.featured-wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: #888;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.featured-wishlist-btn:hover {
+    color: #ff5722;
+    transform: scale(1.1);
+}
+
+/* Image */
+.featured-product-image-link {
+    display: block;
+    text-decoration: none;
+}
+
+.featured-product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f8f8f8;
+}
+
+.featured-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.featured-product-box:hover .featured-product-image img {
+    transform: scale(1.06);
+}
+
+/* Info */
+.featured-product-info {
+    padding: 14px 4px 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.featured-product-collection {
+    font-size: 10px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 4px;
+}
+
+.featured-product-name-link {
+    text-decoration: none;
+}
+
+.featured-product-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111;
+    margin: 0 0 6px;
+    line-height: 1.3;
+    font-family: 'Public Sans', sans-serif;
+    transition: color 0.2s;
+}
+
+.featured-product-name-link:hover .featured-product-name {
+    color: #198754;
+}
+
+/* Stars */
+.featured-product-stars {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+
+.featured-product-stars i {
+    font-size: 12px;
+    color: #ffc107;
+}
+
+/* Price */
+.featured-product-price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.featured-product-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+}
+
+.featured-product-old-price {
+    font-size: 12px;
+    color: #bbb;
+    text-decoration: line-through;
+}
+
+.featured-preorder-badge {
+    font-size: 8px;
+    font-weight: 800;
+    background: #ff9800;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.3px;
+}
+
+/* Add to Cart */
+.featured-atc-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1.5px solid #198754;
+    color: #198754;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-radius: 0;
+    font-family: 'Public Sans', sans-serif;
+    transition: all 0.25s;
+    margin-top: auto;
+}
+
+.featured-atc-btn:hover {
+    background: #ff9505;
+    border-color: #ff9505;
+    color: #fff;
+}
+
+.featured-atc-btn:disabled {
+    background: #f0f0f0;
+    border-color: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* View All */
+.featured-view-all-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.featured-view-all-btn {
+    display: inline-block;
+    padding: 13px 40px;
+    background: transparent;
+    border: 2px solid #198754;
+    color: #198754;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+.featured-view-all-btn:hover {
+    background: #ff9505;
+    border-color: #ff9505;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .featured-product-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .featured-products-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 575px) {
+    .featured-products-inner {
+        padding: 0 16px;
+    }
+
+    .featured-product-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .featured-products-title {
+        font-size: 28px;
+        margin-bottom: 28px;
     }
 }
 
@@ -3116,12 +3469,8 @@ const confirmAddToCart = () => {
 .quality-image {
     position: relative;
     overflow: hidden;
-}
-
-.quality-img-placeholder {
     width: 100%;
     height: 100%;
-    background: #bbb;
     min-height: 640px;
 }
 
@@ -3130,6 +3479,9 @@ const confirmAddToCart = () => {
     height: 100%;
     object-fit: cover;
     display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /* Right content side */
@@ -3196,7 +3548,7 @@ const confirmAddToCart = () => {
         grid-template-columns: 1fr;
     }
 
-    .quality-img-placeholder {
+    .quality-image {
         min-height: 360px;
     }
 
@@ -3226,12 +3578,12 @@ const confirmAddToCart = () => {
     left: 50%;
     margin-left: -50vw;
     background: #fff;
-    padding: 70px 60px 80px;
+    padding: 100px 60px 80px;
     z-index: 1;
 }
 
 .runwild-title {
-    font-size: 42px;
+    font-size: 50px;
     font-weight: 900;
     color: #111;
     text-align: center;
@@ -3248,16 +3600,10 @@ const confirmAddToCart = () => {
 }
 
 .runwild-item {
+    position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-}
-
-.runwild-placeholder {
-    width: 100%;
-    height: 100%;
-    background: #ddd;
-    min-height: 320px;
-    transition: transform 0.4s ease;
+    background: #ddd; /* Fallback color while image loads */
 }
 
 .runwild-item img {
@@ -3268,7 +3614,6 @@ const confirmAddToCart = () => {
     transition: transform 0.4s ease;
 }
 
-.runwild-item:hover .runwild-placeholder,
 .runwild-item:hover img {
     transform: scale(1.05);
 }
@@ -3286,10 +3631,6 @@ const confirmAddToCart = () => {
     .runwild-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    .runwild-placeholder {
-        min-height: 240px;
-    }
 }
 
 @media (max-width: 575px) {
@@ -3305,10 +3646,6 @@ const confirmAddToCart = () => {
     .runwild-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
-    }
-
-    .runwild-placeholder {
-        min-height: 160px;
     }
 }
 

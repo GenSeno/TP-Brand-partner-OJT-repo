@@ -88,28 +88,32 @@
                             CONTACT US
                         </Link>
 
-                        <a href="javascript:void(0)" class="nav-item">
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.partner',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
                             BE OUR PARTNER
-                        </a>
+                        </Link>
                     </nav>
                 </div>
 
                 <!-- Right Utility Icons & CTA -->
                 <div class="right-nav-wrapper d-none d-lg-block">
                     <nav class="right-nav">
-                        <Link
-                            :href="
-                                brandPartner
-                                    ? route(
-                                          'store.brand-partner.login',
-                                          brandPartner.slug,
-                                      )
-                                    : '#'
-                            "
+                        <a
+                            href="#"
                             class="utility-link"
+                            @click.prevent="openAccountModal"
                         >
                             <i class="ri-user-line"></i> Account
-                        </Link>
+                        </a>
                         <a href="javascript:void(0)" class="utility-link"
                             ><i class="ri-heart-line"></i> Wishlist</a
                         >
@@ -282,6 +286,185 @@
         </div>
         <!-- Side Menu End -->
 
+        <!-- Account Modal -->
+        <div
+            class="account-modal-overlay"
+            v-if="accountModalOpen"
+            @click.self="closeAccountModal"
+        >
+            <div class="account-modal">
+                <button
+                    type="button"
+                    class="modal-close"
+                    @click="closeAccountModal"
+                >
+                    <i class="ri-close-line"></i>
+                </button>
+
+                <div class="account-card-left">
+                    <div class="account-card-copy">
+                        <h2 class="auth-title">Welcome, Runner</h2>
+                        <p class="auth-subtitle">
+                            Log in to continue your journey—track events,
+                            manage registrations, and stay connected with the
+                            tribe.
+                        </p>
+                    </div>
+
+                    <form
+                        class="account-form"
+                        @submit.prevent="showRegister ? submitRegister() : submitLogin()"
+                    >
+                        <template v-if="!showRegister">
+                            <div class="auth-field">
+                                <label class="auth-label">EMAIL ADDRESS</label>
+                                <input
+                                    type="email"
+                                    class="auth-input"
+                                    placeholder="Email Address"
+                                    v-model="loginForm.email"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">PASSWORD</label>
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Password"
+                                    v-model="loginForm.password"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-remember-row">
+                                <label class="auth-remember">
+                                    <input
+                                        type="checkbox"
+                                        v-model="loginForm.remember"
+                                    />
+                                    <span>Remember Password?</span>
+                                </label>
+                                <a href="#" class="auth-forgot">Forgot Password?</a>
+                            </div>
+
+                            <button type="submit" class="auth-btn-primary">
+                                LOGIN
+                            </button>
+
+                            <button type="button" class="auth-btn-google">
+                                <img
+                                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                    alt="Google"
+                                    class="google-icon"
+                                />
+                                LOGIN WITH GOOGLE
+                            </button>
+
+                            <p class="auth-switch">
+                                Don't have an account?
+                                <button
+                                    type="button"
+                                    class="auth-link-btn"
+                                    @click="showRegister = true"
+                                >
+                                    SignUp
+                                </button>
+                            </p>
+
+                            <div class="auth-do-later">
+                                <a href="/" class="auth-do-later-link">Do it Later.</a>
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <div class="auth-field">
+                                <label class="auth-label">FULL NAME</label>
+                                <input
+                                    type="text"
+                                    class="auth-input"
+                                    placeholder="Enter Full name"
+                                    v-model="registerForm.name"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">EMAIL ADDRESS</label>
+                                <input
+                                    type="email"
+                                    class="auth-input"
+                                    placeholder="Enter Email Address"
+                                    v-model="registerForm.email"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">PASSWORD</label>
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Enter Password"
+                                    v-model="registerForm.password"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">CONFIRM PASSWORD</label>
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Confirm Password"
+                                    v-model="registerForm.password_confirmation"
+                                    required
+                                />
+                            </div>
+
+                            <label class="auth-terms">
+                                <input
+                                    type="checkbox"
+                                    v-model="registerForm.terms"
+                                    required
+                                />
+                                <span>
+                                    By creating an account, you agree to our
+                                    <a href="#" class="auth-terms-link"
+                                        >Terms &amp; Conditions</a
+                                    >
+                                    and
+                                    <a href="#" class="auth-terms-link"
+                                        >Privacy Policy</a
+                                    >.
+                                </span>
+                            </label>
+
+                            <button type="submit" class="auth-btn-primary">
+                                CREATE ACCOUNT
+                            </button>
+
+                            <p class="auth-switch">
+                                Already have an account?
+                                <button
+                                    type="button"
+                                    class="auth-link-btn"
+                                    @click="showRegister = false"
+                                >
+                                    Log In
+                                </button>
+                            </p>
+                        </template>
+                    </form>
+                </div>
+
+                <div class="account-card-right">
+                    <div class="account-card-img-placeholder"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Content -->
         <main class="store-main">
             <slot />
@@ -326,7 +509,7 @@
 </template>
 
 <script setup>
-import { Link, usePage, router } from '@inertiajs/vue3';
+import { Link, useForm, usePage, router } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 const page = usePage();
@@ -334,6 +517,61 @@ const page = usePage();
 const brandPartner = computed(() => page.props.brandPartner);
 const cartCount = computed(() => page.props.cartCount || 0);
 const sideMenuOpen = ref(false);
+const accountModalOpen = ref(false);
+const showRegister = ref(false);
+
+const loginForm = useForm({
+    email: '',
+    password: '',
+    remember: false,
+});
+
+const registerForm = useForm({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    terms: false,
+});
+
+const openAccountModal = () => {
+    accountModalOpen.value = true;
+    showRegister.value = false;
+};
+
+const closeAccountModal = () => {
+    accountModalOpen.value = false;
+    showRegister.value = false;
+};
+
+const submitLogin = () => {
+    if (!brandPartner.value) return;
+
+    loginForm.post(
+        route('store.brand-partner.login.submit', brandPartner.value.slug),
+        {
+            onFinish: () => loginForm.reset('password'),
+            onSuccess: () => closeAccountModal(),
+        },
+    );
+};
+
+const submitRegister = () => {
+    if (!brandPartner.value) return;
+
+    registerForm.post(
+        route('store.brand-partner.register.submit', brandPartner.value.slug),
+        {
+            onFinish: () =>
+                registerForm.reset(
+                    'password',
+                    'password_confirmation',
+                    'terms',
+                ),
+            onSuccess: () => closeAccountModal(),
+        },
+    );
+};
 
 const isRoute = (name) => {
     return route().current(name);
@@ -417,14 +655,13 @@ const focusSearchField = () => {
 }
 
 .grocery-color {
-    /* Updated Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
-    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
-    --grocery-border: 232, 232, 232; /* Light gray borders */
-    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
-    --grocery-light-bg: 247, 247, 247; /* Light gray background */
-    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+    --grocery-theme: 60, 133, 153;
+    --grocery-content: 143, 143, 178;
+    --grocery-title: 27, 27, 62;
+    --grocery-border: 232, 232, 232;
+    --grocery-primary: 254, 175, 24;
+    --grocery-light-bg: 247, 247, 247;
+    --grocery-rating: 255, 191, 19;
     --grocery-success: #2ed573;
     --grocery-danger: #ff4757;
     --grocery-dark: #222;
@@ -432,7 +669,6 @@ const focusSearchField = () => {
     --grocery-light-gray: #999;
     --grocery-bg: #fafafa;
 
-    /* Updated primary color references */
     --grocery-primary-color: rgb(var(--grocery-theme));
     --grocery-primary-light: rgba(var(--grocery-theme), 0.1);
     background: var(--grocery-bg);
@@ -1036,6 +1272,264 @@ const focusSearchField = () => {
 .theme-btn:disabled {
     background: #ddd;
     cursor: not-allowed;
+}
+
+.account-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+
+.account-modal {
+    width: min(100%, 1040px);
+    max-height: 94vh;
+    overflow: hidden;
+    border-radius: 32px;
+    background: #fff;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #222;
+    font-size: 20px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+}
+
+.account-card-left,
+.account-card-right {
+    min-height: 560px;
+}
+
+.account-card-left {
+    padding: 48px 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.account-card-copy {
+    max-width: 420px;
+    margin-bottom: 32px;
+}
+
+.auth-title {
+    font-size: clamp(2rem, 2.5vw, 3rem);
+    line-height: 1.05;
+    margin: 0 0 18px;
+    color: #111;
+}
+
+.auth-subtitle {
+    color: #5a5a5a;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 420px;
+    margin: 0;
+}
+
+.account-form {
+    display: grid;
+    gap: 18px;
+}
+
+.auth-field {
+    display: grid;
+    gap: 8px;
+}
+
+.auth-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #444;
+}
+
+.auth-input {
+    width: 100%;
+    min-height: 54px;
+    padding: 16px 18px;
+    border: 1px solid #ddd;
+    border-radius: 28px;
+    background: #fafafa;
+    font-size: 14px;
+    color: #222;
+}
+
+.auth-remember-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.auth-remember {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
+.auth-remember input {
+    width: 16px;
+    height: 16px;
+    accent-color: rgb(var(--grocery-primary));
+}
+
+.auth-forgot {
+    color: rgb(var(--grocery-primary));
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-btn-primary,
+.auth-btn-google {
+    border: none;
+    border-radius: 28px;
+    min-height: 54px;
+    font-weight: 700;
+    font-family: 'Public Sans', sans-serif;
+    cursor: pointer;
+}
+
+.auth-btn-primary {
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+
+.auth-btn-google {
+    background: #f6f7f8;
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border: 1px solid #e7e7e7;
+}
+
+.google-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.auth-switch {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.auth-link-btn {
+    border: none;
+    padding: 0;
+    font-weight: 700;
+    color: rgb(var(--grocery-primary));
+    background: none;
+    cursor: pointer;
+}
+
+.auth-do-later {
+    margin-top: 8px;
+}
+
+.auth-do-later-link {
+    font-size: 14px;
+    color: #f15a24;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-terms {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    color: #555;
+    font-size: 14px;
+}
+
+.auth-terms input {
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    accent-color: rgb(var(--grocery-primary));
+}
+
+.auth-terms-link {
+    color: rgb(var(--grocery-primary));
+    text-decoration: none;
+}
+
+.account-card-right {
+    position: relative;
+    background: radial-gradient(circle at top left, rgba(255, 118, 74, 0.12), transparent 34%),
+        linear-gradient(180deg, #111 0%, #1c1c1c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.account-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: url('/img/login-side.jpg') center/cover no-repeat;
+    filter: brightness(0.95);
+}
+
+@media (max-width: 1024px) {
+    .account-modal {
+        grid-template-columns: 1fr;
+        max-height: 90vh;
+    }
+
+    .modal-close {
+        top: 14px;
+        right: 14px;
+    }
+
+    .account-card-left,
+    .account-card-right {
+        min-height: auto;
+    }
+
+    .account-card-left {
+        padding: 34px 28px;
+    }
+}
+
+@media (max-width: 680px) {
+    .account-modal-overlay {
+        padding: 16px;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+    }
+
+    .auth-remember-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .white-btn {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerCollectionController;
 use App\Http\Controllers\Store\BrandPartnerAboutController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
+use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerLoginController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,10 @@ Route::group([
     // Contact Us page
     Route::get('/contact', [BrandPartnerContactController::class, 'index'])
         ->name('brand-partner.contact');
+
+    // Be Our Partner page
+    Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])
+        ->name('brand-partner.partner');
 
     // ========== LOGIN ROUTES ==========
     Route::get('/{brandPartner}/login', function ($brandPartner) {
