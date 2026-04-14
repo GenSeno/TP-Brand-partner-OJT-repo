@@ -1492,7 +1492,7 @@ const focusSearchField = () => {
 .account-card-img-placeholder {
     width: 100%;
     height: 100%;
-    background: url('/img/login-side.jpg') center/cover no-repeat;
+    background: url('/img/img-login.png') center/cover no-repeat;
     filter: brightness(0.95);
 }
 

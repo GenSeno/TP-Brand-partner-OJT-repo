@@ -420,11 +420,117 @@
                 </div>
             </div>
         </div>
+
+        <div
+            class="modal fade"
+            id="addToCartModal"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-sm-fullwidth">
+                <div
+                    class="modal-content grocery-modal-content"
+                    v-if="selectedProduct"
+                >
+                    <div class="grocery-modal-header">
+                        <h4 class="grocery-modal-title">
+                            {{ selectedProduct.name }}
+                        </h4>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            @click="cartModal?.hide()"
+                        ></button>
+                    </div>
+                    <div class="grocery-modal-body">
+                        <div class="modal-product-detail">
+                            <img
+                                :src="selectedProduct.image_url || '/img/tshirt-placeholder.svg'"
+                                :alt="selectedProduct.name"
+                                class="modal-product-img"
+                            />
+                            <div class="modal-product-info">
+                                <p v-if="selectedProduct.short_description">
+                                    {{ selectedProduct.short_description }}
+                                </p>
+                                <h5 class="modal-product-price">
+                                    {{ formatPrice(selectedProduct.price) }}
+                                </h5>
+                                <span
+                                    v-if="
+                                        selectedProduct.compare_price &&
+                                        selectedProduct.compare_price >
+                                            selectedProduct.price
+                                    "
+                                    class="old-price"
+                                >
+                                    {{ formatPrice(selectedProduct.compare_price) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="qty-section-title">
+                            <h5>Quantity</h5>
+                        </div>
+                        <div class="qty-selector">
+                            <div class="qty-box">
+                                <div class="input-group">
+                                    <button
+                                        type="button"
+                                        class="qty-btn qty-minus"
+                                        @click="modalQuantity > 1 && modalQuantity--"
+                                        :disabled="modalQuantity <= 1"
+                                    >
+                                        -
+                                    </button>
+                                    <input
+                                        class="form-control qty-input"
+                                        type="text"
+                                        v-model.number="modalQuantity"
+                                        min="1"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="qty-btn qty-plus"
+                                        @click="modalQuantity++"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grocery-modal-footer">
+                        <div class="modal-footer-info">
+                            <h5>
+                                {{ modalQuantity }}
+                                {{ modalQuantity === 1 ? 'item' : 'items' }}
+                            </h5>
+                            <h4>
+                                {{ formatPrice(selectedProduct.price * modalQuantity) }}
+                            </h4>
+                        </div>
+                        <button
+                            class="btn btn-grocery-primary cart-bar-btn"
+                            @click="confirmAddToCart"
+                            :disabled="isAddingToCart"
+                        >
+                            <span v-if="isAddingToCart">Adding...</span>
+                            <span v-else>
+                                Add to Cart
+                                <i class="ri-arrow-right-line"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </template>
 
     <script setup>
     import { Head, Link, router } from '@inertiajs/vue3';
-    import { ref, reactive } from 'vue';
+    import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+    import { Modal } from 'bootstrap';
 
     const props = defineProps({
         brandPartner: Object,
@@ -458,6 +564,10 @@
     const selectedCollections = ref([]);
     const selectedGarments = ref([]);
     const selectedProductTypes = ref([]);
+    const selectedProduct = ref(null);
+    const modalQuantity = ref(1);
+    const isAddingToCart = ref(false);
+    let cartModal = null;
     const priceMax = ref(5000);
 
     const toggleColor = (val) => {
@@ -480,18 +590,49 @@
 
     const formatPrice = (val) =>`PHP ${(val / 100).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+    onMounted(() => {
+        const modalEl = document.getElementById('addToCartModal');
+        if (modalEl) {
+            cartModal = new Modal(modalEl);
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                selectedProduct.value = null;
+                modalQuantity.value = 1;
+                isAddingToCart.value = false;
+            });
+        }
+    });
+
+    onBeforeUnmount(() => {
+        if (cartModal) {
+            cartModal.dispose();
+            cartModal = null;
+        }
+    });
+
     const addToCart = (product) => {
+        selectedProduct.value = product;
+        modalQuantity.value = 1;
+        cartModal?.show();
+    };
+
+    const confirmAddToCart = () => {
+        if (!selectedProduct.value) return;
+
+        isAddingToCart.value = true;
         router.post(
             route('store.brand-partner.cart.add'),
             {
-                product_id: product.id,
-                quantity: 1,
-                color: product.colors_array?.[0] || null,
-                size: product.sizes_array?.[0] || null,
+                product_id: selectedProduct.value.id,
+                quantity: modalQuantity.value,
+                color: selectedProduct.value.colors_array?.[0] || null,
+                size: selectedProduct.value.sizes_array?.[0] || null,
             },
             {
                 preserveScroll: true,
-                onSuccess: () => alert('Product added to cart!'),
+                onSuccess: () => cartModal?.hide(),
+                onFinish: () => {
+                    isAddingToCart.value = false;
+                },
             },
         );
     };
@@ -970,6 +1111,185 @@
         background: #ff9505;
         border: 1px solid #ff9505;
         color: #fff;
+    }
+
+        .grocery-modal,
+    .grocery-modal-content {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+        font-family: 'Public Sans', sans-serif;
+    }
+
+    .grocery-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: #fff;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .grocery-modal-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: #111;
+    }
+
+    .grocery-modal-body {
+        padding: 20px;
+        background: #fff;
+    }
+
+    .modal-product-detail {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 18px;
+    }
+
+    .modal-product-img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 18px;
+        border: 1px solid #f0f0f0;
+        background: #f8f8f8;
+    }
+
+    .modal-product-info p {
+        margin: 0 0 10px;
+        color: #5a5a5a;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .modal-product-price {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: #e84b0f;
+    }
+
+    .old-price {
+        display: block;
+        margin-top: 8px;
+        font-size: 13px;
+        color: #999;
+    }
+
+    .qty-section-title {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #111;
+    }
+
+    .qty-selector {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .qty-box {
+        display: inline-flex;
+        align-items: center;
+        background: #f7f7f7;
+        border-radius: 18px;
+        border: 1px solid #e4e4e4;
+        overflow: hidden;
+    }
+
+    .input-group {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .qty-btn {
+        width: 42px;
+        height: 42px;
+        border: none;
+        background: #fff;
+        color: #111;
+        font-size: 18px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .qty-btn:hover:not(:disabled) {
+        background: #f0f0f0;
+    }
+
+    .qty-btn:disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .qty-input {
+        width: 68px;
+        border: none;
+        text-align: center;
+        background: transparent;
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        padding: 0 12px;
+        outline: none;
+    }
+
+    .grocery-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 18px 22px;
+        background: #fafafa;
+        border-top: 1px solid #f1f1f1;
+    }
+
+    .modal-footer-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .modal-footer-info h5,
+    .modal-footer-info h4 {
+        margin: 0;
+        color: #111;
+    }
+
+    .modal-footer-info h4 {
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    .cart-bar-btn {
+        min-width: 150px;
+        padding: 12px 16px;
+        border-radius: 16px;
+        border: none;
+        background: #e84b0f;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .cart-bar-btn:hover:not(:disabled) {
+        background: #d96f0d;
+    }
+
+    .cart-bar-btn:disabled {
+        opacity: 0.75;
+        cursor: not-allowed;
     }
 
     /* Responsive */

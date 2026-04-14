@@ -430,7 +430,18 @@
                         patterns, vectors of limitless adventures and shades of greens and cloud dancer 
                         which represent the colors of 2026.
                     </p>
-                    <a href="#" class="dreamer-btn">CHECK OUR COLLECTIONS</a>
+                        <a
+                            :href="
+                                brandPartner
+                                    ? route(
+                                        'store.brand-partner.collections',
+                                        brandPartner.slug,
+                                    )
+                                    : '#'
+                            "
+                            class="dreamer-btn"
+                            >CHECK OUR COLLECTIONS</a
+                        >
                 </div>
             </div>
 
@@ -2052,8 +2063,8 @@ const confirmAddToCart = () => {
     align-items: center;
     gap: 6px;
     padding: 10px 22px;
-    color: #005523;
-    border: 1 solid #005523;
+    color: #06402b;
+    border: 1 solid #06402b;
     border-radius: 0;
     font-size: 14px;
     font-weight: 700;
@@ -2064,7 +2075,7 @@ const confirmAddToCart = () => {
 }
 
 .btn-grocery-primary:hover {
-    background: rgba(var(--grocery-theme), 0.9);
+    background-color: #06402b;
     box-shadow: 0 4px 16px rgba(var(--grocery-theme), 0.35);
     color: #fff;
     transform: translateY(-1px);
@@ -2228,7 +2239,7 @@ const confirmAddToCart = () => {
 
 .dreamer-btn:hover {
     background: #fff;
-    color: #071a13;
+    color: #ec4e1f;
     border-color: #fff;
 }
 
@@ -2386,7 +2397,7 @@ const confirmAddToCart = () => {
 .col-panel-btn-outline:hover {
     background: #fff;
     border-color: #fff;
-    color: #ffffff;
+    color: #ec4e1f;
 }
 
 .col-panel-btn-outline-dark {
@@ -2397,7 +2408,7 @@ const confirmAddToCart = () => {
 
 .col-panel-btn-outline-dark:hover {
     background: #ffffff;
-    color: #fff;
+    color: #ec4e1f;
 }
 
 .col-panel-btn-white {
@@ -3655,7 +3666,7 @@ const confirmAddToCart = () => {
     bottom: 60px;
     left: 0;
     right: 0;
-    background: #fff;
+    background: #f39c12;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
     z-index: 998;
     padding: 14px 0;
@@ -3670,9 +3681,11 @@ const confirmAddToCart = () => {
 
 .cart-item-count {
     font-size: 12px;
-    color: rgb(var(--grocery-content));
+    color: black(var(--grocery-content));
     margin: 0;
     font-weight: 500;
+    padding-left : 50px;
+    position: relative;
 }
 
 .cart-bar-title {
@@ -3681,10 +3694,13 @@ const confirmAddToCart = () => {
     color: rgb(var(--grocery-title));
     margin: 0;
     font-family: 'Public Sans', sans-serif;
+    padding-left : 50px;
+    position: relative;
 }
 
 .cart-bar-btn {
     padding: 10px 22px;
+    padding-right: 80px;
 }
 
 .cart-bar-btn i {
@@ -3692,11 +3708,14 @@ const confirmAddToCart = () => {
 }
 
 /* ===== Modal - Grocery Styling ===== */
+.grocery-modal,
 .grocery-modal-content {
     border: none;
-    border-radius: 24px;
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+    background: #fff;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .grocery-modal-header {
@@ -3708,11 +3727,10 @@ const confirmAddToCart = () => {
 }
 
 .grocery-modal-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 800;
     color: rgb(var(--grocery-title));
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
 }
 
 .grocery-modal-body {
@@ -3727,19 +3745,20 @@ const confirmAddToCart = () => {
 }
 
 .modal-product-img {
-    width: 88px;
-    height: 88px;
+    width: 90px;
+    height: 90px;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 18px;
     flex-shrink: 0;
     border: 1px solid #f0f0f0;
+    background: #f8f8f8;
 }
 
 .modal-product-info p {
     font-size: 13px;
     color: rgb(var(--grocery-content));
     margin: 0 0 8px;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 .modal-product-price {
@@ -3747,7 +3766,13 @@ const confirmAddToCart = () => {
     font-weight: 800;
     color: rgb(var(--grocery-theme));
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
+}
+
+.old-price {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #999;
 }
 
 .qty-section-title {
@@ -3760,10 +3785,8 @@ const confirmAddToCart = () => {
     font-weight: 700;
     color: rgb(var(--grocery-title));
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
 }
 
-/* Qty Box */
 .qty-selector {
     padding-bottom: 10px;
 }
@@ -3771,8 +3794,8 @@ const confirmAddToCart = () => {
 .qty-box .input-group {
     display: flex;
     align-items: center;
-    background: #f5f5f5;
-    border-radius: 14px;
+    background: #f7f7f7;
+    border-radius: 18px;
     overflow: hidden;
     width: fit-content;
 }
@@ -3781,20 +3804,19 @@ const confirmAddToCart = () => {
     width: 44px;
     height: 44px;
     border: none;
-    background: none;
-    color: rgb(var(--grocery-theme));
+    background: #fff;
+    color: #111;
     font-size: 20px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Public Sans', sans-serif;
     transition: background 0.2s;
 }
 
-.qty-btn:hover {
-    background: rgba(var(--grocery-theme), 0.08);
+.qty-btn:hover:not(:disabled) {
+    background: #f0f0f0;
 }
 
 .qty-btn:disabled {
@@ -3802,18 +3824,16 @@ const confirmAddToCart = () => {
 }
 
 .qty-input {
-    width: 54px;
+    width: 64px;
     height: 44px;
     border: none;
     background: none;
     text-align: center;
     font-weight: 700;
     font-size: 16px;
-    color: #333;
+    color: #111;
     outline: none;
     padding: 0;
-    font-family: 'Public Sans', sans-serif;
-    -moz-appearance: textfield;
 }
 
 .qty-input::-webkit-outer-spin-button,
@@ -3822,12 +3842,12 @@ const confirmAddToCart = () => {
     margin: 0;
 }
 
-/* Modal Footer */
 .grocery-modal-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 22px;
+    gap: 14px;
+    padding: 18px 22px;
     background: #fafafa;
     border-top: 1px solid #f0f0f0;
 }
@@ -3844,7 +3864,64 @@ const confirmAddToCart = () => {
     font-weight: 800;
     color: rgb(var(--grocery-theme));
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
+}
+
+.cart-bar-btn {
+    min-width: 150px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: none;
+    background: #e84b0f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.cart-bar-btn:hover:not(:disabled) {
+    background: #d96f0d;
+}
+
+.cart-bar-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.btn-cancel,
+.btn-confirm {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #111;
+}
+
+.btn-cancel:hover {
+    background: #f7f7f7;
+}
+
+.btn-confirm {
+    border: none;
+    background: #e84b0f;
+    color: #fff;
+}
+
+.btn-confirm:hover:not(:disabled) {
+    background: #d96f0d;
+}
+
+.btn-confirm:disabled {
+    background: #ddd;
+    cursor: not-allowed;
 }
 
 /* ===== Bottom Space ===== */

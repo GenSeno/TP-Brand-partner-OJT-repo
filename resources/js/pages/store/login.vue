@@ -86,7 +86,7 @@
             <!-- Right: Image -->
             <div class="auth-card-right">
                 <div class="auth-card-img-placeholder"></div>
-                <!-- Replace with: <img src="/img/login-side.jpg" alt=""> -->
+                <img src="/img/img-login.png" alt="">
             </div>
         </div>
 

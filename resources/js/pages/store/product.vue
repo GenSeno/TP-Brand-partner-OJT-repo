@@ -4,9 +4,9 @@
     <div class="grocery-product-page">
         <!-- Header with back arrow -->
         <div class="product-header px-15">
-            <Link :href="route('store.brand-partner.index')" class="back-arrow">
+            <button type="button" class="back-arrow" @click="goBack">
                 <i class="ri-arrow-left-s-line"></i>
-            </Link>
+            </button>
             <h6 class="header-title">Product Details</h6>
             <Link :href="route('store.brand-partner.cart')" class="cart-icon-link">
                 <i class="ri-shopping-cart-2-line"></i>
@@ -341,6 +341,14 @@ onBeforeUnmount(() => {
         confirmModal = null;
     }
 });
+
+const goBack = () => {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        router.get(route('store.brand-partner.index'));
+    }
+};
 
 const showConfirmModal = () => confirmModal?.show();
 
@@ -929,6 +937,7 @@ const addToCart = () => {
     font-size: 15px;
     color: rgb(var(--grocery-title));
     outline: none;
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
@@ -971,66 +980,80 @@ const addToCart = () => {
 /* ========================
    Confirm Modal
    ======================== */
-.grocery-modal {
+/* ===== Modal - Grocery Styling ===== */
+.grocery-modal,
+.grocery-modal-content {
     border: none;
-    border-radius: 20px;
+    border-radius: 22px;
     overflow: hidden;
+    background: #fff;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
     font-family: 'Public Sans', sans-serif;
+}
+
+.grocery-modal .modal-header,
+.grocery-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
     background: #fff;
+    border-bottom: 1px solid #f1f1f1;
 }
 
-.grocery-modal .modal-header {
-    border-bottom: 1px solid rgb(var(--grocery-border));
-    padding: 16px 20px;
-    background: #fff;
+.grocery-modal .modal-title,
+.grocery-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
 }
 
-.grocery-modal .modal-title {
-    font-weight: 700;
-    font-size: 16px;
-    color: rgb(var(--grocery-title));
-}
-
-.grocery-modal .modal-body {
+.grocery-modal .modal-body,
+.grocery-modal-body {
     padding: 20px;
     background: #fff;
 }
 
-.grocery-modal .modal-footer {
-    border-top: 1px solid rgb(var(--grocery-border));
-    padding: 14px 20px;
-    gap: 10px;
+.confirm-product,
+.modal-product-detail {
     display: flex;
-    background: #fafafa;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 18px;
 }
 
-.confirm-product {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    margin-bottom: 14px;
-}
-
-.confirm-img {
-    width: 70px;
-    height: 70px;
+.confirm-img,
+.modal-product-img {
+    width: 90px;
+    height: 90px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 18px;
+    border: 1px solid #f0f0f0;
     background: #f8f8f8;
-    border: 1px solid rgb(var(--grocery-border));
 }
 
-.confirm-info h6 {
-    font-weight: 700;
-    margin: 0 0 4px;
-    font-size: 15px;
-    color: rgb(var(--grocery-title));
+.confirm-info p,
+.modal-product-info p {
+    margin: 0 0 10px;
+    color: #5a5a5a;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-.confirm-price {
+.confirm-price,
+.modal-product-price {
+    margin: 0;
+    font-size: 18px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
-    font-size: 15px;
+    color: #e84b0f;
+}
+
+.old-price {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #999;
 }
 
 .confirm-variation {
@@ -1039,10 +1062,17 @@ const addToCart = () => {
     margin-bottom: 10px;
 }
 
-.confirm-summary {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgb(var(--grocery-border));
+.confirm-summary,
+.qty-section-title {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.qty-section-title {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgb(var(--grocery-title));
 }
 
 .summary-row {
@@ -1058,54 +1088,135 @@ const addToCart = () => {
     border-top: 1px solid rgb(var(--grocery-border));
     padding-top: 12px;
     margin-top: 6px;
-    color: rgb(var(--grocery-title));
+    color: #ec4e1f;
     font-size: 16px;
 }
 
 .summary-row.total strong {
-    color: rgb(var(--grocery-theme));
+    color: #ec4e1f;
 }
 
-.btn-cancel {
-    flex: 1;
+.qty-selector,
+.confirm-summary {
+    padding-bottom: 10px;
+}
+
+.qty-box,
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.qty-box {
+    background: #f7f7f7;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e4e4e4;
+}
+
+.qty-btn {
+    width: 44px;
     height: 44px;
-    border: 1.5px solid rgb(var(--grocery-border));
-    background: #fff;
-    color: rgb(var(--grocery-title));
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Public Sans', sans-serif;
-}
-
-.btn-cancel:hover {
-    border-color: #bbb;
-    background: #f9f9f9;
-}
-
-.btn-confirm {
-    flex: 1;
-    height: 44px;
-    background: rgb(var(--grocery-theme));
-    color: #fff;
     border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
+    background: #fff;
+    color: #111;
+    font-size: 18px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s;
-    font-family: 'Public Sans', sans-serif;
 }
 
-.btn-confirm:hover {
+.qty-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+}
+
+.qty-btn:disabled {
+    color: #ccc;
+}
+
+.qty-input {
+    width: 68px;
+    border: none;
+    text-align: center;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    padding: 0 12px;
+    outline: none;
+}
+
+.grocery-modal-footer,
+.grocery-modal .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: #fafafa;
+    border-top: 1px solid #f1f1f1;
+}
+
+.modal-footer-info h5,
+.modal-footer-info h4,
+.confirm-summary h5,
+.confirm-summary h4 {
+    margin: 0;
+}
+
+.modal-footer-info h5 {
+    font-size: 12px;
+    color: #5a5a5a;
+    font-weight: 500;
+}
+
+.modal-footer-info h4 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #e84b0f;
+}
+
+.cart-bar-btn,
+.btn-confirm {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 16px;
+    border: none;
+    background-color: #ec4e1f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.cart-bar-btn:hover:not(:disabled),
+.btn-confirm:hover:not(:disabled) {
     background: rgba(var(--grocery-theme), 0.85);
 }
 
+.cart-bar-btn:disabled,
 .btn-confirm:disabled {
-    background: #ddd;
+    opacity: 0.75;
     cursor: not-allowed;
+}
+
+.btn-cancel {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 16px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    color: rgb(var(--grocery-title));
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #f7f7f7;
 }
 
 /* ========================
@@ -1205,6 +1316,7 @@ const addToCart = () => {
         font-size: 15px;
         color: rgb(var(--grocery-title));
         outline: none;
+        appearance: textfield;
         -moz-appearance: textfield;
     }
 
