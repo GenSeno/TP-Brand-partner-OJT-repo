@@ -66,7 +66,7 @@
                             "
                             class="nav-item"
                         >
-                            Animal ka
+                            About us
                         </Link>
 
                         <Link
@@ -478,26 +478,61 @@
                 <div class="footer-grid">
                     <div class="footer-brand">
                         <img
-                            src="/img/logo/logo-pdf.png"
-                            alt="TP Ink Lab"
+                            src="/img/logo/pakaras-logo.png"
+                            alt="Tribu Pakaras"
                             class="footer-logo"
                         />
-                        <p>Quality custom printing solutions</p>
-                    </div>
-                    <div class="footer-info">
-                        <h5>Contact Us</h5>
+                        <div class="pakaras-adjective">
+                            <h4>Pakaras /'pa-kah-ras/</h4>
+                            <span>adjective</span>
+                        </div>
                         <p>
-                            <i class="ri-mail-line"></i> contact@printmyshirt.ph
-                        </p>
-                        <p><i class="ri-phone-line"></i> +63 9923090084</p>
-                    </div>
-                    <div class="footer-info">
-                        <h5>Location</h5>
-                        <p>
-                            <i class="ri-map-pin-line"></i> Charlotte Dormitel
-                            Bldg, Roxas, Davao City
+                            Showing fearlessness and determination without
+                            thinking or caring about the probable consequences
+                            of ther actions
                         </p>
                     </div>
+                    <div class="footer-info">
+                        <h4>Sitemap</h4>
+                        <p>Shop</p>
+                        <p>Collections</p>
+                        <p>Header 1</p>
+                        <p>Header 2</p>
+                        <p>Header 3</p>
+                    </div>
+                    <div class="footer-info">
+                        <h4>Account</h4>
+                        <p>Wishlist</p>
+                        <p>Cart</p>
+                    </div>
+                    <div class="footer-info">
+                        <h4>Contact Information</h4>
+                        <p>
+                            <i class="ri-map-pin-line"></i> Davao City,
+                            Philippines
+                        </p>
+                        <p>
+                            <i class="ri-mail-line"></i>tribupakarasph@gmail.com
+                        </p>
+                        <p><i class="ri-phone-line"></i>0906 496 1393</p>
+                    </div>
+                    <div class="socials">
+                        <h4>Social</h4>
+                        <p>
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-tiktok"></i>
+                            <i class="fab fa-youtube"></i>
+                            <i class="fab fa-instagram"></i>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h2>Be among the first to experience it</h2>
+                    <p>
+                        From rugged trails to everyday runs,we've got you
+                        covered.
+                    </p>
+                    <input type="text" />
                 </div>
                 <div class="footer-bottom">
                     <p>
@@ -684,7 +719,7 @@ const focusSearchField = () => {
 .custom-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 5px;
 }
 
 .px-15 {
@@ -1129,35 +1164,52 @@ const focusSearchField = () => {
    FOOTER
    ============================================ */
 .store-footer {
-    background: #2b2b2b;
+    background: #1a1a1a;
     color: #ccc;
     padding: 40px 0 20px;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr 2fr;
+    gap: 40px;
     margin-bottom: 25px;
 }
 
+.footer-grid h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
 .footer-brand .footer-logo {
-    height: 40px;
+    height: 60px;
     margin-bottom: 12px;
-    filter: brightness(0) invert(1);
+}
+
+.footer-brand .pakaras-adjective h4 {
+    margin-bottom: 0;
+}
+.footer-brand .pakaras-adjective span {
+    display: block;
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+}
+
+.footer-brand img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    scale: 1.3;
 }
 
 .footer-brand p {
     color: #999;
     font-size: 14px;
     margin: 0;
-}
-
-.footer-info h5 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #fff;
+    width: fit-content;
 }
 
 .footer-info p {
@@ -1166,13 +1218,27 @@ const focusSearchField = () => {
     margin-bottom: 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .footer-info i {
-    color: var(--grocery-primary-color);
-    font-size: 15px;
+    color: #bcbcbc;
+    font-size: 1.3rem;
     width: 16px;
+    margin-right: 7px;
+}
+
+.socials p {
+    display: flex;
+    gap: 15px;
+}
+
+.socials i {
+    gap: 30px;
+    color: #bcbcbc;
+    font-size: 0.9rem;
+    width: 16px;
+    margin-right: 7px;
 }
 
 .footer-bottom {
