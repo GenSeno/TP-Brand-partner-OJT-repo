@@ -792,9 +792,9 @@
                     of the Year
                 </h2>
                 <p class="marathon-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam.
+                    Eleifend nam ultrices sed ut ultrices. Nisi laoreet nulla
+                    posuere hendrerit. Etiam lectus mattis ultricies nunc
+                    aliquet a. Mattis nisi integer at diam amet sed sit.
                 </p>
 
                 <!-- Countdown Timer -->
@@ -3020,7 +3020,7 @@ const confirmAddToCart = () => {
     margin-left: -50vw;
     min-height: 680px;
     background-image: url('/img/img-marathon.png');
-    background-size: 100% 100%;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
