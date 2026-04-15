@@ -301,10 +301,11 @@ const clearCart = () => {
     height: 36px;
     border-radius: 50%;
     background: rgb(var(--grocery-light-bg));
-    color: rgb(var(--grocery-title));
+    color: #ff9505;
     text-decoration: none;
     font-size: 20px;
     transition: background 0.2s;
+    border: #ff9505 1.5px solid;
 }
 
 .header-back:hover {
@@ -339,7 +340,7 @@ const clearCart = () => {
 .continue-link {
     font-size: 13px;
     font-weight: 600;
-    color: rgb(var(--grocery-theme));
+    color: #ff9505;
     text-decoration: none;
     white-space: nowrap;
 }
@@ -661,7 +662,7 @@ const clearCart = () => {
     gap: 8px;
     width: 100%;
     padding: 14px 24px;
-    background: rgb(var(--grocery-theme));
+    background: #ff9505;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -682,7 +683,7 @@ const clearCart = () => {
 }
 
 .grocery-btn.theme-btn:hover {
-    background: #e67a1f;
+    background: #015523;
     color: #fff;
     transform: translateY(-1px);
 }
@@ -709,7 +710,7 @@ const clearCart = () => {
 
 .empty-cart-icon i {
     font-size: 48px;
-    color: rgb(var(--grocery-theme));
+    color: #ff9505;
 }
 
 .empty-cart-state h3 {

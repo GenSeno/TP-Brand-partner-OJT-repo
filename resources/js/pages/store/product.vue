@@ -1175,7 +1175,7 @@ const addToCart = () => {
 .modal-footer-info h4 {
     font-size: 18px;
     font-weight: 800;
-    color: #e84b0f;
+    color: #ff9505;
 }
 
 .cart-bar-btn,

@@ -549,7 +549,7 @@
 
                 <ul class="featured-product-list" v-if="products.data.length > 0">
                     <li
-                        v-for="product in products.data.slice(0, 8)"
+                        v-for="product in products.data.slice(0, 4)"
                         :key="'featured-' + product.id"
                         class="featured-product-item"
                     >
@@ -2673,10 +2673,10 @@ const confirmAddToCart = () => {
 .featured-products-title {
     font-size: 48px;
     font-weight: 900;
-    color: #111;
+    color: #535353;
     text-align: center;
     margin: 0 0 48px;
-    font-family: 'Public Sans', sans-serif;
+    font-family: 'Arial', 'Helvetica', sans-serif;
     letter-spacing: -1px;
 }
 
@@ -3764,7 +3764,7 @@ const confirmAddToCart = () => {
 .modal-product-price {
     font-size: 18px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
+    color: #ff9505;
     margin: 0;
 }
 
@@ -3854,7 +3854,7 @@ const confirmAddToCart = () => {
 
 .modal-footer-info h5 {
     font-size: 12px;
-    color: rgb(var(--grocery-content));
+    color: #000000;
     margin: 0;
     font-weight: 500;
 }
@@ -3862,7 +3862,7 @@ const confirmAddToCart = () => {
 .modal-footer-info h4 {
     font-size: 18px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
+    color: #ff9505;
     margin: 0;
 }
 
@@ -3871,7 +3871,7 @@ const confirmAddToCart = () => {
     padding: 12px 16px;
     border-radius: 16px;
     border: none;
-    background: #e84b0f;
+    background: #ff9505;
     color: #fff;
     font-size: 13px;
     font-weight: 800;
