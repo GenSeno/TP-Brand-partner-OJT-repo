@@ -6,28 +6,23 @@
             :class="{ 'header-hidden': headerHide }"
         >
             <div class="header-inner">
-                <!-- Brand Logo (Left) -->
-                <div class="left-header">
-                    <Link
-                        v-if="brandPartner"
-                        :href="
-                            route(
-                                'store.brand-partner.index',
-                                brandPartner.slug,
-                            )
-                        "
-                        class="brand-link"
-                    >
-                        <img
-                            src="/img/logo/pakaras_logo.png"
-                            alt="Pakaras Logo"
-                            class="img-fluid brand-logo-raw"
-                        />
-                    </Link>
-                    <span v-else class="brand-link">
-                        <span class="brand-name text-white">Store</span>
-                    </span>
-                </div>
+                <!-- Brand Logo -->
+                <Link
+                    v-if="brandPartner"
+                    :href="
+                        route('store.brand-partner.index', brandPartner.slug)
+                    "
+                    class="pakaras-logo"
+                >
+                    <img
+                        src="/img/logo/pakaras-logo.png"
+                        alt="Pakaras Logo"
+                        class="img-fluid brand-logo-raw"
+                    />
+                </Link>
+                <span v-else class="brand-link">
+                    <span class="brand-name text-white">Store</span>
+                </span>
 
                 <!-- Center Nav Links -->
                 <div class="center-nav-wrapper d-none d-lg-block">
@@ -71,7 +66,7 @@
                             "
                             class="nav-item"
                         >
-                            ABOUT US
+                            Animal ka
                         </Link>
 
                         <Link
@@ -305,15 +300,16 @@
                     <div class="account-card-copy">
                         <h2 class="auth-title">Welcome, Runner</h2>
                         <p class="auth-subtitle">
-                            Log in to continue your journey—track events,
-                            manage registrations, and stay connected with the
-                            tribe.
+                            Log in to continue your journey—track events, manage
+                            registrations, and stay connected with the tribe.
                         </p>
                     </div>
 
                     <form
                         class="account-form"
-                        @submit.prevent="showRegister ? submitRegister() : submitLogin()"
+                        @submit.prevent="
+                            showRegister ? submitRegister() : submitLogin()
+                        "
                     >
                         <template v-if="!showRegister">
                             <div class="auth-field">
@@ -346,7 +342,9 @@
                                     />
                                     <span>Remember Password?</span>
                                 </label>
-                                <a href="#" class="auth-forgot">Forgot Password?</a>
+                                <a href="#" class="auth-forgot"
+                                    >Forgot Password?</a
+                                >
                             </div>
 
                             <button type="submit" class="auth-btn-primary">
@@ -374,7 +372,9 @@
                             </p>
 
                             <div class="auth-do-later">
-                                <a href="/" class="auth-do-later-link">Do it Later.</a>
+                                <a href="/" class="auth-do-later-link"
+                                    >Do it Later.</a
+                                >
                             </div>
                         </template>
 
@@ -413,7 +413,9 @@
                             </div>
 
                             <div class="auth-field">
-                                <label class="auth-label">CONFIRM PASSWORD</label>
+                                <label class="auth-label"
+                                    >CONFIRM PASSWORD</label
+                                >
                                 <input
                                     type="password"
                                     class="auth-input"
@@ -712,6 +714,7 @@ const focusSearchField = () => {
 }
 
 .header-inner {
+    position: relative;
     max-width: 1400px;
     margin: 0 auto;
     padding: 15px 30px;
@@ -720,20 +723,20 @@ const focusSearchField = () => {
     align-items: center;
 }
 
-.left-header {
-    flex: 0 0 auto;
-    order: 1;
-}
-
-.brand-link {
-    text-decoration: none;
+.pakaras-logo {
     display: flex;
+    justify-content: center;
     align-items: center;
+    height: 4rem;
+    width: 9rem;
+    padding-right: 10px;
 }
 
 .brand-logo-raw {
-    height: 40px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scale: 1.6;
 }
 
 /* Center Nav */
@@ -1481,7 +1484,12 @@ const focusSearchField = () => {
 
 .account-card-right {
     position: relative;
-    background: radial-gradient(circle at top left, rgba(255, 118, 74, 0.12), transparent 34%),
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(255, 118, 74, 0.12),
+            transparent 34%
+        ),
         linear-gradient(180deg, #111 0%, #1c1c1c 100%);
     display: flex;
     align-items: center;

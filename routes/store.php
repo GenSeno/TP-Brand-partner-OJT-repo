@@ -50,18 +50,6 @@ Route::group([
     // Be Our Partner page
     Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])
         ->name('brand-partner.partner');
-
-    // ========== LOGIN ROUTES ==========
-    Route::get('/{brandPartner}/login', function ($brandPartner) {
-        return Inertia::render('store/login', [
-            'brandPartner' => BrandPartner::where('slug', $brandPartner)->first()
-        ]);
-    })->name('brand-partner.login');
-    
-    Route::post('/{brandPartner}/login', function () {
-        // Placeholder for login submission
-    })->name('brand-partner.login.submit');
-
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])
         ->name('brand-partner.cart.add');

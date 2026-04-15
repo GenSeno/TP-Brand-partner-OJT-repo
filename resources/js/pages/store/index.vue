@@ -59,12 +59,10 @@
                                 </p>
                                 <a
                                     :href="
-                                        brandPartner
-                                            ? route(
-                                                  'store.brand-partner.shop',
-                                                  brandPartner.slug,
-                                              )
-                                            : '#'
+                                        route(
+                                            'store.brand-partner.shop',
+                                            brandPartner.slug,
+                                        )
                                     "
                                     class="btn slide-btn-outline mt-4"
                                     >VIEW ALL PRODUCTS</a
@@ -89,12 +87,10 @@
                                 </p>
                                 <a
                                     :href="
-                                        brandPartner
-                                            ? route(
-                                                  'store.brand-partner.collections',
-                                                  brandPartner.slug,
-                                              )
-                                            : '#'
+                                        route(
+                                            'store.brand-partner.shop',
+                                            brandPartner?.slug,
+                                        )
                                     "
                                     class="btn slide-btn-outline"
                                     >VIEW ALL PRODUCTS</a
@@ -362,12 +358,17 @@
                     </div>
                     <h4>No products found</h4>
                     <p>Try adjusting your filters or search query.</p>
-                    <button
+                    <a
                         class="btn btn-grocery-primary"
-                        @click="clearFilters"
+                        :href="
+                            route(
+                                'store.brand-partner.shop',
+                                brandPartner?.slug,
+                            )
+                        "
                     >
                         <i class="ri-store-2-line"></i> View All Products
-                    </button>
+                    </a>
                 </div>
 
                 <!-- View All Button -->
@@ -420,28 +421,38 @@
         <!-- Check Our Collections Section -->
         <section class="collections-section">
             <!-- THE Collection Banner -->
-            <div class="dreamer-banner" style="background-image: url('/img/img-dreamercollection.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div
+                class="dreamer-banner"
+                style="
+                    background-image: url('/img/img-dreamercollection.png');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                "
+            >
                 <div class="dreamer-content">
                     <span class="dreamer-label">THE</span>
                     <h2 class="dreamer-title">DREAMER</h2>
                     <p class="dreamer-description">
-                        <strong>Dare to Dream Big</strong> with our first shirt collection for 2026 — 
-                        <strong>The Dreamer</strong> — featuring the blend of milky way &amp; outer space 
-                        patterns, vectors of limitless adventures and shades of greens and cloud dancer 
-                        which represent the colors of 2026.
+                        <strong>Dare to Dream Big</strong> with our first shirt
+                        collection for 2026 — <strong>The Dreamer</strong> —
+                        featuring the blend of milky way &amp; outer space
+                        patterns, vectors of limitless adventures and shades of
+                        greens and cloud dancer which represent the colors of
+                        2026.
                     </p>
-                        <a
-                            :href="
-                                brandPartner
-                                    ? route(
-                                        'store.brand-partner.collections',
-                                        brandPartner.slug,
-                                    )
-                                    : '#'
-                            "
-                            class="dreamer-btn"
-                            >CHECK OUR COLLECTIONS</a
-                        >
+                    <a
+                        :href="
+                            brandPartner
+                                ? route(
+                                      'store.brand-partner.collections',
+                                      brandPartner.slug,
+                                  )
+                                : '#'
+                        "
+                        class="dreamer-btn"
+                        >CHECK OUR COLLECTIONS</a
+                    >
                 </div>
             </div>
 
@@ -480,9 +491,7 @@
                 <!-- Panel 2: Kuris Koleksyon -->
                 <div
                     class="col-panel panel-mid"
-                    style="
-                        background-image: url('/img/img-indexcollection2.png');
-                    "
+                    style="background-image: url('/img/img-collection2.png')"
                 >
                     <div class="col-panel-overlay"></div>
                     <div class="col-panel-body col-panel-body-center">
@@ -545,9 +554,14 @@
         <!-- Featured Products Section -->
         <section class="featured-products-section">
             <div class="featured-products-inner">
-                <h2 class="featured-products-title">Better Build. Made Better</h2>
+                <h2 class="featured-products-title">
+                    Better Build. Made Better
+                </h2>
 
-                <ul class="featured-product-list" v-if="products.data.length > 0">
+                <ul
+                    class="featured-product-list"
+                    v-if="products.data.length > 0"
+                >
                     <li
                         v-for="product in products.data.slice(0, 4)"
                         :key="'featured-' + product.id"
@@ -556,8 +570,17 @@
                         <div class="featured-product-box">
                             <!-- Badges -->
                             <div class="featured-product-badges">
-                                <span class="featured-badge-sale" v-if="product.compare_price && product.compare_price > product.price">SALE</span>
-                                <span class="featured-badge-new" v-else>NEW</span>
+                                <span
+                                    class="featured-badge-sale"
+                                    v-if="
+                                        product.compare_price &&
+                                        product.compare_price > product.price
+                                    "
+                                    >SALE</span
+                                >
+                                <span class="featured-badge-new" v-else
+                                    >NEW</span
+                                >
                             </div>
 
                             <!-- Wishlist -->
@@ -567,12 +590,20 @@
 
                             <!-- Image -->
                             <Link
-                                :href="route('store.brand-partner.product', product.slug)"
+                                :href="
+                                    route(
+                                        'store.brand-partner.product',
+                                        product.slug,
+                                    )
+                                "
                                 class="featured-product-image-link"
                             >
                                 <div class="featured-product-image">
                                     <img
-                                        :src="product.image_url || '/img/tshirt-placeholder.svg'"
+                                        :src="
+                                            product.image_url ||
+                                            '/img/tshirt-placeholder.svg'
+                                        "
                                         :alt="product.name"
                                     />
                                 </div>
@@ -581,14 +612,28 @@
                             <!-- Info -->
                             <div class="featured-product-info">
                                 <p class="featured-product-collection">
-                                    {{ product.short_description ? truncate(product.short_description, 30) : '&nbsp;' }}
+                                    {{
+                                        product.short_description
+                                            ? truncate(
+                                                  product.short_description,
+                                                  30,
+                                              )
+                                            : '&nbsp;'
+                                    }}
                                 </p>
 
                                 <Link
-                                    :href="route('store.brand-partner.product', product.slug)"
+                                    :href="
+                                        route(
+                                            'store.brand-partner.product',
+                                            product.slug,
+                                        )
+                                    "
                                     class="featured-product-name-link"
                                 >
-                                    <h5 class="featured-product-name">{{ product.name }}</h5>
+                                    <h5 class="featured-product-name">
+                                        {{ product.name }}
+                                    </h5>
                                 </Link>
 
                                 <!-- Stars -->
@@ -606,12 +651,22 @@
                                         {{ formatCurrency(product.price) }}
                                     </span>
                                     <span
-                                        v-if="product.compare_price && product.compare_price > product.price"
+                                        v-if="
+                                            product.compare_price &&
+                                            product.compare_price >
+                                                product.price
+                                        "
                                         class="featured-product-old-price"
                                     >
-                                        {{ formatCurrency(product.compare_price) }}
+                                        {{
+                                            formatCurrency(
+                                                product.compare_price,
+                                            )
+                                        }}
                                     </span>
-                                    <span class="featured-preorder-badge">PRE-ORDER</span>
+                                    <span class="featured-preorder-badge"
+                                        >PRE-ORDER</span
+                                    >
                                 </div>
 
                                 <!-- Add to Cart -->
@@ -628,9 +683,14 @@
                 </ul>
 
                 <!-- View All -->
-                <div class="featured-view-all-wrap" v-if="products.data.length > 0">
+                <div
+                    class="featured-view-all-wrap"
+                    v-if="products.data.length > 0"
+                >
                     <Link
-                        :href="route('store.brand-partner.shop', brandPartner.slug)"
+                        :href="
+                            route('store.brand-partner.shop', brandPartner.slug)
+                        "
                         class="featured-view-all-btn"
                     >
                         VIEW ALL PRODUCTS
@@ -927,19 +987,19 @@
             <div class="runwild-grid">
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <img src="/img/img-section1.png" alt="Section 1">
+                    <img src="/img/img-section1.png" alt="Section 1" />
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <img src="/img/img-section2.png" alt="Section 2">
+                    <img src="/img/img-section2.png" alt="Section 2" />
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <img src="/img/img-section3.png" alt="Section 3">
+                    <img src="/img/img-section3.png" alt="Section 3" />
                 </div>
                 <div class="runwild-item">
                     <div class="runwild-placeholder"></div>
-                    <img src="/img/img-collection1.png" alt="Section 4">
+                    <img src="/img/img-collection1.png" alt="Section 4" />
                 </div>
             </div>
         </section>
@@ -2171,8 +2231,6 @@ const confirmAddToCart = () => {
     z-index: 2;
 }
 
-
-
 .dreamer-content {
     flex: 1;
     z-index: 2;
@@ -2701,12 +2759,14 @@ const confirmAddToCart = () => {
     background: #fff;
     display: flex;
     flex-direction: column;
-    transition: transform 0.25s, box-shadow 0.25s;
+    transition:
+        transform 0.25s,
+        box-shadow 0.25s;
 }
 
 .featured-product-box:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
 }
 
 /* Badges */
@@ -2756,7 +2816,7 @@ const confirmAddToCart = () => {
     justify-content: center;
     cursor: pointer;
     z-index: 2;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
 }
 
@@ -3684,7 +3744,7 @@ const confirmAddToCart = () => {
     color: black(var(--grocery-content));
     margin: 0;
     font-weight: 500;
-    padding-left : 50px;
+    padding-left: 50px;
     position: relative;
 }
 
@@ -3694,7 +3754,7 @@ const confirmAddToCart = () => {
     color: rgb(var(--grocery-title));
     margin: 0;
     font-family: 'Public Sans', sans-serif;
-    padding-left : 50px;
+    padding-left: 50px;
     position: relative;
 }
 

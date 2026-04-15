@@ -54,7 +54,7 @@
                     <div class="collection-item">
                         <div class="collection-item-image">
                             <img
-                                src="/img/img-collection3.png"
+                                src="/img/img-carousel3.png"
                                 alt="Collection 3"
                             />
                         </div>
