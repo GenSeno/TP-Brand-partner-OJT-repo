@@ -477,11 +477,12 @@
             <div class="custom-container">
                 <div class="footer-grid">
                     <div class="footer-brand">
-                        <img
-                            src="/img/logo/pakaras-logo.png"
-                            alt="Tribu Pakaras"
-                            class="footer-logo"
-                        />
+                        <div class="footer-logo">
+                            <img
+                                src="/img/logo/pakaras-logo2.png"
+                                alt="Tribu Pakaras"
+                            />
+                        </div>
                         <div class="pakaras-adjective">
                             <h4>Pakaras /'pa-kah-ras/</h4>
                             <span>adjective</span>
@@ -525,14 +526,25 @@
                             <i class="fab fa-instagram"></i>
                         </p>
                     </div>
-                </div>
-                <div>
-                    <h2>Be among the first to experience it</h2>
-                    <p>
-                        From rugged trails to everyday runs,we've got you
-                        covered.
-                    </p>
-                    <input type="text" />
+                    <div class="news-letter">
+                        <h1>Be among the first to experience it</h1>
+                        <p>
+                            From rugged trails to everyday runs,we've got you
+                            covered.
+                        </p>
+                        <div class="subscribe">
+                            <input
+                                type="text"
+                                class="footer-input"
+                                placeholder="Email Address"
+                            />
+                            <input
+                                type="submit"
+                                value="Subscribe"
+                                class="subscribe-button"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div class="footer-bottom">
                     <p>
@@ -717,9 +729,9 @@ const focusSearchField = () => {
 
 /* Custom Container */
 .custom-container {
-    max-width: 1200px;
+    max-width: 1800px;
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 0 10px;
 }
 
 .px-15 {
@@ -1169,23 +1181,31 @@ const focusSearchField = () => {
     padding: 40px 0 20px;
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr 2fr;
-    gap: 40px;
-    margin-bottom: 25px;
-}
-
-.footer-grid h4 {
+.store-footer h4 {
     font-size: 15px;
     font-weight: 900;
     color: #fff;
     margin-bottom: 15px;
+    font-family: 'poppins';
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 2fr;
+    gap: 40px;
+    margin-bottom: 25px;
 }
 
 .footer-brand .footer-logo {
-    height: 60px;
+    height: 80px;
     margin-bottom: 12px;
+    width: fit-content;
+}
+
+.footer-brand img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 
 .footer-brand .pakaras-adjective h4 {
@@ -1196,13 +1216,6 @@ const focusSearchField = () => {
     font-style: italic;
     font-size: 0.8rem;
     margin-bottom: 15px;
-}
-
-.footer-brand img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    scale: 1.3;
 }
 
 .footer-brand p {
@@ -1239,6 +1252,34 @@ const focusSearchField = () => {
     font-size: 0.9rem;
     width: 16px;
     margin-right: 7px;
+}
+
+.news-letter h1 {
+    font-weight: 900;
+    color: #fff;
+    word-spacing: 0.1em;
+    margin-bottom: 15px;
+    font-family: 'poppins';
+}
+
+.subscribe {
+    display: flex;
+}
+
+.footer-input {
+    height: 45px;
+    width: 250px;
+    padding: 15px;
+    border: none;
+    border-radius: 0;
+}
+
+.subscribe-button {
+    height: 45px;
+    width: 90px;
+    color: white;
+    border: none;
+    background: #ff9505;
 }
 
 .footer-bottom {
