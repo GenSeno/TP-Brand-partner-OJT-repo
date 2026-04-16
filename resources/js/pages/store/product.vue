@@ -380,7 +380,7 @@ const addToCart = () => {
     background: #f7f7f7;
     min-height: 100vh;
     padding-bottom: 100px;
-    --grocery-theme: 60, 133, 153;
+    --grocery-theme: 255, 149, 5, 1;
     --grocery-content: 143, 143, 178;
     --grocery-title: 27, 27, 62;
     --grocery-border: 232, 232, 232;
@@ -580,6 +580,7 @@ const addToCart = () => {
     margin: 0 0 10px;
     line-height: 1.3;
     text-transform: uppercase;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .product-price-row {
@@ -593,7 +594,7 @@ const addToCart = () => {
 .current-price {
     font-size: 22px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
+    color: #FF9505;
 }
 
 .old-price {
@@ -679,8 +680,7 @@ const addToCart = () => {
 
 .color-swatch-btn.active,
 .color-swatch-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
+    background: rgba(255, 149, 5, 1);
     color: #fff;
 }
 
@@ -704,8 +704,7 @@ const addToCart = () => {
 
 .size-btn.active,
 .size-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
+    background: rgba(255, 149, 5, 1);
     color: #fff;
 }
 
@@ -758,14 +757,14 @@ const addToCart = () => {
 .accordion-style-1 .accordion-button {
     font-size: 14px;
     font-weight: 700;
-    color: rgb(var(--grocery-title));
+    color: #FF9505;
     background: #fafafa;
     padding: 14px 16px;
     box-shadow: none;
 }
 
 .accordion-style-1 .accordion-button:not(.collapsed) {
-    color: rgb(var(--grocery-theme));
+    color: #FF9505;
     background: rgba(var(--grocery-theme), 0.05);
 }
 
@@ -1289,7 +1288,7 @@ const addToCart = () => {
         height: 44px;
         border: none;
         background: none;
-        color: rgb(var(--grocery-theme));
+        color: #005523;
         font-size: 18px;
         cursor: pointer;
         display: flex;
@@ -1329,10 +1328,10 @@ const addToCart = () => {
     .add-cart-btn {
         flex: 1;
         height: 46px;
-        background: rgb(var(--grocery-theme));
+        background: #005523;
         color: #fff;
         border: none;
-        border-radius: 12px;
+        border-radius: 2px;
         font-size: 15px;
         font-weight: 700;
         cursor: pointer;
@@ -1345,7 +1344,7 @@ const addToCart = () => {
     }
 
     .add-cart-btn:hover {
-        background: rgba(var(--grocery-theme), 0.85);
+        background: rgba(255, 149, 5, 1);
     }
 
     .add-cart-btn:disabled {

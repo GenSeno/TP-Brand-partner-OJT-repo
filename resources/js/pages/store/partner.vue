@@ -316,9 +316,9 @@ const steps = [
 .partner-grow-title {
     font-size: 40px;
     font-weight: 900;
-    color: #252525;
+    color: #535353;
     margin: 0 0 28px;
-    font-family: 'Public Sans', sans-serif;
+    font-family: 'Poppins', 'Public Sans', sans-serif;
 }
 
 .partner-grow-text {
@@ -385,7 +385,7 @@ const steps = [
 }
 
 .why-card {
-    background: rgba(255,255,255,0.08);
+    background: #FF95051A;
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255,255,255,0.12);
     padding: 36px 28px;
@@ -393,6 +393,7 @@ const steps = [
     flex-direction: column;
     gap: 20px;
     transition: background 0.3s;
+    opacity: 10;
 }
 
 .why-card:hover {
@@ -521,7 +522,7 @@ const steps = [
 .partner-easy-title {
     font-size: 38px;
     font-weight: 900;
-    color: #252525;
+    color: #535353;
     margin: 0 0 20px;
     line-height: 1.15;
     font-family: 'Public Sans', sans-serif;
@@ -561,7 +562,7 @@ const steps = [
 .easy-step-title {
     font-size: 20px;
     font-weight: 800;
-    color: #252525;
+    color: #535353;
     margin: 0 0 10px;
     font-family: 'Public Sans', sans-serif;
 }
@@ -599,7 +600,7 @@ const steps = [
 .partner-choose-title {
     font-size: 40px;
     font-weight: 900;
-    color: #252525;
+    color: #535353;
     margin: 0 0 16px;
     font-family: 'Public Sans', sans-serif;
 }

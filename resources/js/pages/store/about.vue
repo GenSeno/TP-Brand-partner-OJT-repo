@@ -190,7 +190,6 @@ import { Head } from '@inertiajs/vue3';
     font-size: 64px;
     font-weight: 800;
     text-align: left;
-    margin-bottom: 40px;
     color: #ffffff;
     letter-spacing: -1px;
     line-height: 1.2;
@@ -260,7 +259,7 @@ import { Head } from '@inertiajs/vue3';
 .about-story-image {
     width: 100%;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 5px;
 }
 
 .about-story-image img {

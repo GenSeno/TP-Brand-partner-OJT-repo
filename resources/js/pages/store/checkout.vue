@@ -24,7 +24,7 @@
                     <!-- Contact Information -->
                     <div class="grocery-card">
                         <div class="card-header">
-                            <i class="ri-user-3-line"></i>
+                            <i class="ri-user-3-line" style="color: #FF9505;"></i>
                             <h5>Contact Information</h5>
                         </div>
                         <div class="form-row-grid">
@@ -94,7 +94,7 @@
                     <!-- Shipping Address -->
                     <div class="grocery-card">
                         <div class="card-header">
-                            <i class="ri-map-pin-line"></i>
+                            <i class="ri-map-pin-line" style="color: #FF9505;"></i>
                             <h5>Shipping Address</h5>
                         </div>
 
@@ -306,7 +306,7 @@
                     <!-- Additional Notes -->
                     <div class="grocery-card">
                         <div class="card-header">
-                            <i class="ri-sticky-note-line"></i>
+                            <i class="ri-sticky-note-line" style="color: #FF9505;"></i>
                             <h5>Additional Notes</h5>
                         </div>
                         <div class="form-group">
@@ -527,6 +527,7 @@ const submitOrder = () => {
     padding: 16px 0;
     border-bottom: 1px solid rgb(var(--grocery-border));
     margin-bottom: 24px;
+    padding-top: 100px;
 }
 
 .grocery-container {
@@ -548,15 +549,16 @@ const submitOrder = () => {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgb(var(--grocery-light-bg));
-    color: rgb(var(--grocery-title));
+    background: #f5f5f5;
+    border: 1.5px solid #ff9505;
+    color: #ff9505;
     text-decoration: none;
     font-size: 20px;
     transition: background 0.2s;
 }
 
 .header-back:hover {
-    background: rgb(var(--grocery-border));
+    background: #fff3e0;
 }
 
 .header-title {
@@ -745,7 +747,7 @@ textarea.grocery-input {
     position: absolute;
     top: -6px;
     right: -6px;
-    background: rgb(var(--grocery-theme));
+    background: #FF9505;
     color: #fff;
     font-size: 10px;
     font-weight: 700;
@@ -828,7 +830,7 @@ textarea.grocery-input {
 .grand-total-row span:last-child {
     font-size: 20px;
     font-weight: 900;
-    color: rgb(var(--grocery-theme));
+    color: #FF9505;
 }
 
 /* Place Order Button */
@@ -839,7 +841,7 @@ textarea.grocery-input {
     gap: 8px;
     width: 100%;
     padding: 14px 24px;
-    background: rgb(var(--grocery-theme));
+    background: #FF9505;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -854,7 +856,7 @@ textarea.grocery-input {
 }
 
 .grocery-btn.theme-btn:hover {
-    background: #e67a1f;
+    background: #005523;
     color: #fff;
     transform: translateY(-1px);
 }

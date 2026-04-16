@@ -213,7 +213,7 @@ import { Head } from '@inertiajs/vue3';
 .contact-form-title {
     font-size: 28px;
     font-weight: 800;
-    color: #111;
+    color: #535353;
     margin: 0 0 10px;
     font-family: 'Public Sans', sans-serif;
 }
@@ -278,7 +278,7 @@ import { Head } from '@inertiajs/vue3';
 }
 
 .contact-submit-btn:hover {
-    background: #ff5722;
+    background: #FF9505;
     transform: translateY(-1px);
 }
 </style>

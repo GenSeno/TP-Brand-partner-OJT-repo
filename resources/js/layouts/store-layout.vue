@@ -880,7 +880,7 @@ const focusSearchField = () => {
 .race-cta-btn {
     background-color: #f39c12;
     color: #fff;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 14px;
     padding: 10px 24px;
     border-radius: 0;

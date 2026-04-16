@@ -2,29 +2,20 @@
     <Head :title="`Cart - ${brandPartner.name}`" />
 
     <div class="grocery-cart-section">
+
         <!-- Header -->
         <div class="grocery-header">
             <div class="grocery-container">
                 <div class="header-inner">
                     <Link
-                        :href="
-                            route(
-                                'store.brand-partner.index',
-                                brandPartner.slug,
-                            )
-                        "
+                        :href="route('store.brand-partner.index', brandPartner.slug)"
                         class="header-back"
                     >
                         <i class="ri-arrow-left-s-line"></i>
                     </Link>
                     <h2 class="header-title">Shopping Cart</h2>
                     <Link
-                        :href="
-                            route(
-                                'store.brand-partner.index',
-                                brandPartner.slug,
-                            )
-                        "
+                        :href="route('store.brand-partner.index', brandPartner.slug)"
                         class="continue-link"
                     >
                         Continue Shopping
@@ -34,155 +25,144 @@
         </div>
 
         <div class="grocery-container">
+
             <!-- Cart with items -->
-            <div v-if="cart.items.length > 0" class="cart-grid">
-                <!-- Left: Cart Items -->
-                <div class="cart-items-section">
-                    <div class="cart-box-list">
-                        <div
-                            class="cart-box"
-                            v-for="item in cart.items"
-                            :key="item.id"
-                        >
-                            <div class="cart-box-left">
+            <div v-if="cart.items.length > 0">
+
+                <!-- Table Header -->
+                <div class="cart-table-header">
+                    <span class="col-item">Item</span>
+                    <span class="col-price">Price</span>
+                    <span class="col-qty">Quantity</span>
+                    <span class="col-total">Total</span>
+                    <span class="col-action"></span>
+                </div>
+
+                <!-- Cart Rows -->
+                <div class="cart-table-body">
+                    <div
+                        class="cart-row"
+                        v-for="item in cart.items"
+                        :key="item.id"
+                    >
+                        <!-- Item -->
+                        <div class="col-item cart-item-info">
+                            <Link
+                                :href="route('store.brand-partner.product', item.product.slug)"
+                                class="cart-item-img-link"
+                            >
+                                <img
+                                    :src="item.product.image_url || '/img/tshirt-placeholder.svg'"
+                                    :alt="item.product.name"
+                                    class="cart-item-img"
+                                />
+                            </Link>
+                            <div class="cart-item-details">
+                                <span class="cart-item-badge">PRE-ORDER</span>
                                 <Link
-                                    :href="
-                                        route('store.brand-partner.product', item.product.slug)
-                                    "
-                                    class="product-image"
+                                    :href="route('store.brand-partner.product', item.product.slug)"
+                                    class="cart-item-name"
                                 >
-                                    <img
-                                        :src="
-                                            item.product.image_url ||
-                                            '/img/tshirt-placeholder.svg'
-                                        "
-                                        :alt="item.product.name"
-                                    />
+                                    {{ item.product.name }}
                                 </Link>
-                                <div class="product-name">
-                                    <h5>
-                                        <Link
-                                            :href="
-                                                route(
-                                                    'store.brand-partner.product',
-                                                    item.product.slug,
-                                                )
-                                            "
-                                        >
-                                            {{ item.product.name }}
-                                        </Link>
-                                    </h5>
-                                    <h6 v-if="item.color || item.size" class="text-muted" style="font-size:12px;">
-                                        <span v-if="item.color">Color: <strong>{{ item.color }}</strong></span>
-                                        <span v-if="item.size" class="ms-2">Size: <strong>{{ item.size }}</strong></span>
-                                    </h6>
-                                    <h6 v-else-if="item.product.sku" style="font-size:12px;">
-                                        SKU: {{ item.product.sku }}
-                                    </h6>
-                                    <div class="qty-controls">
-                                        <button
-                                            class="qty-btn"
-                                            @click="
-                                                updateQuantity(
-                                                    item.id,
-                                                    item.quantity - 1,
-                                                )
-                                            "
-                                            :disabled="item.quantity <= 1"
-                                        >
-                                            <i class="ri-subtract-line"></i>
-                                        </button>
-                                        <input
-                                            type="number"
-                                            class="qty-input"
-                                            :value="item.quantity"
-                                            min="1"
-                                            @change="
-                                                updateQuantity(
-                                                    item.id,
-                                                    $event.target.value,
-                                                )
-                                            "
-                                        />
-                                        <button
-                                            class="qty-btn"
-                                            @click="
-                                                updateQuantity(
-                                                    item.id,
-                                                    item.quantity + 1,
-                                                )
-                                            "
-                                        >
-                                            <i class="ri-add-line"></i>
-                                        </button>
-                                    </div>
+                                <div class="cart-item-meta">
+                                    <span v-if="item.product.short_description">Garment: {{ item.product.short_description }}</span>
+                                    <span v-if="item.color">Color: {{ item.color }}</span>
+                                    <span v-if="item.size">Size: {{ item.size }}</span>
+                                    <span v-if="item.product.sku">SKU: {{ item.product.sku }}</span>
                                 </div>
                             </div>
-                            <div class="cart-box-right">
-                                <h5 class="item-price">
-                                    {{ formatCurrency(item.total) }}
-                                </h5>
-                                <span class="item-unit-price"
-                                    >{{ formatCurrency(item.price) }} each</span
-                                >
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-price">
+                            <span class="cart-price">{{ formatCurrency(item.price) }}</span>
+                            <span class="cart-old-price" v-if="item.product.compare_price && item.product.compare_price > item.price">
+                                {{ formatCurrency(item.product.compare_price) }}
+                            </span>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="col-qty">
+                            <div class="qty-controls">
                                 <button
-                                    class="delete-btn"
-                                    @click="removeItem(item.id)"
-                                    title="Remove item"
+                                    class="qty-btn"
+                                    @click="updateQuantity(item.id, item.quantity - 1)"
+                                    :disabled="item.quantity <= 1"
                                 >
-                                    <i class="ri-delete-bin-line"></i>
+                                    <i class="ri-subtract-line"></i>
+                                </button>
+                                <input
+                                    type="number"
+                                    class="qty-input"
+                                    :value="item.quantity"
+                                    min="1"
+                                    @change="updateQuantity(item.id, $event.target.value)"
+                                />
+                                <button
+                                    class="qty-btn"
+                                    @click="updateQuantity(item.id, item.quantity + 1)"
+                                >
+                                    <i class="ri-add-line"></i>
                                 </button>
                             </div>
                         </div>
-                    </div>
 
+                        <!-- Total -->
+                        <div class="col-total">
+                            <span class="cart-total-price">{{ formatCurrency(item.total) }}</span>
+                        </div>
+
+                        <!-- Delete -->
+                        <div class="col-action">
+                            <button
+                                class="delete-btn"
+                                @click="removeItem(item.id)"
+                                title="Remove item"
+                            >
+                                DELETE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clear Cart -->
+                <div class="cart-actions-row">
                     <button class="clear-cart-btn" @click="clearCart">
                         <i class="ri-delete-bin-line"></i> Clear Cart
                     </button>
                 </div>
 
-                <!-- Right: Order Summary Sidebar -->
-                <div class="cart-summary-sidebar">
-                    <div class="summary-box">
-                        <h4 class="summary-title">Order Details</h4>
-                        <ul class="order-details-list">
-                            <li>
-                                <span>Subtotal</span>
-                                <span>{{ formatCurrency(cart.subtotal) }}</span>
-                            </li>
-                            <li v-if="cart.discount > 0" class="savings-line">
-                                <span>Savings</span>
-                                <span class="savings-val"
-                                    >-{{ formatCurrency(cart.discount) }}</span
-                                >
-                            </li>
-                            <li>
-                                <span>Delivery</span>
-                                <span class="delivery-val"
-                                    >To be determined</span
-                                >
-                            </li>
-                        </ul>
-                        <div class="order-total-row">
-                            <span>Total</span>
-                            <span>{{ formatCurrency(cart.total) }}</span>
+                <!-- Summary -->
+                <div class="cart-summary-section">
+                    <div class="cart-summary-box">
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value">{{ formatCurrency(cart.subtotal) }}</span>
                         </div>
-                        <div class="checkout-button-box">
-                            <Link
-                                :href="
-                                    route(
-                                        'store.brand-partner.checkout',
-                                        brandPartner.slug,
-                                    )
-                                "
-                                class="grocery-btn theme-btn"
+                        <div class="summary-row" v-if="cart.discount > 0">
+                            <span class="summary-label">Savings</span>
+                            <span class="summary-value savings-val">-{{ formatCurrency(cart.discount) }}</span>
+                        </div>
+                        <div class="delivery-row summary-row">
+                            <span>Delivery</span>
+                            <span class="delivery-val"
+                                 >To be determined</span
                             >
-                                Proceed to Checkout
-                                <i class="ri-arrow-right-line"></i>
-                            </Link>
                         </div>
+                        <div class="summary-row grand-total-row">
+                            <span class="grand-total-label">Grand Total</span>
+                            <span class="grand-total-value">{{ formatCurrency(cart.total) }}</span>
+                        </div>
+                        <Link
+                            :href="route('store.brand-partner.checkout', brandPartner.slug)"
+                            class="checkout-btn"
+                        >
+                            Proceed to Checkout <i class="ri-arrow-right-s-line"></i>
+                        </Link>
                     </div>
                 </div>
+
             </div>
 
             <!-- Empty Cart State -->
@@ -193,14 +173,14 @@
                 <h3>Your cart is empty</h3>
                 <p>Looks like you haven't added any products yet.</p>
                 <Link
-                    :href="
-                        route('store.brand-partner.index')
-                    "
-                    class="grocery-btn theme-btn"
+                    :href="route('store.brand-partner.index')"
+                    class="checkout-btn"
+                    style="display:inline-flex; width:auto; text-decoration:none;"
                 >
                     <i class="ri-store-2-line"></i> Start Shopping
                 </Link>
             </div>
+
         </div>
     </div>
 </template>
@@ -248,9 +228,7 @@ const clearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
         router.delete(
             route('store.brand-partner.cart.clear'),
-            {
-                preserveScroll: true,
-            },
+            { preserveScroll: true },
         );
     }
 };
@@ -259,32 +237,31 @@ const clearCart = () => {
 <style scoped>
 .grocery-cart-section {
     min-height: 60vh;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
     font-family: 'Public Sans', sans-serif;
-    background: rgb(var(--grocery-light-bg));
-    /* Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
-    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
-    --grocery-border: 232, 232, 232; /* Light gray borders */
-    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
-    --grocery-light-bg: 247, 247, 247; /* Light gray background */
-    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+    background: #f9f9f9;
+    --grocery-theme: 60, 133, 153;
+    --grocery-content: 143, 143, 178;
+    --grocery-title: 27, 27, 62;
+    --grocery-border: 232, 232, 232;
+    --grocery-primary: 254, 175, 24;
+    --grocery-light-bg: 247, 247, 247;
+    --grocery-rating: 255, 191, 19;
 }
 
-/* Header */
+/* ===== Header ===== */
 .grocery-header {
     background: #fff;
     padding: 16px 0;
     border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 24px;
-    margin-top: 100px;
+    margin-bottom: 32px;
+    margin-top: 80px;
 }
 
 .grocery-container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 24px;
 }
 
 .header-inner {
@@ -300,16 +277,16 @@ const clearCart = () => {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgb(var(--grocery-light-bg));
+    background: #f5f5f5;
+    border: 1.5px solid #ff9505;
     color: #ff9505;
     text-decoration: none;
     font-size: 20px;
     transition: background 0.2s;
-    border: #ff9505 1.5px solid;
 }
 
 .header-back:hover {
-    background: rgb(var(--grocery-border));
+    background: #fff3e0;
 }
 
 .header-title {
@@ -318,23 +295,6 @@ const clearCart = () => {
     color: rgb(var(--grocery-title));
     margin: 0;
     flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.cart-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    min-width: 22px;
-    height: 22px;
-    border-radius: 11px;
-    padding: 0 6px;
 }
 
 .continue-link {
@@ -342,107 +302,150 @@ const clearCart = () => {
     font-weight: 600;
     color: #ff9505;
     text-decoration: none;
-    white-space: nowrap;
 }
 
 .continue-link:hover {
-    color: rgba(var(--grocery-theme), 0.8);
+    text-decoration: underline;
 }
 
-/* Cart Grid */
-.cart-grid {
+/* ===== Table Header ===== */
+.cart-table-header {
     display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 24px;
-    align-items: start;
-}
-
-/* Cart Items */
-.cart-items-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.cart-box-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.cart-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    grid-template-columns: 2fr 1fr 1.2fr 1fr 80px;
+    gap: 16px;
+    padding: 12px 20px;
     background: #fff;
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: box-shadow 0.2s;
+    border: 1px solid #e8e8e8;
+    margin-bottom: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
 }
 
-.cart-box:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
-}
-
-.cart-box-left {
+/* ===== Cart Rows ===== */
+.cart-table-body {
     display: flex;
-    gap: 14px;
-    flex: 1;
-    min-width: 0;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-top: none;
 }
 
-.product-image {
+.cart-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.2fr 1fr 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+}
+
+.cart-row:last-child {
+    border-bottom: none;
+}
+
+.cart-row:hover {
+    background: #fafafa;
+}
+
+/* Item column */
+.cart-item-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.cart-item-img-link {
     flex-shrink: 0;
 }
 
-.product-image img {
-    width: 80px;
-    height: 80px;
+.cart-item-img {
+    width: 72px;
+    height: 72px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 6px;
     background: #f5f5f5;
+    border: 1px solid #eee;
 }
 
-.product-name {
-    flex: 1;
+.cart-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     min-width: 0;
 }
 
-.product-name h5 {
-    font-size: 15px;
+.cart-item-badge {
+    display: inline-block;
+    background: #ff9505;
+    color: #fff;
+    font-size: 9px;
     font-weight: 700;
-    margin: 0 0 2px;
-    line-height: 1.3;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    width: fit-content;
 }
 
-.product-name h5 a {
+.cart-item-name {
+    font-size: 14px;
+    font-weight: 700;
     color: rgb(var(--grocery-title));
     text-decoration: none;
+    line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: color 0.2s;
 }
 
-.product-name h5 a:hover {
-    color: rgb(var(--grocery-theme));
+.cart-item-name:hover {
+    color: #ff9505;
 }
 
-.product-name h6 {
+.cart-item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cart-item-meta span {
     font-size: 11px;
-    font-weight: 400;
-    color: rgb(var(--grocery-content));
-    margin: 0 0 10px;
+    color: #888;
+    line-height: 1.4;
 }
 
-/* Quantity Controls */
+/* Price column */
+.col-price {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cart-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff9505;
+}
+
+.cart-old-price {
+    font-size: 11px;
+    color: #bbb;
+    text-decoration: line-through;
+}
+
+/* Quantity column */
 .qty-controls {
     display: inline-flex;
     align-items: center;
-    background: #f5f5f5;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     overflow: hidden;
+    background: #fff;
 }
 
 .qty-btn {
@@ -450,7 +453,7 @@ const clearCart = () => {
     height: 32px;
     border: none;
     background: none;
-    color: rgb(var(--grocery-theme));
+    color: #555;
     font-size: 14px;
     cursor: pointer;
     display: flex;
@@ -460,7 +463,7 @@ const clearCart = () => {
 }
 
 .qty-btn:hover:not(:disabled) {
-    background: rgba(var(--grocery-theme), 0.08);
+    background: #f5f5f5;
 }
 
 .qty-btn:disabled {
@@ -469,13 +472,15 @@ const clearCart = () => {
 }
 
 .qty-input {
-    width: 38px;
+    width: 40px;
     height: 32px;
     border: none;
-    background: none;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    background: #fff;
     text-align: center;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13px;
     font-family: 'Public Sans', sans-serif;
     color: rgb(var(--grocery-title));
     outline: none;
@@ -488,88 +493,51 @@ const clearCart = () => {
     margin: 0;
 }
 
-/* Cart Box Right */
-.cart-box-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-    flex-shrink: 0;
-    margin-left: 12px;
+/* Total column */
+.cart-total-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgb(var(--grocery-title));
 }
 
-.item-price {
-    font-size: 16px;
-    font-weight: 800;
-    color: rgb(var(--grocery-theme));
-    margin: 0;
-}
-
-.item-unit-price {
-    font-size: 11px;
-    color: rgb(var(--grocery-content));
-}
-
+/* Delete column */
 .delete-btn {
     background: none;
     border: none;
-    color: rgb(var(--grocery-content));
-    font-size: 18px;
+    color: #aaa;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    padding: 4px;
-    margin-top: 4px;
-    border-radius: 6px;
-    transition:
-        background 0.15s,
-        transform 0.15s;
-}
-
-.delete-btn:hover {
-    background: rgba(var(--grocery-content), 0.1);
-    transform: scale(1.1);
-}
-
-/* Clear Cart */
-.clear-cart-btn {
-    background: none;
-    border: 1.5px solid rgb(var(--grocery-content));
-    color: rgb(var(--grocery-content));
-    border-radius: 12px;
-    padding: 12px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 4px 0;
+    transition: color 0.2s;
     font-family: 'Public Sans', sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: background 0.2s;
-}
-
-.clear-cart-btn:hover {
-    background: rgba(var(--grocery-content), 0.05);
+    text-transform: uppercase;
 }
 
 .delete-btn:hover {
-    background: #fff0f0;
-    transform: scale(1.1);
+    color: #e74c3c;
 }
 
-/* Clear Cart */
+/* ===== Cart Actions Row ===== */
+.cart-actions-row {
+    display: flex;
+    justify-content: flex-start;
+    padding: 16px 0;
+}
+
 .clear-cart-btn {
     background: none;
     border: 1.5px solid #ffcdd2;
-    color: #ff4757;
-    border-radius: 12px;
-    padding: 12px;
-    font-size: 13px;
+    color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 12px;
     font-weight: 600;
     font-family: 'Public Sans', sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
     transition: background 0.2s;
 }
@@ -578,129 +546,108 @@ const clearCart = () => {
     background: #fff5f5;
 }
 
-/* Summary Sidebar */
-.cart-summary-sidebar {
-    position: sticky;
-    top: 80px;
+/* ===== Summary Section ===== */
+.cart-summary-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
 }
 
-.summary-box {
-    background: #fff;
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.cart-summary-box {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
-.summary-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: rgb(var(--grocery-title));
-    margin: 0 0 18px;
-}
-
-.order-details-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 16px;
-}
-
-.order-details-list li {
+.summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
-    color: rgb(var(--grocery-content));
-    border-bottom: 1px solid rgb(var(--grocery-border));
+    color: #555;
 }
 
-.order-details-list li:last-child {
-    border-bottom: none;
+.summary-row:first-child {
+    border-top: 1px solid #f0f0f0;
+}
+
+.summary-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.summary-value {
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
 }
 
 .savings-val {
-    color: rgb(var(--grocery-rating));
-    font-weight: 600;
+    color: #27ae60;
 }
 
-.delivery-val {
-    font-size: 12px;
-    color: rgb(var(--grocery-content));
-    font-style: italic;
+.grand-total-row {
+    border-bottom: none;
+    padding: 16px 0 20px;
+    margin-top: 4px;
 }
 
-.order-total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-    border-top: 2px solid rgb(var(--grocery-border));
-    margin-bottom: 18px;
-}
-
-.order-total-row span:first-child {
+.grand-total-label {
     font-size: 16px;
     font-weight: 800;
     color: rgb(var(--grocery-title));
 }
 
-.order-total-row span:last-child {
+.grand-total-value {
     font-size: 20px;
     font-weight: 900;
-    color: rgb(var(--grocery-theme));
+    color: #FF9505;
 }
 
-/* Checkout Button */
-.checkout-button-box {
-    display: flex;
-}
-
-.grocery-btn.theme-btn {
+/* ===== Checkout Button ===== */
+.checkout-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 14px 24px;
-    background: #ff9505;
+    padding: 15px 24px;
+    background: #FF9505;
     color: #fff;
     border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 700;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
     font-family: 'Public Sans', sans-serif;
     text-decoration: none;
     cursor: pointer;
-    transition:
-        background 0.2s,
-        transform 0.15s;
+    transition: background 0.2s, transform 0.15s;
 }
 
-.grocery-btn.theme-btn:hover {
-    background: rgba(var(--grocery-theme), 0.9);
+.checkout-btn:hover {
+    background: #144d30;
     color: #fff;
     transform: translateY(-1px);
 }
 
-.grocery-btn.theme-btn:hover {
-    background: #015523;
-    color: #fff;
-    transform: translateY(-1px);
-}
-
-/* Empty Cart */
+/* ===== Empty Cart ===== */
 .empty-cart-state {
     text-align: center;
     padding: 80px 20px;
     background: #fff;
     border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eee;
 }
 
 .empty-cart-icon {
     width: 110px;
     height: 110px;
-    background: rgba(var(--grocery-theme), 0.1);
+    background: rgba(var(--grocery-theme), 0.08);
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -723,52 +670,57 @@ const clearCart = () => {
 .empty-cart-state p {
     font-size: 14px;
     color: rgb(var(--grocery-content));
-    margin: 0 0 24px;
+    margin: 0 0 28px;
 }
 
-.empty-cart-state .grocery-btn.theme-btn {
-    display: inline-flex;
-    width: auto;
-}
-
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-    .cart-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .cart-summary-sidebar {
-        position: static;
-    }
-
-    .continue-link {
+    .cart-table-header {
         display: none;
     }
 
-    .product-image img {
-        width: 64px;
-        height: 64px;
-    }
-
-    .cart-box {
-        padding: 12px;
-        flex-direction: column;
+    .cart-row {
+        grid-template-columns: 1fr;
         gap: 12px;
+        padding: 16px;
+        position: relative;
     }
 
-    .cart-box-right {
-        flex-direction: row;
+    .col-item {
+        grid-column: 1;
+    }
+
+    .col-price,
+    .col-qty,
+    .col-total {
+        display: flex;
         align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        margin-left: 0;
-        padding-top: 10px;
-        border-top: 1px solid #f5f5f5;
+        gap: 8px;
     }
 
-    .cart-box-right .delete-btn {
-        margin-top: 0;
+    .col-price::before { content: 'Price: '; font-size: 11px; color: #aaa; font-weight: 600; }
+    .col-qty::before { content: 'Qty: '; font-size: 11px; color: #aaa; font-weight: 600; }
+    .col-total::before { content: 'Total: '; font-size: 11px; color: #aaa; font-weight: 600; }
+
+    .col-action {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+
+    .cart-summary-box {
+        max-width: 100%;
+    }
+
+    .grocery-header {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-item-img {
+        width: 56px;
+        height: 56px;
     }
 }
 </style>

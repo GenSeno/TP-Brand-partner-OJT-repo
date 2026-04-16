@@ -1133,10 +1133,11 @@
     }
 
     .grocery-modal-title {
-        margin: 0;
         font-size: 18px;
         font-weight: 800;
-        color: #111;
+        color: rgb(var(--grocery-title));
+        margin: 0;
+        font-family:'poppins', 'Public Sans', sans-serif;
     }
 
     .grocery-modal-body {
@@ -1168,10 +1169,10 @@
     }
 
     .modal-product-price {
-        margin: 0;
         font-size: 18px;
         font-weight: 800;
-        color: #e84b0f;
+        color: #ff9505;
+        margin: 0;
     }
 
     .old-price {
@@ -1259,15 +1260,18 @@
         gap: 4px;
     }
 
-    .modal-footer-info h5,
-    .modal-footer-info h4 {
+    .modal-footer-info h5 {
+        font-size: 12px;
+        color: #000000;
         margin: 0;
-        color: #111;
+        font-weight: 500;
     }
 
     .modal-footer-info h4 {
-        font-size: 20px;
-        font-weight: 900;
+        font-size: 18px;
+        font-weight: 800;
+        color: #ff9505;
+        margin: 0;
     }
 
     .cart-bar-btn {
@@ -1275,10 +1279,11 @@
         padding: 12px 16px;
         border-radius: 16px;
         border: none;
-        background: #e84b0f;
+        background: #ff9505;
         color: #fff;
         font-size: 13px;
         font-weight: 800;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
         cursor: pointer;
     }

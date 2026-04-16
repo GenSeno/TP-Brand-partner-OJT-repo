@@ -2597,12 +2597,13 @@ const confirmAddToCart = () => {
 }
 
 .reviews-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: #e09515;
+    border-color: #e09515;
 }
 
 .reviews-nav-btn-active {
-    background: #f5a623;
-    border-color: #f5a623;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
     color: #fff;
 }
 
@@ -3194,7 +3195,7 @@ const confirmAddToCart = () => {
 .events-happening-title {
     font-size: 40px;
     font-weight: 900;
-    color: #111;
+    color: #535353;
     margin: 0;
     font-family: 'Public Sans', sans-serif;
 }
@@ -3367,19 +3368,18 @@ const confirmAddToCart = () => {
 }
 
 .event-hover-btn:hover {
-    background: #111;
+    background: #f5a623;
     color: #fff;
 }
 
 .event-hover-btn-outline {
     background: transparent;
-    border: 2px solid #fff;
     color: #fff;
 }
 
 .event-hover-btn-outline:hover {
-    background: #fff;
-    color: #e84b0f;
+    background: #f5a623;
+    color: #fff;
 }
 
 /* Tags */
@@ -3656,7 +3656,7 @@ const confirmAddToCart = () => {
 .runwild-title {
     font-size: 50px;
     font-weight: 900;
-    color: #111;
+    color: #535353;
     text-align: center;
     margin: 0 0 48px;
     font-family: 'Public Sans', sans-serif;
@@ -3791,6 +3791,7 @@ const confirmAddToCart = () => {
     font-weight: 800;
     color: rgb(var(--grocery-title));
     margin: 0;
+    font-family:'poppins', 'Public Sans', sans-serif;
 }
 
 .grocery-modal-body {
@@ -3819,6 +3820,7 @@ const confirmAddToCart = () => {
     color: rgb(var(--grocery-content));
     margin: 0 0 8px;
     line-height: 1.45;
+    font-family: poppins, 'Public Sans', sans-serif;
 }
 
 .modal-product-price {
@@ -3929,9 +3931,9 @@ const confirmAddToCart = () => {
 .cart-bar-btn {
     min-width: 150px;
     padding: 12px 16px;
-    border-radius: 16px;
+    border-radius: 2px;
     border: none;
-    background: #ff9505;
+    background: #FF9505;
     color: #fff;
     font-size: 13px;
     font-weight: 800;
@@ -3941,7 +3943,7 @@ const confirmAddToCart = () => {
 }
 
 .cart-bar-btn:hover:not(:disabled) {
-    background: #d96f0d;
+    background: #005523;
 }
 
 .cart-bar-btn:disabled {
