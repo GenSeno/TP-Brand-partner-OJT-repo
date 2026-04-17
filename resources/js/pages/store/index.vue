@@ -324,19 +324,6 @@
                                             )
                                         }}
                                     </span>
-                                    <span
-                                        class="badge bg-warning text-dark pre-order-badge"
-                                        style="
-                                            font-size: 8px;
-                                            border-radius: 12px;
-                                            padding: 3px 8px;
-                                            font-weight: 800;
-                                            background-color: #ff9800 !important;
-                                            color: #fff !important;
-                                        "
-                                    >
-                                        PRE-ORDER
-                                    </span>
                                 </div>
 
                                 <button
@@ -650,23 +637,6 @@
                                     <span class="featured-product-price">
                                         {{ formatCurrency(product.price) }}
                                     </span>
-                                    <span
-                                        v-if="
-                                            product.compare_price &&
-                                            product.compare_price >
-                                                product.price
-                                        "
-                                        class="featured-product-old-price"
-                                    >
-                                        {{
-                                            formatCurrency(
-                                                product.compare_price,
-                                            )
-                                        }}
-                                    </span>
-                                    <span class="featured-preorder-badge"
-                                        >PRE-ORDER</span
-                                    >
                                 </div>
 
                                 <!-- Add to Cart -->
@@ -1570,32 +1540,7 @@ const confirmAddToCart = () => {
     background-color: #fff;
     width: 26px;
     border-radius: 10px;
-}
 
-@media (max-width: 991px) {
-    .slide-title {
-        font-size: 2.5rem;
-    }
-    .hero-carousel .carousel-item {
-        height: 600px;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-    }
-    .slide-overlay-left-dark,
-    .slide-overlay-left-orange {
-        width: 100%;
-        background: rgba(0, 0, 0, 0.7);
-    }
-    .slide-4-bg .slide-overlay-left-orange {
-        background: rgba(var(--grocery-primary), 0.9);
-    }
-    .slide-content-right {
-        display: none;
-    }
 }
 /* ===== Grocery Template Styles ===== */
 .grocery-store-page {
@@ -2918,16 +2863,6 @@ const confirmAddToCart = () => {
     text-decoration: line-through;
 }
 
-.featured-preorder-badge {
-    font-size: 8px;
-    font-weight: 800;
-    background: #ff9800;
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 12px;
-    letter-spacing: 0.3px;
-}
-
 /* Add to Cart */
 .featured-atc-btn {
     width: 100%;
@@ -4102,10 +4037,21 @@ const confirmAddToCart = () => {
 }
 
 .product-box {
-    margin-bottom: 30px;
-    background: #fff;
+    width: 100%;
     position: relative;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    transition:
+        transform 0.25s,
+        box-shadow 0.25s;
 }
+
+.product-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+}
+
 
 .product-image-wrap {
     position: relative;
@@ -4236,6 +4182,8 @@ const confirmAddToCart = () => {
     padding: 0;
     margin: 0;
 }
+
+
 
 @media (max-width: 991px) {
     .product-offer-list {

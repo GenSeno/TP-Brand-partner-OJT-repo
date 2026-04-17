@@ -1,18 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin\AddressController;
+use App\Http\Controllers\Store\AuthController;
+use App\Http\Controllers\Store\BrandPartnerAboutController;
 use App\Http\Controllers\Store\BrandPartnerCartController;
 use App\Http\Controllers\Store\BrandPartnerCheckoutController;
-use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerCollectionController;
-use App\Http\Controllers\Store\BrandPartnerAboutController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
 use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
-use App\Http\Controllers\Store\BrandPartnerLoginController;
+use App\Http\Controllers\Store\BrandPartnerStoreController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Models\BrandPartner;
 
 /**
  * Front Store Routes for Brand Partners
@@ -50,6 +48,22 @@ Route::group([
     // Be Our Partner page
     Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])
         ->name('brand-partner.partner');
+
+    // Auth routes
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('brand-partner.login.submit');
+
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('brand-partner.register.submit');
+
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('brand-partner.logout');
+
+    // User account page
+    Route::get('/account', [AuthController::class, 'account'])
+        ->name('brand-partner.account')
+        ->middleware('auth');
+
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])
         ->name('brand-partner.cart.add');

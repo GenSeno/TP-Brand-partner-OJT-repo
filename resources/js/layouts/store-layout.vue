@@ -107,7 +107,9 @@
                             class="utility-link"
                             @click.prevent="openAccountModal"
                         >
-                            <i class="ri-user-line"></i> Account
+                            <i class="ri-user-line"></i>
+                            <span v-if="user">{{ user.name }}</span>
+                            <span v-else>Account</span>
                         </a>
                         <a href="javascript:void(0)" class="utility-link"
                             ><i class="ri-heart-line"></i> Wishlist</a
@@ -469,7 +471,7 @@
 
         <!-- Main Content -->
         <main class="store-main">
-            <slot />
+            <slot/>
         </main>
 
         <!-- Footer -->
@@ -565,6 +567,8 @@ const page = usePage();
 
 const brandPartner = computed(() => page.props.brandPartner);
 const cartCount = computed(() => page.props.cartCount || 0);
+const auth = computed(() => page.props.auth);
+const user = computed(() => auth.value?.user);
 const sideMenuOpen = ref(false);
 const accountModalOpen = ref(false);
 const showRegister = ref(false);
@@ -584,6 +588,11 @@ const registerForm = useForm({
 });
 
 const openAccountModal = () => {
+    if (user.value) {
+        router.visit(route('store.brand-partner.account'));
+        return;
+    }
+
     accountModalOpen.value = true;
     showRegister.value = false;
 };
@@ -594,32 +603,22 @@ const closeAccountModal = () => {
 };
 
 const submitLogin = () => {
-    if (!brandPartner.value) return;
-
-    loginForm.post(
-        route('store.brand-partner.login.submit', brandPartner.value.slug),
-        {
-            onFinish: () => loginForm.reset('password'),
-            onSuccess: () => closeAccountModal(),
-        },
-    );
+    loginForm.post(route('store.brand-partner.login.submit'), {
+        onFinish: () => loginForm.reset('password'),
+        onSuccess: () => closeAccountModal(),
+    });
 };
 
 const submitRegister = () => {
-    if (!brandPartner.value) return;
-
-    registerForm.post(
-        route('store.brand-partner.register.submit', brandPartner.value.slug),
-        {
-            onFinish: () =>
-                registerForm.reset(
-                    'password',
-                    'password_confirmation',
-                    'terms',
-                ),
-            onSuccess: () => closeAccountModal(),
-        },
-    );
+    registerForm.post(route('store.brand-partner.register.submit'), {
+        onFinish: () =>
+            registerForm.reset(
+                'password',
+                'password_confirmation',
+                'terms',
+            ),
+        onSuccess: () => closeAccountModal(),
+    });
 };
 
 const isRoute = (name) => {
@@ -701,6 +700,7 @@ const focusSearchField = () => {
     padding: 0;
     overflow-x: clip;
     max-width: 100%;
+    cursor: auto;
 }
 
 .grocery-color {
@@ -721,6 +721,7 @@ const focusSearchField = () => {
     --grocery-primary-color: rgb(var(--grocery-theme));
     --grocery-primary-light: rgba(var(--grocery-theme), 0.1);
     background: var(--grocery-bg);
+    cursor: auto;
 }
 
 * {

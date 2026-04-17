@@ -33,6 +33,9 @@ class HandleStoreInertiaRequests extends Middleware
             ...parent::share($request),
             'theme' => 'food',
             'brandPartnerSlug' => config('store.brand_partner_slug'),
+            'auth' => [
+                'user' => $request->user(),
+            ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
