@@ -2,20 +2,29 @@
     <Head :title="`Cart - ${brandPartner.name}`" />
 
     <div class="grocery-cart-section">
-
         <!-- Header -->
         <div class="grocery-header">
             <div class="grocery-container">
                 <div class="header-inner">
                     <Link
-                        :href="route('store.brand-partner.index', brandPartner.slug)"
+                        :href="
+                            route(
+                                'store.brand-partner.index',
+                                brandPartner.slug,
+                            )
+                        "
                         class="header-back"
                     >
                         <i class="ri-arrow-left-s-line"></i>
                     </Link>
                     <h2 class="header-title">Shopping Cart</h2>
                     <Link
-                        :href="route('store.brand-partner.index', brandPartner.slug)"
+                        :href="
+                            route(
+                                'store.brand-partner.index',
+                                brandPartner.slug,
+                            )
+                        "
                         class="continue-link"
                     >
                         Continue Shopping
@@ -25,10 +34,11 @@
         </div>
 
         <div class="grocery-container">
+            <!-- BreadCrumb -->
+            <Breadcrumb :items="breadcrumbItems" />
 
             <!-- Cart with items -->
             <div v-if="cart.items.length > 0">
-
                 <!-- Table Header -->
                 <div class="cart-table-header">
                     <span class="col-item">Item</span>
@@ -48,11 +58,19 @@
                         <!-- Item -->
                         <div class="col-item cart-item-info">
                             <Link
-                                :href="route('store.brand-partner.product', item.product.slug)"
+                                :href="
+                                    route(
+                                        'store.brand-partner.product',
+                                        item.product.slug,
+                                    )
+                                "
                                 class="cart-item-img-link"
                             >
                                 <img
-                                    :src="item.product.image_url || '/img/tshirt-placeholder.svg'"
+                                    :src="
+                                        item.product.image_url ||
+                                        '/img/tshirt-placeholder.svg'
+                                    "
                                     :alt="item.product.name"
                                     class="cart-item-img"
                                 />
@@ -60,24 +78,48 @@
                             <div class="cart-item-details">
                                 <span class="cart-item-badge">PRE-ORDER</span>
                                 <Link
-                                    :href="route('store.brand-partner.product', item.product.slug)"
+                                    :href="
+                                        route(
+                                            'store.brand-partner.product',
+                                            item.product.slug,
+                                        )
+                                    "
                                     class="cart-item-name"
                                 >
                                     {{ item.product.name }}
                                 </Link>
                                 <div class="cart-item-meta">
-                                    <span v-if="item.product.short_description">Garment: {{ item.product.short_description }}</span>
-                                    <span v-if="item.color">Color: {{ item.color }}</span>
-                                    <span v-if="item.size">Size: {{ item.size }}</span>
-                                    <span v-if="item.product.sku">SKU: {{ item.product.sku }}</span>
+                                    <span v-if="item.product.short_description"
+                                        >Garment:
+                                        {{
+                                            item.product.short_description
+                                        }}</span
+                                    >
+                                    <span v-if="item.color"
+                                        >Color: {{ item.color }}</span
+                                    >
+                                    <span v-if="item.size"
+                                        >Size: {{ item.size }}</span
+                                    >
+                                    <span v-if="item.product.sku"
+                                        >SKU: {{ item.product.sku }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
 
                         <!-- Price -->
                         <div class="col-price">
-                            <span class="cart-price">{{ formatCurrency(item.price) }}</span>
-                            <span class="cart-old-price" v-if="item.product.compare_price && item.product.compare_price > item.price">
+                            <span class="cart-price">{{
+                                formatCurrency(item.price)
+                            }}</span>
+                            <span
+                                class="cart-old-price"
+                                v-if="
+                                    item.product.compare_price &&
+                                    item.product.compare_price > item.price
+                                "
+                            >
                                 {{ formatCurrency(item.product.compare_price) }}
                             </span>
                         </div>
@@ -87,7 +129,12 @@
                             <div class="qty-controls">
                                 <button
                                     class="qty-btn"
-                                    @click="updateQuantity(item.id, item.quantity - 1)"
+                                    @click="
+                                        updateQuantity(
+                                            item.id,
+                                            item.quantity - 1,
+                                        )
+                                    "
                                     :disabled="item.quantity <= 1"
                                 >
                                     <i class="ri-subtract-line"></i>
@@ -97,11 +144,21 @@
                                     class="qty-input"
                                     :value="item.quantity"
                                     min="1"
-                                    @change="updateQuantity(item.id, $event.target.value)"
+                                    @change="
+                                        updateQuantity(
+                                            item.id,
+                                            $event.target.value,
+                                        )
+                                    "
                                 />
                                 <button
                                     class="qty-btn"
-                                    @click="updateQuantity(item.id, item.quantity + 1)"
+                                    @click="
+                                        updateQuantity(
+                                            item.id,
+                                            item.quantity + 1,
+                                        )
+                                    "
                                 >
                                     <i class="ri-add-line"></i>
                                 </button>
@@ -110,7 +167,9 @@
 
                         <!-- Total -->
                         <div class="col-total">
-                            <span class="cart-total-price">{{ formatCurrency(item.total) }}</span>
+                            <span class="cart-total-price">{{
+                                formatCurrency(item.total)
+                            }}</span>
                         </div>
 
                         <!-- Delete -->
@@ -138,31 +197,40 @@
                     <div class="cart-summary-box">
                         <div class="summary-row">
                             <span class="summary-label">Subtotal</span>
-                            <span class="summary-value">{{ formatCurrency(cart.subtotal) }}</span>
+                            <span class="summary-value">{{
+                                formatCurrency(cart.subtotal)
+                            }}</span>
                         </div>
                         <div class="summary-row" v-if="cart.discount > 0">
                             <span class="summary-label">Savings</span>
-                            <span class="summary-value savings-val">-{{ formatCurrency(cart.discount) }}</span>
+                            <span class="summary-value savings-val"
+                                >-{{ formatCurrency(cart.discount) }}</span
+                            >
                         </div>
                         <div class="delivery-row summary-row">
                             <span>Delivery</span>
-                            <span class="delivery-val"
-                                 >To be determined</span
-                            >
+                            <span class="delivery-val">To be determined</span>
                         </div>
                         <div class="summary-row grand-total-row">
                             <span class="grand-total-label">Grand Total</span>
-                            <span class="grand-total-value">{{ formatCurrency(cart.total) }}</span>
+                            <span class="grand-total-value">{{
+                                formatCurrency(cart.total)
+                            }}</span>
                         </div>
                         <Link
-                            :href="route('store.brand-partner.checkout', brandPartner.slug)"
+                            :href="
+                                route(
+                                    'store.brand-partner.checkout',
+                                    brandPartner.slug,
+                                )
+                            "
                             class="checkout-btn"
                         >
-                            Proceed to Checkout <i class="ri-arrow-right-s-line"></i>
+                            Proceed to Checkout
+                            <i class="ri-arrow-right-s-line"></i>
                         </Link>
                     </div>
                 </div>
-
             </div>
 
             <!-- Empty Cart State -->
@@ -175,18 +243,22 @@
                 <Link
                     :href="route('store.brand-partner.index')"
                     class="checkout-btn"
-                    style="display:inline-flex; width:auto; text-decoration:none;"
+                    style="
+                        display: inline-flex;
+                        width: auto;
+                        text-decoration: none;
+                    "
                 >
                     <i class="ri-store-2-line"></i> Start Shopping
                 </Link>
             </div>
-
         </div>
     </div>
 </template>
 
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -200,6 +272,11 @@ const props = defineProps({
         }),
     },
 });
+
+const breadcrumbItems = [
+    { label: 'My Account', link: '#' },
+    { label: 'Cart', link: '#' },
+];
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-PH', {
@@ -218,18 +295,16 @@ const updateQuantity = (itemId, quantity) => {
 };
 
 const removeItem = (itemId) => {
-    router.delete(
-        route('store.brand-partner.cart.remove', itemId),
-        { preserveScroll: true },
-    );
+    router.delete(route('store.brand-partner.cart.remove', itemId), {
+        preserveScroll: true,
+    });
 };
 
 const clearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
-        router.delete(
-            route('store.brand-partner.cart.clear'),
-            { preserveScroll: true },
-        );
+        router.delete(route('store.brand-partner.cart.clear'), {
+            preserveScroll: true,
+        });
     }
 };
 </script>
@@ -604,7 +679,7 @@ const clearCart = () => {
 .grand-total-value {
     font-size: 20px;
     font-weight: 900;
-    color: #FF9505;
+    color: #ff9505;
 }
 
 /* ===== Checkout Button ===== */
@@ -615,7 +690,7 @@ const clearCart = () => {
     gap: 8px;
     width: 100%;
     padding: 15px 24px;
-    background: #FF9505;
+    background: #ff9505;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -626,7 +701,9 @@ const clearCart = () => {
     font-family: 'Public Sans', sans-serif;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
+    transition:
+        background 0.2s,
+        transform 0.15s;
 }
 
 .checkout-btn:hover {
@@ -698,9 +775,24 @@ const clearCart = () => {
         gap: 8px;
     }
 
-    .col-price::before { content: 'Price: '; font-size: 11px; color: #aaa; font-weight: 600; }
-    .col-qty::before { content: 'Qty: '; font-size: 11px; color: #aaa; font-weight: 600; }
-    .col-total::before { content: 'Total: '; font-size: 11px; color: #aaa; font-weight: 600; }
+    .col-price::before {
+        content: 'Price: ';
+        font-size: 11px;
+        color: #aaa;
+        font-weight: 600;
+    }
+    .col-qty::before {
+        content: 'Qty: ';
+        font-size: 11px;
+        color: #aaa;
+        font-weight: 600;
+    }
+    .col-total::before {
+        content: 'Total: ';
+        font-size: 11px;
+        color: #aaa;
+        font-weight: 600;
+    }
 
     .col-action {
         position: absolute;

@@ -1,34 +1,43 @@
 <template>
-    <div class="page-header">
-        <div class="row">
-            <div class="col">
-                <h3 class="page-title">{{ title }}</h3>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <Link href="/dashboard/">{{ text }}</Link>
-                    </li>
-                    <li class="breadcrumb-item active">{{ text1 }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <ul class="breadcrumb">
+        <!-- Home -->
+        <li class="breadcrumb-item">
+            <Link href="/">
+                <i class="pi pi-home"></i>
+            </Link>
+        </li>
+
+        <!-- Items -->
+        <li
+            v-for="(item, index) in items"
+            :key="index"
+            class="breadcrumb-item"
+            :class="{ active: index === items.length - 1 }"
+        >
+            <Link
+                v-if="item.link && index !== items.length - 1"
+                :href="item.link"
+            >
+                {{ item.label }}
+            </Link>
+
+            <span v-else>
+                {{ item.label }}
+            </span>
+        </li>
+    </ul>
 </template>
+
 <script>
 import { Link } from '@inertiajs/vue3';
 
 export default {
+    components: { Link },
+
     props: {
-        title: {
-            type: String,
-            default: '',
-        },
-        text: {
-            type: String,
-            default: '',
-        },
-        text1: {
-            type: String,
-            default: '',
+        items: {
+            type: Array,
+            default: () => [],
         },
     },
 };

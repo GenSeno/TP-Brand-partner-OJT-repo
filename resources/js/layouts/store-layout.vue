@@ -7,22 +7,27 @@
         >
             <div class="header-inner">
                 <!-- Brand Logo -->
-                <Link
-                    v-if="brandPartner"
-                    :href="
-                        route('store.brand-partner.index', brandPartner.slug)
-                    "
-                    class="pakaras-logo"
-                >
-                    <img
-                        src="/img/logo/pakaras-logo.png"
-                        alt="Pakaras Logo"
-                        class="img-fluid brand-logo-raw"
-                    />
-                </Link>
-                <span v-else class="brand-link">
-                    <span class="brand-name text-white">Store</span>
-                </span>
+                <div class="header-container">
+                    <Link
+                        v-if="brandPartner"
+                        :href="
+                            route(
+                                'store.brand-partner.index',
+                                brandPartner.slug,
+                            )
+                        "
+                        class="pakaras-logo"
+                    >
+                        <img
+                            src="/img/logo/pakaras-logo2.png"
+                            alt="Pakaras Logo"
+                            class="img-fluid brand-logo-raw"
+                        />
+                    </Link>
+                    <span v-else class="brand-link">
+                        <span class="brand-name text-white">Store</span>
+                    </span>
+                </div>
 
                 <!-- Center Nav Links -->
                 <div class="center-nav-wrapper d-none d-lg-block">
@@ -521,15 +526,29 @@
                     </div>
                     <div class="socials">
                         <h4>Social</h4>
-                        <p>
-                            <i class="fab fa-facebook-f"></i>
-                            <i class="fab fa-tiktok"></i>
-                            <i class="fab fa-youtube"></i>
-                            <i class="fab fa-instagram"></i>
-                        </p>
+                        <div>
+                            <a
+                                href="https://www.facebook.com/TribuPakarasOutdoor"
+                                target="_blank"
+                            >
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a
+                                href="https://www.instagram.com/tribupakarasoutdoor"
+                                target="_blank"
+                            >
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
                     </div>
                     <div class="news-letter">
-                        <h1>Be among the first to experience it</h1>
+                        <h2>Be among the first to experience it</h2>
                         <p>
                             From rugged trails to everyday runs,we've got you
                             covered.
@@ -730,7 +749,7 @@ const focusSearchField = () => {
 
 /* Custom Container */
 .custom-container {
-    max-width: 1800px;
+    max-width: 1450px;
     margin: 0 auto;
     padding: 0 10px;
 }
@@ -771,7 +790,7 @@ const focusSearchField = () => {
     align-items: center;
 }
 
-.pakaras-logo {
+.header-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -780,11 +799,10 @@ const focusSearchField = () => {
     padding-right: 10px;
 }
 
-.brand-logo-raw {
+.header-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    scale: 1.6;
+    object-fit: contain;
 }
 
 /* Center Nav */
@@ -1204,8 +1222,8 @@ const focusSearchField = () => {
 }
 
 .footer-brand img {
-    height: 100%;
-    width: 100%;
+    height: 80%;
+    width: 80%;
     object-fit: contain;
 }
 
@@ -1242,7 +1260,7 @@ const focusSearchField = () => {
     margin-right: 7px;
 }
 
-.socials p {
+.socials div {
     display: flex;
     gap: 15px;
 }
@@ -1255,8 +1273,8 @@ const focusSearchField = () => {
     margin-right: 7px;
 }
 
-.news-letter h1 {
-    font-weight: 900;
+.news-letter h2 {
+    font-weight: 700;
     color: #fff;
     word-spacing: 0.1em;
     margin-bottom: 15px;
