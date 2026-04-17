@@ -42,3 +42,10 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+li:hover {
+    color: #f39c12 !important;
+    text-decoration: underline;
+}
+</style>
