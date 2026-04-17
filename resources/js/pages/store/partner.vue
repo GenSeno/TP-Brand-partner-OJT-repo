@@ -10,6 +10,9 @@
             </div>
             <div class="partner-hero-overlay"></div>
             <div class="partner-hero-content">
+                <div class="breadcrumb-wrapper">
+                    <Breadcrumb :items="breadcrumbItems" />
+                </div>
                 <h1 class="partner-hero-title">Be Our Partner</h1>
             </div>
         </section>
@@ -195,6 +198,13 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { computed } from 'vue';
+
+// Breadcrumb items
+const breadcrumbItems = computed(() => [
+    { label: 'Be Our Partner' }
+]);
 
 const steps = [
     {
@@ -220,6 +230,55 @@ const steps = [
     font-family: 'Public Sans', sans-serif;
     color: #252525;
     background: #fff;
+}
+
+/* Breadcrumb Color Override for Partner Page */
+.breadcrumb-wrapper {
+    padding: 0 0 15px;
+}
+
+.partner-hero-content :deep(.breadcrumb) {
+    justify-content: flex-start;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.partner-hero-content :deep(.breadcrumb-item) {
+    color: #ffffff;
+}
+
+.partner-hero-content :deep(.breadcrumb-item:not(:last-child)::after) {
+    color: #ffffff;
+}
+
+.partner-hero-content :deep(.breadcrumb-home) {
+    color: #ffffff;
+}
+
+.partner-hero-content :deep(.breadcrumb-home:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.partner-hero-content :deep(.breadcrumb-home:hover i) {
+    color: #FF9505;
+}
+
+.partner-hero-content :deep(.breadcrumb-item a) {
+    color: #ffffff;
+}
+
+.partner-hero-content :deep(.breadcrumb-item a:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.partner-hero-content :deep(.breadcrumb-item.active) {
+    color: #ffffff;
+}
+
+.partner-hero-content :deep(.breadcrumb-item span) {
+    color: #ffffff;
 }
 
 /* ===== Shared placeholder ===== */

@@ -1,13 +1,14 @@
 <template>
     <ul class="breadcrumb">
-        <!-- Home -->
+        <!-- Home with Icon and Text together -->
         <li class="breadcrumb-item">
-            <Link href="/">
-                <i class="pi pi-home"></i>
+            <Link href="/" class="breadcrumb-home">
+                <i class="ri-home-4-line"></i>
+                <span>Home</span>
             </Link>
         </li>
 
-        <!-- Items -->
+        <!-- Other Items -->
         <li
             v-for="(item, index) in items"
             :key="index"
@@ -44,8 +45,59 @@ export default {
 </script>
 
 <style scoped>
-li:hover {
-    color: #f39c12 !important;
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    margin-bottom: 8px;
+    list-style: none;
+    background: transparent;
+    font-family: 'Public Sans', sans-serif;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    margin: 0 10px;
+    color: #ccc;
+}
+
+.breadcrumb-home {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-home i {
+    font-size: 16px;
+}
+
+.breadcrumb-home:hover {
+    color: #FF9505;
     text-decoration: underline;
+}
+
+.breadcrumb-item a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #FF9505;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+    font-weight: 500;
 }
 </style>

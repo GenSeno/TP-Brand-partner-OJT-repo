@@ -4,7 +4,6 @@
     <div class="shop-page">
         <div class="shop-inner">
             <!-- BreadCrumb -->
-
             <Breadcrumb :items="breadcrumbItems" />
 
             <h1 class="shop-title">Our Products</h1>
@@ -21,7 +20,14 @@
                     <button class="toolbar-btn">
                         <i class="ri-sort-asc"></i> Sort
                     </button>
-                    <span class="toolbar-featured">Featured</span>
+                    <button
+                        class="toolbar-btn"
+                        :class="{ active: selectedFeatured }"
+                        @click="toggleFeatured"
+                    >
+                        <i class="ri-star-fill"></i>
+                        Featured
+                    </button>
                 </div>
             </div>
 
@@ -48,17 +54,22 @@
                             v-show="openGroups.categories"
                         >
                             <label
-                                class="filter-radio"
-                                v-for="cat in sampleCategories"
+                                class="filter-checkbox"
+                                v-for="cat in categoryOptions"
                                 :key="cat.id"
                             >
                                 <input
-                                    type="radio"
-                                    name="category"
+                                    type="checkbox"
                                     :value="cat.id"
-                                    v-model="selectedCategory"
+                                    v-model="selectedCategories"
+                                    @change="applyFilters"
                                 />
-                                <span>{{ cat.name }}</span>
+                                <span>
+                                    {{ cat.label || cat.name }}
+                                    <small v-if="cat.products_count !== undefined">
+                                        ({{ cat.products_count }})
+                                    </small>
+                                </span>
                             </label>
                         </div>
                     </div>
@@ -84,16 +95,16 @@
                         >
                             <div class="color-swatches">
                                 <button
-                                    v-for="color in sampleColors"
+                                    v-for="color in colorOptions"
                                     :key="color.value"
                                     class="color-swatch"
-                                    :style="{ background: color.hex }"
+                                    :style="{ background: color.hex || color.value }"
                                     :class="{
                                         active: selectedColors.includes(
                                             color.value,
                                         ),
                                     }"
-                                    @click="toggleColor(color.value)"
+                                    @click="toggleColor(color.value); applyFilters()"
                                     :title="color.name"
                                 ></button>
                             </div>
@@ -121,13 +132,13 @@
                         >
                             <div class="size-chips">
                                 <button
-                                    v-for="size in sampleSizes"
+                                    v-for="size in sizeOptions"
                                     :key="size"
                                     class="size-chip"
                                     :class="{
                                         active: selectedSizes.includes(size),
                                     }"
-                                    @click="toggleSize(size)"
+                                    @click="toggleSize(size); applyFilters()"
                                 >
                                     {{ size }}
                                 </button>
@@ -156,7 +167,7 @@
                         >
                             <div class="collection-chips">
                                 <button
-                                    v-for="col in sampleCollections"
+                                    v-for="col in collectionOptions"
                                     :key="col.id"
                                     class="collection-chip"
                                     :class="{
@@ -166,88 +177,12 @@
                                     }"
                                     @click="toggleCollection(col.id)"
                                 >
-                                    {{ col.name }}
+                                    {{ col.label || col.name }}
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Garment -->
-                    <div class="filter-group">
-                        <div
-                            class="filter-group-header"
-                            @click="toggleGroup('garments')"
-                        >
-                            <span>GARMENT</span>
-                            <i
-                                :class="
-                                    openGroups.garments
-                                        ? 'ri-arrow-up-s-line'
-                                        : 'ri-arrow-down-s-line'
-                                "
-                            ></i>
-                        </div>
-                        <div
-                            class="filter-group-body"
-                            v-show="openGroups.garments"
-                        >
-                            <label
-                                class="filter-checkbox"
-                                v-for="g in sampleGarments"
-                                :key="g"
-                            >
-                                <input
-                                    type="checkbox"
-                                    :value="g"
-                                    v-model="selectedGarments"
-                                />
-                                <span>{{ g }}</span>
-                            </label>
-                            <div class="garment-chips">
-                                <button
-                                    v-for="g in sampleGarmentChips"
-                                    :key="g"
-                                    class="garment-chip"
-                                >
-                                    {{ g }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product Type -->
-                    <div class="filter-group">
-                        <div
-                            class="filter-group-header"
-                            @click="toggleGroup('productTypes')"
-                        >
-                            <span>PRODUCT TYPE</span>
-                            <i
-                                :class="
-                                    openGroups.productTypes
-                                        ? 'ri-arrow-up-s-line'
-                                        : 'ri-arrow-down-s-line'
-                                "
-                            ></i>
-                        </div>
-                        <div
-                            class="filter-group-body"
-                            v-show="openGroups.productTypes"
-                        >
-                            <label
-                                class="filter-checkbox"
-                                v-for="pt in sampleProductTypes"
-                                :key="pt"
-                            >
-                                <input
-                                    type="checkbox"
-                                    :value="pt"
-                                    v-model="selectedProductTypes"
-                                />
-                                <span>{{ pt }}</span>
-                            </label>
-                        </div>
-                    </div>
 
                     <!-- Price Filter -->
                     <div class="filter-group">
@@ -337,12 +272,14 @@
                                     class="product-card-collection text-uppercase"
                                 >
                                     {{
-                                        product.short_description
+                                        product.category?.name ||
+                                        product.collection?.label ||
+                                        (product.short_description
                                             ? product.short_description.substring(
                                                   0,
                                                   30,
                                               )
-                                            : 'COLLECTION'
+                                            : 'COLLECTION')
                                     }}
                                 </p>
                                 <Link
@@ -546,20 +483,27 @@
 
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+
 
 const props = defineProps({
     brandPartner: Object,
     categories: Array,
     events: Array,
     products: Object,
+    collections: Array,
+    colors: Array,
+    sizes: Array,
     filter: Object,
     cartCount: Number,
 });
 
-const breadcrumbItems = [{ label: 'Dashboard', link: '/' }];
+// Breadcrumb items
+const breadcrumbItems = computed(() => [
+    { label: 'Shop' }
+]);
 
 const showFilters = ref(true);
 
@@ -577,13 +521,40 @@ const toggleGroup = (group) => {
     openGroups[group] = !openGroups[group];
 };
 
+const categoryOptions = computed(() => props.categories || []);
+const collectionOptions = computed(() => props.collections || []);
+const colorOptions = computed(() =>
+    (props.colors || []).map((value) => ({
+        name: value,
+        value,
+        hex: value,
+    })),
+);
+const sizeOptions = computed(() => props.sizes || []);
+
 // Selected filters
-const selectedCategory = ref(null);
-const selectedColors = ref([]);
-const selectedSizes = ref([]);
-const selectedCollections = ref([]);
-const selectedGarments = ref([]);
-const selectedProductTypes = ref([]);
+const selectedCategories = ref(
+    props.filter?.category
+        ? Array.isArray(props.filter.category)
+            ? props.filter.category
+            : [props.filter.category]
+        : [],
+);
+const selectedColors = ref(props.filter?.colors || []);
+const selectedSizes = ref(props.filter?.sizes || []);
+const selectedCollections = ref(
+    props.filter?.collection
+        ? Array.isArray(props.filter.collection)
+            ? props.filter.collection
+            : [props.filter.collection]
+        : [],
+);
+const selectedFeatured = ref(
+    props.filter?.featured === true ||
+    props.filter?.featured === '1' ||
+    props.filter?.featured === 1 ||
+    props.filter?.featured === 'true',
+);
 const selectedProduct = ref(null);
 const modalQuantity = ref(1);
 const isAddingToCart = ref(false);
@@ -606,6 +577,41 @@ const toggleCollection = (val) => {
     const idx = selectedCollections.value.indexOf(val);
     if (idx > -1) selectedCollections.value.splice(idx, 1);
     else selectedCollections.value.push(val);
+    applyFilters();
+};
+
+const toggleFeatured = () => {
+    selectedFeatured.value = !selectedFeatured.value;
+    applyFilters();
+};
+
+const applyFilters = () => {
+    const params = {};
+
+    if (selectedCategories.value.length > 0) {
+        params.category = selectedCategories.value;
+    }
+
+    if (selectedCollections.value.length > 0) {
+        params.collection = selectedCollections.value;
+    }
+
+    if (selectedColors.value.length > 0) {
+        params.colors = selectedColors.value;
+    }
+
+    if (selectedSizes.value.length > 0) {
+        params.sizes = selectedSizes.value;
+    }
+
+    if (selectedFeatured.value) {
+        params.featured = 1;
+    }
+
+    router.get(route('store.brand-partner.shop'), params, {
+        preserveState: true,
+        replace: true,
+    });
 };
 
 const formatPrice = (val) =>
@@ -660,6 +666,56 @@ const confirmAddToCart = () => {
 </script>
 
 <style scoped>
+/* Breadcrumb Styles */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    margin-bottom: 8px;
+    list-style: none;
+    background: transparent;
+    font-family: 'Public Sans', sans-serif;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: '/';
+    margin: 0 10px;
+    color: #ccc;
+}
+
+.breadcrumb-item a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #e84b0f;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+    font-weight: 500;
+}
+
+.breadcrumb-item i {
+    font-size: 16px;
+    color: #888;
+}
+
+.breadcrumb-item a:hover i {
+    color: #e84b0f;
+}
+
+
 .shop-page {
     font-family: 'Public Sans', sans-serif;
     background: #fff;
@@ -677,7 +733,6 @@ const confirmAddToCart = () => {
     font-size: 60px;
     font-weight: 800;
     text-align: left;
-    padding-top: 15px;
     color: #535353;
     letter-spacing: -1px;
     line-height: 1.2;
@@ -718,6 +773,10 @@ const confirmAddToCart = () => {
 }
 
 .toolbar-btn:hover {
+    color: #e84b0f;
+}
+
+.toolbar-btn.active {
     color: #e84b0f;
 }
 

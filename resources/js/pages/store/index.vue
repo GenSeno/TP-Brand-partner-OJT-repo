@@ -39,51 +39,15 @@
                     ></button>
                 </div>
                 <div class="carousel-inner">
-                    <!-- Slide 1: Keep On Breaking Boundaries (img-carousel1) -->
-                    <div class="carousel-item active slide-1-bg">
-                        <div class="slide-overlay-left-dark"></div>
-                        <div class="slide-layout">
-                            <div
-                                class="slide-content-left px-5"
-                                style="z-index: 2"
-                            >
-                                <h1 class="slide-title text-white">
-                                    KEEP ON<br />BREAKING THE<br />BOUNDARIES.
-                                </h1>
-                                <p class="slide-subtitle text-white mt-3">
-                                    Tribu Pakaras is launching its official
-                                    eCommerce platform soon, powered by upgraded
-                                    production, improved quality, and expanded
-                                    product offerings designed for athletes who
-                                    demand more.
-                                </p>
-                                <a
-                                    :href="
-                                        route(
-                                            'store.brand-partner.shop',
-                                            brandPartner.slug,
-                                        )
-                                    "
-                                    class="btn slide-btn-outline mt-4"
-                                    >VIEW ALL PRODUCTS</a
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 2: Collection (img-carousel2) -->
-                    <div class="carousel-item slide-2-bg">
+                    <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
+                    <div class="carousel-item active slide-2-bg">
                         <div class="slide-layout">
                             <div class="slide-content-left px-5">
                                 <h1 class="slide-title text-white">
                                     HUGIS COLLECTION V2
                                 </h1>
                                 <p class="slide-subtitle text-white">
-                                    HUGIS COLLECTION V2 celebrates this
-                                    collective energy. It honors individuality
-                                    while embracing the beauty of community,
-                                    proving that when runners move as one, their
-                                    diversity becomes the masterpiece.
+                                    HUGIS COLLECTION V2 celebrates this collective energy. It honors individuality while embracing the beauty of community, proving that when runners move as one, their diversity becomes the masterpiece.
                                 </p>
                                 <a
                                     :href="
@@ -99,6 +63,34 @@
                         </div>
                     </div>
 
+                    <!-- Slide 2: Keep On Breaking Boundaries (img-carousel1) [WAS SLIDE 1] -->
+                    <div class="carousel-item slide-1-bg">
+                        <div class="slide-overlay-left-dark"></div>
+                        <div class="slide-layout">
+                            <div
+                                class="slide-content-left px-5"
+                                style="z-index: 2"
+                            >
+                                <h1 class="slide-title text-white">
+                                    KEEP ON<br />BREAKING THE<br />BOUNDARIES.
+                                </h1>
+                                <p class="slide-subtitle text-white mt-3">
+                                    Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.
+                                </p>
+                                <a
+                                    :href="
+                                        route(
+                                            'store.brand-partner.shop',
+                                            brandPartner.slug,
+                                        )
+                                    "
+                                    class="btn slide-btn-outline mt-4"
+                                    >VIEW ALL PRODUCTS</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Slide 3: Dare To Dream Big (img-carousel3) -->
                     <div class="carousel-item slide-3-bg">
                         <div class="slide-overlay-left-orange"></div>
@@ -108,15 +100,10 @@
                                 style="z-index: 2"
                             >
                                 <h1 class="slide-title text-white">
-                                    DARE TO DREAM BIG — KEEP ON BREAKING THE
-                                    BOUNDARIES.
+                                    DARE TO DREAM BIG — KEEP ON BREAKING THE BOUNDARIES.
                                 </h1>
                                 <p class="slide-subtitle text-white mt-3">
-                                    Tribu Pakaras is launching its official
-                                    eCommerce platform soon, powered by upgraded
-                                    production, improved quality, and expanded
-                                    product offerings designed for athletes who
-                                    demand more.
+                                    Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.
                                 </p>
                                 <Link
                                     :href="
@@ -547,10 +534,10 @@
 
                 <ul
                     class="featured-product-list"
-                    v-if="products.data.length > 0"
+                    v-if="hasFeaturedProducts"
                 >
                     <li
-                        v-for="product in products.data.slice(0, 4)"
+                        v-for="product in featuredProductList"
                         :key="'featured-' + product.id"
                         class="featured-product-item"
                     >
@@ -1149,6 +1136,10 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
+    featuredProducts: {
+        type: Array,
+        default: () => [],
+    },
     filter: {
         type: Object,
         default: () => ({}),
@@ -1232,6 +1223,16 @@ const selectedProduct = ref(null);
 const modalQuantity = ref(1);
 const isAddingToCart = ref(false);
 let cartModal = null;
+
+const featuredProductList = computed(() => {
+    return props.featuredProducts.length > 0
+        ? props.featuredProducts
+        : props.products.data.slice(0, 4);
+});
+
+const hasFeaturedProducts = computed(() => {
+    return featuredProductList.value.length > 0;
+});
 
 onMounted(() => {
     // Cart modal
@@ -1549,7 +1550,7 @@ const confirmAddToCart = () => {
     overflow-x: visible;
     max-width: 100%;
     /* Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
+    --grocery-theme: 255, 149, 5, 1; /* Main teal/cyan color: rgb(60, 133, 153) */
     --grocery-content: 143, 143, 178; /* Light gray-blue content text */
     --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
     --grocery-border: 232, 232, 232; /* Light gray borders */

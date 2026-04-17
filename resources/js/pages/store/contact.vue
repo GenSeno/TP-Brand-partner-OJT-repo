@@ -9,6 +9,9 @@
             </div>
             <div class="contact-hero-overlay"></div>
             <div class="contact-hero-content">
+                <div class="breadcrumb-wrapper">
+                    <Breadcrumb :items="breadcrumbItems" />
+                </div>
                 <h1 class="contact-hero-title">Contact us</h1>
             </div>
         </section>
@@ -88,6 +91,14 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { computed } from 'vue';
+
+// Breadcrumb items
+const breadcrumbItems = computed(() => [
+    { label: 'Contact Us' }
+]);
+
 </script>
 
 <style scoped>
@@ -95,6 +106,54 @@ import { Head } from '@inertiajs/vue3';
     font-family: 'Public Sans', sans-serif;
     background: #fff;
     min-height: 100vh;
+}
+
+.breadcrumb-wrapper {
+    padding: 0 0 15px;
+}
+
+.contact-hero-content :deep(.breadcrumb) {
+    justify-content: flex-start;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.contact-hero-content :deep(.breadcrumb-item) {
+    color: #ffffff;
+}
+
+.contact-hero-content :deep(.breadcrumb-item:not(:last-child)::after) {
+    color: #ffffff;
+}
+
+.contact-hero-content :deep(.breadcrumb-home) {
+    color: #ffffff;
+}
+
+.contact-hero-content :deep(.breadcrumb-home:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.contact-hero-content :deep(.breadcrumb-home:hover i) {
+    color: #FF9505;
+}
+
+.contact-hero-content :deep(.breadcrumb-item a) {
+    color: #ffffff;
+}
+
+.contact-hero-content :deep(.breadcrumb-item a:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.contact-hero-content :deep(.breadcrumb-item.active) {
+    color: #ffffff;
+}
+
+.contact-hero-content :deep(.breadcrumb-item span) {
+    color: #ffffff;
 }
 
 /* Hero */

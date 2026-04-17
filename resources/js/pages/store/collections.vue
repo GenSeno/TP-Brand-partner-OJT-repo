@@ -9,6 +9,9 @@
             </div>
             <div class="collections-hero-overlay"></div>
             <div class="collections-hero-content">
+                <div class="breadcrumb">
+                    <Breadcrumb :items="breadcrumbItems" />
+                </div>
                 <h1 class="collections-hero-title">OUR COLLECTION</h1>
                 <p class="collections-hero-desc">
                     Tribu Pakaras is launching its official eCommerce platform
@@ -129,6 +132,13 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
+
+// Breadcrumb items
+const breadcrumbItems = computed(() => [
+    { label: 'Collections' }
+]);
 </script>
 
 <style scoped>
@@ -136,6 +146,47 @@ import { Head } from '@inertiajs/vue3';
     font-family: 'Public Sans', sans-serif;
     background: #fff;
     min-height: 100vh;
+}
+
+/* Breadcrumb Color Override for Collections Page */
+.collections-hero-content :deep(.breadcrumb) {
+    justify-content: center;
+    padding: 0 0 15px;
+    margin-bottom: 0;
+}
+
+.collections-hero-content :deep(.breadcrumb-item) {
+    color: #ffffff;
+}
+
+.collections-hero-content :deep(.breadcrumb-item:not(:last-child)::after) {
+    color: #ffffff;
+}
+
+.collections-hero-content :deep(.breadcrumb-home) {
+    color: #ffffff;
+}
+
+.collections-hero-content :deep(.breadcrumb-home:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.collections-hero-content :deep(.breadcrumb-item a) {
+    color: #ffffff;
+}
+
+.collections-hero-content :deep(.breadcrumb-item a:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.collections-hero-content :deep(.breadcrumb-item.active) {
+    color: #ffffff;
+}
+
+.collections-hero-content :deep(.breadcrumb-item span) {
+    color: #ffffff;
 }
 
 /* Hero */

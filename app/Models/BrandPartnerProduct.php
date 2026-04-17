@@ -100,7 +100,7 @@ class BrandPartnerProduct extends Model
 
     public function category(): Relations\BelongsTo
     {
-        return $this->belongsTo(BrandPartnerCategory::class, 'category_id');
+        return $this->belongsTo(BrandPartnerProductOptionValue::class, 'category_id');
     }
 
     public function collection(): Relations\BelongsTo

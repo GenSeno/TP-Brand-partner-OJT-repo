@@ -9,6 +9,9 @@
             </div>
             <div class="about-hero-overlay"></div>
             <div class="about-hero-content">
+                <div class="breadcrumb-wrapper">
+                    <Breadcrumb :items="breadcrumbItems" />
+                </div>
                 <h1 class="about-hero-title">About Us</h1>
             </div>
         </section>
@@ -139,6 +142,14 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { computed } from 'vue';
+
+// Breadcrumb items
+const breadcrumbItems = computed(() => [
+    { label: 'About Us' }
+]);
+
 </script>
 
 <style scoped>
@@ -146,6 +157,45 @@ import { Head } from '@inertiajs/vue3';
     font-family: 'Public Sans', sans-serif;
     background: #fff;
     min-height: 100vh;
+}
+
+/* Breadcrumb Color Override for About Us Page */
+.about-hero-content :deep(.breadcrumb) {
+    justify-content: center;
+}
+
+.about-hero-content :deep(.breadcrumb-item) {
+    color: #ffffff;
+}
+
+.about-hero-content :deep(.breadcrumb-item:not(:last-child)::after) {
+    color: #ffffff;
+}
+    
+.about-hero-content :deep(.breadcrumb-home) {
+    color: #ffffff;
+}
+
+.about-hero-content :deep(.breadcrumb-home:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.about-hero-content :deep(.breadcrumb-item a) {
+    color: #ffffff;
+}
+
+.about-hero-content :deep(.breadcrumb-item a:hover) {
+    color: #FF9505;
+    text-decoration: none;
+}
+
+.about-hero-content :deep(.breadcrumb-item.active) {
+    color: #ffffff;
+}
+
+.about-hero-content :deep(.breadcrumb-item span) {
+    color: #ffffff;
 }
 
 /* Hero */

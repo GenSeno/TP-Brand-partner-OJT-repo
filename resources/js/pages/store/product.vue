@@ -2,6 +2,11 @@
     <Head :title="`${product.name} - ${brandPartner.name}`" />
 
     <div class="grocery-product-page">
+        <!-- Breadcrumb at the top -->
+        <div class="product-breadcrumb-wrapper px-15">
+            <Breadcrumb :items="breadcrumbItems" />
+        </div>
+
         <!-- Header with back arrow -->
         <div class="product-header px-15">
             <button type="button" class="back-arrow" @click="goBack">
@@ -269,6 +274,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -282,6 +288,11 @@ const props = defineProps({
         default: 0,
     },
 });
+
+const breadcrumbItems = computed(() => [
+    { label: 'Shop', link: route('store.brand-partner.shop', props.brandPartner?.slug) },
+    { label: props.product.name }
+]);
 
 const quantity = ref(1);
 const isAddingToCart = ref(false);
@@ -474,6 +485,69 @@ const addToCart = () => {
     line-height: 1;
 }
 
+/* Top Breadcrumb */
+.product-breadcrumb-wrapper {
+    background: #fff;
+    padding-top: 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgb(var(--grocery-border));
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb) {
+    padding: 0;
+    margin: 0;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item) {
+    font-size: 13px;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-home) {
+    color: #666;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-home:hover) {
+    color: rgb(var(--grocery-theme));
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item a) {
+    color: #666;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item a:hover) {
+    color: rgb(var(--grocery-theme));
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item.active) {
+    color: rgb(var(--grocery-title));
+    font-weight: 600;
+}
+
+/* Adjust header spacing */
+.product-header {
+    border-bottom: 1px solid rgb(var(--grocery-border));
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+    .product-breadcrumb-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: transparent;
+        border-bottom: none;
+        padding-top: 16px;
+        padding-bottom: 8px;
+    }
+    
+    .product-header {
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: none;
+        padding-top: 8px;
+    }
+}
+
+
 /* ========================
    Main Product Section
    ======================== */
@@ -484,6 +558,7 @@ const addToCart = () => {
 
 .slider-box {
     padding: 15px;
+    width: 100%;
 }
 
 .main-product-image {
@@ -493,11 +568,15 @@ const addToCart = () => {
     background: #f8f8f8;
     cursor: pointer;
     border: 1px solid rgb(var(--grocery-border));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .main-product-image img {
     width: 100%;
-    max-height: 400px;
+    height: auto;
     object-fit: contain;
     display: block;
 }
