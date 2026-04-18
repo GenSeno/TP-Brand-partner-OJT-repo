@@ -2,6 +2,7 @@
     <Head :title="brandPartner.name" />
 
     <div class="grocery-store-page">
+        <ToastComponent />
         <!-- Hero Carousel Section -->
         <section class="hero-carousel-section">
             <div
@@ -47,7 +48,11 @@
                                     HUGIS COLLECTION V2
                                 </h1>
                                 <p class="slide-subtitle text-white">
-                                    HUGIS COLLECTION V2 celebrates this collective energy. It honors individuality while embracing the beauty of community, proving that when runners move as one, their diversity becomes the masterpiece.
+                                    HUGIS COLLECTION V2 celebrates this
+                                    collective energy. It honors individuality
+                                    while embracing the beauty of community,
+                                    proving that when runners move as one, their
+                                    diversity becomes the masterpiece.
                                 </p>
                                 <a
                                     :href="
@@ -75,7 +80,11 @@
                                     KEEP ON<br />BREAKING THE<br />BOUNDARIES.
                                 </h1>
                                 <p class="slide-subtitle text-white mt-3">
-                                    Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.
+                                    Tribu Pakaras is launching its official
+                                    eCommerce platform soon, powered by upgraded
+                                    production, improved quality, and expanded
+                                    product offerings designed for athletes who
+                                    demand more.
                                 </p>
                                 <a
                                     :href="
@@ -100,10 +109,15 @@
                                 style="z-index: 2"
                             >
                                 <h1 class="slide-title text-white">
-                                    DARE TO DREAM BIG — KEEP ON BREAKING THE BOUNDARIES.
+                                    DARE TO DREAM BIG — KEEP ON BREAKING THE
+                                    BOUNDARIES.
                                 </h1>
                                 <p class="slide-subtitle text-white mt-3">
-                                    Tribu Pakaras is launching its official eCommerce platform soon, powered by upgraded production, improved quality, and expanded product offerings designed for athletes who demand more.
+                                    Tribu Pakaras is launching its official
+                                    eCommerce platform soon, powered by upgraded
+                                    production, improved quality, and expanded
+                                    product offerings designed for athletes who
+                                    demand more.
                                 </p>
                                 <Link
                                     :href="
@@ -532,10 +546,7 @@
                     Better Build. Made Better
                 </h2>
 
-                <ul
-                    class="featured-product-list"
-                    v-if="hasFeaturedProducts"
-                >
+                <ul class="featured-product-list" v-if="hasFeaturedProducts">
                     <li
                         v-for="product in featuredProductList"
                         :key="'featured-' + product.id"
@@ -1112,13 +1123,8 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
-
-const formatCurrencySimple = (amount) => {
-    return (amount / 100).toLocaleString('en-PH', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-};
+import { emitter } from '@/composables/eventBus';
+import ToastComponent from '@/components/ToastContainer.vue';
 
 const activeEventTab = ref('upcoming');
 let countdownInterval = null;
@@ -1348,7 +1354,9 @@ const addToCart = (product) => {
 
 const confirmAddToCart = () => {
     if (!selectedProduct.value) return;
+
     isAddingToCart.value = true;
+
     router.post(
         route('store.brand-partner.cart.add'),
         {
@@ -1357,8 +1365,25 @@ const confirmAddToCart = () => {
         },
         {
             preserveScroll: true,
-            onSuccess: () => cartModal?.hide(),
-            onError: (errors) => console.error('Error adding to cart:', errors),
+
+            onSuccess: () => {
+                cartModal?.hide();
+
+                emitter.emit('toast:show', {
+                    type: 'success',
+                    message: `${selectedProduct.value.name} added to cart!`,
+                });
+            },
+
+            onError: (errors) => {
+                console.error('Error adding to cart:', errors);
+
+                emitter.emit('toast:show', {
+                    type: 'error',
+                    message: 'Failed to add item to cart',
+                });
+            },
+
             onFinish: () => {
                 isAddingToCart.value = false;
             },
@@ -1541,7 +1566,6 @@ const confirmAddToCart = () => {
     background-color: #fff;
     width: 26px;
     border-radius: 10px;
-
 }
 /* ===== Grocery Template Styles ===== */
 .grocery-store-page {
@@ -1550,7 +1574,8 @@ const confirmAddToCart = () => {
     overflow-x: visible;
     max-width: 100%;
     /* Grocery Theme Color Variables */
-    --grocery-theme: 255, 149, 5, 1; /* Main teal/cyan color: rgb(60, 133, 153) */
+    --grocery-theme:
+        255, 149, 5, 1; /* Main teal/cyan color: rgb(60, 133, 153) */
     --grocery-content: 143, 143, 178; /* Light gray-blue content text */
     --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
     --grocery-border: 232, 232, 232; /* Light gray borders */
@@ -3727,7 +3752,7 @@ const confirmAddToCart = () => {
     font-weight: 800;
     color: rgb(var(--grocery-title));
     margin: 0;
-    font-family:'poppins', 'Public Sans', sans-serif;
+    font-family: 'poppins', 'Public Sans', sans-serif;
 }
 
 .grocery-modal-body {
@@ -3869,7 +3894,7 @@ const confirmAddToCart = () => {
     padding: 12px 16px;
     border-radius: 2px;
     border: none;
-    background: #FF9505;
+    background: #ff9505;
     color: #fff;
     font-size: 13px;
     font-weight: 800;
@@ -4053,7 +4078,6 @@ const confirmAddToCart = () => {
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
 }
 
-
 .product-image-wrap {
     position: relative;
     margin-bottom: 12px;
@@ -4183,8 +4207,6 @@ const confirmAddToCart = () => {
     padding: 0;
     margin: 0;
 }
-
-
 
 @media (max-width: 991px) {
     .product-offer-list {

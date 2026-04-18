@@ -3,7 +3,6 @@
         <!-- Home with Icon and Text together -->
         <li class="breadcrumb-item">
             <Link href="/" class="breadcrumb-home">
-                <i class="ri-home-4-line"></i>
                 <span>Home</span>
             </Link>
         </li>
@@ -53,6 +52,7 @@ export default {
     list-style: none;
     background: transparent;
     font-family: 'Public Sans', sans-serif;
+    user-select: none;
 }
 
 .breadcrumb-item {
@@ -72,17 +72,7 @@ export default {
     align-items: center;
     gap: 6px;
     color: #666;
-    text-decoration: none;
     transition: color 0.2s;
-}
-
-.breadcrumb-home i {
-    font-size: 16px;
-}
-
-.breadcrumb-home:hover {
-    color: #FF9505;
-    text-decoration: underline;
 }
 
 .breadcrumb-item a {
@@ -92,12 +82,7 @@ export default {
 }
 
 .breadcrumb-item a:hover {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-    color: #333;
-    font-weight: 500;
 }
 </style>

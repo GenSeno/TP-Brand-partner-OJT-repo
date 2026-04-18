@@ -146,10 +146,7 @@ import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 import { computed } from 'vue';
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-    { label: 'About Us' }
-]);
-
+const breadcrumbItems = [{ label: 'About Us', link: '#' }];
 </script>
 
 <style scoped>
@@ -171,13 +168,13 @@ const breadcrumbItems = computed(() => [
 .about-hero-content :deep(.breadcrumb-item:not(:last-child)::after) {
     color: #ffffff;
 }
-    
+
 .about-hero-content :deep(.breadcrumb-home) {
     color: #ffffff;
 }
 
 .about-hero-content :deep(.breadcrumb-home:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
@@ -186,7 +183,7 @@ const breadcrumbItems = computed(() => [
 }
 
 .about-hero-content :deep(.breadcrumb-item a:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 

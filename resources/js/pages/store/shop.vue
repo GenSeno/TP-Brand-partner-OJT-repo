@@ -5,6 +5,7 @@
         <div class="shop-inner">
             <!-- BreadCrumb -->
             <Breadcrumb :items="breadcrumbItems" />
+            <ToastComponent />
 
             <h1 class="shop-title">Our Products</h1>
 
@@ -66,7 +67,9 @@
                                 />
                                 <span>
                                     {{ cat.label || cat.name }}
-                                    <small v-if="cat.products_count !== undefined">
+                                    <small
+                                        v-if="cat.products_count !== undefined"
+                                    >
                                         ({{ cat.products_count }})
                                     </small>
                                 </span>
@@ -98,13 +101,18 @@
                                     v-for="color in colorOptions"
                                     :key="color.value"
                                     class="color-swatch"
-                                    :style="{ background: color.hex || color.value }"
+                                    :style="{
+                                        background: color.hex || color.value,
+                                    }"
                                     :class="{
                                         active: selectedColors.includes(
                                             color.value,
                                         ),
                                     }"
-                                    @click="toggleColor(color.value); applyFilters()"
+                                    @click="
+                                        toggleColor(color.value);
+                                        applyFilters();
+                                    "
                                     :title="color.name"
                                 ></button>
                             </div>
@@ -138,7 +146,10 @@
                                     :class="{
                                         active: selectedSizes.includes(size),
                                     }"
-                                    @click="toggleSize(size); applyFilters()"
+                                    @click="
+                                        toggleSize(size);
+                                        applyFilters();
+                                    "
                                 >
                                     {{ size }}
                                 </button>
@@ -182,7 +193,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <!-- Price Filter -->
                     <div class="filter-group">
@@ -486,7 +496,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
-
+import { emitter } from '@/composables/eventBus';
+import ToastComponent from '@/components/ToastContainer.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -501,9 +512,7 @@ const props = defineProps({
 });
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-    { label: 'Shop' }
-]);
+const breadcrumbItems = [{ label: 'Shop' }];
 
 const showFilters = ref(true);
 
@@ -551,9 +560,9 @@ const selectedCollections = ref(
 );
 const selectedFeatured = ref(
     props.filter?.featured === true ||
-    props.filter?.featured === '1' ||
-    props.filter?.featured === 1 ||
-    props.filter?.featured === 'true',
+        props.filter?.featured === '1' ||
+        props.filter?.featured === 1 ||
+        props.filter?.featured === 'true',
 );
 const selectedProduct = ref(null);
 const modalQuantity = ref(1);
@@ -646,17 +655,34 @@ const confirmAddToCart = () => {
     if (!selectedProduct.value) return;
 
     isAddingToCart.value = true;
+
     router.post(
         route('store.brand-partner.cart.add'),
         {
             product_id: selectedProduct.value.id,
             quantity: modalQuantity.value,
-            color: selectedProduct.value.colors_array?.[0] || null,
-            size: selectedProduct.value.sizes_array?.[0] || null,
         },
         {
             preserveScroll: true,
-            onSuccess: () => cartModal?.hide(),
+
+            onSuccess: () => {
+                cartModal?.hide();
+
+                emitter.emit('toast:show', {
+                    type: 'success',
+                    message: `${selectedProduct.value.name} added to cart!`,
+                });
+            },
+
+            onError: (errors) => {
+                console.error('Error adding to cart:', errors);
+
+                emitter.emit('toast:show', {
+                    type: 'error',
+                    message: 'Failed to add item to cart',
+                });
+            },
+
             onFinish: () => {
                 isAddingToCart.value = false;
             },
@@ -714,7 +740,6 @@ const confirmAddToCart = () => {
 .breadcrumb-item a:hover i {
     color: #e84b0f;
 }
-
 
 .shop-page {
     font-family: 'Public Sans', sans-serif;

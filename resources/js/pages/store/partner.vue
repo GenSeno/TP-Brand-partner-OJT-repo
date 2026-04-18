@@ -2,11 +2,10 @@
     <Head title="Be Our Partner" />
 
     <div class="partner-page">
-
         <!-- ===== HERO ===== -->
         <section class="partner-hero">
             <div class="partner-hero-bg">
-                <img src="/img/img-partner1.png" alt="">
+                <img src="/img/img-partner1.png" alt="" />
             </div>
             <div class="partner-hero-overlay"></div>
             <div class="partner-hero-content">
@@ -38,7 +37,10 @@
                 </div>
                 <div class="partner-grow-image">
                     <div class="img-placeholder">
-                        <img src="/img/img-partner2.png" alt="Let's grow together">
+                        <img
+                            src="/img/img-partner2.png"
+                            alt="Let's grow together"
+                        />
                     </div>
                 </div>
             </div>
@@ -47,7 +49,7 @@
         <!-- ===== WHY PARTNER WITH US ===== -->
         <section class="partner-why">
             <div class="partner-why-bg">
-                <img src="/img/img-partner3.png" alt="">
+                <img src="/img/img-partner3.png" alt="" />
             </div>
             <div class="partner-why-overlay"></div>
             <div class="partner-why-inner">
@@ -57,29 +59,45 @@
                         <div class="why-card-icon">
                             <i class="ri-price-tag-3-line"></i>
                         </div>
-                        <h3>Your Brand,<br>our platform</h3>
-                        <p>Launch your own online store with ease! We'll set up your eCommerce site, integrate secure payments, and make selling simple and seamless.</p>
+                        <h3>Your Brand,<br />our platform</h3>
+                        <p>
+                            Launch your own online store with ease! We'll set up
+                            your eCommerce site, integrate secure payments, and
+                            make selling simple and seamless.
+                        </p>
                     </div>
                     <div class="why-card">
                         <div class="why-card-icon">
                             <i class="ri-truck-line"></i>
                         </div>
-                        <h3>We Print, Pack<br>& Ship for You</h3>
-                        <p>Sit back and relax — we handle all the printing, packaging, and delivery while you focus on designing and growing your brand.</p>
+                        <h3>We Print, Pack<br />& Ship for You</h3>
+                        <p>
+                            Sit back and relax — we handle all the printing,
+                            packaging, and delivery while you focus on designing
+                            and growing your brand.
+                        </p>
                     </div>
                     <div class="why-card">
                         <div class="why-card-icon">
                             <i class="ri-home-3-line"></i>
                         </div>
-                        <h3>No Inventory,<br>No Hassle!</h3>
-                        <p>Say goodbye to storage worries! With our print-on-demand and drop shipping solutions, you sell first — we produce and ship on demand.</p>
+                        <h3>No Inventory,<br />No Hassle!</h3>
+                        <p>
+                            Say goodbye to storage worries! With our
+                            print-on-demand and drop shipping solutions, you
+                            sell first — we produce and ship on demand.
+                        </p>
                     </div>
                     <div class="why-card">
                         <div class="why-card-icon">
                             <i class="ri-store-2-line"></i>
                         </div>
-                        <h3>We Showcase Your<br>Brand in Our Store</h3>
-                        <p>Apart from online sales, your products can also shine in our physical shop, where walk-in customers can see, feel, and buy your creations in person.</p>
+                        <h3>We Showcase Your<br />Brand in Our Store</h3>
+                        <p>
+                            Apart from online sales, your products can also
+                            shine in our physical shop, where walk-in customers
+                            can see, feel, and buy your creations in person.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -88,14 +106,17 @@
         <!-- ===== RUN STRONGER TOGETHER CTA ===== -->
         <section class="partner-run">
             <div class="partner-run-bg">
-                <img src="/img/img-partner4.png" alt="">
+                <img src="/img/img-partner4.png" alt="" />
             </div>
             <div class="partner-run-overlay"></div>
             <div class="partner-run-inner">
-                <h2 class="partner-run-title">Run stronger together—partner<br>with Tribu Parakas.</h2>
+                <h2 class="partner-run-title">
+                    Run stronger together—partner<br />with Tribu Parakas.
+                </h2>
                 <p class="partner-run-text">
-                    We provide end-to-end race solutions including registration, race kit production, and full event
-                    support—built for smooth execution and happy runners.
+                    We provide end-to-end race solutions including registration,
+                    race kit production, and full event support—built for smooth
+                    execution and happy runners.
                 </p>
                 <a href="#" class="partner-run-btn">START YOUR EVENT WITH US</a>
             </div>
@@ -104,13 +125,16 @@
         <!-- ===== NEED HELP CTA ===== -->
         <section class="partner-help">
             <div class="partner-help-bg">
-                <img src="/img/img-partner5.png" alt="">
+                <img src="/img/img-partner5.png" alt="" />
             </div>
             <div class="partner-help-card">
-                <h2 class="partner-help-title">Need Help For Your Printing Ideas?</h2>
+                <h2 class="partner-help-title">
+                    Need Help For Your Printing Ideas?
+                </h2>
                 <p class="partner-help-text">
-                    Our team is always happy to assist and provide the support you need. Send us a
-                    message today and we'll get right back to you
+                    Our team is always happy to assist and provide the support
+                    you need. Send us a message today and we'll get right back
+                    to you
                 </p>
                 <a href="#" class="partner-help-btn">MESSAGE NOW</a>
             </div>
@@ -120,26 +144,37 @@
         <section class="partner-easy">
             <div class="partner-easy-inner">
                 <div class="partner-easy-left">
-                    <h2 class="partner-easy-title">Doing Business with<br>Tribu Pakaras is as<br>Easy as 1 2 3!</h2>
+                    <h2 class="partner-easy-title">
+                        Doing Business with<br />Tribu Pakaras is as<br />Easy
+                        as 1 2 3!
+                    </h2>
                     <p class="partner-easy-sub">
-                        We make partnerships simple, smooth, and stress-free — so you can focus on what you
-                        do best: growing your brand. Here's how easy it is to work with us
+                        We make partnerships simple, smooth, and stress-free —
+                        so you can focus on what you do best: growing your
+                        brand. Here's how easy it is to work with us
                     </p>
                     <div class="partner-easy-image">
                         <div class="img-placeholder tall">
-                            <img src="/img/img-partner6.png" alt="Easy to work with us">
+                            <img
+                                src="/img/img-partner6.png"
+                                alt="Easy to work with us"
+                            />
                         </div>
                     </div>
                 </div>
                 <div class="partner-easy-right">
-                    <div class="easy-step" v-for="step in steps" :key="step.title">
+                    <div
+                        class="easy-step"
+                        v-for="step in steps"
+                        :key="step.title"
+                    >
                         <div class="easy-step-content">
                             <h3 class="easy-step-title">{{ step.title }}</h3>
                             <p class="easy-step-text">{{ step.text }}</p>
                         </div>
                         <div class="easy-step-image">
                             <div class="img-placeholder square">
-                                <img :src="step.image" :alt="step.title">
+                                <img :src="step.image" :alt="step.title" />
                             </div>
                         </div>
                     </div>
@@ -152,8 +187,9 @@
             <div class="partner-choose-inner">
                 <h2 class="partner-choose-title">Why Choose Us?</h2>
                 <p class="partner-choose-sub">
-                    High-quality prints, seamless customization, and dependable fulfillment —TP Ink Lab is your one-stop
-                    solution for custom apparel. More trust, more value, more reason to choose us.
+                    High-quality prints, seamless customization, and dependable
+                    fulfillment —TP Ink Lab is your one-stop solution for custom
+                    apparel. More trust, more value, more reason to choose us.
                 </p>
                 <div class="partner-choose-grid">
                     <div class="choose-card">
@@ -161,21 +197,32 @@
                             <i class="ri-equalizer-line"></i>
                         </div>
                         <h3>Full Customization, No Limits</h3>
-                        <p>Every design, color, and detail is fully customizable — giving you total freedom to create apparel that's uniquely yours.</p>
+                        <p>
+                            Every design, color, and detail is fully
+                            customizable — giving you total freedom to create
+                            apparel that's uniquely yours.
+                        </p>
                     </div>
                     <div class="choose-card">
                         <div class="choose-card-icon">
                             <i class="ri-star-line"></i>
                         </div>
                         <h3>Premium Quality, Fade-Free Prints</h3>
-                        <p>Using high-end sublimation technology, our prints maintain their color and clarity wash after wash.</p>
+                        <p>
+                            Using high-end sublimation technology, our prints
+                            maintain their color and clarity wash after wash.
+                        </p>
                     </div>
                     <div class="choose-card">
                         <div class="choose-card-icon">
                             <i class="ri-bar-chart-line"></i>
                         </div>
                         <h3>Comfort Meets Performance</h3>
-                        <p>We use lightweight, breathable, and durable fabrics ideal for sportswear, activewear, and lifestyle apparel.</p>
+                        <p>
+                            We use lightweight, breathable, and durable fabrics
+                            ideal for sportswear, activewear, and lifestyle
+                            apparel.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -184,12 +231,17 @@
         <!-- ===== BRING IDEAS TO LIFE CTA ===== -->
         <section class="partner-ideas">
             <div class="partner-ideas-bg">
-                <img src="/img/img-partner10.png" alt="Bring Ideas to Life">
+                <img src="/img/img-partner10.png" alt="Bring Ideas to Life" />
             </div>
             <div class="partner-ideas-overlay"></div>
             <div class="partner-ideas-inner">
-                <h2 class="partner-ideas-title">We bring your ideas to life!</h2>
-                <p class="partner-ideas-sub">with vibrant, high-quality custom prints made exactly your way.</p>
+                <h2 class="partner-ideas-title">
+                    We bring your ideas to life!
+                </h2>
+                <p class="partner-ideas-sub">
+                    with vibrant, high-quality custom prints made exactly your
+                    way.
+                </p>
                 <a href="#" class="partner-ideas-btn">GET STARTED TODAY</a>
             </div>
         </section>
@@ -202,9 +254,7 @@ import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 import { computed } from 'vue';
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-    { label: 'Be Our Partner' }
-]);
+const breadcrumbItems = computed(() => [{ label: 'Be Our Partner' }]);
 
 const steps = [
     {
@@ -256,12 +306,12 @@ const steps = [
 }
 
 .partner-hero-content :deep(.breadcrumb-home:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
 .partner-hero-content :deep(.breadcrumb-home:hover i) {
-    color: #FF9505;
+    color: #ff9505;
 }
 
 .partner-hero-content :deep(.breadcrumb-item a) {
@@ -269,7 +319,7 @@ const steps = [
 }
 
 .partner-hero-content :deep(.breadcrumb-item a:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
@@ -318,7 +368,6 @@ const steps = [
     display: flex;
     align-items: flex-end;
     overflow: hidden;
-
 }
 
 .partner-hero-bg {
@@ -338,7 +387,7 @@ const steps = [
 .partner-hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     z-index: 1;
 }
 
@@ -416,7 +465,7 @@ const steps = [
 .partner-why-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.72);
+    background: rgba(0, 0, 0, 0.72);
     z-index: 1;
 }
 
@@ -426,6 +475,7 @@ const steps = [
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 80px;
+    cursor: default;
 }
 
 .partner-why-title {
@@ -444,9 +494,9 @@ const steps = [
 }
 
 .why-card {
-    background: #FF95051A;
+    background: #ff95051a;
     backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 36px 28px;
     display: flex;
     flex-direction: column;
@@ -456,14 +506,14 @@ const steps = [
 }
 
 .why-card:hover {
-    background: rgba(255,255,255,0.13);
+    background: rgba(255, 255, 255, 0.13);
 }
 
 .why-card-icon {
     width: 58px;
     height: 58px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -483,7 +533,7 @@ const steps = [
 
 .why-card p {
     font-size: 14px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.75;
     margin: 0;
 }
@@ -513,7 +563,7 @@ const steps = [
 .partner-run-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(200,65,15,0.82);
+    background: rgba(200, 65, 15, 0.82);
     z-index: 1;
 }
 
@@ -535,7 +585,7 @@ const steps = [
 
 .partner-run-text {
     font-size: 15px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.75;
     margin: 0 0 36px;
     max-width: 640px;
@@ -553,7 +603,9 @@ const steps = [
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background 0.25s, transform 0.25s;
+    transition:
+        background 0.25s,
+        transform 0.25s;
 }
 
 .partner-run-btn:hover {
@@ -597,7 +649,6 @@ const steps = [
 .partner-easy-image {
     overflow: hidden;
     height: 380px;
-
 }
 
 /* Steps */
@@ -686,11 +737,13 @@ const steps = [
     display: flex;
     flex-direction: column;
     gap: 16px;
-    transition: box-shadow 0.25s, transform 0.25s;
+    transition:
+        box-shadow 0.25s,
+        transform 0.25s;
 }
 
 .choose-card:hover {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     transform: translateY(-4px);
 }
 
@@ -698,7 +751,7 @@ const steps = [
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: rgba(232,75,15,0.1);
+    background: rgba(232, 75, 15, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -748,7 +801,7 @@ const steps = [
 .partner-ideas-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(180,60,15,0.85);
+    background: rgba(180, 60, 15, 0.85);
     z-index: 1;
 }
 
@@ -769,7 +822,7 @@ const steps = [
 
 .partner-ideas-sub {
     font-size: 15px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.7;
     margin: 0 0 36px;
 }
@@ -784,7 +837,9 @@ const steps = [
     letter-spacing: 2px;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background 0.25s, transform 0.25s;
+    transition:
+        background 0.25s,
+        transform 0.25s;
 }
 
 .partner-ideas-btn:hover {
@@ -856,7 +911,9 @@ const steps = [
     letter-spacing: 2px;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background 0.25s, transform 0.25s;
+    transition:
+        background 0.25s,
+        transform 0.25s;
 }
 
 .partner-help-btn:hover {
