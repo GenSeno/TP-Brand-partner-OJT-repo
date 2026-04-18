@@ -92,13 +92,9 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
-import { computed } from 'vue';
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-    { label: 'Contact Us' }
-]);
-
+const breadcrumbItems = [{ label: 'Contact Us' }];
 </script>
 
 <style scoped>
@@ -131,12 +127,12 @@ const breadcrumbItems = computed(() => [
 }
 
 .contact-hero-content :deep(.breadcrumb-home:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
 .contact-hero-content :deep(.breadcrumb-home:hover i) {
-    color: #FF9505;
+    color: #ff9505;
 }
 
 .contact-hero-content :deep(.breadcrumb-item a) {
@@ -144,7 +140,7 @@ const breadcrumbItems = computed(() => [
 }
 
 .contact-hero-content :deep(.breadcrumb-item a:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
@@ -337,7 +333,7 @@ const breadcrumbItems = computed(() => [
 }
 
 .contact-submit-btn:hover {
-    background: #FF9505;
+    background: #ff9505;
     transform: translateY(-1px);
 }
 </style>

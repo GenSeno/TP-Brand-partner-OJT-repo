@@ -133,12 +133,9 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
-import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-    { label: 'Collections' }
-]);
+const breadcrumbItems = [{ label: 'Collections' }];
 </script>
 
 <style scoped>
@@ -168,7 +165,7 @@ const breadcrumbItems = computed(() => [
 }
 
 .collections-hero-content :deep(.breadcrumb-home:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 
@@ -177,7 +174,7 @@ const breadcrumbItems = computed(() => [
 }
 
 .collections-hero-content :deep(.breadcrumb-item a:hover) {
-    color: #FF9505;
+    color: #ff9505;
     text-decoration: none;
 }
 

@@ -251,10 +251,9 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
-import { computed } from 'vue';
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [{ label: 'Be Our Partner' }]);
+const breadcrumbItems = [{ label: 'Be Our Partner' }];
 
 const steps = [
     {

@@ -1157,21 +1157,6 @@ const selectedEvent = ref(props.filter.event || null);
 const searchQuery = ref(props.filter.search || '');
 let searchTimeout = null;
 
-const sectionLabel = computed(() => {
-    if (searchQuery.value) return `Results for "${searchQuery.value}"`;
-    if (selectedCategory.value) {
-        const cat = props.categories.find(
-            (c) => c.id == selectedCategory.value,
-        );
-        return cat?.name || 'Products';
-    }
-    if (selectedEvent.value) {
-        const ev = props.events.find((e) => e.id == selectedEvent.value);
-        return ev?.name || 'Products';
-    }
-    return 'All Products';
-});
-
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-PH', {
         style: 'currency',
@@ -1198,18 +1183,6 @@ const selectEvent = (event) => {
 const clearFilters = () => {
     selectedCategory.value = null;
     selectedEvent.value = null;
-    searchQuery.value = '';
-    applyFilters();
-};
-
-const applySearch = () => applyFilters();
-
-const debounceSearch = () => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => applyFilters(), 400);
-};
-
-const clearSearch = () => {
     searchQuery.value = '';
     applyFilters();
 };
