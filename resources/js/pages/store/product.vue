@@ -2,25 +2,20 @@
     <Head :title="`${product.name} - ${brandPartner.name}`" />
 
     <div class="grocery-product-page">
+        <!-- Breadcrumb at the top -->
+        <div class="product-breadcrumb-wrapper px-15">
+            <Breadcrumb :items="breadcrumbItems" />
+        </div>
+
         <!-- Header with back arrow -->
         <div class="product-header px-15">
-            <Link
-                :href="route('store.brand-partner.index')"
-                class="back-arrow"
-            >
+            <button type="button" class="back-arrow" @click="goBack">
                 <i class="ri-arrow-left-s-line"></i>
-            </Link>
+            </button>
             <h6 class="header-title">Product Details</h6>
-            <Link
-                :href="
-                    route('store.brand-partner.cart')
-                "
-                class="cart-icon-link"
-            >
+            <Link :href="route('store.brand-partner.cart')" class="cart-icon-link">
                 <i class="ri-shopping-cart-2-line"></i>
-                <span v-if="cartCount > 0" class="cart-badge">{{
-                    cartCount
-                }}</span>
+                <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
             </Link>
         </div>
 
@@ -29,16 +24,9 @@
             <!-- Main Product Section -->
             <section class="main-product-section">
                 <div class="slider-box">
-                    <div
-                        class="main-product-image"
-                        @click="selectedImage = product.image_url"
-                    >
+                    <div class="main-product-image" @click="selectedImage = product.image_url">
                         <img
-                            :src="
-                                selectedImage ||
-                                product.image_url ||
-                                '/img/tshirt-placeholder.svg'
-                            "
+                            :src="selectedImage || product.image_url || '/img/tshirt-placeholder.svg'"
                             :alt="product.name"
                         />
                         <span v-if="discountPercent > 0" class="discount-badge">
@@ -46,10 +34,7 @@
                         </span>
                     </div>
                     <!-- Thumbnail Row -->
-                    <div
-                        class="thumbnail-strip"
-                        v-if="product.images && product.images.length > 1"
-                    >
+                    <div class="thumbnail-strip" v-if="product.images && product.images.length > 1">
                         <div
                             v-for="(image, index) in product.images"
                             :key="index"
@@ -57,46 +42,27 @@
                             :class="{ active: selectedImage === image.url }"
                             @click="selectedImage = image.url"
                         >
-                            <img
-                                :src="image.url"
-                                :alt="`${product.name} ${index + 1}`"
-                            />
+                            <img :src="image.url" :alt="`${product.name} ${index + 1}`" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Container -->
                 <div class="product-container px-15">
-                    <div
-                        class="product-tags"
-                        v-if="product.category || product.event"
-                    >
-                        <span class="ptag" v-if="product.category">{{
-                            product.category.name
-                        }}</span>
-                        <span class="ptag ptag-event" v-if="product.event">{{
-                            product.event.name
-                        }}</span>
+                    <div class="product-tags" v-if="product.category || product.event">
+                        <span class="ptag" v-if="product.category">{{ product.category.name }}</span>
+                        <span class="ptag ptag-event" v-if="product.event">{{ product.event.name }}</span>
                     </div>
 
                     <h4 class="product-title">{{ product.name }}</h4>
 
                     <div class="product-price-row">
-                        <span class="current-price">{{
-                            formatCurrency(product.price)
-                        }}</span>
+                        <span class="current-price">{{ formatCurrency(product.price) }}</span>
                         <del
-                            v-if="
-                                product.compare_price &&
-                                product.compare_price > product.price
-                            "
+                            v-if="product.compare_price && product.compare_price > product.price"
                             class="old-price"
-                        >
-                            {{ formatCurrency(product.compare_price) }}
-                        </del>
-                        <span v-if="discountPercent > 0" class="save-badge"
-                            >Save {{ discountPercent }}%</span
-                        >
+                        >{{ formatCurrency(product.compare_price) }}</del>
+                        <span v-if="discountPercent > 0" class="save-badge">Save {{ discountPercent }}%</span>
                     </div>
 
                     <div class="stock-indicator">
@@ -108,10 +74,7 @@
                         </span>
                     </div>
 
-                    <p
-                        class="short-description"
-                        v-if="product.short_description"
-                    >
+                    <p class="short-description" v-if="product.short_description">
                         {{ product.short_description }}
                     </p>
 
@@ -155,22 +118,13 @@
                         Please select{{ hasColors ? ' a color' : '' }}{{ hasColors && hasSizes ? ' and' : '' }}{{ hasSizes ? ' a size' : '' }} to continue.
                     </p>
 
-                    <!-- Desktop Add to Cart (hidden on mobile) -->
+                    <!-- Desktop Add to Cart -->
                     <div class="desktop-add-section">
                         <div class="qty-box">
-                            <button
-                                class="qty-btn"
-                                @click="decrementQuantity"
-                                :disabled="quantity <= 1"
-                            >
+                            <button class="qty-btn" @click="decrementQuantity" :disabled="quantity <= 1">
                                 <i class="ri-subtract-line"></i>
                             </button>
-                            <input
-                                type="number"
-                                v-model.number="quantity"
-                                min="1"
-                                class="qty-input"
-                            />
+                            <input type="number" v-model.number="quantity" min="1" class="qty-input" />
                             <button class="qty-btn" @click="incrementQuantity">
                                 <i class="ri-add-line"></i>
                             </button>
@@ -193,10 +147,7 @@
         <section class="section-t-space-3" v-if="product.description">
             <div class="description-box px-15">
                 <h5 class="desc-title">Description</h5>
-                <div
-                    class="accordion accordion-style-1"
-                    id="descriptionAccordion"
-                >
+                <div class="accordion accordion-style-1" id="descriptionAccordion">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="descHeading">
                             <button
@@ -206,9 +157,7 @@
                                 data-bs-target="#descCollapse"
                                 aria-expanded="true"
                                 aria-controls="descCollapse"
-                            >
-                                Product Details
-                            </button>
+                            >Product Details</button>
                         </h2>
                         <div
                             id="descCollapse"
@@ -216,10 +165,7 @@
                             aria-labelledby="descHeading"
                             data-bs-parent="#descriptionAccordion"
                         >
-                            <div
-                                class="accordion-body"
-                                v-html="product.description"
-                            ></div>
+                            <div class="accordion-body" v-html="product.description"></div>
                         </div>
                     </div>
                 </div>
@@ -232,41 +178,22 @@
                 <h4>Similar Products</h4>
             </div>
             <div class="similar-grid px-15">
-                <div
-                    v-for="related in relatedProducts"
-                    :key="related.id"
-                    class="product-box"
-                >
-                    <Link
-                        :href="
-                            route('store.brand-partner.product', related.slug)
-                        "
-                        class="product-box-link"
-                    >
+                <div v-for="related in relatedProducts" :key="related.id" class="product-box">
+                    <Link :href="route('store.brand-partner.product', related.slug)" class="product-box-link">
                         <div class="product-box-img">
                             <img
-                                :src="
-                                    related.image_url ||
-                                    '/img/tshirt-placeholder.svg'
-                                "
+                                :src="related.image_url || '/img/tshirt-placeholder.svg'"
                                 :alt="related.name"
                             />
                         </div>
                         <div class="product-box-detail">
                             <h5 class="product-box-name">{{ related.name }}</h5>
                             <div class="product-box-price-row">
-                                <span class="product-box-price">{{
-                                    formatCurrency(related.price)
-                                }}</span>
+                                <span class="product-box-price">{{ formatCurrency(related.price) }}</span>
                             </div>
                         </div>
                     </Link>
-                    <Link
-                        :href="
-                            route('store.brand-partner.product', related.slug)
-                        "
-                        class="add-cart-icon"
-                    >
+                    <Link :href="route('store.brand-partner.product', related.slug)" class="add-cart-icon">
                         <i class="ri-add-line"></i>
                     </Link>
                 </div>
@@ -276,19 +203,10 @@
         <!-- Bottom Cart Box (Mobile Only) -->
         <div class="product-cart-box">
             <div class="mobile-qty-control">
-                <button
-                    class="qty-btn-mobile"
-                    @click="decrementQuantity"
-                    :disabled="quantity <= 1"
-                >
+                <button class="qty-btn-mobile" @click="decrementQuantity" :disabled="quantity <= 1">
                     <i class="ri-subtract-line"></i>
                 </button>
-                <input
-                    type="number"
-                    v-model.number="quantity"
-                    min="1"
-                    class="qty-input-mobile"
-                />
+                <input type="number" v-model.number="quantity" min="1" class="qty-input-mobile" />
                 <button class="qty-btn-mobile" @click="incrementQuantity">
                     <i class="ri-add-line"></i>
                 </button>
@@ -300,46 +218,28 @@
             >
                 <i class="ri-shopping-cart-2-line"></i>
                 <span v-if="isAddingToCart">Adding...</span>
-                <span v-else
-                    >Add to Cart |
-                    {{ formatCurrency(product.price * quantity) }}</span
-                >
+                <span v-else>Add to Cart | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
 
         <!-- Confirm Modal -->
-        <div
-            class="modal fade"
-            id="addToCartConfirmModal"
-            tabindex="-1"
-            aria-hidden="true"
-        >
+        <div class="modal fade" id="addToCartConfirmModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content grocery-modal">
                     <div class="modal-header">
                         <h5 class="modal-title">Confirm Add to Cart</h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            @click="confirmModal?.hide()"
-                        ></button>
+                        <button type="button" class="btn-close" @click="confirmModal?.hide()"></button>
                     </div>
                     <div class="modal-body">
                         <div class="confirm-product">
                             <img
-                                :src="
-                                    selectedImage ||
-                                    product.image_url ||
-                                    '/img/tshirt-placeholder.svg'
-                                "
+                                :src="selectedImage || product.image_url || '/img/tshirt-placeholder.svg'"
                                 :alt="product.name"
                                 class="confirm-img"
                             />
                             <div class="confirm-info">
                                 <h6>{{ product.name }}</h6>
-                                <span class="confirm-price">{{
-                                    formatCurrency(product.price)
-                                }}</span>
+                                <span class="confirm-price">{{ formatCurrency(product.price) }}</span>
                             </div>
                         </div>
                         <div v-if="selectedColor || selectedSize" class="confirm-variation">
@@ -353,26 +253,13 @@
                             </div>
                             <div class="summary-row total">
                                 <span>Total</span>
-                                <strong>{{
-                                    formatCurrency(product.price * quantity)
-                                }}</strong>
+                                <strong>{{ formatCurrency(product.price * quantity) }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn-cancel"
-                            @click="confirmModal?.hide()"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            class="btn-confirm"
-                            @click="addToCart"
-                            :disabled="isAddingToCart"
-                        >
+                        <button type="button" class="btn-cancel" @click="confirmModal?.hide()">Cancel</button>
+                        <button type="button" class="btn-confirm" @click="addToCart" :disabled="isAddingToCart">
                             <span v-if="isAddingToCart">Adding...</span>
                             <span v-else>Confirm</span>
                         </button>
@@ -387,6 +274,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
+import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -401,11 +289,15 @@ const props = defineProps({
     },
 });
 
+const breadcrumbItems = computed(() => [
+    { label: 'Shop', link: route('store.brand-partner.shop', props.brandPartner?.slug) },
+    { label: props.product.name }
+]);
+
 const quantity = ref(1);
 const isAddingToCart = ref(false);
 const selectedImage = ref(props.product.image_url);
 
-// Variations
 const selectedColor = ref(null);
 const selectedSize = ref(null);
 
@@ -433,14 +325,8 @@ const selectSize = (size) => {
 };
 
 const discountPercent = computed(() => {
-    if (
-        !props.product.compare_price ||
-        props.product.compare_price <= props.product.price
-    )
-        return 0;
-    return Math.round(
-        (1 - props.product.price / props.product.compare_price) * 100,
-    );
+    if (!props.product.compare_price || props.product.compare_price <= props.product.price) return 0;
+    return Math.round((1 - props.product.price / props.product.compare_price) * 100);
 });
 
 const formatCurrency = (amount) => {
@@ -451,17 +337,13 @@ const formatCurrency = (amount) => {
 };
 
 const incrementQuantity = () => quantity.value++;
-const decrementQuantity = () => {
-    if (quantity.value > 1) quantity.value--;
-};
+const decrementQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
 let confirmModal = null;
 
 onMounted(() => {
     const modalEl = document.getElementById('addToCartConfirmModal');
-    if (modalEl) {
-        confirmModal = new Modal(modalEl);
-    }
+    if (modalEl) confirmModal = new Modal(modalEl);
 });
 
 onBeforeUnmount(() => {
@@ -471,9 +353,15 @@ onBeforeUnmount(() => {
     }
 });
 
-const showConfirmModal = () => {
-    confirmModal?.show();
+const goBack = () => {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        router.get(route('store.brand-partner.index'));
+    }
 };
+
+const showConfirmModal = () => confirmModal?.show();
 
 const addToCart = () => {
     isAddingToCart.value = true;
@@ -487,12 +375,8 @@ const addToCart = () => {
         },
         {
             preserveScroll: true,
-            onSuccess: () => {
-                confirmModal?.hide();
-            },
-            onFinish: () => {
-                isAddingToCart.value = false;
-            },
+            onSuccess: () => confirmModal?.hide(),
+            onFinish: () => { isAddingToCart.value = false; },
         },
     );
 };
@@ -500,91 +384,25 @@ const addToCart = () => {
 
 <style scoped>
 /* ========================
-   Variation Selectors
-   ======================== */
-.variation-section {
-    margin: 12px 0;
-}
-.variation-label {
-    font-size: 13px;
-    color: rgb(var(--grocery-title));
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-.color-swatches {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-.color-swatch-btn {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1.5px solid rgb(var(--grocery-border));
-    background: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.color-swatch-btn.active,
-.color-swatch-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-}
-.size-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-.size-btn {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1.5px solid rgb(var(--grocery-border));
-    background: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.size-btn.active,
-.size-btn:hover {
-    border-color: rgb(var(--grocery-theme));
-    background: rgb(var(--grocery-theme));
-    color: #fff;
-}
-.variation-hint {
-    font-size: 12px;
-    color: #e57373;
-    margin: 6px 0 0;
-}
-.confirm-variation {
-    font-size: 13px;
-    color: rgb(var(--grocery-content));
-    margin-bottom: 10px;
-}
-
-/* ========================
-   Grocery Product Page
+   Theme Variables
    ======================== */
 .grocery-product-page {
     font-family: 'Public Sans', sans-serif;
-    background: #f9f9f9;
+    background: #f7f7f7;
     min-height: 100vh;
     padding-bottom: 100px;
-    /* Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
-    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
-    --grocery-border: 232, 232, 232; /* Light gray borders */
-    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
-    --grocery-light-bg: 247, 247, 247; /* Light gray background */
-    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+    --grocery-theme: 255, 149, 5, 1;
+    --grocery-content: 143, 143, 178;
+    --grocery-title: 27, 27, 62;
+    --grocery-border: 232, 232, 232;
+    --grocery-primary: 254, 175, 24;
+    --grocery-light-bg: 247, 247, 247;
+    --grocery-rating: 255, 191, 19;
 }
 
-/* Header */
+/* ========================
+   Header
+   ======================== */
 .product-header {
     display: flex;
     align-items: center;
@@ -598,7 +416,7 @@ const addToCart = () => {
     border-bottom: 1px solid rgb(var(--grocery-border));
 }
 
-.product-header .px-15 {
+.px-15 {
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -627,6 +445,7 @@ const addToCart = () => {
     font-weight: 700;
     color: rgb(var(--grocery-title));
     margin: 0;
+    text-transform: uppercase;
 }
 
 .cart-icon-link {
@@ -666,13 +485,72 @@ const addToCart = () => {
     line-height: 1;
 }
 
-/* Utility */
-.px-15 {
-    padding-left: 15px;
-    padding-right: 15px;
+/* Top Breadcrumb */
+.product-breadcrumb-wrapper {
+    background: #fff;
+    padding-top: 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgb(var(--grocery-border));
 }
 
-/* Main Product Section */
+.product-breadcrumb-wrapper :deep(.breadcrumb) {
+    padding: 0;
+    margin: 0;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item) {
+    font-size: 13px;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-home) {
+    color: #666;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-home:hover) {
+    color: rgb(var(--grocery-theme));
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item a) {
+    color: #666;
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item a:hover) {
+    color: rgb(var(--grocery-theme));
+}
+
+.product-breadcrumb-wrapper :deep(.breadcrumb-item.active) {
+    color: rgb(var(--grocery-title));
+    font-weight: 600;
+}
+
+/* Adjust header spacing */
+.product-header {
+    border-bottom: 1px solid rgb(var(--grocery-border));
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+    .product-breadcrumb-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: transparent;
+        border-bottom: none;
+        padding-top: 16px;
+        padding-bottom: 8px;
+    }
+    
+    .product-header {
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: none;
+        padding-top: 8px;
+    }
+}
+
+
+/* ========================
+   Main Product Section
+   ======================== */
 .main-product-section {
     background: #fff;
     margin-bottom: 10px;
@@ -680,6 +558,7 @@ const addToCart = () => {
 
 .slider-box {
     padding: 15px;
+    width: 100%;
 }
 
 .main-product-image {
@@ -688,11 +567,16 @@ const addToCart = () => {
     overflow: hidden;
     background: #f8f8f8;
     cursor: pointer;
+    border: 1px solid rgb(var(--grocery-border));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .main-product-image img {
     width: 100%;
-    max-height: 400px;
+    height: auto;
     object-fit: contain;
     display: block;
 }
@@ -721,7 +605,7 @@ const addToCart = () => {
     width: 64px;
     height: 64px;
     min-width: 64px;
-    border: 2px solid #eee;
+    border: 2px solid rgb(var(--grocery-border));
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -739,7 +623,9 @@ const addToCart = () => {
     object-fit: cover;
 }
 
-/* Product Container */
+/* ========================
+   Product Info
+   ======================== */
 .product-container {
     padding-bottom: 20px;
 }
@@ -755,14 +641,14 @@ const addToCart = () => {
     display: inline-block;
     padding: 3px 12px;
     border-radius: 20px;
-    background: rgb(var(--grocery-border));
+    background: #f0f0f0;
     font-size: 12px;
     font-weight: 600;
     color: #777;
 }
 
 .ptag-event {
-    background: #fff5ec;
+    background: #e8f4f7;
     color: rgb(var(--grocery-theme));
 }
 
@@ -772,6 +658,8 @@ const addToCart = () => {
     color: rgb(var(--grocery-title));
     margin: 0 0 10px;
     line-height: 1.3;
+    text-transform: uppercase;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .product-price-row {
@@ -785,7 +673,7 @@ const addToCart = () => {
 .current-price {
     font-size: 22px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
+    color: #FF9505;
 }
 
 .old-price {
@@ -794,7 +682,7 @@ const addToCart = () => {
 }
 
 .save-badge {
-    background: #fff0e6;
+    background: rgba(var(--grocery-theme), 0.1);
     color: rgb(var(--grocery-theme));
     padding: 3px 10px;
     border-radius: 6px;
@@ -807,7 +695,7 @@ const addToCart = () => {
 }
 
 .stock-in {
-    color: #2ed573;
+    color: #27ae60;
     font-weight: 700;
     font-size: 14px;
     display: inline-flex;
@@ -816,7 +704,7 @@ const addToCart = () => {
 }
 
 .stock-out {
-    color: #ff4757;
+    color: #e74c3c;
     font-weight: 700;
     font-size: 14px;
     display: inline-flex;
@@ -826,7 +714,7 @@ const addToCart = () => {
 
 .short-description {
     font-size: 14px;
-    color: #777;
+    color: rgb(var(--grocery-content));
     line-height: 1.6;
     margin: 0 0 12px;
 }
@@ -837,12 +725,88 @@ const addToCart = () => {
     margin-bottom: 16px;
 }
 
-/* Desktop Add-to-Cart Section */
+/* ========================
+   Variations
+   ======================== */
+.variation-section {
+    margin: 12px 0;
+}
+
+.variation-label {
+    font-size: 13px;
+    color: rgb(var(--grocery-title));
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.color-swatch-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-swatch-btn.active,
+.color-swatch-btn:hover {
+    background: rgba(255, 149, 5, 1);
+    color: #fff;
+}
+
+.size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.size-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(var(--grocery-title));
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.size-btn.active,
+.size-btn:hover {
+    background: rgba(255, 149, 5, 1);
+    color: #fff;
+}
+
+.variation-hint {
+    font-size: 12px;
+    color: #e74c3c;
+    margin: 6px 0 0;
+}
+
+.confirm-variation {
+    font-size: 13px;
+    color: rgb(var(--grocery-content));
+    margin-bottom: 10px;
+}
+
+/* Desktop Add to Cart - hidden on mobile */
 .desktop-add-section {
     display: none;
 }
 
-/* Description Section */
+/* ========================
+   Description
+   ======================== */
 .section-t-space-3 {
     padding-top: 10px;
 }
@@ -852,6 +816,7 @@ const addToCart = () => {
     border-radius: 16px;
     padding: 20px 15px;
     margin: 0 15px;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .desc-title {
@@ -861,7 +826,6 @@ const addToCart = () => {
     margin: 0 0 14px;
 }
 
-/* Accordion Style 1 */
 .accordion-style-1 .accordion-item {
     border: none;
     border-radius: 12px;
@@ -872,19 +836,15 @@ const addToCart = () => {
 .accordion-style-1 .accordion-button {
     font-size: 14px;
     font-weight: 700;
-    color: #333;
+    color: #FF9505;
     background: #fafafa;
     padding: 14px 16px;
     box-shadow: none;
 }
 
 .accordion-style-1 .accordion-button:not(.collapsed) {
-    color: rgb(var(--grocery-theme));
-    background: #fff8f2;
-}
-
-.accordion-style-1 .accordion-button::after {
-    background-size: 16px;
+    color: #FF9505;
+    background: rgba(var(--grocery-theme), 0.05);
 }
 
 .accordion-style-1 .accordion-body {
@@ -894,7 +854,9 @@ const addToCart = () => {
     line-height: 1.7;
 }
 
-/* Similar Products Section */
+/* ========================
+   Similar Products
+   ======================== */
 .section-t-space-4 {
     padding-top: 20px;
     padding-bottom: 10px;
@@ -918,6 +880,7 @@ const addToCart = () => {
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgb(var(--grocery-border));
     position: relative;
     transition: all 0.2s;
 }
@@ -994,11 +957,13 @@ const addToCart = () => {
 }
 
 .add-cart-icon:hover {
-    background: #e67a1f;
+    background: rgba(var(--grocery-theme), 0.8);
     color: #fff;
 }
 
-/* Bottom Cart Box (Mobile) */
+/* ========================
+   Mobile Bottom Cart
+   ======================== */
 .product-cart-box {
     position: fixed;
     bottom: 0;
@@ -1007,6 +972,7 @@ const addToCart = () => {
     background: #fff;
     padding: 12px 15px;
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgb(var(--grocery-border));
     z-index: 999;
     display: flex;
     align-items: center;
@@ -1019,6 +985,7 @@ const addToCart = () => {
     background: #f5f5f5;
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid rgb(var(--grocery-border));
 }
 
 .qty-btn-mobile {
@@ -1046,8 +1013,9 @@ const addToCart = () => {
     text-align: center;
     font-weight: 700;
     font-size: 15px;
-    color: #333;
+    color: rgb(var(--grocery-title));
     outline: none;
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
@@ -1075,7 +1043,7 @@ const addToCart = () => {
 }
 
 .add-cart-mobile-btn:hover {
-    background: #e67a1f;
+    background: rgba(var(--grocery-theme), 0.85);
 }
 
 .add-cart-mobile-btn:disabled {
@@ -1087,67 +1055,102 @@ const addToCart = () => {
     font-size: 18px;
 }
 
-/* Confirm Modal - Grocery Style */
-.grocery-modal {
+/* ========================
+   Confirm Modal
+   ======================== */
+/* ===== Modal - Grocery Styling ===== */
+.grocery-modal,
+.grocery-modal-content {
     border: none;
-    border-radius: 20px;
+    border-radius: 22px;
     overflow: hidden;
+    background: #fff;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
     font-family: 'Public Sans', sans-serif;
 }
 
-.grocery-modal .modal-header {
-    border-bottom: 1px solid rgb(var(--grocery-border));
-    padding: 16px 20px;
-}
-
-.grocery-modal .modal-title {
-    font-weight: 700;
-    font-size: 16px;
-    color: rgb(var(--grocery-title));
-}
-
-.grocery-modal .modal-body {
-    padding: 20px;
-}
-
-.grocery-modal .modal-footer {
-    border-top: 1px solid rgb(var(--grocery-border));
-    padding: 14px 20px;
-    gap: 10px;
+.grocery-modal .modal-header,
+.grocery-modal-header {
     display: flex;
-}
-
-.confirm-product {
-    display: flex;
-    gap: 14px;
     align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    background: #fff;
+    border-bottom: 1px solid #f1f1f1;
 }
 
-.confirm-img {
-    width: 70px;
-    height: 70px;
+.grocery-modal .modal-title,
+.grocery-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+}
+
+.grocery-modal .modal-body,
+.grocery-modal-body {
+    padding: 20px;
+    background: #fff;
+}
+
+.confirm-product,
+.modal-product-detail {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+.confirm-img,
+.modal-product-img {
+    width: 90px;
+    height: 90px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 18px;
+    border: 1px solid #f0f0f0;
     background: #f8f8f8;
 }
 
-.confirm-info h6 {
-    font-weight: 700;
-    margin: 0 0 4px;
-    font-size: 15px;
-    color: rgb(var(--grocery-title));
+.confirm-info p,
+.modal-product-info p {
+    margin: 0 0 10px;
+    color: #5a5a5a;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-.confirm-price {
+.confirm-price,
+.modal-product-price {
+    margin: 0;
+    font-size: 18px;
     font-weight: 800;
-    color: rgb(var(--grocery-theme));
-    font-size: 15px;
+    color: #e84b0f;
 }
 
-.confirm-summary {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #f5f5f5;
+.old-price {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #999;
+}
+
+.confirm-variation {
+    font-size: 13px;
+    color: rgb(var(--grocery-content));
+    margin-bottom: 10px;
+}
+
+.confirm-summary,
+.qty-section-title {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.qty-section-title {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgb(var(--grocery-title));
 }
 
 .summary-row {
@@ -1156,67 +1159,151 @@ const addToCart = () => {
     align-items: center;
     padding: 6px 0;
     font-size: 14px;
-    color: #777;
+    color: rgb(var(--grocery-content));
 }
 
 .summary-row.total {
     border-top: 1px solid rgb(var(--grocery-border));
     padding-top: 12px;
     margin-top: 6px;
-    color: rgb(var(--grocery-title));
+    color: #ec4e1f;
     font-size: 16px;
 }
 
 .summary-row.total strong {
-    color: rgb(var(--grocery-theme));
+    color: #ec4e1f;
 }
 
-.btn-cancel {
-    flex: 1;
+.qty-selector,
+.confirm-summary {
+    padding-bottom: 10px;
+}
+
+.qty-box,
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.qty-box {
+    background: #f7f7f7;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e4e4e4;
+}
+
+.qty-btn {
+    width: 44px;
     height: 44px;
-    border: 1.5px solid #e0e0e0;
-    background: #fff;
-    color: #555;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-cancel:hover {
-    border-color: #ccc;
-    background: #f9f9f9;
-}
-
-.btn-confirm {
-    flex: 1;
-    height: 44px;
-    background: rgb(var(--grocery-theme));
-    color: #fff;
     border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
+    background: #fff;
+    color: #111;
+    font-size: 18px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s;
 }
 
-.btn-confirm:hover {
-    background: #e67a1f;
+.qty-btn:hover:not(:disabled) {
+    background: #f0f0f0;
 }
 
+.qty-btn:disabled {
+    color: #ccc;
+}
+
+.qty-input {
+    width: 68px;
+    border: none;
+    text-align: center;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    padding: 0 12px;
+    outline: none;
+}
+
+.grocery-modal-footer,
+.grocery-modal .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: #fafafa;
+    border-top: 1px solid #f1f1f1;
+}
+
+.modal-footer-info h5,
+.modal-footer-info h4,
+.confirm-summary h5,
+.confirm-summary h4 {
+    margin: 0;
+}
+
+.modal-footer-info h5 {
+    font-size: 12px;
+    color: #5a5a5a;
+    font-weight: 500;
+}
+
+.modal-footer-info h4 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff9505;
+}
+
+.cart-bar-btn,
+.btn-confirm {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 16px;
+    border: none;
+    background-color: #ec4e1f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.cart-bar-btn:hover:not(:disabled),
+.btn-confirm:hover:not(:disabled) {
+    background: rgba(var(--grocery-theme), 0.85);
+}
+
+.cart-bar-btn:disabled,
 .btn-confirm:disabled {
-    background: #ddd;
+    opacity: 0.75;
     cursor: not-allowed;
 }
 
+.btn-cancel {
+    min-width: 150px;
+    height: 44px;
+    border-radius: 16px;
+    border: 1.5px solid rgb(var(--grocery-border));
+    background: #fff;
+    color: rgb(var(--grocery-title));
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #f7f7f7;
+}
+
 /* ========================
-   Desktop Layout (768px+)
+   Desktop (768px+)
    ======================== */
 @media (min-width: 768px) {
     .grocery-product-page {
         padding-bottom: 40px;
+        padding-top: 120px;
     }
 
     .product-header {
@@ -1235,9 +1322,10 @@ const addToCart = () => {
     .main-product-section {
         display: flex;
         gap: 40px;
-        padding: 20px;
+        padding: 32px;
         border-radius: 16px;
         margin: 0 20px;
+        border: 1px solid rgb(var(--grocery-border));
     }
 
     .slider-box {
@@ -1271,6 +1359,7 @@ const addToCart = () => {
         background: #f5f5f5;
         border-radius: 12px;
         overflow: hidden;
+        border: 1px solid rgb(var(--grocery-border));
     }
 
     .qty-btn {
@@ -1278,7 +1367,7 @@ const addToCart = () => {
         height: 44px;
         border: none;
         background: none;
-        color: rgb(var(--grocery-theme));
+        color: #005523;
         font-size: 18px;
         cursor: pointer;
         display: flex;
@@ -1288,7 +1377,7 @@ const addToCart = () => {
     }
 
     .qty-btn:hover {
-        background: #fff0e6;
+        background: rgba(var(--grocery-theme), 0.08);
     }
 
     .qty-btn:disabled {
@@ -1303,8 +1392,9 @@ const addToCart = () => {
         text-align: center;
         font-weight: 700;
         font-size: 15px;
-        color: #333;
+        color: rgb(var(--grocery-title));
         outline: none;
+        appearance: textfield;
         -moz-appearance: textfield;
     }
 
@@ -1317,10 +1407,10 @@ const addToCart = () => {
     .add-cart-btn {
         flex: 1;
         height: 46px;
-        background: rgb(var(--grocery-theme));
+        background: #005523;
         color: #fff;
         border: none;
-        border-radius: 12px;
+        border-radius: 2px;
         font-size: 15px;
         font-weight: 700;
         cursor: pointer;
@@ -1329,10 +1419,11 @@ const addToCart = () => {
         justify-content: center;
         gap: 8px;
         transition: background 0.2s;
+        font-family: 'Public Sans', sans-serif;
     }
 
     .add-cart-btn:hover {
-        background: #e67a1f;
+        background: rgba(255, 149, 5, 1);
     }
 
     .add-cart-btn:disabled {
@@ -1344,12 +1435,10 @@ const addToCart = () => {
         font-size: 18px;
     }
 
-    /* Hide mobile bottom cart box on desktop */
     .product-cart-box {
         display: none;
     }
 
-    /* Sections layout */
     .section-t-space-3,
     .section-t-space-4 {
         max-width: 1200px;
@@ -1378,22 +1467,12 @@ const addToCart = () => {
     }
 }
 
-/* Large Screens */
-@media (min-width: 1024px) {
-    .similar-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Small screens (up to 767px) */
+/* ========================
+   Mobile (max 767px)
+   ======================== */
 @media (max-width: 767px) {
     .grocery-product-page {
         padding-bottom: 80px;
-    }
-
-    .product-header {
-        position: sticky;
-        top: 0;
     }
 
     .main-product-image img {
@@ -1424,7 +1503,6 @@ const addToCart = () => {
     }
 }
 
-/* Extra small screens */
 @media (max-width: 374px) {
     .add-cart-mobile-btn {
         font-size: 12px;

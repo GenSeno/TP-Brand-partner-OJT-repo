@@ -45,11 +45,9 @@ import SelectFilter from '@/components/datatable/filter/select-filter.vue';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/css/bootstrap.css';
-
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
+import 'bootstrap/dist/css/bootstrap.css';
 // import 'bootstrap/dist/js/bootstrap'; --- IGNORE ---
 
 import '@vuepic/vue-datepicker/dist/main.css';

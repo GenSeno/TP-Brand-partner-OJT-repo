@@ -96,10 +96,16 @@
                                         ></vue-feather>
                                         <span>Products</span>
                                         <span
-                                            v-if="$page.props.pendingProductsCount > 0"
+                                            v-if="
+                                                $page.props
+                                                    .pendingProductsCount > 0
+                                            "
                                             class="badge bg-warning ms-auto"
-                                            style="font-size: 10px;"
-                                        >{{ $page.props.pendingProductsCount }}</span>
+                                            style="font-size: 10px"
+                                            >{{
+                                                $page.props.pendingProductsCount
+                                            }}</span
+                                        >
                                     </Link>
                                 </li>
                             </ul>

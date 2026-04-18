@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\ExpenseController;
 use Illuminate\Support\Facades\Mail;
-Route::get('/shared/{token}',[QuoteController::class, 'sharedView'])->name('quotation.shared');
+Route::get('/shared/{token}', [QuoteController::class, 'sharedView'])->name('quotation.shared');
 Route::get('/pdf/{quotation}', [QuoteController::class, 'pdf'])->name('pdf');
 Route::get('/test/{quotation}', [QuoteController::class, 'test'])->name('test');
 Route::get('/{quotation}/download', [QuoteController::class, 'download'])->name('download.quotation');

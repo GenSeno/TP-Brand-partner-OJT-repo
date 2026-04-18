@@ -1,9 +1,13 @@
 <template>
     <div class="grocery-color public-san-body">
         <!-- Header Start -->
-        <header class="header-style-6">
+        <header
+            class="header-style-6 dark-theme-header"
+            :class="{ 'header-hidden': headerHide }"
+        >
             <div class="header-inner">
-                <div class="left-header">
+                <!-- Brand Logo -->
+                <div class="header-container">
                     <Link
                         v-if="brandPartner"
                         :href="
@@ -12,86 +16,140 @@
                                 brandPartner.slug,
                             )
                         "
-                        class="brand-link"
+                        class="pakaras-logo"
                     >
                         <img
-                            v-if="brandPartner.logo_url"
-                            :src="brandPartner.logo_url"
-                            :alt="brandPartner.name"
-                            class="img-fluid brand-logo"
+                            src="/img/logo/pakaras-logo2.png"
+                            alt="Pakaras Logo"
+                            class="img-fluid brand-logo-raw"
                         />
-                        <span class="brand-name">{{
-                            brandPartner.name || 'Store'
-                        }}</span>
                     </Link>
                     <span v-else class="brand-link">
-                        <span class="brand-name">Store</span>
+                        <span class="brand-name text-white">Store</span>
                     </span>
                 </div>
 
-                <!-- Mobile Menu Button -->
-                <div class="mobile-menu-header">
-                    <button
-                        type="button"
-                        class="btn menu-btn"
-                        @click="toggleSideMenu"
-                    >
-                        <i class="ri-menu-line"></i>
-                    </button>
+                <!-- Center Nav Links -->
+                <div class="center-nav-wrapper d-none d-lg-block">
+                    <nav class="center-nav">
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.shop',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
+                            SHOP <i class="ri-arrow-down-s-line"></i>
+                        </Link>
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.collections',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
+                            COLLECTIONS <i class="ri-arrow-down-s-line"></i>
+                        </Link>
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.about',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
+                            About us
+                        </Link>
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.contact',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
+                            CONTACT US
+                        </Link>
+
+                        <Link
+                            :href="
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.partner',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
+                            "
+                            class="nav-item"
+                        >
+                            BE OUR PARTNER
+                        </Link>
+                    </nav>
                 </div>
 
-                <!-- Desktop Nav -->
-                <div class="desktop-nav-wrapper" v-if="brandPartner">
-                    <nav class="desktop-nav">
+                <!-- Right Utility Icons & CTA -->
+                <div class="right-nav-wrapper d-none d-lg-block">
+                    <nav class="right-nav">
+                        <a
+                            href="#"
+                            class="utility-link"
+                            @click.prevent="openAccountModal"
+                        >
+                            <i class="ri-user-line"></i>
+                            <span v-if="user">{{ user.name }}</span>
+                            <span v-else>Account</span>
+                        </a>
+                        <a href="javascript:void(0)" class="utility-link"
+                            ><i class="ri-heart-line"></i> Wishlist</a
+                        >
                         <Link
                             :href="
-                                route(
-                                    'store.brand-partner.index',
-                                    brandPartner.slug,
-                                )
+                                brandPartner
+                                    ? route(
+                                          'store.brand-partner.cart',
+                                          brandPartner.slug,
+                                      )
+                                    : '#'
                             "
-                            class="nav-shop"
-                            :class="{
-                                active: isRoute('store.brand-partner.index'),
-                            }"
+                            class="utility-link cart-link"
                         >
-                            <i class="ri-shopping-bag-3-line"></i>
-                            Shop
-                        </Link>
-                        <Link
-                            :href="
-                                route(
-                                    'store.brand-partner.cart',
-                                    brandPartner.slug,
-                                )
-                            "
-                            class="nav-cart"
-                            :class="{
-                                active: isRoute('store.brand-partner.cart'),
-                            }"
-                        >
-                            <i class="ri-shopping-cart-line"></i>
-                            Cart
+                            <i class="ri-shopping-cart-2-line"></i> Cart
                             <span class="cart-badge" v-if="cartCount > 0">{{
                                 cartCount
                             }}</span>
                         </Link>
-                        <Link
-                            :href="
-                                route(
-                                    'store.brand-partner.checkout',
-                                    brandPartner.slug,
-                                )
-                            "
-                            class="nav-checkout"
-                            :class="{
-                                active: isRoute('store.brand-partner.checkout'),
-                            }"
+                        <a href="javascript:void(0)" class="race-cta-btn"
+                            >RACE WITH US</a
                         >
-                            <i class="ri-file-list-3-line"></i>
-                            Checkout
-                        </Link>
                     </nav>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="mobile-menu-header d-lg-none">
+                    <button
+                        type="button"
+                        class="btn menu-btn text-white"
+                        @click="toggleSideMenu"
+                    >
+                        <i class="ri-menu-line"></i>
+                    </button>
                 </div>
             </div>
         </header>
@@ -230,9 +288,195 @@
         </div>
         <!-- Side Menu End -->
 
+        <!-- Account Modal -->
+        <div
+            class="account-modal-overlay"
+            v-if="accountModalOpen"
+            @click.self="closeAccountModal"
+        >
+            <div class="account-modal">
+                <button
+                    type="button"
+                    class="modal-close"
+                    @click="closeAccountModal"
+                >
+                    <i class="ri-close-line"></i>
+                </button>
+
+                <div class="account-card-left">
+                    <div class="account-card-copy">
+                        <h2 class="auth-title">Welcome, Runner</h2>
+                        <p class="auth-subtitle">
+                            Log in to continue your journey—track events, manage
+                            registrations, and stay connected with the tribe.
+                        </p>
+                    </div>
+
+                    <form
+                        class="account-form"
+                        @submit.prevent="
+                            showRegister ? submitRegister() : submitLogin()
+                        "
+                    >
+                        <template v-if="!showRegister">
+                            <div class="auth-field">
+                                <label class="auth-label">EMAIL ADDRESS</label>
+                                <input
+                                    type="email"
+                                    class="auth-input"
+                                    placeholder="Email Address"
+                                    v-model="loginForm.email"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">PASSWORD</label>
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Password"
+                                    v-model="loginForm.password"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-remember-row">
+                                <label class="auth-remember">
+                                    <input
+                                        type="checkbox"
+                                        v-model="loginForm.remember"
+                                    />
+                                    <span>Remember Password?</span>
+                                </label>
+                                <a href="#" class="auth-forgot"
+                                    >Forgot Password?</a
+                                >
+                            </div>
+
+                            <button type="submit" class="auth-btn-primary">
+                                LOGIN
+                            </button>
+
+                            <button type="button" class="auth-btn-google">
+                                <img
+                                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                    alt="Google"
+                                    class="google-icon"
+                                />
+                                LOGIN WITH GOOGLE
+                            </button>
+
+                            <p class="auth-switch">
+                                Don't have an account?
+                                <button
+                                    type="button"
+                                    class="auth-link-btn"
+                                    @click="showRegister = true"
+                                >
+                                    SignUp
+                                </button>
+                            </p>
+
+                            <div class="auth-do-later">
+                                <a href="/" class="auth-do-later-link"
+                                    >Do it Later.</a
+                                >
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <div class="auth-field">
+                                <label class="auth-label">FULL NAME</label>
+                                <input
+                                    type="text"
+                                    class="auth-input"
+                                    placeholder="Enter Full name"
+                                    v-model="registerForm.name"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">EMAIL ADDRESS</label>
+                                <input
+                                    type="email"
+                                    class="auth-input"
+                                    placeholder="Enter Email Address"
+                                    v-model="registerForm.email"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label">PASSWORD</label>
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Enter Password"
+                                    v-model="registerForm.password"
+                                    required
+                                />
+                            </div>
+
+                            <div class="auth-field">
+                                <label class="auth-label"
+                                    >CONFIRM PASSWORD</label
+                                >
+                                <input
+                                    type="password"
+                                    class="auth-input"
+                                    placeholder="Confirm Password"
+                                    v-model="registerForm.password_confirmation"
+                                    required
+                                />
+                            </div>
+
+                            <label class="auth-terms">
+                                <input
+                                    type="checkbox"
+                                    v-model="registerForm.terms"
+                                    required
+                                />
+                                <span>
+                                    By creating an account, you agree to our
+                                    <a href="#" class="auth-terms-link"
+                                        >Terms &amp; Conditions</a
+                                    >
+                                    and
+                                    <a href="#" class="auth-terms-link"
+                                        >Privacy Policy</a
+                                    >.
+                                </span>
+                            </label>
+
+                            <button type="submit" class="auth-btn-primary">
+                                CREATE ACCOUNT
+                            </button>
+
+                            <p class="auth-switch">
+                                Already have an account?
+                                <button
+                                    type="button"
+                                    class="auth-link-btn"
+                                    @click="showRegister = false"
+                                >
+                                    Log In
+                                </button>
+                            </p>
+                        </template>
+                    </form>
+                </div>
+
+                <div class="account-card-right">
+                    <div class="account-card-img-placeholder"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Content -->
         <main class="store-main">
-            <slot />
+            <slot/>
         </main>
 
         <!-- Footer -->
@@ -240,26 +484,87 @@
             <div class="custom-container">
                 <div class="footer-grid">
                     <div class="footer-brand">
-                        <img
-                            src="/img/logo/logo-pdf.png"
-                            alt="TP Ink Lab"
-                            class="footer-logo"
-                        />
-                        <p>Quality custom printing solutions</p>
+                        <div class="footer-logo">
+                            <img
+                                src="/img/logo/pakaras-logo2.png"
+                                alt="Tribu Pakaras"
+                            />
+                        </div>
+                        <div class="pakaras-adjective">
+                            <h4>Pakaras /'pa-kah-ras/</h4>
+                            <span>adjective</span>
+                        </div>
+                        <p>
+                            Showing fearlessness and determination without
+                            thinking or caring about the probable consequences
+                            of ther actions
+                        </p>
                     </div>
                     <div class="footer-info">
-                        <h5>Contact Us</h5>
-                        <p>
-                            <i class="ri-mail-line"></i> contact@printmyshirt.ph
-                        </p>
-                        <p><i class="ri-phone-line"></i> +63 9923090084</p>
+                        <h4>Sitemap</h4>
+                        <p>Shop</p>
+                        <p>Collections</p>
+                        <p>Header 1</p>
+                        <p>Header 2</p>
+                        <p>Header 3</p>
                     </div>
                     <div class="footer-info">
-                        <h5>Location</h5>
+                        <h4>Account</h4>
+                        <p>Wishlist</p>
+                        <p>Cart</p>
+                    </div>
+                    <div class="footer-info">
+                        <h4>Contact Information</h4>
                         <p>
-                            <i class="ri-map-pin-line"></i> Charlotte Dormitel
-                            Bldg, Roxas, Davao City
+                            <i class="ri-map-pin-line"></i> Davao City,
+                            Philippines
                         </p>
+                        <p>
+                            <i class="ri-mail-line"></i>tribupakarasph@gmail.com
+                        </p>
+                        <p><i class="ri-phone-line"></i>0906 496 1393</p>
+                    </div>
+                    <div class="socials">
+                        <h4>Social</h4>
+                        <div>
+                            <a
+                                href="https://www.facebook.com/TribuPakarasOutdoor"
+                                target="_blank"
+                            >
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a
+                                href="https://www.instagram.com/tribupakarasoutdoor"
+                                target="_blank"
+                            >
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="news-letter">
+                        <h2>Be among the first to experience it</h2>
+                        <p>
+                            From rugged trails to everyday runs,we've got you
+                            covered.
+                        </p>
+                        <div class="subscribe">
+                            <input
+                                type="text"
+                                class="footer-input"
+                                placeholder="Email Address"
+                            />
+                            <input
+                                type="submit"
+                                value="Subscribe"
+                                class="subscribe-button"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
@@ -274,14 +579,66 @@
 </template>
 
 <script setup>
-import { Link, usePage, router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { Link, useForm, usePage, router } from '@inertiajs/vue3';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 const page = usePage();
 
 const brandPartner = computed(() => page.props.brandPartner);
 const cartCount = computed(() => page.props.cartCount || 0);
+const auth = computed(() => page.props.auth);
+const user = computed(() => auth.value?.user);
 const sideMenuOpen = ref(false);
+const accountModalOpen = ref(false);
+const showRegister = ref(false);
+
+const loginForm = useForm({
+    email: '',
+    password: '',
+    remember: false,
+});
+
+const registerForm = useForm({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    terms: false,
+});
+
+const openAccountModal = () => {
+    if (user.value) {
+        router.visit(route('store.brand-partner.account'));
+        return;
+    }
+
+    accountModalOpen.value = true;
+    showRegister.value = false;
+};
+
+const closeAccountModal = () => {
+    accountModalOpen.value = false;
+    showRegister.value = false;
+};
+
+const submitLogin = () => {
+    loginForm.post(route('store.brand-partner.login.submit'), {
+        onFinish: () => loginForm.reset('password'),
+        onSuccess: () => closeAccountModal(),
+    });
+};
+
+const submitRegister = () => {
+    registerForm.post(route('store.brand-partner.register.submit'), {
+        onFinish: () =>
+            registerForm.reset(
+                'password',
+                'password_confirmation',
+                'terms',
+            ),
+        onSuccess: () => closeAccountModal(),
+    });
+};
 
 const isRoute = (name) => {
     return route().current(name);
@@ -293,6 +650,24 @@ const toggleSideMenu = () => {
         sideMenuOpen.value = !sideMenuOpen.value;
     }
 };
+
+const headerHide = ref(false);
+let lastScrollY = 0;
+
+const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        headerHide.value = true;
+    } else {
+        headerHide.value = false;
+    }
+
+    lastScrollY = currentScrollY;
+};
+
+onMounted(() => window.addEventListener('scroll', handleScroll));
+onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 
 const focusSearchOnPage = () => {
     setTimeout(() => {
@@ -344,17 +719,17 @@ const focusSearchField = () => {
     padding: 0;
     overflow-x: clip;
     max-width: 100%;
+    cursor: auto;
 }
 
 .grocery-color {
-    /* Updated Grocery Theme Color Variables */
-    --grocery-theme: 60, 133, 153; /* Main teal/cyan color: rgb(60, 133, 153) */
-    --grocery-content: 143, 143, 178; /* Light gray-blue content text */
-    --grocery-title: 27, 27, 62; /* Dark blue-gray for titles */
-    --grocery-border: 232, 232, 232; /* Light gray borders */
-    --grocery-primary: 254, 175, 24; /* Yellow/orange accent */
-    --grocery-light-bg: 247, 247, 247; /* Light gray background */
-    --grocery-rating: 255, 191, 19; /* Gold/yellow for ratings */
+    --grocery-theme: 60, 133, 153;
+    --grocery-content: 143, 143, 178;
+    --grocery-title: 27, 27, 62;
+    --grocery-border: 232, 232, 232;
+    --grocery-primary: 254, 175, 24;
+    --grocery-light-bg: 247, 247, 247;
+    --grocery-rating: 255, 191, 19;
     --grocery-success: #2ed573;
     --grocery-danger: #ff4757;
     --grocery-dark: #222;
@@ -362,10 +737,10 @@ const focusSearchField = () => {
     --grocery-light-gray: #999;
     --grocery-bg: #fafafa;
 
-    /* Updated primary color references */
     --grocery-primary-color: rgb(var(--grocery-theme));
     --grocery-primary-light: rgba(var(--grocery-theme), 0.1);
     background: var(--grocery-bg);
+    cursor: auto;
 }
 
 * {
@@ -374,9 +749,9 @@ const focusSearchField = () => {
 
 /* Custom Container */
 .custom-container {
-    max-width: 1200px;
+    max-width: 1450px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 10px;
 }
 
 .px-15 {
@@ -385,189 +760,131 @@ const focusSearchField = () => {
 }
 
 /* ============================================
-   HEADER - header-style-6
+   HEADER - Tribu Pakaras Dark Theme
    ============================================ */
-.header-style-6 {
-    background: #fff;
-    position: sticky;
+.dark-theme-header {
+    background-color: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: fixed;
     top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    border-bottom: 1px solid rgb(var(--grocery-border));
-    width: 100%;
     left: 0;
     right: 0;
+    z-index: 999;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.header-hidden {
+    transform: translateY(-100%);
 }
 
 .header-inner {
-    max-width: 1200px;
+    position: relative;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 4px 15px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 42px;
 }
 
-.left-header {
+.header-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
-    flex: 0 0 auto;
-    order: 1; /* Brand on left */
+    height: 4rem;
+    width: 9rem;
+    padding-right: 10px;
 }
 
-.menu-btn {
-    background: none;
-    border: none;
-    padding: 8px;
-    font-size: 22px;
-    color: rgb(var(--grocery-title));
-    cursor: pointer;
-    line-height: 1;
-    border-radius: 8px;
-    transition: background 0.2s ease;
+.header-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.menu-btn:hover {
-    background: rgba(var(--grocery-theme), 0.08);
-}
-
-.brand-link {
+/* Center Nav */
+.center-nav-wrapper {
+    flex: 1;
     display: flex;
+    justify-content: flex-start;
+    padding-left: 5px;
+    order: 2;
+}
+
+.center-nav {
+    display: flex;
+    gap: 15px;
     align-items: center;
-    gap: 12px;
+}
+
+.center-nav .nav-item {
+    color: #fff;
     text-decoration: none;
-    color: inherit;
-    transition: opacity 0.2s ease;
-    align-self: flex-start;
-}
-
-.brand-link:hover {
-    opacity: 0.8;
-}
-
-.brand-logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid rgb(var(--grocery-border));
-}
-
-.brand-name {
-    font-size: 20px;
-    font-weight: 700;
-    color: rgb(var(--grocery-title));
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-}
-
-.menu-btn {
-    background: none;
-    border: none;
-    padding: 6px;
-    font-size: 22px;
-    color: var(--grocery-dark);
-    cursor: pointer;
-    line-height: 1;
-}
-
-.brand-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.brand-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.brand-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--grocery-dark);
-}
-
-/* Desktop Nav Wrapper */
-.desktop-nav-wrapper {
-    display: none;
-    margin-left: auto;
-    order: 3; /* Position on right */
-}
-
-/* Desktop Nav - Professional Top Navigation */
-.desktop-nav {
-    display: flex;
-    align-items: center;
-    background: transparent;
-    border-radius: 0;
-    padding: 0;
-    box-shadow: none;
-    border: none;
-    gap: 4px;
-    max-width: 300px;
-    width: fit-content;
-}
-
-/* Professional navigation items */
-.desktop-nav a {
-    text-decoration: none;
-    color: rgb(var(--grocery-content));
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    position: relative;
-    white-space: nowrap;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
+}
+
+.center-nav .nav-item:hover {
+    color: rgb(var(--grocery-primary));
+}
+
+.center-nav .nav-item i {
+    font-size: 18px;
+    margin-top: -2px;
+}
+
+/* Right Nav */
+.right-nav-wrapper {
+    flex: 0 0 auto;
+    order: 3;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.utility-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 6px;
-    flex: 1;
-    justify-content: center;
-    text-align: center;
+    transition: color 0.2s ease;
+    position: relative;
+    font-family: 'Public Sans', sans-serif;
 }
 
-.desktop-nav a:hover {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.08);
+.utility-link:hover {
+    color: rgb(var(--grocery-primary));
 }
 
-.desktop-nav a.active {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.12);
-    font-weight: 700;
+.utility-link i {
+    font-size: 18px;
 }
 
-/* Desktop Nav - Show only Shop and Cart */
-.desktop-nav .nav-checkout {
-    display: none; /* Hide Checkout in desktop nav */
-}
-
-.desktop-nav .nav-shop,
-.desktop-nav .nav-cart {
-    display: flex; /* Show Shop and Cart */
-    min-width: 80px; /* Ensure consistent button widths */
-}
-
-/* Cart icon styling in desktop nav */
-.desktop-nav .nav-cart {
+.cart-link {
     position: relative;
 }
 
-.desktop-nav .nav-cart .cart-badge {
+.cart-badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: rgb(var(--grocery-primary)); /* Yellow accent */
-    color: #fff;
+    top: -8px;
+    left: 8px;
+    background: rgb(var(--grocery-primary));
+    color: #000;
     font-size: 10px;
     font-weight: 700;
     min-width: 16px;
@@ -576,79 +893,37 @@ const focusSearchField = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
-    box-shadow: 0 2px 4px rgba(var(--grocery-primary), 0.3);
-    border: 2px solid #fff;
 }
 
-.desktop-nav a {
-    text-decoration: none;
-    color: rgb(var(--grocery-content));
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 16px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    position: relative;
-    background: transparent;
-}
-
-.desktop-nav a:hover {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.08);
-    border-color: rgba(var(--grocery-theme), 0.2);
-    transform: translateY(-1px);
-}
-
-.desktop-nav a.active {
-    color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.1);
-    border-color: rgb(var(--grocery-theme));
-    font-weight: 700;
-}
-
-.desktop-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: rgb(var(--grocery-theme));
-    transition: width 0.25s ease;
-}
-
-.desktop-nav a.active::after {
-    width: 30px;
-}
-
-/* Mobile Menu Button - Only visible on mobile */
-.mobile-menu-header {
-    display: none;
-    order: 3;
-}
-
-.cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: rgb(
-        var(--grocery-primary)
-    ); /* Using yellow accent for visibility */
+/* CTA Button */
+.race-cta-btn {
+    background-color: #f39c12;
     color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    box-shadow: 0 2px 6px rgba(var(--grocery-primary), 0.3);
-    border: 2px solid #fff;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 24px;
+    border-radius: 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.race-cta-btn:hover {
+    background-color: #f39c12;
+    color: #fff;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 991px) {
+    .header-inner {
+        padding: 10px 15px;
+    }
 }
 
 /* ============================================
@@ -912,41 +1187,61 @@ const focusSearchField = () => {
    ============================================ */
 .store-main {
     flex: 1;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 /* ============================================
    FOOTER
    ============================================ */
 .store-footer {
-    background: #2b2b2b;
+    background: #1a1a1a;
     color: #ccc;
     padding: 40px 0 20px;
 }
 
+.store-footer h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 15px;
+    font-family: 'poppins';
+}
+
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 2fr;
+    gap: 40px;
     margin-bottom: 25px;
 }
 
 .footer-brand .footer-logo {
-    height: 40px;
+    height: 80px;
     margin-bottom: 12px;
-    filter: brightness(0) invert(1);
+    width: fit-content;
+}
+
+.footer-brand img {
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+}
+
+.footer-brand .pakaras-adjective h4 {
+    margin-bottom: 0;
+}
+.footer-brand .pakaras-adjective span {
+    display: block;
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
 }
 
 .footer-brand p {
     color: #999;
     font-size: 14px;
     margin: 0;
-}
-
-.footer-info h5 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #fff;
+    width: fit-content;
 }
 
 .footer-info p {
@@ -955,13 +1250,55 @@ const focusSearchField = () => {
     margin-bottom: 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .footer-info i {
-    color: var(--grocery-primary-color);
-    font-size: 15px;
+    color: #bcbcbc;
+    font-size: 1.3rem;
     width: 16px;
+    margin-right: 7px;
+}
+
+.socials div {
+    display: flex;
+    gap: 15px;
+}
+
+.socials i {
+    gap: 30px;
+    color: #bcbcbc;
+    font-size: 0.9rem;
+    width: 16px;
+    margin-right: 7px;
+}
+
+.news-letter h2 {
+    font-weight: 700;
+    color: #fff;
+    word-spacing: 0.1em;
+    margin-bottom: 15px;
+    font-family: 'poppins';
+}
+
+.subscribe {
+    display: flex;
+}
+
+.footer-input {
+    height: 45px;
+    width: 250px;
+    padding: 15px;
+    border: none;
+    border-radius: 0;
+}
+
+.subscribe-button {
+    height: 45px;
+    width: 90px;
+    color: white;
+    border: none;
+    background: #ff9505;
 }
 
 .footer-bottom {
@@ -1064,6 +1401,269 @@ const focusSearchField = () => {
 .theme-btn:disabled {
     background: #ddd;
     cursor: not-allowed;
+}
+
+.account-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+
+.account-modal {
+    width: min(100%, 1040px);
+    max-height: 94vh;
+    overflow: hidden;
+    border-radius: 32px;
+    background: #fff;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #222;
+    font-size: 20px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+}
+
+.account-card-left,
+.account-card-right {
+    min-height: 560px;
+}
+
+.account-card-left {
+    padding: 48px 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.account-card-copy {
+    max-width: 420px;
+    margin-bottom: 32px;
+}
+
+.auth-title {
+    font-size: clamp(2rem, 2.5vw, 3rem);
+    line-height: 1.05;
+    margin: 0 0 18px;
+    color: #111;
+}
+
+.auth-subtitle {
+    color: #5a5a5a;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 420px;
+    margin: 0;
+}
+
+.account-form {
+    display: grid;
+    gap: 18px;
+}
+
+.auth-field {
+    display: grid;
+    gap: 8px;
+}
+
+.auth-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #444;
+}
+
+.auth-input {
+    width: 100%;
+    min-height: 54px;
+    padding: 16px 18px;
+    border: 1px solid #ddd;
+    border-radius: 28px;
+    background: #fafafa;
+    font-size: 14px;
+    color: #222;
+}
+
+.auth-remember-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.auth-remember {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
+.auth-remember input {
+    width: 16px;
+    height: 16px;
+    accent-color: rgb(var(--grocery-primary));
+}
+
+.auth-forgot {
+    color: rgb(var(--grocery-primary));
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-btn-primary,
+.auth-btn-google {
+    border: none;
+    border-radius: 28px;
+    min-height: 54px;
+    font-weight: 700;
+    font-family: 'Public Sans', sans-serif;
+    cursor: pointer;
+}
+
+.auth-btn-primary {
+    background: rgb(var(--grocery-theme));
+    color: #fff;
+}
+
+.auth-btn-google {
+    background: #f6f7f8;
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border: 1px solid #e7e7e7;
+}
+
+.google-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.auth-switch {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.auth-link-btn {
+    border: none;
+    padding: 0;
+    font-weight: 700;
+    color: rgb(var(--grocery-primary));
+    background: none;
+    cursor: pointer;
+}
+
+.auth-do-later {
+    margin-top: 8px;
+}
+
+.auth-do-later-link {
+    font-size: 14px;
+    color: #f15a24;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-terms {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    color: #555;
+    font-size: 14px;
+}
+
+.auth-terms input {
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    accent-color: rgb(var(--grocery-primary));
+}
+
+.auth-terms-link {
+    color: rgb(var(--grocery-primary));
+    text-decoration: none;
+}
+
+.account-card-right {
+    position: relative;
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(255, 118, 74, 0.12),
+            transparent 34%
+        ),
+        linear-gradient(180deg, #111 0%, #1c1c1c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.account-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: url('/img/img-login.png') center/cover no-repeat;
+    filter: brightness(0.95);
+}
+
+@media (max-width: 1024px) {
+    .account-modal {
+        grid-template-columns: 1fr;
+        max-height: 90vh;
+    }
+
+    .modal-close {
+        top: 14px;
+        right: 14px;
+    }
+
+    .account-card-left,
+    .account-card-right {
+        min-height: auto;
+    }
+
+    .account-card-left {
+        padding: 34px 28px;
+    }
+}
+
+@media (max-width: 680px) {
+    .account-modal-overlay {
+        padding: 16px;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+    }
+
+    .auth-remember-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .white-btn {

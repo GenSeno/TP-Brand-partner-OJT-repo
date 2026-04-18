@@ -13,7 +13,6 @@
 
         <form @submit.prevent="submitForm">
             <div class="page-body new-employee-field">
-
                 <h6 class="mb-3">Customer Information</h6>
 
                 <div class="row">
@@ -148,13 +147,18 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">JO Status</label>
-                        <select v-model="form.data.jo_status" class="form-select">
+                        <select
+                            v-model="form.data.jo_status"
+                            class="form-select"
+                        >
                             <option value="">— None —</option>
                             <option
                                 v-for="(label, value) in joStatusOptions"
                                 :key="value"
                                 :value="value"
-                            >{{ label }}</option>
+                            >
+                                {{ label }}
+                            </option>
                         </select>
                         <input-error :message="form.errors.jo_status" />
                     </div>
@@ -177,8 +181,12 @@
                         type="button"
                         class="btn btn-secondary me-2"
                         @click="close()"
-                    >Cancel</button>
-                    <submit-btn :loading="form.processing">Save Changes</submit-btn>
+                    >
+                        Cancel
+                    </button>
+                    <submit-btn :loading="form.processing"
+                        >Save Changes</submit-btn
+                    >
                 </div>
             </div>
         </form>

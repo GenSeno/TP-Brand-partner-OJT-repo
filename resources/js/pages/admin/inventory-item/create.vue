@@ -41,7 +41,7 @@
                         <input-error :message="form.errors.current_stock" />
                     </div>
                     <div class="col-md-6 mb-3">
-                         <label class="form-label">Reorder Qty</label>
+                        <label class="form-label">Reorder Qty</label>
                         <input-text
                             v-model="form.data.reorder_qty"
                             type="number"

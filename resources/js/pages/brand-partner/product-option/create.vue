@@ -28,7 +28,10 @@
                         <div class="col">
                             <i>{{ valueHeader }}</i>
                         </div>
-                        <div v-if="form.data.values.length > 1" class="col-auto">
+                        <div
+                            v-if="form.data.values.length > 1"
+                            class="col-auto"
+                        >
                             <span class="btn-icon h-auto"></span>
                         </div>
                     </div>
@@ -39,11 +42,15 @@
                     >
                         <div class="col">
                             <input-text v-model="val.label" />
-                            <input-error :message="form.errors[`values.${index}.label`]" />
+                            <input-error
+                                :message="form.errors[`values.${index}.label`]"
+                            />
                         </div>
                         <div class="col">
                             <input-text v-model="val.value" />
-                            <input-error :message="form.errors[`values.${index}.value`]" />
+                            <input-error
+                                :message="form.errors[`values.${index}.value`]"
+                            />
                         </div>
                         <div class="col-auto">
                             <button
@@ -53,7 +60,10 @@
                                 @click="form.data.values.splice(index, 1)"
                                 title="Remove"
                             >
-                                <vue-feather type="trash-2" class="feather-14"></vue-feather>
+                                <vue-feather
+                                    type="trash-2"
+                                    class="feather-14"
+                                ></vue-feather>
                             </button>
                         </div>
                     </div>
@@ -68,7 +78,11 @@
 
                 <div class="mb-0">
                     <label class="form-label required">Position</label>
-                    <input-text v-model="form.data.position" type="number" min="1" />
+                    <input-text
+                        v-model="form.data.position"
+                        type="number"
+                        min="1"
+                    />
                     <input-error :message="form.errors.position" />
                 </div>
             </div>
@@ -114,7 +128,8 @@ const labelHeader = computed(() => {
 
 const valueHeader = computed(() => {
     const name = form.data.name.toLowerCase();
-    if (name.includes('collection') || name.includes('category')) return 'Notes';
+    if (name.includes('collection') || name.includes('category'))
+        return 'Notes';
     return 'Value';
 });
 
@@ -122,7 +137,9 @@ const submitForm = () => {
     form.post(route('brand-partner.product-options.store'), {
         onSuccess: ({ data }) => {
             modalRef.value.close();
-            alert.showSuccess(data.message || 'Product option created successfully.');
+            alert.showSuccess(
+                data.message || 'Product option created successfully.',
+            );
         },
     });
 };

@@ -13,7 +13,6 @@
 
         <form @submit.prevent="submitForm">
             <div class="page-body new-employee-field">
-
                 <h6 class="mb-3">Customer Information</h6>
 
                 <div class="row">
@@ -117,7 +116,7 @@
                         v-model="form.data.postcode"
                         type="text"
                         class="form-control"
-                        style="max-width: 150px;"
+                        style="max-width: 150px"
                     />
                     <input-error :message="form.errors.postcode" />
                 </div>
@@ -142,7 +141,9 @@
                     class="row mb-2 align-items-end"
                 >
                     <div class="col-md-5">
-                        <label v-if="index === 0" class="form-label required">Product</label>
+                        <label v-if="index === 0" class="form-label required"
+                            >Product</label
+                        >
                         <select
                             v-model="line.product_id"
                             class="form-select"
@@ -153,22 +154,32 @@
                                 v-for="p in products"
                                 :key="p.id"
                                 :value="p.id"
-                            >{{ p.name }}</option>
+                            >
+                                {{ p.name }}
+                            </option>
                         </select>
-                        <input-error :message="form.errors[`lines.${index}.product_id`]" />
+                        <input-error
+                            :message="form.errors[`lines.${index}.product_id`]"
+                        />
                     </div>
                     <div class="col-md-2">
-                        <label v-if="index === 0" class="form-label required">Qty</label>
+                        <label v-if="index === 0" class="form-label required"
+                            >Qty</label
+                        >
                         <input
                             v-model.number="line.quantity"
                             type="number"
                             class="form-control"
                             min="1"
                         />
-                        <input-error :message="form.errors[`lines.${index}.quantity`]" />
+                        <input-error
+                            :message="form.errors[`lines.${index}.quantity`]"
+                        />
                     </div>
                     <div class="col-md-3">
-                        <label v-if="index === 0" class="form-label required">Unit Price</label>
+                        <label v-if="index === 0" class="form-label required"
+                            >Unit Price</label
+                        >
                         <input
                             v-model.number="line.unit_price"
                             type="number"
@@ -176,7 +187,9 @@
                             min="0"
                             step="0.01"
                         />
-                        <input-error :message="form.errors[`lines.${index}.unit_price`]" />
+                        <input-error
+                            :message="form.errors[`lines.${index}.unit_price`]"
+                        />
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button
@@ -185,7 +198,10 @@
                             :disabled="form.data.lines.length === 1"
                             @click="removeLine(index)"
                         >
-                            <vue-feather type="trash-2" class="feather-14"></vue-feather>
+                            <vue-feather
+                                type="trash-2"
+                                class="feather-14"
+                            ></vue-feather>
                         </button>
                     </div>
                 </div>
@@ -195,7 +211,10 @@
                     class="btn btn-outline-primary btn-sm mt-1"
                     @click="addLine"
                 >
-                    <vue-feather type="plus" class="feather-14 me-1"></vue-feather>
+                    <vue-feather
+                        type="plus"
+                        class="feather-14 me-1"
+                    ></vue-feather>
                     Add Item
                 </button>
 
@@ -218,8 +237,12 @@
                         type="button"
                         class="btn btn-secondary me-2"
                         @click="close()"
-                    >Cancel</button>
-                    <submit-btn :loading="form.processing">Create Order</submit-btn>
+                    >
+                        Cancel
+                    </button>
+                    <submit-btn :loading="form.processing"
+                        >Create Order</submit-btn
+                    >
                 </div>
             </div>
         </form>

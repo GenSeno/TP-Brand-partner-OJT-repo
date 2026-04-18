@@ -74,7 +74,12 @@
                     <img
                         :src="getProductImage(row)"
                         :alt="row.name"
-                        style="width:48px;height:48px;object-fit:cover;border-radius:6px;"
+                        style="
+                            width: 48px;
+                            height: 48px;
+                            object-fit: cover;
+                            border-radius: 6px;
+                        "
                     />
                 </template>
 
@@ -93,10 +98,20 @@
                 </template>
 
                 <template v-if="approvalEnabled" #approval_status="{ row }">
-                    <span class="badge" :class="`bg-${getApprovalColor(row.approval_status)}`">
+                    <span
+                        class="badge"
+                        :class="`bg-${getApprovalColor(row.approval_status)}`"
+                    >
                         {{ getApprovalLabel(row.approval_status) }}
                     </span>
-                    <div v-if="row.approval_status === 'rejected' && row.approval_notes" class="small text-danger mt-1" style="max-width: 180px; white-space: normal;">
+                    <div
+                        v-if="
+                            row.approval_status === 'rejected' &&
+                            row.approval_notes
+                        "
+                        class="small text-danger mt-1"
+                        style="max-width: 180px; white-space: normal"
+                    >
                         {{ row.approval_notes }}
                     </div>
                 </template>
@@ -152,7 +167,9 @@ const props = defineProps({
 });
 
 const page = usePage();
-const approvalEnabled = computed(() => page.props.features?.product_approval ?? true);
+const approvalEnabled = computed(
+    () => page.props.features?.product_approval ?? true,
+);
 
 const columns = computed(() => {
     const cols = [
@@ -164,7 +181,11 @@ const columns = computed(() => {
         { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
     ];
     if (approvalEnabled.value) {
-        cols.push({ title: 'Approval', dataIndex: 'approval_status', key: 'approval_status' });
+        cols.push({
+            title: 'Approval',
+            dataIndex: 'approval_status',
+            key: 'approval_status',
+        });
     }
     cols.push({ title: '', dataIndex: 'id', key: 'action' });
     return cols;
@@ -217,11 +238,19 @@ const getStatusColor = (status) => {
 };
 
 const getApprovalColor = (status) => {
-    return { pending: 'warning', approved: 'success', rejected: 'danger' }[status] ?? 'secondary';
+    return (
+        { pending: 'warning', approved: 'success', rejected: 'danger' }[
+            status
+        ] ?? 'secondary'
+    );
 };
 
 const getApprovalLabel = (status) => {
-    return { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' }[status] ?? status;
+    return (
+        { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' }[
+            status
+        ] ?? status
+    );
 };
 
 const getProductImage = (product) => {

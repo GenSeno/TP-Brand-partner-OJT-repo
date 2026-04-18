@@ -135,7 +135,12 @@ td {
                                         "
                                     />
                                 </div>
-                                <div v-if="viewingStage && viewingStage !== 'new'" class="mb-0">
+                                <div
+                                    v-if="
+                                        viewingStage && viewingStage !== 'new'
+                                    "
+                                    class="mb-0"
+                                >
                                     <label
                                         :for="`file-path-${index}`"
                                         class="form-label"

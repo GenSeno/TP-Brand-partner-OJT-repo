@@ -80,12 +80,7 @@ export function getTotalPrice(lines = [], currency) {
 }
 
 export function formatCurrency(value, currency) {
-    if (
-        value === null ||
-        value === undefined ||
-        value === '' ||
-        value == 0
-    )
+    if (value === null || value === undefined || value === '' || value == 0)
         return '—';
 
     const number = Number(value);
@@ -109,10 +104,12 @@ export function getPriceDisplay(lines = [], currency) {
     lines.forEach((line) => {
         const description = line.purchasable?.description ?? '';
         const isWithName =
-            description.startsWith('WITH-name') || description.startsWith('WITH name');
+            description.startsWith('WITH-name') ||
+            description.startsWith('WITH name');
 
         // Determine size or custom dimension
-        const rawSize = line.meta?.size ?? description.split('/')[1]?.trim() ?? 'Unknown';
+        const rawSize =
+            line.meta?.size ?? description.split('/')[1]?.trim() ?? 'Unknown';
         const size =
             rawSize.toLowerCase() === 'custom' && line.meta?.custom_dimension
                 ? line.meta.custom_dimension

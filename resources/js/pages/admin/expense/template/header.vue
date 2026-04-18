@@ -36,7 +36,8 @@
             <span class="text-muted">PAY TO:</span>
             <div class="small text-muted mt-1">
                 <!-- Name is always required -->
-                <span class="fw-bold text-black">{{ supplier.name }}</span><br />
+                <span class="fw-bold text-black">{{ supplier.name }}</span
+                ><br />
 
                 <!-- Only show if contact_person exists -->
                 <template v-if="supplier.contact_person">
@@ -54,7 +55,11 @@
                 </template>
 
                 <!-- Province + postcode + country -->
-                <template v-if="supplier.province || supplier.postcode || country?.name">
+                <template
+                    v-if="
+                        supplier.province || supplier.postcode || country?.name
+                    "
+                >
                     {{ supplier.province ? supplier.province : '' }}
                     {{ supplier.postcode ? ', ' + supplier.postcode : '' }}
                     {{ country?.name ? ', ' + country.name : '' }}<br />
@@ -62,10 +67,10 @@
 
                 <!-- Email / Mobile -->
                 <template v-if="supplier.email || supplier.phone">
-                    Email: {{ supplier.email ? supplier.email : '-' }}
-                    / Mobile: {{ supplier.phone ? '+' + supplier.phone : '-' }}
+                    Email: {{ supplier.email ? supplier.email : '-' }} / Mobile:
+                    {{ supplier.phone ? '+' + supplier.phone : '-' }}
                 </template>
-                </div>
+            </div>
         </div>
         <!-- DATE TO -->
         <div class="col-md-6 mb-4 mt-4">
@@ -93,13 +98,13 @@
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;</td>
                             <td class="text-capitalize">
-                            {{
-                                expense?.payment_method === 'bank'
-                                ? 'Bank Transfer'
-                                : expense?.payment_method
-                                ? expense?.payment_method
-                                : 'Not Set'
-                            }}
+                                {{
+                                    expense?.payment_method === 'bank'
+                                        ? 'Bank Transfer'
+                                        : expense?.payment_method
+                                          ? expense?.payment_method
+                                          : 'Not Set'
+                                }}
                             </td>
                         </tr>
                         <tr>

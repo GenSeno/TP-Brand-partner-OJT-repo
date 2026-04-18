@@ -41,7 +41,9 @@
                         type="button"
                         class="btn btn-secondary me-2"
                         @click="close()"
-                    >Cancel</button>
+                    >
+                        Cancel
+                    </button>
                     <submit-btn :loading="form.processing">Save</submit-btn>
                 </div>
             </div>
@@ -73,12 +75,15 @@ const form = useAxiosForm({
 });
 
 const submitForm = () => {
-    form.post(route('brand-partner.orders.receive-payment.store', props.order.id), {
-        onSuccess: () => {
-            alert.showSuccess('Payment status updated successfully.');
-            modalRef.value.close();
-            router.reload();
+    form.post(
+        route('brand-partner.orders.receive-payment.store', props.order.id),
+        {
+            onSuccess: () => {
+                alert.showSuccess('Payment status updated successfully.');
+                modalRef.value.close();
+                router.reload();
+            },
         },
-    });
+    );
 };
 </script>

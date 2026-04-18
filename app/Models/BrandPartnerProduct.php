@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BrandPartnerProductImage;
 use App\Enums\BrandPartnerProductApprovalStatus;
 use App\Enums\BrandPartnerProductStatus;
 use App\Lunar\Traits\LogsActivity;
@@ -99,7 +100,7 @@ class BrandPartnerProduct extends Model
 
     public function category(): Relations\BelongsTo
     {
-        return $this->belongsTo(BrandPartnerCategory::class, 'category_id');
+        return $this->belongsTo(BrandPartnerProductOptionValue::class, 'category_id');
     }
 
     public function collection(): Relations\BelongsTo

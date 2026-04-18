@@ -70,11 +70,40 @@
                                                 "
                                             />
                                             <div>
-                                                <span>{{ line.product_name }}</span>
-                                                <div v-if="line.meta?.color || line.meta?.size" style="font-size:11px;color:#888;margin-top:2px;">
-                                                    <span v-if="line.meta.color">Color: <strong>{{ line.meta.color }}</strong></span>
-                                                    <span v-if="line.meta.color && line.meta.size"> &middot; </span>
-                                                    <span v-if="line.meta.size">Size: <strong>{{ line.meta.size }}</strong></span>
+                                                <span>{{
+                                                    line.product_name
+                                                }}</span>
+                                                <div
+                                                    v-if="
+                                                        line.meta?.color ||
+                                                        line.meta?.size
+                                                    "
+                                                    style="
+                                                        font-size: 11px;
+                                                        color: #888;
+                                                        margin-top: 2px;
+                                                    "
+                                                >
+                                                    <span v-if="line.meta.color"
+                                                        >Color:
+                                                        <strong>{{
+                                                            line.meta.color
+                                                        }}</strong></span
+                                                    >
+                                                    <span
+                                                        v-if="
+                                                            line.meta.color &&
+                                                            line.meta.size
+                                                        "
+                                                    >
+                                                        &middot;
+                                                    </span>
+                                                    <span v-if="line.meta.size"
+                                                        >Size:
+                                                        <strong>{{
+                                                            line.meta.size
+                                                        }}</strong></span
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -140,16 +169,19 @@
                 </div>
                 <div class="card-body">
                     <p class="mb-1">
-                        <strong>Company:</strong> {{ order.company_name || '—' }}
+                        <strong>Company:</strong>
+                        {{ order.company_name || '—' }}
                     </p>
                     <p class="mb-1">
                         <strong>Name:</strong> {{ order.customer_name }}
                     </p>
                     <p class="mb-1">
-                        <strong>Address:</strong> {{ order.address_line1 || '—' }}
+                        <strong>Address:</strong>
+                        {{ order.address_line1 || '—' }}
                     </p>
                     <p class="mb-1">
-                        <strong>Phone:</strong> {{ order.customer_phone || '—' }}
+                        <strong>Phone:</strong>
+                        {{ order.customer_phone || '—' }}
                     </p>
                     <p class="mb-0">
                         <strong>Order Date:</strong>
@@ -159,9 +191,14 @@
             </div>
 
             <div class="card mt-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                >
                     <h5 class="card-title mb-0">Payment Status</h5>
-                    <span class="badge" :class="`bg-${getPaymentStatusColor(order.payment_status)}`">
+                    <span
+                        class="badge"
+                        :class="`bg-${getPaymentStatusColor(order.payment_status)}`"
+                    >
                         {{ getPaymentStatusLabel(order.payment_status) }}
                     </span>
                 </div>
@@ -171,7 +208,11 @@
                             v-for="opt in paymentStatusOptions"
                             :key="opt.value"
                             class="badge fs-6 px-3 py-2"
-                            :class="order.payment_status === opt.value ? `bg-${getPaymentStatusColor(opt.value)}` : 'bg-light text-dark'"
+                            :class="
+                                order.payment_status === opt.value
+                                    ? `bg-${getPaymentStatusColor(opt.value)}`
+                                    : 'bg-light text-dark'
+                            "
                             style="cursor: default"
                         >
                             {{ opt.label }}
@@ -185,9 +226,15 @@
                     <h5 class="card-title mb-0">Order Info</h5>
                 </div>
                 <div class="card-body">
-                    <p class="mb-1"><strong>JO Number:</strong> {{ order.jo_number || '—' }}</p>
-                    <p class="mb-1"><strong>JO Status:</strong> {{ order.jo_status || '—' }}</p>
-                    <p class="mb-0"><strong>Note:</strong> {{ order.notes || '—' }}</p>
+                    <p class="mb-1">
+                        <strong>JO Number:</strong> {{ order.jo_number || '—' }}
+                    </p>
+                    <p class="mb-1">
+                        <strong>JO Status:</strong> {{ order.jo_status || '—' }}
+                    </p>
+                    <p class="mb-0">
+                        <strong>Note:</strong> {{ order.notes || '—' }}
+                    </p>
                 </div>
             </div>
 
@@ -203,7 +250,10 @@
                             @click="confirmOrder"
                             :disabled="processing"
                         >
-                            <vue-feather type="check" class="me-2"></vue-feather>
+                            <vue-feather
+                                type="check"
+                                class="me-2"
+                            ></vue-feather>
                             Confirm Order
                         </button>
                         <button
@@ -212,7 +262,10 @@
                             @click="completeOrder"
                             :disabled="processing"
                         >
-                            <vue-feather type="check-circle" class="me-2"></vue-feather>
+                            <vue-feather
+                                type="check-circle"
+                                class="me-2"
+                            ></vue-feather>
                             Mark as Completed
                         </button>
                         <ModalLink
@@ -223,19 +276,33 @@
                             Edit
                         </ModalLink>
                         <ModalLink
-                            :href="route('brand-partner.orders.receive-payment', order.id)"
+                            :href="
+                                route(
+                                    'brand-partner.orders.receive-payment',
+                                    order.id,
+                                )
+                            "
                             class="btn btn-info text-white"
                         >
-                            <vue-feather type="credit-card" class="me-2"></vue-feather>
+                            <vue-feather
+                                type="credit-card"
+                                class="me-2"
+                            ></vue-feather>
                             Receive Payment
                         </ModalLink>
                         <button
-                            v-if="order.status !== 'completed' && order.status !== 'cancelled'"
+                            v-if="
+                                order.status !== 'completed' &&
+                                order.status !== 'cancelled'
+                            "
                             class="btn btn-danger"
                             @click="cancelOrder"
                             :disabled="processing"
                         >
-                            <vue-feather type="x-circle" class="me-2"></vue-feather>
+                            <vue-feather
+                                type="x-circle"
+                                class="me-2"
+                            ></vue-feather>
                             Cancel Order
                         </button>
                     </div>
@@ -275,7 +342,11 @@ const paymentStatusOptions = [
 ];
 
 const getPaymentStatusLabel = (status) => {
-    return paymentStatusOptions.find(o => o.value === status)?.label ?? status ?? '—';
+    return (
+        paymentStatusOptions.find((o) => o.value === status)?.label ??
+        status ??
+        '—'
+    );
 };
 
 const getPaymentStatusColor = (status) => {

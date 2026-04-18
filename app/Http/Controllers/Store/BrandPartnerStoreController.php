@@ -67,13 +67,22 @@ class BrandPartnerStoreController extends Controller
             $productsQuery->search($request->search);
         }
 
-        $products = $productsQuery->latest()->paginate(12)->withQueryString();
+        $products = $productsQuery->latest()->paginate(8)->withQueryString();
+
+        $featuredProducts = $brandPartner->products()
+            ->published()
+            ->featured()
+            ->with(['category', 'event', 'images'])
+            ->latest()
+            ->limit(4)
+            ->get();
 
         return Inertia::render('store/index', [
             'brandPartner' => $brandPartner,
             'categories' => $categories,
             'events' => $events,
             'products' => $products,
+            'featuredProducts' => $featuredProducts,
             'filter' => $request->only(['category', 'event', 'featured', 'search']),
             'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
         ]);

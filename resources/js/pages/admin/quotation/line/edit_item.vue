@@ -51,15 +51,21 @@
                                 </option>
                             </select>
                         </div>
-                         <div class="mb-3">
-                             <p v-if="props.product?.description">
-                               {{props.product?.description }}
+                        <div class="mb-3">
+                            <p v-if="props.product?.description">
+                                {{ props.product?.description }}
                             </p>
                         </div>
                     </div>
 
                     <!-- RIGHT SIDE: Variant Details -->
-                    <div class="col-md-7" v-if="groupedVariants.withName.length || groupedVariants.noName.length">
+                    <div
+                        class="col-md-7"
+                        v-if="
+                            groupedVariants.withName.length ||
+                            groupedVariants.noName.length
+                        "
+                    >
                         <h6 class="mb-2">Selected Variants</h6>
                         <span class="text-info">
                             <i
@@ -69,182 +75,214 @@
                             Set Names, Input Quantity and Price
                         </span>
                         <hr />
-                         <div v-if="groupedVariants.withName.length">
+                        <div v-if="groupedVariants.withName.length">
                             <h6 class="fw-bold text-dark">WITH NAME</h6>
-                        <div
-                            v-for="variant in groupedVariants.withName"
-                            :key="variant.quote_line_id"
-                            class="mb-3"
-                        >
-                            <div class="d-flex align-items-center">
-                                <!-- Variant description -->
-                                <div class="flex-grow-1">
-                                    {{ variant.size }}
-                                </div>
-
-                                <!-- Set Names button -->
-                                <button
-                                    v-if="needsSetNames(variant.description)"
-                                    type="button"
-                                    class="btn btn-xs btn-dark mx-2"
-                                    @click="openSetNamesOverlay(variant)"
-                                >
-                                    {{
-                                        variantQuantities[
-                                            variant.quote_line_id
-                                        ] > 1
-                                            ? 'Set Names'
-                                            : 'Set Name'
-                                    }}
-                                </button>
-
-                                <!-- Quantity input -->
-                                <input
-                                    type="number"
-                                    min="1"
-                                    class="form-control w-25 ms-3"
-                                    v-model.number="
-                                        variantQuantities[variant.quote_line_id]
-                                    "
-                                />
-
-                                <!-- Price input beside quantity -->
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    class="form-control w-25 ms-2"
-                                    v-model.number="
-                                        variantPrices[variant.quote_line_id]
-                                    "
-                                />
-                            </div>
                             <div
-                                v-if="isOthersSize(variant.size)"
-                                class="mt-3"
-                                >
-                                <p class="small text-muted mb-1">
-                                    Dimension (W × H)
-                                </p>
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <input
-                                        v-model.number="variantDimensions[variant.quote_line_id].width"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="W"
-                                    />
-
-                                    <span class="fw-bold text-muted">×</span>
-
-                                    <input
-                                        v-model.number="variantDimensions[variant.quote_line_id].height"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="H"
-                                    />
-
-                                    <small class="text-muted">inches</small>
-                                </div>
-                            </div>
-
-                            <!-- Display names if any -->
-                            <div
-                                v-if="
-                                    variantNames[variant.quote_line_id]?.length
-                                "
-                                class="mt-1 small text-muted"
+                                v-for="variant in groupedVariants.withName"
+                                :key="variant.quote_line_id"
+                                class="mb-3"
                             >
-                                <span
-                                    v-for="(name, idx) in variantNames[
-                                        variant.quote_line_id
-                                    ]"
-                                    :key="idx"
-                                >
-                                    {{ idx + 1 }}. {{ name || '—'
-                                    }}<span
+                                <div class="d-flex align-items-center">
+                                    <!-- Variant description -->
+                                    <div class="flex-grow-1">
+                                        {{ variant.size }}
+                                    </div>
+
+                                    <!-- Set Names button -->
+                                    <button
                                         v-if="
-                                            idx <
-                                            variantNames[variant.quote_line_id]
-                                                .length -
-                                                1
+                                            needsSetNames(variant.description)
                                         "
-                                        >,
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                        </div>
-                         <hr />
-                         <div v-if="groupedVariants.noName.length">
-                            <h6 class="fw-bold text-dark">NO NAME</h6>
-                        <div
-                            v-for="variant in groupedVariants.noName"
-                            :key="variant.quote_line_id"
-                            class="mb-3"
-                             >
-                            <div class="d-flex align-items-center">
-                                <!-- Variant description -->
-                                <div class="flex-grow-1">
-                                    {{ variant.size }}
-                                </div>
-                                <!-- Quantity input -->
-                                <input
-                                    type="number"
-                                    min="1"
-                                    class="form-control w-25 ms-3"
-                                    v-model.number="
-                                        variantQuantities[variant.quote_line_id]
-                                    "
-                                />
+                                        type="button"
+                                        class="btn btn-xs btn-dark mx-2"
+                                        @click="openSetNamesOverlay(variant)"
+                                    >
+                                        {{
+                                            variantQuantities[
+                                                variant.quote_line_id
+                                            ] > 1
+                                                ? 'Set Names'
+                                                : 'Set Name'
+                                        }}
+                                    </button>
 
-                                <!-- Price input beside quantity -->
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    class="form-control w-25 ms-2"
-                                    v-model.number="
-                                        variantPrices[variant.quote_line_id]
-                                    "
-                                />
-                            </div>
-                               <div
-                                v-if="isOthersSize(variant.size)"
-                                class="mt-3"
+                                    <!-- Quantity input -->
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        class="form-control w-25 ms-3"
+                                        v-model.number="
+                                            variantQuantities[
+                                                variant.quote_line_id
+                                            ]
+                                        "
+                                    />
+
+                                    <!-- Price input beside quantity -->
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control w-25 ms-2"
+                                        v-model.number="
+                                            variantPrices[variant.quote_line_id]
+                                        "
+                                    />
+                                </div>
+                                <div
+                                    v-if="isOthersSize(variant.size)"
+                                    class="mt-3"
                                 >
-                                <p class="small text-muted mb-1">
-                                    Dimension (W × H)
-                                </p>
+                                    <p class="small text-muted mb-1">
+                                        Dimension (W × H)
+                                    </p>
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <input
-                                        v-model.number="variantDimensions[variant.quote_line_id].width"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="W"
-                                    />
+                                    <div
+                                        class="d-flex align-items-center gap-2"
+                                    >
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.quote_line_id
+                                                ].width
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="W"
+                                        />
 
-                                    <span class="fw-bold text-muted">×</span>
+                                        <span class="fw-bold text-muted"
+                                            >×</span
+                                        >
 
-                                    <input
-                                        v-model.number="variantDimensions[variant.quote_line_id].height"
-                                        type="number"
-                                        min="1"
-                                        class="form-control form-control-sm text-center"
-                                        style="max-width: 5rem"
-                                        placeholder="H"
-                                    />
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.quote_line_id
+                                                ].height
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="H"
+                                        />
 
-                                    <small class="text-muted">inches</small>
+                                        <small class="text-muted">inches</small>
+                                    </div>
+                                </div>
+
+                                <!-- Display names if any -->
+                                <div
+                                    v-if="
+                                        variantNames[variant.quote_line_id]
+                                            ?.length
+                                    "
+                                    class="mt-1 small text-muted"
+                                >
+                                    <span
+                                        v-for="(name, idx) in variantNames[
+                                            variant.quote_line_id
+                                        ]"
+                                        :key="idx"
+                                    >
+                                        {{ idx + 1 }}. {{ name || '—'
+                                        }}<span
+                                            v-if="
+                                                idx <
+                                                variantNames[
+                                                    variant.quote_line_id
+                                                ].length -
+                                                    1
+                                            "
+                                            >,
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
+                        </div>
+                        <hr />
+                        <div v-if="groupedVariants.noName.length">
+                            <h6 class="fw-bold text-dark">NO NAME</h6>
+                            <div
+                                v-for="variant in groupedVariants.noName"
+                                :key="variant.quote_line_id"
+                                class="mb-3"
+                            >
+                                <div class="d-flex align-items-center">
+                                    <!-- Variant description -->
+                                    <div class="flex-grow-1">
+                                        {{ variant.size }}
+                                    </div>
+                                    <!-- Quantity input -->
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        class="form-control w-25 ms-3"
+                                        v-model.number="
+                                            variantQuantities[
+                                                variant.quote_line_id
+                                            ]
+                                        "
+                                    />
+
+                                    <!-- Price input beside quantity -->
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control w-25 ms-2"
+                                        v-model.number="
+                                            variantPrices[variant.quote_line_id]
+                                        "
+                                    />
+                                </div>
+                                <div
+                                    v-if="isOthersSize(variant.size)"
+                                    class="mt-3"
+                                >
+                                    <p class="small text-muted mb-1">
+                                        Dimension (W × H)
+                                    </p>
+
+                                    <div
+                                        class="d-flex align-items-center gap-2"
+                                    >
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.quote_line_id
+                                                ].width
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="W"
+                                        />
+
+                                        <span class="fw-bold text-muted"
+                                            >×</span
+                                        >
+
+                                        <input
+                                            v-model.number="
+                                                variantDimensions[
+                                                    variant.quote_line_id
+                                                ].height
+                                            "
+                                            type="number"
+                                            min="1"
+                                            class="form-control form-control-sm text-center"
+                                            style="max-width: 5rem"
+                                            placeholder="H"
+                                        />
+
+                                        <small class="text-muted">inches</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -333,30 +371,27 @@ const variantPrices = reactive({});
 const variantNames = reactive({});
 const variantDimensions = reactive({});
 
-
-
 props.lines.forEach((line) => {
     variantQuantities[line.id] = line.quantity;
     variantPrices[line.id] = line.purchase_price?.decimal || 0;
     variantNames[line.id] = line.meta?.names || [];
 
     const dimension = line.meta?.custom_dimension || '';
-    const [w, h] = dimension.split('x').map(v => v?.trim() || '');
+    const [w, h] = dimension.split('x').map((v) => v?.trim() || '');
     variantDimensions[line.id] = { width: w, height: h };
 });
 
 const groupedVariants = computed(() => {
     const groups = { withName: [], noName: [] };
     props.lines.forEach((line) => {
-        const description =
-            line.purchasable?.description || '';
+        const description = line.purchasable?.description || '';
         const variantObject = {
             ...line.purchasable,
             quote_line_id: line.id,
             description,
             size: line.meta?.size || description?.split('/')[1]?.trim(),
         };
-        
+
         if (description.toUpperCase().includes('WITH NAME')) {
             groups.withName.push(variantObject);
         } else {
@@ -369,7 +404,6 @@ const groupedVariants = computed(() => {
 const isOthersSize = (description) => {
     return description.toLowerCase() === 'custom';
 };
-
 
 // Overlay for setting names
 const showSetNamesOverlay = ref(false);
@@ -407,14 +441,13 @@ const form = useAxiosForm({ quote_lines: props.lines });
 
 const submitForm = () => {
     const quote_lines = props.lines.map((line) => ({
-        
         id: line.id,
         purchasable_type: 'App\\Models\\ProductVariant',
         purchasable_id: line.purchasable.id,
         quantity: variantQuantities[line.id],
         purchase_price: variantPrices[line.id],
         meta: {
-             ...line.meta,
+            ...line.meta,
             names: variantNames[line.id] ?? [],
             custom_dimension: `${variantDimensions[line.id].width} x ${variantDimensions[line.id].height}`,
         },

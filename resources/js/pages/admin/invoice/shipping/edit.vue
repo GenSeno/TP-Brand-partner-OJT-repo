@@ -22,9 +22,7 @@
                             placeholder="Description"
                         />
                         <input-error
-                            :message="
-                                form.errors[`lines.${index}.description`]
-                            "
+                            :message="form.errors[`lines.${index}.description`]"
                         />
                     </div>
                     <div class="col-auto" style="width: 180px">
@@ -64,10 +62,7 @@
                     class="btn btn-sm btn-outline-primary mt-1"
                     @click="addLine"
                 >
-                    <i
-                        data-feather="plus"
-                        class="feather-plus me-1"
-                    ></i>
+                    <i data-feather="plus" class="feather-plus me-1"></i>
                     Add Line
                 </button>
             </div>
@@ -81,9 +76,7 @@
                     >
                         Cancel
                     </button>
-                    <submit-btn :loading="form.processing">
-                        Save
-                    </submit-btn>
+                    <submit-btn :loading="form.processing"> Save </submit-btn>
                 </div>
             </div>
         </form>
@@ -135,7 +128,7 @@ const removeLine = (index) => {
 const submitForm = () => {
     form.data.billing_id = props.billingId;
 
-    form.put(route('admin.shipping.update', { invoice: props.billingId } ), {
+    form.put(route('admin.shipping.update', { invoice: props.billingId }), {
         onSuccess: () => {
             modalRef.value.close();
             emitter.emit('shipping:updated');

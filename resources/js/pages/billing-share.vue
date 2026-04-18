@@ -154,8 +154,7 @@
                         >
                             {{ invoice.shipping_address.barangay }},
                             {{ invoice.shipping_address.city
-                            }}<template
-                                v-if="invoice.shipping_address.province"
+                            }}<template v-if="invoice.shipping_address.province"
                                 >,
                                 {{
                                     invoice.shipping_address.province
@@ -163,9 +162,7 @@
                             >
                         </p>
                     </div>
-                    <em
-                        v-else-if="invoice.billing_address"
-                        class="text-muted"
+                    <em v-else-if="invoice.billing_address" class="text-muted"
                         >(Same as billing address)</em
                     >
                 </div>
@@ -200,9 +197,7 @@
                             </td>
                             <td>
                                 <div
-                                    v-for="(
-                                        option, oi
-                                    ) in line.options_payload"
+                                    v-for="(option, oi) in line.options_payload"
                                     :key="oi"
                                     class="small mb-1"
                                 >
@@ -303,69 +298,41 @@
                                 {{ invoice.summary.with_shipping.formatted }}
                             </td>
                         </tr>
-                        <tr  v-if="billing?.length == 0">
-                            <td colspan="4" class="border-0">
-                                &nbsp;
-                            </td>
+                        <tr v-if="billing?.length == 0">
+                            <td colspan="4" class="border-0">&nbsp;</td>
                         </tr>
-                         <template v-if="billing?.length > 0">
+                        <template v-if="billing?.length > 0">
                             <tr>
-                                <td
-                                    colspan="4"
-                                    class="border-0"
-                                >
-                                    <h6 class="mt-3">
-                                        Billing Breakdown
-                                    </h6>
+                                <td colspan="4" class="border-0">
+                                    <h6 class="mt-3">Billing Breakdown</h6>
                                 </td>
                             </tr>
-                            <tr
-                                v-for="bill in billing"
-                                :key="bill.id"
-                            >
-                                <td
-                                    colspan="3"
-                                    class="bg-light"
-                                >
+                            <tr v-for="bill in billing" :key="bill.id">
+                                <td colspan="3" class="bg-light">
                                     Billing No.:
-                                     {{ bill.reference }}
+                                    {{ bill.reference }}
                                 </td>
                                 <td class="text-end">
-                                    {{
-                                        bill.summary.amount_paid
-                                            .formatted
-                                    }}
-                                </td>
-                            </tr>
-                            <tr  v-if="invoice.type != 'down-payment'">
-                                <td
-                                    colspan="3"
-                                    class="fw-bold bg-light"
-                                >
-                                    Total Amount Billed
-                                </td>
-                                <td class="text-end fw-bold">
-                                    {{
-                                        totalBilled
-                                            .formatted
-                                    }}
+                                    {{ bill.summary.amount_paid.formatted }}
                                 </td>
                             </tr>
                             <tr v-if="invoice.type != 'down-payment'">
-                                <td
-                                    colspan="3"
-                                    class="bg-light text-danger"
-                                >
+                                <td colspan="3" class="fw-bold bg-light">
+                                    Total Amount Billed
+                                </td>
+                                <td class="text-end fw-bold">
+                                    {{ totalBilled.formatted }}
+                                </td>
+                            </tr>
+                            <tr v-if="invoice.type != 'down-payment'">
+                                <td colspan="3" class="bg-light text-danger">
                                     Unbilled Amount
                                 </td>
                                 <td class="text-end text-danger">
-                                    {{
-                                        unbilledAmount
-                                            .formatted
-                                    }}
+                                    {{ unbilledAmount.formatted }}
                                 </td>
                             </tr>
-                            <br/>
+                            <br />
                         </template>
 
                         <!-- VAT Breakdown -->
@@ -471,9 +438,7 @@
                 <div class="flex-grow-1 border-top"></div>
             </div>
 
-            <div
-                class="d-flex justify-content-end align-items-center gap-2"
-            >
+            <div class="d-flex justify-content-end align-items-center gap-2">
                 <div class="small text-end">Powered by</div>
                 <img
                     src="/img/tech-hive-logo-black-font.png"
@@ -543,7 +508,7 @@ import dayjs from 'dayjs';
 
 const props = defineProps({
     invoice: Object,
-     billing: Array,
+    billing: Array,
     totalBilled: Number,
     unbilledAmount: Number,
 });
@@ -553,8 +518,7 @@ const loading = ref(false);
 
 const hasShipping = computed(() => {
     return (
-        props.invoice?.shipping_total &&
-        props.invoice.shipping_total.value > 0
+        props.invoice?.shipping_total && props.invoice.shipping_total.value > 0
     );
 });
 

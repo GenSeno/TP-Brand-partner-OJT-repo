@@ -53,9 +53,7 @@
                         <div v-if="names.length" class="small text-muted">
                             <span v-for="(name, idx) in names" :key="idx">
                                 {{ idx + 1 }}. {{ name || '—'
-                                }}<span v-if="idx < names.length - 1"
-                                    >,
-                                </span>
+                                }}<span v-if="idx < names.length - 1">, </span>
                             </span>
                         </div>
                     </div>
@@ -157,7 +155,9 @@ const tempNames = ref([]);
 
 const openSetNamesOverlay = () => {
     const qty = quantity.value || 1;
-    tempNames.value = [...(names.value.length ? names.value : Array(qty).fill(''))];
+    tempNames.value = [
+        ...(names.value.length ? names.value : Array(qty).fill('')),
+    ];
 
     if (tempNames.value.length < qty)
         tempNames.value.push(...Array(qty - tempNames.value.length).fill(''));

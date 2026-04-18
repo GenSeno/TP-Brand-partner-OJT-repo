@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
@@ -13,6 +14,15 @@ class BrandPartnerProductOptionValue extends Model
         'value',
         'position',
     ];
+
+    protected $appends = ['name'];
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->label,
+        );
+    }
 
     protected $casts = [
         'product_option_id' => 'integer',

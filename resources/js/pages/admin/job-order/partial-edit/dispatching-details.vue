@@ -11,19 +11,21 @@
 
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div>
-                        <div class="text-muted small mb-1">Unbilled Balance</div>
+                        <div class="text-muted small mb-1">
+                            Unbilled Balance
+                        </div>
                         <div class="fw-semibold fs-5">
                             {{
-                                jobOrder.order.billing_summary
-                                    ?.amount_unbilled?.formatted || '—'
+                                jobOrder.order.billing_summary?.amount_unbilled
+                                    ?.formatted || '—'
                             }}
                         </div>
                     </div>
                     <div class="ms-auto">
                         <ModalLink
                             v-if="
-                                (jobOrder.order.billing_summary
-                                    ?.amount_unbilled?.value ?? 0) > 0
+                                (jobOrder.order.billing_summary?.amount_unbilled
+                                    ?.value ?? 0) > 0
                             "
                             navigate
                             :href="
@@ -80,9 +82,7 @@
                         :message="form.errors['dispatching.add_delivery_fee']"
                     />
                     <div
-                        v-if="
-                            form.data.dispatching.add_delivery_fee === 'yes'
-                        "
+                        v-if="form.data.dispatching.add_delivery_fee === 'yes'"
                         class="mt-2"
                     >
                         <ModalLink
@@ -136,9 +136,7 @@
                             class="form-control"
                             :class="{
                                 'is-invalid':
-                                    form.errors[
-                                        'dispatching.delivery_method'
-                                    ],
+                                    form.errors['dispatching.delivery_method'],
                             }"
                             placeholder="Enter delivery method"
                         />
@@ -159,9 +157,7 @@
                             class="form-control"
                             :class="{
                                 'is-invalid':
-                                    form.errors[
-                                        'dispatching.reference_number'
-                                    ],
+                                    form.errors['dispatching.reference_number'],
                             }"
                             placeholder="Enter reference number"
                         />

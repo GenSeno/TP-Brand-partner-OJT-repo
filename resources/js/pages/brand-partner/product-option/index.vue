@@ -57,7 +57,9 @@
                 <template #name="{ row, value }">
                     <ModalLink
                         navigate
-                        :href="route('brand-partner.product-options.edit', row.id)"
+                        :href="
+                            route('brand-partner.product-options.edit', row.id)
+                        "
                     >
                         {{ value }}
                     </ModalLink>
@@ -72,21 +74,37 @@
                         <div class="edit-delete-action">
                             <ModalLink
                                 navigate
-                                :href="route('brand-partner.product-options.edit', value)"
+                                :href="
+                                    route(
+                                        'brand-partner.product-options.edit',
+                                        value,
+                                    )
+                                "
                                 class="btn btn-icon btn-outline-light btn-sm me-2"
                                 title="Edit"
                             >
-                                <vue-feather type="edit" class="feather-14"></vue-feather>
+                                <vue-feather
+                                    type="edit"
+                                    class="feather-14"
+                                ></vue-feather>
                             </ModalLink>
                             <dt-delete2
-                                :url="route('brand-partner.product-options.destroy', value)"
+                                :url="
+                                    route(
+                                        'brand-partner.product-options.destroy',
+                                        value,
+                                    )
+                                "
                                 :record-name="row.name"
                                 model-name="product option"
                                 :emitter-event="deleteEmitterEvent"
                                 class="btn btn-icon btn-danger-light btn-sm"
                                 title="Delete"
                             >
-                                <vue-feather type="trash-2" class="feather-14"></vue-feather>
+                                <vue-feather
+                                    type="trash-2"
+                                    class="feather-14"
+                                ></vue-feather>
                             </dt-delete2>
                         </div>
                     </div>
@@ -115,7 +133,12 @@ const props = defineProps({
 
 const columns = [
     { title: 'Product Option', dataIndex: 'name', key: 'name', sortable: true },
-    { title: 'Created Date', dataIndex: 'created_at', key: 'created_at', sortable: true },
+    {
+        title: 'Created Date',
+        dataIndex: 'created_at',
+        key: 'created_at',
+        sortable: true,
+    },
     { title: 'Position', dataIndex: 'position', key: 'position' },
     { title: '', dataIndex: 'id', key: 'action' },
 ];
@@ -135,7 +158,8 @@ const submitFilters = () => {
         removeEmptyValues({
             ...data,
             sort: data.sort.join(','),
-            per_page: data.per_page === props.default_per_page ? '' : data.per_page,
+            per_page:
+                data.per_page === props.default_per_page ? '' : data.per_page,
         }),
     ).get(route('brand-partner.product-options.index'), {
         preserveState: true,
@@ -151,7 +175,9 @@ onMounted(() => {
             preserveScroll: true,
             replace: true,
         });
-        alert.showSuccess(data.message || 'Product option deleted successfully.');
+        alert.showSuccess(
+            data.message || 'Product option deleted successfully.',
+        );
     });
 });
 </script>

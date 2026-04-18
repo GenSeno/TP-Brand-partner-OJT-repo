@@ -176,7 +176,7 @@
                     </tbody>
                     <tbody v-if="Object.keys(lines).length">
                         <template
-                            v-for="(productLines,  index) in lines"
+                            v-for="(productLines, index) in lines"
                             :key="index"
                         >
                             <tr>
@@ -267,7 +267,10 @@
                                             </div>
 
                                             <!-- Expand each line into multiple rows based on quantity -->
-                                            <div v-if="groupKey === 'withName'" class="text-muted ms-3">
+                                            <div
+                                                v-if="groupKey === 'withName'"
+                                                class="text-muted ms-3"
+                                            >
                                                 <div
                                                     v-for="line in linesBySize"
                                                     :key="line.id"
@@ -384,7 +387,10 @@
                                     signature is required.
                                 </small>
                             </td>
-                            <td colspan="1" class="fw-bold bg-light text-center">
+                            <td
+                                colspan="1"
+                                class="fw-bold bg-light text-center"
+                            >
                                 {{
                                     Object.values(lines).reduce(
                                         (total, productLines) =>
@@ -396,7 +402,7 @@
                                         0,
                                     )
                                 }}
-                             </td>
+                            </td>
                             <td
                                 colspan="2"
                                 class="fw-bold bg-light"

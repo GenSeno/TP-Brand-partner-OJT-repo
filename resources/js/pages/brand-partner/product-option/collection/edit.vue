@@ -67,11 +67,19 @@ const form = useAxiosForm({
 });
 
 const submitForm = () => {
-    form.put(route('brand-partner.product-options.collections.update', props.collection.id), {
-        onSuccess: ({ data }) => {
-            modalRef.value.close();
-            alert.showSuccess(data.message || 'Collection updated successfully.');
+    form.put(
+        route(
+            'brand-partner.product-options.collections.update',
+            props.collection.id,
+        ),
+        {
+            onSuccess: ({ data }) => {
+                modalRef.value.close();
+                alert.showSuccess(
+                    data.message || 'Collection updated successfully.',
+                );
+            },
         },
-    });
+    );
 };
 </script>

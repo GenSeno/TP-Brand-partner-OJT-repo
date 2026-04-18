@@ -53,8 +53,8 @@
                                                     ?.amount_billed?.value > 0,
                                         }"
                                         :title="
-                                            order.billing_summary
-                                                ?.amount_billed?.value > 0
+                                            order.billing_summary?.amount_billed
+                                                ?.value > 0
                                                 ? 'Cannot print SO: order has already been billed'
                                                 : ''
                                         "
@@ -149,15 +149,11 @@
                                 <a
                                     class="btn btn-sm btn-danger"
                                     :class="{
-                                        disabled:
-                                            order.status === 'cancelled',
+                                        disabled: order.status === 'cancelled',
                                     }"
                                     @click="showReasonModal('cancel')"
                                 >
-                                    <i
-                                        data-feather="x"
-                                        class="feather-x"
-                                    ></i>
+                                    <i data-feather="x" class="feather-x"></i>
                                     <span class="d-none d-lg-inline ms-2"
                                         >Cancel</span
                                     >
@@ -351,15 +347,12 @@ function cancelOrder() {
         })
         .then(({ data }) => {
             bsModal.hide();
-            alert.showSuccess(
-                data.message || 'Order cancelled successfully.',
-            );
+            alert.showSuccess(data.message || 'Order cancelled successfully.');
             router.reload();
         })
         .catch((error) => {
             alert.showError(
-                error.response?.data?.message ||
-                    'Failed to cancel order.',
+                error.response?.data?.message || 'Failed to cancel order.',
             );
         })
         .finally(() => {

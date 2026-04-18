@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @property int $id
@@ -62,6 +63,11 @@ class BrandPartnerProductImage extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('position');
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return Storage::disk('public')->url($this->path);
     }
 
     // Methods

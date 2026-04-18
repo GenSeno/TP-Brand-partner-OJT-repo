@@ -46,72 +46,76 @@
             </a>
 
             <ul class="nav user-menu">
-                <li class="nav-item nav-item-box">
-                    <a
-                        href="javascript:void(0);"
-                        id="btnFullscreen"
-                        @click="toggleFullscreen"
-                    >
-                        <i class="ti ti-maximize"></i>
-                    </a>
-                </li>
+                <div class="nav nav-menu">
+                    <li class="nav-item nav-item-box">
+                        <a
+                            href="javascript:void(0);"
+                            id="btnFullscreen"
+                            @click="toggleFullscreen"
+                        >
+                            <i class="ti ti-maximize"></i>
+                        </a>
+                    </li>
 
-                <li
-                    class="nav-item dropdown has-arrow main-drop profile-nav"
-                    :class="{ show: dropdownOpen }"
-                >
-                    <a
-                        href="javascript:void(0);"
-                        class="nav-link userset"
-                        @click="toggleDropdown"
-                    >
-                        <span class="user-info p-0">
-                            <span class="user-letter">
-                                <img
-                                    :src="
-                                        brandPartner?.logo_url ||
-                                        '/img/default.png'
-                                    "
-                                    alt="Logo"
-                                    class="img-fluid border"
-                                />
-                            </span>
-                            <span class="user-detail ms-2">
-                                <span class="user-name">{{
-                                    brandPartner?.name || 'Brand Partner'
-                                }}</span>
-                                <span class="user-role">Partner</span>
-                            </span>
-                        </span>
-                    </a>
-                    <div
-                        class="dropdown-menu dropdown-menu-end menu-drop-user"
+                    <li
+                        class="nav-item dropdown has-arrow main-drop profile-nav"
                         :class="{ show: dropdownOpen }"
                     >
-                        <Link
-                            class="dropdown-item"
-                            :href="route('brand-partner.settings.index')"
+                        <a
+                            href="javascript:void(0);"
+                            class="nav-link userset"
+                            @click="toggleDropdown"
                         >
-                            <vue-feather
-                                type="settings"
-                                class="feather-14 me-2"
-                            ></vue-feather>
-                            Settings
-                        </Link>
-                        <Link
-                            :href="route('brand-partner.logout')"
-                            method="post"
-                            as="button"
-                            class="dropdown-item logout"
+                            <span class="user-info p-0">
+                                <span class="user-letter">
+                                    <img
+                                        :src="
+                                            brandPartner?.logo_url ||
+                                            '/img/default.png'
+                                        "
+                                        alt="Logo"
+                                        class="img-fluid border"
+                                    />
+                                </span>
+                                <span class="user-detail ms-2">
+                                    <span class="user-name">{{
+                                        brandPartner?.name || 'Brand Partner'
+                                    }}</span>
+                                    <span class="user-role">{{
+                                        brandPartner?.role || 'Partner'
+                                    }}</span>
+                                </span>
+                            </span>
+                        </a>
+                        <div
+                            class="dropdown-menu dropdown-menu-end menu-drop-user"
+                            :class="{ show: dropdownOpen }"
                         >
-                            <vue-feather
-                                type="log-out"
-                                class="feather-14 me-2"
-                            ></vue-feather>
-                            Logout
-                        </Link>
-                    </div>
-                </li>
+                            <Link
+                                class="dropdown-item"
+                                :href="route('brand-partner.settings.index')"
+                            >
+                                <vue-feather
+                                    type="settings"
+                                    class="feather-13 me-1"
+                                ></vue-feather>
+                                Settings
+                            </Link>
+                            <Link
+                                :href="route('brand-partner.logout')"
+                                method="post"
+                                as="button"
+                                class="dropdown-item logout"
+                            >
+                                <vue-feather
+                                    type="log-out"
+                                    class="feather-13 me-1"
+                                ></vue-feather>
+                                Logout
+                            </Link>
+                        </div>
+                    </li>
+                </div>
             </ul>
         </div>
     </div>
@@ -175,5 +179,10 @@ onUnmounted(() => {
     position: absolute !important;
     top: 100% !important;
     right: 0 !important;
+    margin-left: auto;
+}
+.nav-menu {
+    align-items: center;
+    margin-left: auto;
 }
 </style>

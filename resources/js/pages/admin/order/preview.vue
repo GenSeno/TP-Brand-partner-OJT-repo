@@ -215,11 +215,7 @@ th {
                         <th class="fw-bold" style="width: 80px">UOM</th>
                         <th class="fw-bold" style="width: 100px">Price</th>
                         <th class="fw-bold" style="width: 120px">TOTAL</th>
-                        <th
-                            v-if="isEdit"
-                            class="fw-bold"
-                            style="width: 80px"
-                        >
+                        <th v-if="isEdit" class="fw-bold" style="width: 80px">
                             Action
                         </th>
                     </tr>
@@ -293,11 +289,15 @@ th {
                                     >
                                         <span>
                                             <!-- Check if this is a custom size -->
-                                            <template v-if="isCustomSize(item.size)">
-                                                Custom: {{ item.size }}: {{ item.quantity }}
+                                            <template
+                                                v-if="isCustomSize(item.size)"
+                                            >
+                                                Custom: {{ item.size }}:
+                                                {{ item.quantity }}
                                             </template>
                                             <template v-else>
-                                                {{ item.size }}: {{ item.quantity }}
+                                                {{ item.size }}:
+                                                {{ item.quantity }}
                                             </template>
                                         </span>
                                         <!-- Per-variation Edit / Delete -->
@@ -360,15 +360,9 @@ th {
                         </td>
                         <td class="text-end">
                             <template
-                                v-if="
-                                    getOrderPriceDisplay(line).length <=
-                                    1
-                                "
+                                v-if="getOrderPriceDisplay(line).length <= 1"
                             >
-                                {{
-                                    getOrderPriceDisplay(line)[0] ||
-                                    'N/A'
-                                }}
+                                {{ getOrderPriceDisplay(line)[0] || 'N/A' }}
                             </template>
                             <template v-else>
                                 <div
@@ -390,13 +384,10 @@ th {
                                 <ModalLink
                                     navigate
                                     :href="
-                                        route(
-                                            'admin.order.item.edit-product',
-                                            {
-                                                order: order.id,
-                                                product: line.product_id,
-                                            },
-                                        )
+                                        route('admin.order.item.edit-product', {
+                                            order: order.id,
+                                            product: line.product_id,
+                                        })
                                     "
                                     class="btn btn-icon btn-outline-light btn-sm"
                                     title="Edit Item"
@@ -436,7 +427,9 @@ th {
                                 signature is required.
                             </small>
                         </td>
-                        <td class="bg-light text-center fw-bold">{{ totalQty }}</td>
+                        <td class="bg-light text-center fw-bold">
+                            {{ totalQty }}
+                        </td>
                         <td colspan="2" class="bg-light">Total</td>
                         <td class="text-end">
                             {{ order.sub_total?.formatted || 'N/A' }}
@@ -449,10 +442,7 @@ th {
                                 <h6 class="mt-3">Payment Breakdown</h6>
                             </td>
                         </tr>
-                        <tr
-                            v-for="invoice in order.invoices"
-                            :key="invoice.id"
-                        >
+                        <tr v-for="invoice in order.invoices" :key="invoice.id">
                             <td colspan="3" class="bg-light">
                                 {{ invoice.type_label }}
                                 (#{{ invoice.id }}):
@@ -652,9 +642,15 @@ const props = defineProps({
 
 const billingAddress = computed(() => props.order?.billing_address);
 const shippingAddress = computed(() => props.order?.shipping_address);
-const hasBillings = computed(() => props.order?.billing_summary?.amount_billed?.value > 0);
-const totalQty = computed(() =>
-    props.order?.print_lines?.reduce((sum, line) => sum + (line.quantity || 0), 0) ?? 0,
+const hasBillings = computed(
+    () => props.order?.billing_summary?.amount_billed?.value > 0,
+);
+const totalQty = computed(
+    () =>
+        props.order?.print_lines?.reduce(
+            (sum, line) => sum + (line.quantity || 0),
+            0,
+        ) ?? 0,
 );
 const dateFormat = 'MMMM DD, YYYY';
 const lightbox = reactive({
@@ -686,7 +682,12 @@ const getOrderPriceDisplay = (line) => {
         const key = `${item.size}|${hasNames}`;
         if (!seen.has(key)) {
             seen.add(key);
-            uniqueItems.push({ size: item.size, hasNames, formatted: item.unit_price_formatted, price: item.unit_price });
+            uniqueItems.push({
+                size: item.size,
+                hasNames,
+                formatted: item.unit_price_formatted,
+                price: item.unit_price,
+            });
         }
     }
 

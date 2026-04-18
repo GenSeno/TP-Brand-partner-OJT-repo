@@ -66,7 +66,9 @@
                             </div>
                             <div v-if="canResetPassword" class="text-end">
                                 <Link
-                                    :href="route('brand-partner.password.request')"
+                                    :href="
+                                        route('brand-partner.password.request')
+                                    "
                                     class="text-orange fs-16 fw-medium"
                                     >Forgot Password?</Link
                                 >

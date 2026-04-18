@@ -11,7 +11,6 @@ import { createBootstrap } from 'bootstrap-vue-next/plugins/createBootstrap';
 import { createApp } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
-
 import VueFeather from 'vue-feather';
 import VueSelect from 'vue3-select-component';
 

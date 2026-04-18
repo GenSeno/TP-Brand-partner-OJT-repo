@@ -183,7 +183,7 @@ import { emitter } from '@/composables/eventBus';
 
 const loading1 = ref(false);
 const expenses = ref([]);
-const selected = ref(['draft', 'upcoming','paid','cancelled']);
+const selected = ref(['draft', 'upcoming', 'paid', 'cancelled']);
 const currentPage = ref(1);
 const perPage = ref(20); // show 5 items per page
 

@@ -69,7 +69,8 @@
                 />
             </div>
             <div
-                class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3"
+            >
                 <select-filter
                     v-model="form.filter.enabled"
                     :options="inventoryStatus"
@@ -117,7 +118,7 @@
                             'text-danger fw-bold': value <= row.reorder_qty,
                             'text-warning fw-bold':
                                 value > row.reorder_qty &&
-                                value <= row.reorder_qty + 5
+                                value <= row.reorder_qty + 5,
                         }"
                     >
                         {{ simplifyFloat(value) }}
@@ -130,7 +131,6 @@
                 <template #action="{ row, value }">
                     <div class="action-table-data">
                         <div class="edit-delete-action">
-                            
                             <ModalLink
                                 navigate
                                 :href="
@@ -173,10 +173,7 @@
                             <ModalLink
                                 navigate
                                 :href="
-                                    route(
-                                        'admin.inventory-item.history',
-                                        value,
-                                    )
+                                    route('admin.inventory-item.history', value)
                                 "
                                 class="btn btn-icon btn-secondary-light btn-sm me-2"
                                 title="Movement History"
@@ -211,7 +208,6 @@ const props = defineProps({
     inventoryTypes: Object,
     filter: Object,
 });
-
 
 const deleteEmitterEvent = 'inventory-item:deleted';
 const selected = ref([]);
