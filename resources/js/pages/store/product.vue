@@ -572,12 +572,14 @@ const addToCart = () => {
     align-items: center;
     justify-content: center;
     width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 500px;
 }
 
 .main-product-image img {
     width: 100%;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     display: block;
 }
 
@@ -1335,7 +1337,8 @@ const addToCart = () => {
     }
 
     .main-product-image img {
-        max-height: 500px;
+        max-height: none;
+        height: 100%;
     }
 
     .product-container {
@@ -1476,7 +1479,8 @@ const addToCart = () => {
     }
 
     .main-product-image img {
-        max-height: 320px;
+        max-height: none;
+        height: 100%;
     }
 
     .thumb-item {

@@ -217,6 +217,8 @@
                         v-for="product in products.data"
                         :key="product.id"
                         class="product-offer-item"
+                        @mouseenter="hoverImageIndex[product.id] = true"
+                        @mouseleave="hoverImageIndex[product.id] = false"
                     >
                         <div class="product-box">
                             <div class="product-image-wrap">
@@ -248,8 +250,9 @@
                                 >
                                     <img
                                         :src="
-                                            product.image_url ||
-                                            '/img/tshirt-placeholder.svg'
+                                            (hoverImageIndex[product.id] && product.images && product.images.length > 1)
+                                                ? product.images[1]?.url || product.image_url
+                                                : product.image_url || '/img/tshirt-placeholder.svg'
                                         "
                                         :alt="product.name"
                                         class="img-fluid"
@@ -551,6 +554,8 @@
                         v-for="product in featuredProductList"
                         :key="'featured-' + product.id"
                         class="featured-product-item"
+                        @mouseenter="hoverImageIndex[product.id] = true"
+                        @mouseleave="hoverImageIndex[product.id] = false"
                     >
                         <div class="featured-product-box">
                             <!-- Badges -->
@@ -586,8 +591,9 @@
                                 <div class="featured-product-image">
                                     <img
                                         :src="
-                                            product.image_url ||
-                                            '/img/tshirt-placeholder.svg'
+                                            (hoverImageIndex[product.id] && product.images && product.images.length > 1)
+                                                ? product.images[1]?.url || product.image_url
+                                                : product.image_url || '/img/tshirt-placeholder.svg'
                                         "
                                         :alt="product.name"
                                     />
@@ -1198,6 +1204,7 @@ const applyFilters = () => {
     });
 };
 
+const hoverImageIndex = ref({});
 const selectedProduct = ref(null);
 const modalQuantity = ref(1);
 const isAddingToCart = ref(false);
@@ -1366,6 +1373,13 @@ const confirmAddToCart = () => {
 </script>
 
 <style scoped>
+/* ===== Animation Variables ===== */
+:root {
+    --animation-timing-unit: 80ms;
+    --animation-timing-300: calc(var(--animation-timing-unit) * 3);
+    --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
+}
+
 /* ===== Hero Carousel Styles ===== */
 .hero-carousel-section {
     width: 100vw;
@@ -2787,7 +2801,9 @@ const confirmAddToCart = () => {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.35s ease;
+    transition-duration: var(--animation-timing-300);
+    transition-timing-function: var(--ease-out-quart);
+    transition-property: opacity, transform;
 }
 
 .featured-product-box:hover .featured-product-image img {
@@ -4069,6 +4085,9 @@ const confirmAddToCart = () => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition-duration: var(--animation-timing-300);
+    transition-timing-function: var(--ease-out-quart);
+    transition-property: opacity;
 }
 
 .product-image-wrap .img-fluid {

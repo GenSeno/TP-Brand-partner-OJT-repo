@@ -12,12 +12,6 @@
             <!-- Toolbar -->
             <div class="shop-toolbar">
                 <div class="shop-toolbar-left">
-                    <button
-                        class="toolbar-btn"
-                        @click="showFilters = !showFilters"
-                    >
-                        <i class="ri-filter-3-line"></i> Filter
-                    </button>
                     <button class="toolbar-btn">
                         <i class="ri-sort-asc"></i> Sort
                     </button>
@@ -238,6 +232,8 @@
                             class="product-card"
                             v-for="product in products.data"
                             :key="product.id"
+                            @mouseenter="hoverImageIndex[product.id] = true"
+                            @mouseleave="hoverImageIndex[product.id] = false"
                         >
                             <!-- Badges -->
                             <div class="product-card-badges">
@@ -268,8 +264,9 @@
                                 >
                                     <img
                                         :src="
-                                            product.image_url ||
-                                            '/img/tshirt-placeholder.svg'
+                                            (hoverImageIndex[product.id] && product.images && product.images.length > 1)
+                                                ? product.images[1]?.url || product.image_url
+                                                : product.image_url || '/img/tshirt-placeholder.svg'
                                         "
                                         :alt="product.name"
                                     />
@@ -516,6 +513,8 @@ const breadcrumbItems = [{ label: 'Shop' }];
 
 const showFilters = ref(true);
 
+const hoverImageIndex = ref({});
+
 const openGroups = reactive({
     categories: true,
     colors: true,
@@ -692,6 +691,13 @@ const confirmAddToCart = () => {
 </script>
 
 <style scoped>
+/* ===== Animation Variables ===== */
+:root {
+    --animation-timing-unit: 80ms;
+    --animation-timing-300: calc(var(--animation-timing-unit) * 3);
+    --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
+}
+
 /* Breadcrumb Styles */
 .breadcrumb {
     display: flex;
@@ -751,6 +757,7 @@ const confirmAddToCart = () => {
 .shop-inner {
     max-width: 1300px;
     margin: 0 auto;
+    margin-left: 70px;
     padding: 0 32px;
 }
 
@@ -1092,7 +1099,7 @@ const confirmAddToCart = () => {
     width: 100%;
     overflow: hidden;
     aspect-ratio: 4 / 3;
-    min-height: 220px;
+    min-height: 250px;
 }
 
 .product-card-img-placeholder {
@@ -1105,10 +1112,12 @@ const confirmAddToCart = () => {
     position: absolute;
     top: 0;
     left: 0;
-    transition: transform 0.4s ease;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition-duration: var(--animation-timing-300);
+    transition-timing-function: var(--ease-out-quart);
+    transition-property: opacity, transform;
 }
 
 .product-card:hover .product-card-image img,
