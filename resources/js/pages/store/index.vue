@@ -232,11 +232,18 @@
                                         "
                                         >SALE</span
                                     >
-                                    <span class="badge new-badge" v-else
+                                    <span
+                                        class="badge new-badge"
+                                        v-else-if="
+                                            isNewProduct(product.created_at)
+                                        "
                                         >NEW
                                     </span>
                                 </div>
-                                <button class="wishlist-btn">
+                                <button
+                                    @click="toggleWishlist(product.id)"
+                                    class="wishlist-btn"
+                                >
                                     <i class="ri-heart-line"></i>
                                 </button>
                                 <Link
@@ -250,9 +257,13 @@
                                 >
                                     <img
                                         :src="
-                                            (hoverImageIndex[product.id] && product.images && product.images.length > 1)
-                                                ? product.images[1]?.url || product.image_url
-                                                : product.image_url || '/img/tshirt-placeholder.svg'
+                                            hoverImageIndex[product.id] &&
+                                            product.images &&
+                                            product.images.length > 1
+                                                ? product.images[1]?.url ||
+                                                  product.image_url
+                                                : product.image_url ||
+                                                  '/img/tshirt-placeholder.svg'
                                         "
                                         :alt="product.name"
                                         class="img-fluid"
@@ -568,13 +579,18 @@
                                     "
                                     >SALE</span
                                 >
-                                <span class="featured-badge-new" v-else
+                                <span
+                                    class="featured-badge-new"
+                                    v-else-if="isNewProduct(product.created_at)"
                                     >NEW</span
                                 >
                             </div>
 
                             <!-- Wishlist -->
-                            <button class="featured-wishlist-btn">
+                            <button
+                                @click="toggleWishlist(product.id)"
+                                class="featured-wishlist-btn"
+                            >
                                 <i class="ri-heart-line"></i>
                             </button>
 
@@ -591,9 +607,13 @@
                                 <div class="featured-product-image">
                                     <img
                                         :src="
-                                            (hoverImageIndex[product.id] && product.images && product.images.length > 1)
-                                                ? product.images[1]?.url || product.image_url
-                                                : product.image_url || '/img/tshirt-placeholder.svg'
+                                            hoverImageIndex[product.id] &&
+                                            product.images &&
+                                            product.images.length > 1
+                                                ? product.images[1]?.url ||
+                                                  product.image_url
+                                                : product.image_url ||
+                                                  '/img/tshirt-placeholder.svg'
                                         "
                                         :alt="product.name"
                                     />
@@ -1220,6 +1240,18 @@ const hasFeaturedProducts = computed(() => {
     return featuredProductList.value.length > 0;
 });
 
+// "New" badge function 7 days to dissapear
+function isNewProduct(createdAt) {
+    const dateCreated = new Date(createdAt);
+    const now = new Date();
+
+    const diffTime = now - dateCreated;
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const diffDays = diffTime / msPerDay;
+
+    return diffDays <= 7;
+}
+
 onMounted(() => {
     // Cart modal
     const modalEl = document.getElementById('addToCartModal');
@@ -1370,6 +1402,14 @@ const confirmAddToCart = () => {
         },
     );
 };
+
+const toggleWishlist = (productId) => {
+    router.post(
+        route('store.brand-partner.wishlist.toggle'),
+        { product_id: productId },
+        { preserveScroll: true },
+    );
+};
 </script>
 
 <style scoped>
@@ -1377,7 +1417,7 @@ const confirmAddToCart = () => {
 :root {
     --animation-timing-unit: 80ms;
     --animation-timing-300: calc(var(--animation-timing-unit) * 3);
-    --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
+    --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* ===== Hero Carousel Styles ===== */

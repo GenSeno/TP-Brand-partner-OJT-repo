@@ -95,4 +95,18 @@ Route::group([
     // Order confirmation
     Route::get('/order/{reference}', [BrandPartnerCheckoutController::class, 'confirmation'])
         ->name('brand-partner.order.confirmation');
+
+
+    //wishlist routes
+    Route::get('/wishlist', [WishlistController::class, 'index'])
+    ->name('store.brand-partner.wishlist')
+    ->middleware('auth');
+
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
+    ->name('store.brand-partner.wishlist.toggle')
+    ->middleware('auth');
+
+    Route::delete('/wishlist/{itemId}', [WishlistController::class, 'remove'])
+    ->name('store.brand-partner.wishlist.remove')
+    ->middleware('auth');
 });

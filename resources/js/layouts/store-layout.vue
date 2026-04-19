@@ -116,7 +116,7 @@
                             <span v-if="user">{{ user.name }}</span>
                             <span v-else>Account</span>
                         </a>
-                        <a href="javascript:void(0)" class="utility-link"
+                        <a href="/wishlist" class="utility-link"
                             ><i class="ri-heart-line"></i> Wishlist</a
                         >
                         <Link
@@ -476,7 +476,7 @@
 
         <!-- Main Content -->
         <main class="store-main">
-            <slot/>
+            <slot />
         </main>
 
         <!-- Footer -->
@@ -607,6 +607,7 @@ const registerForm = useForm({
 });
 
 const openAccountModal = () => {
+    console.log('user:', user.value);
     if (user.value) {
         router.visit(route('store.brand-partner.account'));
         return;
@@ -631,11 +632,7 @@ const submitLogin = () => {
 const submitRegister = () => {
     registerForm.post(route('store.brand-partner.register.submit'), {
         onFinish: () =>
-            registerForm.reset(
-                'password',
-                'password_confirmation',
-                'terms',
-            ),
+            registerForm.reset('password', 'password_confirmation', 'terms'),
         onSuccess: () => closeAccountModal(),
     });
 };

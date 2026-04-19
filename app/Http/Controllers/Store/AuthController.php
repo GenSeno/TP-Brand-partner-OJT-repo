@@ -14,16 +14,18 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
+            // Merge any guest session cart into the user's DB cart
+            $cartController = new BrandPartnerCartController();
+            $cartController->mergeSessionCartIntoDb($request, Auth::id());
+
+            return redirect()->intended(route('store.brand-partner.index', config('store.brand_partner_slug')));
         }
 
         throw ValidationException::withMessages([
@@ -34,14 +36,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => $request->password,
         ]);
 
@@ -49,7 +51,11 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
+        // Merge any guest session cart into the new user's DB cart
+        $cartController = new BrandPartnerCartController();
+        $cartController->mergeSessionCartIntoDb($request, $user->id);
+
+        return redirect(route('store.brand-partner.index', config('store.brand_partner_slug')));
     }
 
     public function logout(Request $request)
@@ -64,8 +70,13 @@ class AuthController extends Controller
 
     public function account(Request $request)
     {
-        return Inertia::render('store/storeuser', [
-            'user' => $request->user(),
-        ]);
+        $brandPartner = \App\Models\BrandPartner::where('slug', config('store.brand_partner_slug'))
+        ->where('status', \App\Enums\BrandPartnerStatus::ACTIVE)
+        ->firstOrFail();
+
+    return Inertia::render('store/storeuser', [
+        'user'          => $request->user(),
+        'brandPartner'  => $brandPartner,
+    ]);
     }
 }
