@@ -121,6 +121,11 @@ class BrandPartnerCheckoutController extends Controller
         $countries        = Country::orderBy('name')->get();
         $defaultCountryId = Country::where('iso2', 'PH')->value('id');
 
+        $userAddresses = [];
+        if (Auth::check()) {
+            $userAddresses = Auth::user()->load('addresses.country')->addresses;
+        }
+
         return Inertia::render('store/checkout', [
             'brandPartner'     => $brandPartner,
             'cart'             => [
@@ -132,6 +137,7 @@ class BrandPartnerCheckoutController extends Controller
             'cartCount'        => array_sum(array_column($cartItems, 'quantity')),
             'countries'        => $countries,
             'defaultCountryId' => $defaultCountryId,
+            'userAddresses'    => $userAddresses,
         ]);
     }
 

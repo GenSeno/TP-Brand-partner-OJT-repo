@@ -424,6 +424,40 @@
                         </div>
                     </div>
 
+                    <!-- Garment / Color Variations -->
+                    <div v-if="selectedProduct?.colors_array?.length > 0" class="variation-block">
+                        <div class="variation-heading">COLOR</div>
+                        <div class="pill-group">
+                            <button
+                                v-for="color in selectedProduct.colors_array"
+                                :key="color"
+                                type="button"
+                                class="pill-btn"
+                                :class="{ active: selectedColor === color }"
+                                @click="selectedColor = (selectedColor === color ? null : color)"
+                            >{{ color }}</button>
+                        </div>
+                    </div>
+
+                    <!-- Size Variations -->
+                    <div v-if="selectedProduct?.sizes_array?.length > 0" class="variation-block">
+                        <div class="variation-heading">SIZE</div>
+                        <div class="pill-group">
+                            <button
+                                v-for="size in selectedProduct.sizes_array"
+                                :key="size"
+                                type="button"
+                                class="pill-btn"
+                                :class="{ active: selectedSize === size }"
+                                @click="selectedSize = (selectedSize === size ? null : size)"
+                            >{{ size }}</button>
+                        </div>
+                    </div>
+
+                    <p v-if="((selectedProduct?.colors_array?.length > 0 && !selectedColor) || (selectedProduct?.sizes_array?.length > 0 && !selectedSize))" class="variation-hint mt-2 mb-3">
+                        Please select required variations to continue.
+                    </p>
+
                     <div class="qty-section-title">
                         <h5>Quantity</h5>
                     </div>
@@ -474,7 +508,7 @@
                     <button
                         class="btn btn-grocery-primary cart-bar-btn"
                         @click="confirmAddToCart"
-                        :disabled="isAddingToCart"
+                        :disabled="isAddingToCart || (selectedProduct?.colors_array?.length > 0 && !selectedColor) || (selectedProduct?.sizes_array?.length > 0 && !selectedSize)"
                     >
                         <span v-if="isAddingToCart">Adding...</span>
                         <span v-else>
@@ -565,6 +599,8 @@ const selectedFeatured = ref(
 );
 const selectedProduct = ref(null);
 const modalQuantity = ref(1);
+const selectedColor = ref(null);
+const selectedSize = ref(null);
 const isAddingToCart = ref(false);
 let cartModal = null;
 const priceMax = ref(5000);
@@ -632,6 +668,8 @@ onMounted(() => {
         modalEl.addEventListener('hidden.bs.modal', () => {
             selectedProduct.value = null;
             modalQuantity.value = 1;
+            selectedColor.value = null;
+            selectedSize.value = null;
             isAddingToCart.value = false;
         });
     }
@@ -647,6 +685,8 @@ onBeforeUnmount(() => {
 const addToCart = (product) => {
     selectedProduct.value = product;
     modalQuantity.value = 1;
+    selectedColor.value = null;
+    selectedSize.value = null;
     cartModal?.show();
 };
 
@@ -660,6 +700,8 @@ const confirmAddToCart = () => {
         {
             product_id: selectedProduct.value.id,
             quantity: modalQuantity.value,
+            color: selectedColor.value,
+            size: selectedSize.value,
         },
         {
             preserveScroll: true,
@@ -697,6 +739,15 @@ const confirmAddToCart = () => {
     --animation-timing-300: calc(var(--animation-timing-unit) * 3);
     --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
 }
+
+/* Variations */
+.variation-block { margin-top: 15px; margin-bottom: 20px; }
+.variation-heading { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #555; text-transform: uppercase; margin-bottom: 10px; }
+.pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill-btn { padding: 7px 18px; border: 1px solid #d1d1d1; background: #fff; border-radius: 2px; font-size: 13px; font-weight: 500; color: #1a1a1a; cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; text-transform: uppercase; }
+.pill-btn:hover { border-color: #1a1a1a; background: #f9f9f9; }
+.pill-btn.active { border-color: #FF9505; background: #FF9505; color: #fff; }
+.variation-hint { font-size: 12px; color: #dc2626; margin: -8px 0 16px; }
 
 /* Breadcrumb Styles */
 .breadcrumb {

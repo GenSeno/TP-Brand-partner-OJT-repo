@@ -74,9 +74,40 @@ class AuthController extends Controller
         ->where('status', \App\Enums\BrandPartnerStatus::ACTIVE)
         ->firstOrFail();
 
+        $orders = \App\Models\BrandPartnerOrder::where('brand_partner_id', $brandPartner->id)
+            ->where('user_id', $request->user()->id)
+            ->with(['lines.product.images'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $user = $request->user()->load('addresses.country');
+        $countries = \App\Models\Country::orderBy('name')->get();
+        $defaultCountryId = \App\Models\Country::where('iso2', 'PH')->value('id');
+
     return Inertia::render('store/storeuser', [
-        'user'          => $request->user(),
-        'brandPartner'  => $brandPartner,
+        'user'             => $user,
+        'brandPartner'     => $brandPartner,
+        'orders'           => $orders,
+        'countries'        => $countries,
+        'defaultCountryId' => $defaultCountryId,
     ]);
+    }
+
+    public function cancelOrder(Request $request, string $reference)
+    {
+        $brandPartner = \App\Models\BrandPartner::where('slug', config('store.brand_partner_slug'))
+            ->where('status', \App\Enums\BrandPartnerStatus::ACTIVE)
+            ->firstOrFail();
+
+        $order = \App\Models\BrandPartnerOrder::where('brand_partner_id', $brandPartner->id)
+            ->where('user_id', $request->user()->id)
+            ->where('reference', $reference)
+            ->firstOrFail();
+
+        if (in_array($order->status->value, ['pending', 'confirmed'])) {
+            $order->cancel();
+        }
+
+        return back()->with('success', 'Order cancelled successfully.');
     }
 }

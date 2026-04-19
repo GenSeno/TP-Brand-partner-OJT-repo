@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class WishlistController extends Controller
+class BrandPartnerWishlistController extends Controller
 {
     /**
      * Display the wishlist page.
