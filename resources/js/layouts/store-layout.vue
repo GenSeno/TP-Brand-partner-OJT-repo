@@ -61,13 +61,23 @@
                                 COLLECTIONS <i class="ri-arrow-down-s-line"></i>
                             </Link>
 
-                            <div v-if="navCollections.length > 0" class="dropdown-menu-list">
+                            <div
+                                v-if="navCollections.length > 0"
+                                class="dropdown-menu-list"
+                            >
                                 <Link
                                     v-for="collection in navCollections"
                                     :key="collection.id"
                                     :href="
-                                        brandPartner 
-                                            ? route('store.brand-partner.shop', { brandPartner: brandPartner.slug, collection: collection.id })
+                                        brandPartner
+                                            ? route(
+                                                  'store.brand-partner.shop',
+                                                  {
+                                                      brandPartner:
+                                                          brandPartner.slug,
+                                                      collection: collection.id,
+                                                  },
+                                              )
                                             : '#'
                                     "
                                     class="dropdown-item"
@@ -133,9 +143,9 @@
                             <span v-if="user">{{ user.name }}</span>
                             <span v-else>Account</span>
                         </a>
-                        <a href="/wishlist" class="utility-link"
-                            ><i class="ri-heart-line"></i> Wishlist</a
-                        >
+                        <Link class="utility-link">
+                            <i class="ri-heart-line"></i> Wishlist
+                        </Link>
                         <Link
                             :href="
                                 brandPartner
@@ -906,7 +916,7 @@ const focusSearchField = () => {
 
 .nav-item-dropdown .dropdown-item:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #FF9505 !important;
+    color: #ff9505 !important;
 }
 
 .nav-item-dropdown .dropdown-item:last-child {
@@ -1021,7 +1031,7 @@ const focusSearchField = () => {
     .header-inner {
         padding: 10px 15px;
     }
-    
+
     /* Mobile dropdown styles */
     .nav-item-dropdown .dropdown-menu-list {
         position: static;
@@ -1037,18 +1047,18 @@ const focusSearchField = () => {
         margin: 5px 0 0 20px;
         min-width: auto;
     }
-    
+
     .nav-item-dropdown .dropdown-item {
         color: rgba(255, 255, 255, 0.7) !important;
         padding: 8px 0;
         white-space: normal;
     }
-    
+
     .nav-item-dropdown .dropdown-item:hover {
         color: #fff !important;
         background: transparent;
     }
-    
+
     .nav-item-dropdown .dropdown-menu-list::before {
         display: none;
     }

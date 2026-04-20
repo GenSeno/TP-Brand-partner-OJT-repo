@@ -104,17 +104,16 @@ Route::group([
 
 
     //wishlist routes
-    Route::get('/wishlist', [WishlistController::class, 'index'])
-    ->name('store.brand-partner.wishlist')
-    ->middleware('auth');
-
-    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
-    ->name('store.brand-partner.wishlist.toggle')
-    ->middleware('auth');
-
-    Route::delete('/wishlist/{itemId}', [WishlistController::class, 'remove'])
-    ->name('store.brand-partner.wishlist.remove')
-    ->middleware('auth');
+    Route::middleware('auth')->group(function () {
+        Route::get('/wishlist', [WishlistController::class, 'index'])
+        ->name('store.brand-partner.wishlist')
+        ->middleware('auth');
+        Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
+        ->name('brand-partner.wishlist.toggle');
+        Route::delete('/wishlist/{itemId}', [WishlistController::class, 'remove'])
+        ->name('store.brand-partner.wishlist.remove')
+        ->middleware('auth');
+    });
 
     // User Addresses
     Route::post('/account/addresses', [UserAddressController::class, 'store'])

@@ -12,7 +12,8 @@
                             $page.props.brandPartner?.slug,
                         )
                     "
-                >Shop</Link>
+                    >Shop</Link
+                >
                 <span> &rsaquo; </span>
                 <span>My Profile</span>
             </div>
@@ -23,13 +24,34 @@
                     <h3 class="sidebar-title">My Account</h3>
                     <ul class="sidebar-menu">
                         <li :class="{ active: activeTab === 'profile' }">
-                            <a href="#" @click.prevent="activeTab = 'profile'; selectedOrder = null">My Profile</a>
+                            <a
+                                href="#"
+                                @click.prevent="
+                                    activeTab = 'profile';
+                                    selectedOrder = null;
+                                "
+                                >My Profile</a
+                            >
                         </li>
                         <li :class="{ active: activeTab === 'orders' }">
-                            <a href="#" @click.prevent="activeTab = 'orders'; selectedOrder = null">My Orders</a>
+                            <a
+                                href="#"
+                                @click.prevent="
+                                    activeTab = 'orders';
+                                    selectedOrder = null;
+                                "
+                                >My Orders</a
+                            >
                         </li>
                         <li :class="{ active: activeTab === 'addresses' }">
-                            <a href="#" @click.prevent="activeTab = 'addresses'; selectedOrder = null">My Addresses</a>
+                            <a
+                                href="#"
+                                @click.prevent="
+                                    activeTab = 'addresses';
+                                    selectedOrder = null;
+                                "
+                                >My Addresses</a
+                            >
                         </li>
                         <li>
                             <Link
@@ -59,7 +81,6 @@
 
                 <!-- Main Content -->
                 <div class="account-content">
-                    
                     <!-- ============================================== -->
                     <!-- PROFILE TAB                                    -->
                     <!-- ============================================== -->
@@ -100,61 +121,209 @@
                     <template v-else-if="activeTab === 'orders'">
                         <div v-if="!selectedOrder">
                             <h2 class="account-page-title">My Orders</h2>
-                            <p class="account-page-subtitle">Manage your orders, track shipments, and view order history</p>
+                            <p class="account-page-subtitle">
+                                Manage your orders, track shipments, and view
+                                order history
+                            </p>
 
                             <!-- Tabs -->
                             <div class="orders-tabs">
-                                <button :class="{ active: orderTab === 'all' }" @click="orderTab = 'all'">All</button>
-                                <button :class="{ active: orderTab === 'shipping' }" @click="orderTab = 'shipping'">On Shipping</button>
-                                <button :class="{ active: orderTab === 'arrived' }" @click="orderTab = 'arrived'">Arrived</button>
-                                <button :class="{ active: orderTab === 'cancelled' }" @click="orderTab = 'cancelled'">Cancelled</button>
+                                <button
+                                    :class="{ active: orderTab === 'all' }"
+                                    @click="orderTab = 'all'"
+                                >
+                                    All
+                                </button>
+                                <button
+                                    :class="{ active: orderTab === 'shipping' }"
+                                    @click="orderTab = 'shipping'"
+                                >
+                                    On Shipping
+                                </button>
+                                <button
+                                    :class="{ active: orderTab === 'arrived' }"
+                                    @click="orderTab = 'arrived'"
+                                >
+                                    Arrived
+                                </button>
+                                <button
+                                    :class="{
+                                        active: orderTab === 'cancelled',
+                                    }"
+                                    @click="orderTab = 'cancelled'"
+                                >
+                                    Cancelled
+                                </button>
                             </div>
 
                             <!-- List -->
                             <div class="orders-list">
-                                <div v-for="order in filteredOrders" :key="order.id" class="order-card">
+                                <div
+                                    v-for="order in filteredOrders"
+                                    :key="order.id"
+                                    class="order-card"
+                                >
                                     <div class="order-card-header">
-                                        <span class="font-bold">Order NO. {{ order.reference }}</span>
-                                        <span class="font-bold">{{ formatDateShort(order.created_at) }}</span>
+                                        <span class="font-bold"
+                                            >Order NO.
+                                            {{ order.reference }}</span
+                                        >
+                                        <span class="font-bold">{{
+                                            formatDateShort(order.created_at)
+                                        }}</span>
                                     </div>
                                     <div class="order-card-body">
-                                        <div v-for="line in order.lines" :key="line.id" class="order-line-item">
+                                        <div
+                                            v-for="line in order.lines"
+                                            :key="line.id"
+                                            class="order-line-item"
+                                        >
                                             <div class="line-img-wrap">
-                                                <img :src="line.product?.images?.[0]?.url || '/img/tshirt-placeholder.svg'" alt="">
+                                                <img
+                                                    :src="
+                                                        line.product
+                                                            ?.images?.[0]
+                                                            ?.url ||
+                                                        '/img/tshirt-placeholder.svg'
+                                                    "
+                                                    alt=""
+                                                />
                                             </div>
                                             <div class="line-details">
-                                                <div class="line-title">{{ line.product_name }}</div>
+                                                <div class="line-title">
+                                                    {{ line.product_name }}
+                                                </div>
                                                 <div class="line-variants">
-                                                    <div v-if="line.meta?.size">Size: {{ line.meta.size }}</div>
-                                                    <div v-if="line.meta?.color">Color: {{ line.meta.color }}</div>
-                                                    <div>Quantity: {{ line.quantity }}</div>
+                                                    <div v-if="line.meta?.size">
+                                                        Size:
+                                                        {{ line.meta.size }}
+                                                    </div>
+                                                    <div
+                                                        v-if="line.meta?.color"
+                                                    >
+                                                        Color:
+                                                        {{ line.meta.color }}
+                                                    </div>
+                                                    <div>
+                                                        Quantity:
+                                                        {{ line.quantity }}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="line-price-col">
-                                                <div class="price-current text-red">PHP {{ (line.unit_price / 100).toFixed(2) }}</div>
-                                                <div v-if="line.product?.compare_price > line.unit_price" class="price-old text-strike">PHP {{ (line.product.compare_price / 100).toFixed(2) }}</div>
+                                                <div
+                                                    class="price-current text-red"
+                                                >
+                                                    PHP
+                                                    {{
+                                                        (
+                                                            line.unit_price /
+                                                            100
+                                                        ).toFixed(2)
+                                                    }}
+                                                </div>
+                                                <div
+                                                    v-if="
+                                                        line.product
+                                                            ?.compare_price >
+                                                        line.unit_price
+                                                    "
+                                                    class="price-old text-strike"
+                                                >
+                                                    PHP
+                                                    {{
+                                                        (
+                                                            line.product
+                                                                .compare_price /
+                                                            100
+                                                        ).toFixed(2)
+                                                    }}
+                                                </div>
                                             </div>
                                             <div class="status-col">
-                                                <div class="status-badge" :class="getStatusBadgeClass(order.status)">
-                                                    <span class="status-dot"></span>
-                                                    {{ getStatusLabel(order.status) }}
+                                                <div
+                                                    class="status-badge"
+                                                    :class="
+                                                        getStatusBadgeClass(
+                                                            order.status,
+                                                        )
+                                                    "
+                                                >
+                                                    <span
+                                                        class="status-dot"
+                                                    ></span>
+                                                    {{
+                                                        getStatusLabel(
+                                                            order.status,
+                                                        )
+                                                    }}
                                                 </div>
-                                                <div class="status-text mt-2 text-muted" style="font-size: 11px;">
-                                                    <span v-if="order.status === 'completed'">Delivered on {{ formatDateLong(order.updated_at) }}</span>
-                                                    <span v-else-if="order.status === 'pending'">Order is being prepared</span>
-                                                    <span v-else-if="order.status === 'cancelled'">Order has been cancelled</span>
-                                                    <span v-else>Estimated Delivery: Pending</span>
+                                                <div
+                                                    class="status-text mt-2 text-muted"
+                                                    style="font-size: 11px"
+                                                >
+                                                    <span
+                                                        v-if="
+                                                            order.status ===
+                                                            'completed'
+                                                        "
+                                                        >Delivered on
+                                                        {{
+                                                            formatDateLong(
+                                                                order.updated_at,
+                                                            )
+                                                        }}</span
+                                                    >
+                                                    <span
+                                                        v-else-if="
+                                                            order.status ===
+                                                            'pending'
+                                                        "
+                                                        >Order is being
+                                                        prepared</span
+                                                    >
+                                                    <span
+                                                        v-else-if="
+                                                            order.status ===
+                                                            'cancelled'
+                                                        "
+                                                        >Order has been
+                                                        cancelled</span
+                                                    >
+                                                    <span v-else
+                                                        >Estimated Delivery:
+                                                        Pending</span
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="order-card-footer">
-                                            <button class="btn-cancel-order" v-if="['pending', 'confirmed'].includes(order.status)" @click="cancelOrder(order)">CANCEL ORDER</button>
-                                            <button class="btn-view-details" @click="viewDetails(order)">VIEW DETAILS</button>
+                                            <button
+                                                class="btn-cancel-order"
+                                                v-if="
+                                                    [
+                                                        'pending',
+                                                        'confirmed',
+                                                    ].includes(order.status)
+                                                "
+                                                @click="cancelOrder(order)"
+                                            >
+                                                CANCEL ORDER
+                                            </button>
+                                            <button
+                                                class="btn-view-details"
+                                                @click="viewDetails(order)"
+                                            >
+                                                VIEW DETAILS
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="filteredOrders.length === 0" class="no-orders py-4 text-center text-muted">
+                                <div
+                                    v-if="filteredOrders.length === 0"
+                                    class="no-orders py-4 text-center text-muted"
+                                >
                                     <p>No orders found in this category.</p>
                                 </div>
                             </div>
@@ -164,32 +333,66 @@
                         <!-- ORDER DETAILS VIEW                             -->
                         <!-- ============================================== -->
                         <div v-else class="order-details-view">
-                            <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div
+                                class="d-flex justify-content-between align-items-start mb-4"
+                            >
                                 <div>
-                                    <h2 class="account-page-title">My Orders</h2>
-                                    <p class="account-page-subtitle">Manage your orders, track shipments, and view order history</p>
+                                    <h2 class="account-page-title">
+                                        My Orders
+                                    </h2>
+                                    <p class="account-page-subtitle">
+                                        Manage your orders, track shipments, and
+                                        view order history
+                                    </p>
                                 </div>
-                                <button @click="backToList" class="btn-back mt-2" style="background:none; border:none; color:#1b5e38; font-weight:bold; cursor:pointer;">
+                                <button
+                                    @click="backToList"
+                                    class="btn-back mt-2"
+                                    style="
+                                        background: none;
+                                        border: none;
+                                        color: #1b5e38;
+                                        font-weight: bold;
+                                        cursor: pointer;
+                                    "
+                                >
                                     &larr; Back
                                 </button>
                             </div>
 
                             <div class="order-details-header">
-                                <div class="detail-h-item" style="width: 25%;">
+                                <div class="detail-h-item" style="width: 25%">
                                     <label>ORDER DATE</label>
-                                    <div>{{ formatDateShort(selectedOrder.created_at) }}</div>
+                                    <div>
+                                        {{
+                                            formatDateShort(
+                                                selectedOrder.created_at,
+                                            )
+                                        }}
+                                    </div>
                                 </div>
-                                <div class="detail-h-item" style="width: 25%;">
+                                <div class="detail-h-item" style="width: 25%">
                                     <label>PAYMENT STATUS</label>
-                                    <div>{{ selectedOrder.payment_status || 'Paid' }}</div>
+                                    <div>
+                                        {{
+                                            selectedOrder.payment_status ||
+                                            'Paid'
+                                        }}
+                                    </div>
                                 </div>
-                                <div class="detail-h-item" style="width: 25%;">
+                                <div class="detail-h-item" style="width: 25%">
                                     <label>FULFILLMENT STATUS</label>
-                                    <div>{{ getStatusLabel(selectedOrder.status) }}</div>
+                                    <div>
+                                        {{
+                                            getStatusLabel(selectedOrder.status)
+                                        }}
+                                    </div>
                                 </div>
-                                <div class="detail-h-item" style="width: 25%;">
+                                <div class="detail-h-item" style="width: 25%">
                                     <label>ORDER NO.</label>
-                                    <div>Order NO. {{ selectedOrder.reference }}</div>
+                                    <div>
+                                        Order NO. {{ selectedOrder.reference }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -197,32 +400,153 @@
                                 <table class="order-table">
                                     <thead>
                                         <tr>
-                                            <th style="width: 50%;">PRODUCT</th>
-                                            <th style="width: 20%;">PRICE</th>
-                                            <th style="width: 15%;">QUANTITY</th>
-                                            <th style="width: 15%; text-align: right;">TOTAL</th>
+                                            <th style="width: 50%">PRODUCT</th>
+                                            <th style="width: 20%">PRICE</th>
+                                            <th style="width: 15%">QUANTITY</th>
+                                            <th
+                                                style="
+                                                    width: 15%;
+                                                    text-align: right;
+                                                "
+                                            >
+                                                TOTAL
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="line in selectedOrder.lines" :key="line.id">
+                                        <tr
+                                            v-for="line in selectedOrder.lines"
+                                            :key="line.id"
+                                        >
                                             <td>
-                                                <div class="d-flex" style="gap: 16px;">
-                                                    <div style="width: 80px; height: 80px; background: #f5f5f5; display:flex; align-items:center; justify-content:center;">
-                                                        <img :src="line.product?.images?.[0]?.url || '/img/tshirt-placeholder.svg'" style="max-width:100%; max-height:100%; object-fit:contain;" alt="">
+                                                <div
+                                                    class="d-flex"
+                                                    style="gap: 16px"
+                                                >
+                                                    <div
+                                                        style="
+                                                            width: 80px;
+                                                            height: 80px;
+                                                            background: #f5f5f5;
+                                                            display: flex;
+                                                            align-items: center;
+                                                            justify-content: center;
+                                                        "
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                line.product
+                                                                    ?.images?.[0]
+                                                                    ?.url ||
+                                                                '/img/tshirt-placeholder.svg'
+                                                            "
+                                                            style="
+                                                                max-width: 100%;
+                                                                max-height: 100%;
+                                                                object-fit: contain;
+                                                            "
+                                                            alt=""
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <div class="font-bold" style="font-size: 14px; margin-bottom: 4px; color: #333;">{{ line.product_name }}</div>
-                                                        <div class="text-muted" style="font-size: 12px; line-height: 1.6;">
-                                                            <div v-if="line.product?.category">Garment: {{ line.product.category.name }}</div>
-                                                            <div v-if="line.meta?.color">Color: {{ line.meta.color }}</div>
-                                                            <div v-if="line.meta?.size">Size: {{ line.meta.size }}</div>
+                                                        <div
+                                                            class="font-bold"
+                                                            style="
+                                                                font-size: 14px;
+                                                                margin-bottom: 4px;
+                                                                color: #333;
+                                                            "
+                                                        >
+                                                            {{
+                                                                line.product_name
+                                                            }}
+                                                        </div>
+                                                        <div
+                                                            class="text-muted"
+                                                            style="
+                                                                font-size: 12px;
+                                                                line-height: 1.6;
+                                                            "
+                                                        >
+                                                            <div
+                                                                v-if="
+                                                                    line.product
+                                                                        ?.category
+                                                                "
+                                                            >
+                                                                Garment:
+                                                                {{
+                                                                    line.product
+                                                                        .category
+                                                                        .name
+                                                                }}
+                                                            </div>
+                                                            <div
+                                                                v-if="
+                                                                    line.meta
+                                                                        ?.color
+                                                                "
+                                                            >
+                                                                Color:
+                                                                {{
+                                                                    line.meta
+                                                                        .color
+                                                                }}
+                                                            </div>
+                                                            <div
+                                                                v-if="
+                                                                    line.meta
+                                                                        ?.size
+                                                                "
+                                                            >
+                                                                Size:
+                                                                {{
+                                                                    line.meta
+                                                                        .size
+                                                                }}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style="vertical-align: top; padding-top: 24px; color: #555;">PHP {{ (line.unit_price / 100).toFixed(2) }}</td>
-                                            <td style="vertical-align: top; padding-top: 24px; color: #555;">{{ line.quantity }}</td>
-                                            <td style="vertical-align: top; padding-top: 24px; color: #555; text-align: right;">PHP {{ (line.total / 100).toFixed(2) }}</td>
+                                            <td
+                                                style="
+                                                    vertical-align: top;
+                                                    padding-top: 24px;
+                                                    color: #555;
+                                                "
+                                            >
+                                                PHP
+                                                {{
+                                                    (
+                                                        line.unit_price / 100
+                                                    ).toFixed(2)
+                                                }}
+                                            </td>
+                                            <td
+                                                style="
+                                                    vertical-align: top;
+                                                    padding-top: 24px;
+                                                    color: #555;
+                                                "
+                                            >
+                                                {{ line.quantity }}
+                                            </td>
+                                            <td
+                                                style="
+                                                    vertical-align: top;
+                                                    padding-top: 24px;
+                                                    color: #555;
+                                                    text-align: right;
+                                                "
+                                            >
+                                                PHP
+                                                {{
+                                                    (line.total / 100).toFixed(
+                                                        2,
+                                                    )
+                                                }}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -231,15 +555,39 @@
                             <div class="order-summary-box">
                                 <div class="summary-line">
                                     <span>Subtotal</span>
-                                    <span>PHP {{ (selectedOrder.sub_total / 100).toFixed(2) }}</span>
+                                    <span
+                                        >PHP
+                                        {{
+                                            (
+                                                selectedOrder.sub_total / 100
+                                            ).toFixed(2)
+                                        }}</span
+                                    >
                                 </div>
                                 <div class="summary-line">
                                     <span>Shipping</span>
-                                    <span>PHP {{ ((selectedOrder.tax_total || 0) / 100).toFixed(2) }}</span> 
+                                    <span
+                                        >PHP
+                                        {{
+                                            (
+                                                (selectedOrder.tax_total || 0) /
+                                                100
+                                            ).toFixed(2)
+                                        }}</span
+                                    >
                                 </div>
                                 <div class="summary-line summary-total">
                                     <span class="font-bold">Total</span>
-                                    <span class="font-bold font-lg" style="font-size: 18px;">PHP {{ (selectedOrder.total / 100).toFixed(2) }}</span>
+                                    <span
+                                        class="font-bold font-lg"
+                                        style="font-size: 18px"
+                                        >PHP
+                                        {{
+                                            (selectedOrder.total / 100).toFixed(
+                                                2,
+                                            )
+                                        }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -249,100 +597,285 @@
                     <!-- ADDRESSES TAB                                  -->
                     <!-- ============================================== -->
                     <template v-else-if="activeTab === 'addresses'">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div
+                            class="d-flex justify-content-between align-items-center mb-4"
+                        >
                             <div>
                                 <h2 class="account-page-title">My Addresses</h2>
-                                <p class="account-page-subtitle">Manage and protect your account</p>
+                                <p class="account-page-subtitle">
+                                    Manage and protect your account
+                                </p>
                             </div>
                         </div>
 
-                        <div v-if="isAddressFormVisible" class="address-form-box">
-                            <h4 style="margin-bottom: 20px;">{{ editingAddressId ? 'Edit Address' : 'Add New Address' }}</h4>
+                        <div
+                            v-if="isAddressFormVisible"
+                            class="address-form-box"
+                        >
+                            <h4 style="margin-bottom: 20px">
+                                {{
+                                    editingAddressId
+                                        ? 'Edit Address'
+                                        : 'Add New Address'
+                                }}
+                            </h4>
                             <form @submit.prevent="submitAddress">
                                 <div class="form-row-grid">
                                     <div class="form-group full-width">
-                                        <label class="required">Full Name</label>
-                                        <input v-model="addressForm.name" type="text" class="grocery-input" required />
+                                        <label class="required"
+                                            >Full Name</label
+                                        >
+                                        <input
+                                            v-model="addressForm.name"
+                                            type="text"
+                                            class="grocery-input"
+                                            required
+                                        />
                                     </div>
                                     <div class="form-group full-width">
-                                        <label class="required">Street Address</label>
-                                        <input v-model="addressForm.line1" type="text" class="grocery-input" placeholder="House number and street name" required />
+                                        <label class="required"
+                                            >Street Address</label
+                                        >
+                                        <input
+                                            v-model="addressForm.line1"
+                                            type="text"
+                                            class="grocery-input"
+                                            placeholder="House number and street name"
+                                            required
+                                        />
                                     </div>
                                     <div class="form-group full-width">
-                                        <label>Apartment, suite, unit, etc.</label>
-                                        <input v-model="addressForm.line2" type="text" class="grocery-input" />
+                                        <label
+                                            >Apartment, suite, unit, etc.</label
+                                        >
+                                        <input
+                                            v-model="addressForm.line2"
+                                            type="text"
+                                            class="grocery-input"
+                                        />
                                     </div>
                                     <div class="form-group">
-                                        <label class="required">Country/Region</label>
-                                        <select v-model="addressForm.country_id" class="grocery-input" required>
-                                            <option v-for="c in countries" :key="c.id" :value="c.id">{{ c.name }}</option>
+                                        <label class="required"
+                                            >Country/Region</label
+                                        >
+                                        <select
+                                            v-model="addressForm.country_id"
+                                            class="grocery-input"
+                                            required
+                                        >
+                                            <option
+                                                v-for="c in countries"
+                                                :key="c.id"
+                                                :value="c.id"
+                                            >
+                                                {{ c.name }}
+                                            </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Province</label>
-                                        <select v-if="addressForm.country_id === defaultCountryId" v-model="addressForm.province" class="grocery-input">
-                                            <option value="">Select a province</option>
-                                            <option v-for="p in provinces" :key="p.id" :value="p.province_name">{{ p.province_name }}</option>
+                                        <select
+                                            v-if="
+                                                addressForm.country_id ===
+                                                defaultCountryId
+                                            "
+                                            v-model="addressForm.province"
+                                            class="grocery-input"
+                                        >
+                                            <option value="">
+                                                Select a province
+                                            </option>
+                                            <option
+                                                v-for="p in provinces"
+                                                :key="p.id"
+                                                :value="p.province_name"
+                                            >
+                                                {{ p.province_name }}
+                                            </option>
                                         </select>
-                                        <input v-else v-model="addressForm.province" type="text" class="grocery-input" />
+                                        <input
+                                            v-else
+                                            v-model="addressForm.province"
+                                            type="text"
+                                            class="grocery-input"
+                                        />
                                     </div>
                                     <div class="form-group">
                                         <label class="required">City</label>
-                                        <select v-if="addressForm.country_id === defaultCountryId && cities.length > 0" v-model="addressForm.city" class="grocery-input" required>
-                                            <option value="">Select a city</option>
-                                            <option v-for="c in cities" :key="c.id" :value="c.city_name">{{ c.city_name }}</option>
+                                        <select
+                                            v-if="
+                                                addressForm.country_id ===
+                                                    defaultCountryId &&
+                                                cities.length > 0
+                                            "
+                                            v-model="addressForm.city"
+                                            class="grocery-input"
+                                            required
+                                        >
+                                            <option value="">
+                                                Select a city
+                                            </option>
+                                            <option
+                                                v-for="c in cities"
+                                                :key="c.id"
+                                                :value="c.city_name"
+                                            >
+                                                {{ c.city_name }}
+                                            </option>
                                         </select>
-                                        <input v-else v-model="addressForm.city" type="text" class="grocery-input" required />
+                                        <input
+                                            v-else
+                                            v-model="addressForm.city"
+                                            type="text"
+                                            class="grocery-input"
+                                            required
+                                        />
                                     </div>
                                     <div class="form-group">
                                         <label>Barangay</label>
-                                        <input v-model="addressForm.barangay" type="text" class="grocery-input" />
+                                        <input
+                                            v-model="addressForm.barangay"
+                                            type="text"
+                                            class="grocery-input"
+                                        />
                                     </div>
                                     <div class="form-group full-width">
-                                        <label class="required">Postal / Zip Code</label>
-                                        <input v-model="addressForm.postcode" type="text" class="grocery-input" required />
+                                        <label class="required"
+                                            >Postal / Zip Code</label
+                                        >
+                                        <input
+                                            v-model="addressForm.postcode"
+                                            type="text"
+                                            class="grocery-input"
+                                            required
+                                        />
                                     </div>
                                 </div>
-                                <div class="form-actions mt-4 d-flex" style="gap: 12px; justify-content: flex-end;">
-                                    <button type="button" @click="cancelAddressForm" class="btn-cancel" style="padding: 10px 20px; border: 1px solid #ccc; background: white; border-radius: 6px; cursor: pointer;">Cancel</button>
-                                    <button type="submit" class="btn-save" style="padding: 10px 20px; border: none; background: #1b5e38; color: white; border-radius: 6px; cursor: pointer;" :disabled="addressForm.processing">Save Address</button>
+                                <div
+                                    class="form-actions mt-4 d-flex"
+                                    style="gap: 12px; justify-content: flex-end"
+                                >
+                                    <button
+                                        type="button"
+                                        @click="cancelAddressForm"
+                                        class="btn-cancel"
+                                        style="
+                                            padding: 10px 20px;
+                                            border: 1px solid #ccc;
+                                            background: white;
+                                            border-radius: 6px;
+                                            cursor: pointer;
+                                        "
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        class="btn-save"
+                                        style="
+                                            padding: 10px 20px;
+                                            border: none;
+                                            background: #1b5e38;
+                                            color: white;
+                                            border-radius: 6px;
+                                            cursor: pointer;
+                                        "
+                                        :disabled="addressForm.processing"
+                                    >
+                                        Save Address
+                                    </button>
                                 </div>
                             </form>
                         </div>
 
                         <div v-else class="address-grid">
                             <!-- Existing Addresses -->
-                            <div v-for="addr in user.addresses" :key="addr.id" class="address-card">
+                            <div
+                                v-for="addr in user.addresses"
+                                :key="addr.id"
+                                class="address-card"
+                            >
                                 <div class="address-card-content">
                                     <div class="address-card-header">
-                                        <span class="addr-name">{{ addr.first_name }} {{ addr.last_name }}</span>
-                                        <span v-if="addr.default" class="addr-default-badge">DEFAULT</span>
+                                        <span class="addr-name"
+                                            >{{ addr.first_name }}
+                                            {{ addr.last_name }}</span
+                                        >
+                                        <span
+                                            v-if="addr.default"
+                                            class="addr-default-badge"
+                                            >DEFAULT</span
+                                        >
                                     </div>
                                     <div class="addr-body">
                                         <p>{{ addr.line1 }}</p>
-                                        <p v-if="addr.line2">{{ addr.line2 }}</p>
-                                        <p>{{ [addr.barangay, addr.city, addr.province].filter(Boolean).join(', ') }}</p>
+                                        <p v-if="addr.line2">
+                                            {{ addr.line2 }}
+                                        </p>
+                                        <p>
+                                            {{
+                                                [
+                                                    addr.barangay,
+                                                    addr.city,
+                                                    addr.province,
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(', ')
+                                            }}
+                                        </p>
                                         <p>{{ addr.postcode }}</p>
-                                        <p>{{ addr.country?.name || 'Philippines' }}</p>
+                                        <p>
+                                            {{
+                                                addr.country?.name ||
+                                                'Philippines'
+                                            }}
+                                        </p>
                                     </div>
                                     <div class="addr-actions">
-                                        <button @click="editAddress(addr)" class="btn-link">Edit</button>
-                                        <button @click="removeAddress(addr.id)" class="btn-link">Remove</button>
-                                        <button v-if="!addr.default" @click="setDefault(addr.id)" class="btn-link">Set Default</button>
+                                        <button
+                                            @click="editAddress(addr)"
+                                            class="btn-link"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            @click="removeAddress(addr.id)"
+                                            class="btn-link"
+                                        >
+                                            Remove
+                                        </button>
+                                        <button
+                                            v-if="!addr.default"
+                                            @click="setDefault(addr.id)"
+                                            class="btn-link"
+                                        >
+                                            Set Default
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <!-- Add New Address Card -->
-                            <div class="address-card add-new-card" @click="openAddressForm()">
+                            <div
+                                class="address-card add-new-card"
+                                @click="openAddressForm()"
+                            >
                                 <div class="add-new-content">
                                     <div class="add-icon">+</div>
                                     <div class="add-title">Add New Address</div>
-                                    <div class="add-subtitle" style="font-size:12px; color:#888; margin-top:8px;">Manage and protect your account</div>
+                                    <div
+                                        class="add-subtitle"
+                                        style="
+                                            font-size: 12px;
+                                            color: #888;
+                                            margin-top: 8px;
+                                        "
+                                    >
+                                        Manage and protect your account
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </template>
-
                 </div>
             </div>
         </div>
@@ -358,7 +891,7 @@ const props = defineProps({
     user: Object,
     orders: {
         type: Array,
-        default: () => []
+        default: () => [],
     },
     countries: Array,
     defaultCountryId: Number,
@@ -371,9 +904,14 @@ const selectedOrder = ref(null);
 const filteredOrders = computed(() => {
     if (!props.orders) return [];
     if (orderTab.value === 'all') return props.orders;
-    if (orderTab.value === 'shipping') return props.orders.filter(o => ['sent_to_tpinklab', 'confirmed'].includes(o.status));
-    if (orderTab.value === 'arrived') return props.orders.filter(o => o.status === 'completed');
-    if (orderTab.value === 'cancelled') return props.orders.filter(o => o.status === 'cancelled');
+    if (orderTab.value === 'shipping')
+        return props.orders.filter((o) =>
+            ['sent_to_tpinklab', 'confirmed'].includes(o.status),
+        );
+    if (orderTab.value === 'arrived')
+        return props.orders.filter((o) => o.status === 'completed');
+    if (orderTab.value === 'cancelled')
+        return props.orders.filter((o) => o.status === 'cancelled');
     return props.orders;
 });
 
@@ -401,9 +939,15 @@ const backToList = () => {
 
 const cancelOrder = (order) => {
     if (confirm('Are you sure you want to cancel this order?')) {
-        router.patch(route('store.brand-partner.order.cancel', { reference: order.reference }), {}, {
-            preserveScroll: true,
-        });
+        router.patch(
+            route('store.brand-partner.order.cancel', {
+                reference: order.reference,
+            }),
+            {},
+            {
+                preserveScroll: true,
+            },
+        );
     }
 };
 
@@ -452,11 +996,13 @@ watch(
         addressForm.city = '';
         cities.value = [];
         if (value && value !== props.defaultCountryId) {
-            axios.post(route('store.address.states'), { country_id: value }).then(({ data }) => {
-                cities.value = data.map((s) => ({
-                    city_name: s.name,
-                }));
-            });
+            axios
+                .post(route('store.address.states'), { country_id: value })
+                .then(({ data }) => {
+                    cities.value = data.map((s) => ({
+                        city_name: s.name,
+                    }));
+                });
         }
     },
 );
@@ -470,11 +1016,13 @@ watch(
             cities.value = [];
             return;
         }
-        axios.get(route('store.address.cities'), {
-            params: { province_id: province.id },
-        }).then(({ data }) => {
-            cities.value = data;
-        });
+        axios
+            .get(route('store.address.cities'), {
+                params: { province_id: province.id },
+            })
+            .then(({ data }) => {
+                cities.value = data;
+            });
     },
 );
 
@@ -492,22 +1040,28 @@ const editAddress = (addr) => {
     addressForm.line2 = addr.line2;
     addressForm.country_id = addr.country_id || props.defaultCountryId;
     addressForm.province = addr.province;
-    
+
     // trigger watch correctly for cities before setting city
     if (addr.province && addressForm.country_id === props.defaultCountryId) {
-        const province = provinces.value.find((p) => p.province_name === addr.province);
+        const province = provinces.value.find(
+            (p) => p.province_name === addr.province,
+        );
         if (province) {
-            axios.get(route('store.address.cities'), { params: { province_id: province.id } }).then(({ data }) => {
-                cities.value = data;
-                addressForm.city = addr.city;
-            });
+            axios
+                .get(route('store.address.cities'), {
+                    params: { province_id: province.id },
+                })
+                .then(({ data }) => {
+                    cities.value = data;
+                    addressForm.city = addr.city;
+                });
         } else {
             addressForm.city = addr.city;
         }
     } else {
         addressForm.city = addr.city;
     }
-    
+
     addressForm.barangay = addr.barangay;
     addressForm.postcode = addr.postcode;
     addressForm.default = addr.default;
@@ -521,17 +1075,27 @@ const cancelAddressForm = () => {
 
 const submitAddress = () => {
     if (editingAddressId.value) {
-        addressForm.patch(route('store.brand-partner.addresses.update', editingAddressId.value), {
-            preserveScroll: true,
-            onSuccess: () => { isAddressFormVisible.value = false; }
-        });
+        addressForm.patch(
+            route(
+                'store.brand-partner.addresses.update',
+                editingAddressId.value,
+            ),
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    isAddressFormVisible.value = false;
+                },
+            },
+        );
     } else {
         if (props.user.addresses?.length === 0) {
             addressForm.default = true;
         }
         addressForm.post(route('store.brand-partner.addresses.store'), {
             preserveScroll: true,
-            onSuccess: () => { isAddressFormVisible.value = false; }
+            onSuccess: () => {
+                isAddressFormVisible.value = false;
+            },
         });
     }
 };
@@ -545,20 +1109,23 @@ const removeAddress = (id) => {
 };
 
 const setDefault = (id) => {
-    const addr = props.user.addresses.find(a => a.id === id);
-    router.patch(route('store.brand-partner.addresses.update', id), {
-        name: (addr.first_name + ' ' + addr.last_name).trim() || 'Tim Lim',
-        line1: addr.line1,
-        line2: addr.line2,
-        country_id: addr.country_id,
-        province: addr.province,
-        city: addr.city,
-        barangay: addr.barangay,
-        postcode: addr.postcode,
-        default: true
-    }, { preserveScroll: true });
+    const addr = props.user.addresses.find((a) => a.id === id);
+    router.patch(
+        route('store.brand-partner.addresses.update', id),
+        {
+            name: (addr.first_name + ' ' + addr.last_name).trim() || 'Tim Lim',
+            line1: addr.line1,
+            line2: addr.line2,
+            country_id: addr.country_id,
+            province: addr.province,
+            city: addr.city,
+            barangay: addr.barangay,
+            postcode: addr.postcode,
+            default: true,
+        },
+        { preserveScroll: true },
+    );
 };
-
 </script>
 
 <style scoped>
@@ -637,7 +1204,9 @@ const setDefault = (id) => {
     width: 100%;
     text-align: left;
     font-family: 'Public Sans', sans-serif;
-    transition: background 0.15s, color 0.15s;
+    transition:
+        background 0.15s,
+        color 0.15s;
 }
 
 .sidebar-menu li a:hover,
@@ -709,7 +1278,6 @@ const setDefault = (id) => {
     font-weight: 500;
     color: #333;
 }
-
 
 /* Orders Tab Defaults */
 .orders-tabs {
@@ -905,7 +1473,6 @@ const setDefault = (id) => {
     color: #fff;
 }
 
-
 /* Order Details Layout */
 .order-details-header {
     background: #e9e9e9;
@@ -964,7 +1531,6 @@ const setDefault = (id) => {
     color: #333;
 }
 
-
 @media (max-width: 768px) {
     .account-wrapper {
         grid-template-columns: 1fr;
@@ -976,7 +1542,8 @@ const setDefault = (id) => {
         flex-direction: column;
         gap: 12px;
     }
-    .line-price-col, .status-col {
+    .line-price-col,
+    .status-col {
         width: 100%;
         text-align: left;
     }
@@ -990,7 +1557,8 @@ const setDefault = (id) => {
     .order-table-container {
         overflow-x: auto;
     }
-    .order-table th, .order-table td {
+    .order-table th,
+    .order-table td {
         min-width: 100px;
     }
     .order-summary-box {
@@ -1009,10 +1577,12 @@ const setDefault = (id) => {
     border: 1px solid #f0f0f0;
     border-radius: 12px;
     padding: 24px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 }
 .address-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 .address-card-header {
     display: flex;
@@ -1090,7 +1660,9 @@ const setDefault = (id) => {
     border-radius: 16px;
     padding: 32px;
     margin-bottom: 32px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        0 4px 16px rgba(0, 0, 0, 0.04);
     border: 1px solid #e8ecef;
     animation: slideDown 0.3s ease-out;
 }
@@ -1287,7 +1859,9 @@ select.grocery-input:disabled {
 }
 
 @keyframes spin {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 /* Responsive adjustments */
@@ -1295,26 +1869,27 @@ select.grocery-input:disabled {
     .address-form-box {
         padding: 20px;
     }
-    
+
     .form-row-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
+
     .form-group.full-width {
         grid-column: span 1;
     }
-    
+
     .form-actions {
         flex-direction: column-reverse;
         gap: 8px;
     }
-    
-    .btn-cancel, .btn-save {
+
+    .btn-cancel,
+    .btn-save {
         width: 100%;
         text-align: center;
     }
-    
+
     .grocery-input {
         font-size: 16px; /* Prevents zoom on mobile */
         padding: 14px;
