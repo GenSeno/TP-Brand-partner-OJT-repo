@@ -9,7 +9,8 @@
                 id="heroCarousel"
                 class="carousel slide hero-carousel"
                 data-bs-ride="carousel"
-                data-bs-interval="3000"
+                data-bs-interval="4000"
+                data-bs-pause="false"
             >
                 <div class="carousel-indicators">
                     <button
@@ -40,6 +41,24 @@
                     ></button>
                 </div>
                 <div class="carousel-inner">
+                    <button
+                        class="carousel-control-prev custom-arrow"
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide="prev"
+                    >
+                        <span class="arrow-icon">&#10094;</span>
+                    </button>
+
+                    <!-- Next Button -->
+                    <button
+                        class="carousel-control-next custom-arrow"
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide="next"
+                    >
+                        <span class="arrow-icon">&#10095;</span>
+                    </button>
                     <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
                     <div class="carousel-item active slide-2-bg">
                         <div class="slide-layout">
@@ -145,23 +164,42 @@
 
         <!-- Event Tabs -->
         <section class="grocery-events-section" v-if="events.length > 0">
-            <div>
-                <ul class="nav nav-pills tab-style-5">
+            <div class="events-tabs-container">
+                <!-- Optional: Add left fade gradient for better scroll indication -->
+                <div class="scroll-fade-left"></div>
+                
+                <ul class="nav nav-pills tab-style-5" role="tablist">
                     <li
                         class="nav-item"
                         v-for="event in events"
                         :key="event.id"
+                        role="presentation"
                     >
                         <button
                             class="nav-link"
-                            :class="{ active: selectedEvent == event.id }"
+                            :class="{ 
+                                active: selectedEvent == event.id,
+                                loading: event.loading 
+                            }"
                             type="button"
+                            role="tab"
+                            :aria-selected="selectedEvent == event.id"
+                            :aria-label="`Select ${event.name} event`"
                             @click="selectEvent(event)"
                         >
-                            {{ event.name }}
+                            <span class="tab-label">{{ event.name }}</span>
+                            <!-- Optional: Add count badge if needed -->
+                            <span 
+                                v-if="event.count" 
+                                class="event-count-badge"
+                            >
+                                {{ event.count }}
+                            </span>
                         </button>
                     </li>
                 </ul>
+                
+                <div class="scroll-fade-right"></div>
             </div>
         </section>
 
@@ -1617,25 +1655,36 @@ const toggleWishlist = (productId) => {
 
 /* Carousel Indicators */
 .hero-carousel .carousel-indicators {
-    margin-bottom: 30px;
-    justify-content: center;
+    position: absolute;
+    bottom: 25px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    left: 50%;
+    padding: 8px 16px;
+    border-radius: 50px;
+    margin: 0;
+    right: auto;
 }
 
 .hero-carousel .carousel-indicators button {
-    width: 12px;
-    height: 12px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    margin: 0 6px;
-    background-color: rgba(255, 255, 255, 0.4);
     border: none;
+    background-color: rgba(255, 255, 255, 0.4);
     transition: all 0.3s ease;
 }
 
 .hero-carousel .carousel-indicators button.active {
-    background-color: #fff;
-    width: 26px;
+    width: 28px;
+    height: 6px;
     border-radius: 10px;
+    background-color: #fff;
 }
+
+
 /* ===== Grocery Template Styles ===== */
 .variation-block { margin-top: 15px; margin-bottom: 20px; }
 .variation-heading { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #555; text-transform: uppercase; margin-bottom: 10px; }
@@ -1814,23 +1863,29 @@ const toggleWishlist = (productId) => {
     font-weight: 700;
 }
 
-/* ===== Event Tabs - tab-style-5 ===== */
+/* ===== Event Tabs - Modern Style ===== */
 .grocery-events-section {
-    padding: 12px 0;
-    background: #fff;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 0 8px;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .tab-style-5 {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
     border-bottom: none;
-    padding: 0;
+    padding: 4px 4px 8px;
     margin: 0;
     list-style: none;
+    scroll-behavior: smooth;
 }
 
 .tab-style-5::-webkit-scrollbar {
@@ -1842,30 +1897,93 @@ const toggleWishlist = (productId) => {
 }
 
 .tab-style-5 .nav-link {
-    padding: 8px 20px;
-    border-radius: 24px;
-    border: 2px solid #e8e8e8;
-    background: #fff;
-    font-size: 13px;
+    padding: 10px 24px;
+    border-radius: 30px;
+    border: 1.5px solid #e5e7eb;
+    background: #ffffff;
+    font-size: 14px;
     font-weight: 600;
-    color: rgb(var(--grocery-content));
+    letter-spacing: 0.01em;
+    color: #4b5563;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.25s ease;
-    font-family: 'Public Sans', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-style-5 .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(var(--grocery-theme), 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.tab-style-5 .nav-link:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .tab-style-5 .nav-link:hover {
     border-color: rgb(var(--grocery-theme));
     color: rgb(var(--grocery-theme));
-    background: rgba(var(--grocery-theme), 0.05);
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(var(--grocery-theme), 0.12);
 }
 
 .tab-style-5 .nav-link.active {
-    background: rgb(var(--grocery-theme));
+    background: linear-gradient(135deg, 
+        rgb(var(--grocery-theme)) 0%, 
+        rgba(var(--grocery-theme), 0.9) 100%);
     border-color: rgb(var(--grocery-theme));
-    color: #fff;
-    box-shadow: 0 3px 10px rgba(var(--grocery-theme), 0.25);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(var(--grocery-theme), 0.3);
+    transform: scale(1.02);
+}
+
+.tab-style-5 .nav-link.active:hover {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(var(--grocery-theme), 0.35);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grocery-events-section {
+        padding: 12px 0 6px;
+    }
+    
+    .tab-style-5 {
+        gap: 8px;
+        padding: 4px 2px 6px;
+    }
+    
+    .tab-style-5 .nav-link {
+        padding: 8px 18px;
+        font-size: 13px;
+    }
+}
+
+/* Touch device optimization */
+@media (hover: none) and (pointer: coarse) {
+    .tab-style-5 .nav-link {
+        padding: 10px 20px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .tab-style-5 .nav-link::before {
+        display: none;
+    }
 }
 
 /* ===== Products Section ===== */

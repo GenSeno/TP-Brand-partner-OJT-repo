@@ -311,31 +311,24 @@
             v-if="accountModalOpen"
             @click.self="closeAccountModal"
         >
-            <div class="account-modal">
-                <button
-                    type="button"
-                    class="modal-close"
-                    @click="closeAccountModal"
-                >
+            <div class="account-modal" :class="{ 'register-mode': showRegister }">
+                <button type="button" class="modal-close" @click="closeAccountModal">
                     <i class="ri-close-line"></i>
                 </button>
 
-                <div class="account-card-left">
-                    <div class="account-card-copy">
-                        <h2 class="auth-title">Welcome, Runner</h2>
-                        <p class="auth-subtitle">
-                            Log in to continue your journey—track events, manage
-                            registrations, and stay connected with the tribe.
-                        </p>
-                    </div>
+                <!-- LOGIN VIEW -->
+                <template v-if="!showRegister">
+                    <!-- Left: Form -->
+                    <div class="account-card-left">
+                        <div class="account-card-copy">
+                            <h2 class="auth-title">Welcome, Runner</h2>
+                            <p class="auth-subtitle">
+                                Log in to continue your journey—track events, manage
+                                registrations, and stay connected with the tribe.
+                            </p>
+                        </div>
 
-                    <form
-                        class="account-form"
-                        @submit.prevent="
-                            showRegister ? submitRegister() : submitLogin()
-                        "
-                    >
-                        <template v-if="!showRegister">
+                        <form class="account-form" @submit.prevent="submitLogin()">
                             <div class="auth-field">
                                 <label class="auth-label">EMAIL ADDRESS</label>
                                 <input
@@ -360,20 +353,13 @@
 
                             <div class="auth-remember-row">
                                 <label class="auth-remember">
-                                    <input
-                                        type="checkbox"
-                                        v-model="loginForm.remember"
-                                    />
+                                    <input type="checkbox" v-model="loginForm.remember" />
                                     <span>Remember Password?</span>
                                 </label>
-                                <a href="#" class="auth-forgot"
-                                    >Forgot Password?</a
-                                >
+                                <a href="#" class="auth-forgot">Forgot Password?</a>
                             </div>
 
-                            <button type="submit" class="auth-btn-primary">
-                                LOGIN
-                            </button>
+                            <button type="submit" class="auth-btn-primary">LOGIN</button>
 
                             <button type="button" class="auth-btn-google">
                                 <img
@@ -386,23 +372,54 @@
 
                             <p class="auth-switch">
                                 Don't have an account?
-                                <button
-                                    type="button"
-                                    class="auth-link-btn"
-                                    @click="showRegister = true"
-                                >
-                                    SignUp
-                                </button>
+                                <button type="button" class="auth-link-btn" @click="showRegister = true">SignUp</button>
                             </p>
 
                             <div class="auth-do-later">
-                                <a href="/" class="auth-do-later-link"
-                                    >Do it Later.</a
-                                >
+                                <a href="/" class="auth-do-later-link">Do it Later.</a>
                             </div>
-                        </template>
+                        </form>
+                    </div>
 
-                        <template v-else>
+                    <!-- Right: Photo -->
+                    <div class="account-card-right">
+                        <div class="account-card-img-placeholder"></div>
+                    </div>
+                </template>
+
+                <!-- REGISTER VIEW -->
+                <template v-else>
+                    <!-- Left: Intro + Google -->
+                    <div class="account-card-left register-left">
+                        <button type="button" class="auth-back-btn" @click="showRegister = false">
+                            Back
+                        </button>
+
+                        <div class="account-card-copy">
+                            <h2 class="auth-title register-title">Start Your Journey</h2>
+                            <p class="auth-subtitle">
+                                Run with heart. Move with purpose. Join Tribu Pakaras and conquer every trail ahead.
+                            </p>
+                        </div>
+
+                        <button type="button" class="auth-btn-google">
+                            <img
+                                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                alt="Google"
+                                class="google-icon"
+                            />
+                            LOGIN WITH GOOGLE
+                        </button>
+
+                        <p class="auth-switch" style="margin-top: 20px;">
+                            Already have an account?
+                            <button type="button" class="auth-link-btn" @click="showRegister = false">Log In</button>
+                        </p>
+                    </div>
+
+                    <!-- Right: Form Fields -->
+                    <div class="account-card-right register-right">
+                        <form class="account-form" @submit.prevent="submitRegister()">
                             <div class="auth-field">
                                 <label class="auth-label">FULL NAME</label>
                                 <input
@@ -437,9 +454,7 @@
                             </div>
 
                             <div class="auth-field">
-                                <label class="auth-label"
-                                    >CONFIRM PASSWORD</label
-                                >
+                                <label class="auth-label">CONFIRM PASSWORD</label>
                                 <input
                                     type="password"
                                     class="auth-input"
@@ -450,44 +465,19 @@
                             </div>
 
                             <label class="auth-terms">
-                                <input
-                                    type="checkbox"
-                                    v-model="registerForm.terms"
-                                    required
-                                />
+                                <input type="checkbox" v-model="registerForm.terms" required />
                                 <span>
                                     By creating an account, you agree to our
-                                    <a href="#" class="auth-terms-link"
-                                        >Terms &amp; Conditions</a
-                                    >
+                                    <a href="#" class="auth-terms-link">Terms &amp; Conditions</a>
                                     and
-                                    <a href="#" class="auth-terms-link"
-                                        >Privacy Policy</a
-                                    >.
+                                    <a href="#" class="auth-terms-link">Privacy Policy</a>.
                                 </span>
                             </label>
 
-                            <button type="submit" class="auth-btn-primary">
-                                CREATE ACCOUNT
-                            </button>
-
-                            <p class="auth-switch">
-                                Already have an account?
-                                <button
-                                    type="button"
-                                    class="auth-link-btn"
-                                    @click="showRegister = false"
-                                >
-                                    Log In
-                                </button>
-                            </p>
-                        </template>
-                    </form>
-                </div>
-
-                <div class="account-card-right">
-                    <div class="account-card-img-placeholder"></div>
-                </div>
+                            <button type="submit" class="auth-btn-primary">CREATE ACCOUNT</button>
+                        </form>
+                    </div>
+                </template>
             </div>
         </div>
 
@@ -597,7 +587,7 @@
 
 <script setup>
 import { Link, useForm, usePage, router } from '@inertiajs/vue3';
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 
 const page = usePage();
 
@@ -609,6 +599,16 @@ const user = computed(() => auth.value?.user);
 const sideMenuOpen = ref(false);
 const accountModalOpen = ref(false);
 const showRegister = ref(false);
+
+watch(accountModalOpen, (isOpen) => {
+    if (isOpen) {
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = 'var(--scrollbar-width, 0px)'; // Prevents layout shift
+    } else {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+    }
+});
 
 const loginForm = useForm({
     email: '',
@@ -665,6 +665,7 @@ const toggleSideMenu = () => {
         sideMenuOpen.value = !sideMenuOpen.value;
     }
 };
+
 
 const headerHide = ref(false);
 let lastScrollY = 0;
@@ -1531,266 +1532,362 @@ const focusSearchField = () => {
     cursor: not-allowed;
 }
 
+/* ============================================
+   ACCOUNT MODAL - Redesigned
+   ============================================ */
 .account-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.75);
     z-index: 2000;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+    overflow-y: auto; /* allows modal content to scroll if needed */
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
 }
 
 .account-modal {
-    width: min(100%, 1040px);
-    max-height: 94vh;
-    overflow: hidden;
-    border-radius: 32px;
+    width: min(100%, 960px);
+    max-height: 92vh;
+    overflow: hidden; 
+    border-radius: 28px;
     background: #fff;
-    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1fr 1fr;
     position: relative;
+    margin: auto; 
+}
+
+/* Register mode flips the layout feel */
+.account-modal.register-mode {
+    grid-template-columns: 1fr 1fr;
 }
 
 .modal-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 42px;
-    height: 42px;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: none;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.92);
     color: #222;
     font-size: 20px;
     cursor: pointer;
     display: grid;
     place-items: center;
-    z-index: 2;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.2s;
 }
 
-.account-card-left,
-.account-card-right {
-    min-height: 560px;
+.modal-close:hover {
+    background: #fff;
 }
 
+/* LEFT PANEL — Login Form */
 .account-card-left {
-    padding: 48px 46px;
+    padding: 48px 44px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: #fff;
+    overflow-y: auto; 
+    max-height: 92vh;
 }
 
 .account-card-copy {
-    max-width: 420px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .auth-title {
-    font-size: clamp(2rem, 2.5vw, 3rem);
-    line-height: 1.05;
-    margin: 0 0 18px;
+    font-size: clamp(1.8rem, 2.4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0 0 14px;
     color: #111;
+    font-family: 'Poppins', 'Public Sans', sans-serif;
+}
+
+.register-title {
+    font-size: clamp(1.6rem, 2.2vw, 2.4rem);
 }
 
 .auth-subtitle {
-    color: #5a5a5a;
-    font-size: 16px;
-    line-height: 1.8;
-    max-width: 420px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.75;
     margin: 0;
 }
 
 .account-form {
     display: grid;
-    gap: 18px;
+    gap: 16px;
 }
 
 .auth-field {
     display: grid;
-    gap: 8px;
+    gap: 7px;
 }
 
 .auth-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #444;
 }
 
 .auth-input {
     width: 100%;
-    min-height: 54px;
-    padding: 16px 18px;
-    border: 1px solid #ddd;
-    border-radius: 28px;
-    background: #fafafa;
+    height: 50px;
+    padding: 0 18px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    background: #f9f9f9;
     font-size: 14px;
     color: #222;
+    font-family: 'Public Sans', sans-serif;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: rgb(var(--grocery-theme));
+    background: #fff;
 }
 
 .auth-remember-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
 .auth-remember {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     color: #555;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .auth-remember input {
-    width: 16px;
-    height: 16px;
-    accent-color: rgb(var(--grocery-primary));
+    width: 15px;
+    height: 15px;
+    accent-color: rgb(var(--grocery-theme));
 }
 
 .auth-forgot {
-    color: rgb(var(--grocery-primary));
+    color: #f15a24;
     text-decoration: none;
-    font-size: 14px;
-}
-
-.auth-btn-primary,
-.auth-btn-google {
-    border: none;
-    border-radius: 28px;
-    min-height: 54px;
-    font-weight: 700;
-    font-family: 'Public Sans', sans-serif;
-    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .auth-btn-primary {
-    background: rgb(var(--grocery-theme));
+    border: none;
+    border-radius: 50px;
+    height: 52px;
+    font-weight: 700;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    background: #1a6fa8;
     color: #fff;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.auth-btn-primary:hover {
+    background: #155d8e;
+    transform: translateY(-1px);
 }
 
 .auth-btn-google {
-    background: #f6f7f8;
-    color: #222;
+    height: 52px;
+    border-radius: 50px;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #333;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    border: 1px solid #e7e7e7;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    font-family: 'Public Sans', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.auth-btn-google:hover {
+    border-color: #bbb;
+    background: #fafafa;
 }
 
 .google-icon {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
 
 .auth-switch {
-    font-size: 14px;
+    font-size: 13px;
     color: #666;
     margin: 0;
+    text-align: center;
 }
 
 .auth-link-btn {
     border: none;
     padding: 0;
     font-weight: 700;
-    color: rgb(var(--grocery-primary));
+    color: #f15a24;
     background: none;
     cursor: pointer;
+    font-size: 13px;
+    font-family: 'Public Sans', sans-serif;
 }
 
 .auth-do-later {
-    margin-top: 8px;
+    text-align: center;
 }
 
 .auth-do-later-link {
-    font-size: 14px;
+    font-size: 13px;
     color: #f15a24;
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .auth-terms {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     align-items: flex-start;
     color: #555;
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.6;
 }
 
 .auth-terms input {
-    margin-top: 4px;
-    width: 16px;
-    height: 16px;
-    accent-color: rgb(var(--grocery-primary));
+    margin-top: 3px;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    accent-color: rgb(var(--grocery-theme));
 }
 
 .auth-terms-link {
-    color: rgb(var(--grocery-primary));
+    color: rgb(var(--grocery-theme));
     text-decoration: none;
+    font-weight: 600;
 }
 
+/* RIGHT PANEL — Photo (Login) */
 .account-card-right {
     position: relative;
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(255, 118, 74, 0.12),
-            transparent 34%
-        ),
-        linear-gradient(180deg, #111 0%, #1c1c1c 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
+    min-height: 520px;
 }
 
 .account-card-img-placeholder {
     width: 100%;
     height: 100%;
     background: url('/img/img-login.png') center/cover no-repeat;
-    filter: brightness(0.95);
 }
 
+/* REGISTER — Right panel becomes the form area */
+.register-right {
+    background: #f7f8fa;
+    padding: 48px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: 92vh;
+}
+
+/* REGISTER — Left panel styles */
+.register-left {
+    padding: 48px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    border-right: 1px solid #efefef;
+}
+
+.auth-back-btn {
+    border: none;
+    background: none;
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 28px;
+    font-family: 'Public Sans', sans-serif;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.auth-back-btn:hover {
+    color: #333;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
     .account-modal {
         grid-template-columns: 1fr;
-        max-height: 90vh;
+        max-height: 92vh;
+        overflow-y: auto;
+        border-radius: 20px;
     }
 
-    .modal-close {
-        top: 14px;
-        right: 14px;
+    .account-modal.register-mode {
+        grid-template-columns: 1fr;
+    }
+
+    .account-card-right:not(.register-right) {
+        display: none;
     }
 
     .account-card-left,
-    .account-card-right {
+    .register-left,
+    .register-right {
+        padding: 36px 28px;
         min-height: auto;
     }
 
-    .account-card-left {
-        padding: 34px 28px;
+    .register-left {
+        border-right: none;
+        border-bottom: 1px solid #efefef;
     }
 }
 
 @media (max-width: 680px) {
     .account-modal-overlay {
-        padding: 16px;
+        padding: 12px;
     }
 
     .auth-title {
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
 
     .auth-remember-row {
         flex-direction: column;
         align-items: flex-start;
+        gap: 10px;
     }
 }
 
