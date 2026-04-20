@@ -1,0 +1,1 @@
+<?php require 'vendor/autoload.php'; \ = require_once 'bootstrap/app.php'; \ = \->make(Illuminate\Contracts\Http\Kernel::class); \ = \->handle(Illuminate\Http\Request::capture()); echo json_encode(App\Models\BrandPartnerCollection::with('brandPartner')->first()); ?>

@@ -46,19 +46,36 @@
                             SHOP <i class="ri-arrow-down-s-line"></i>
                         </Link>
 
-                        <Link
-                            :href="
-                                brandPartner
-                                    ? route(
-                                          'store.brand-partner.collections',
-                                          brandPartner.slug,
-                                      )
-                                    : '#'
-                            "
-                            class="nav-item"
-                        >
-                            COLLECTIONS <i class="ri-arrow-down-s-line"></i>
-                        </Link>
+                        <div class="nav-item-dropdown">
+                            <Link
+                                :href="
+                                    brandPartner
+                                        ? route(
+                                              'store.brand-partner.collections',
+                                              brandPartner.slug,
+                                          )
+                                        : '#'
+                                "
+                                class="nav-item"
+                            >
+                                COLLECTIONS <i class="ri-arrow-down-s-line"></i>
+                            </Link>
+
+                            <div v-if="navCollections.length > 0" class="dropdown-menu-list">
+                                <Link
+                                    v-for="collection in navCollections"
+                                    :key="collection.id"
+                                    :href="
+                                        brandPartner 
+                                            ? route('store.brand-partner.shop', { brandPartner: brandPartner.slug, collection: collection.id })
+                                            : '#'
+                                    "
+                                    class="dropdown-item"
+                                >
+                                    {{ collection.label }}
+                                </Link>
+                            </div>
+                        </div>
 
                         <Link
                             :href="
@@ -585,6 +602,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 const page = usePage();
 
 const brandPartner = computed(() => page.props.brandPartner);
+const navCollections = computed(() => page.props.navCollections || []);
 const cartCount = computed(() => page.props.cartCount || 0);
 const auth = computed(() => page.props.auth);
 const user = computed(() => auth.value?.user);
@@ -839,6 +857,88 @@ const focusSearchField = () => {
     margin-top: -2px;
 }
 
+/* ============================================
+   COLLECTIONS DROPDOWN STYLES
+   ============================================ */
+.nav-item-dropdown {
+    position: relative;
+}
+
+.nav-item-dropdown .dropdown-menu-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    padding: 8px 0;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.nav-item-dropdown:hover .dropdown-menu-list {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-item-dropdown .dropdown-item {
+    display: block;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+}
+
+.nav-item-dropdown .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FF9505 !important;
+}
+
+.nav-item-dropdown .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Arrow indicator animation */
+.nav-item-dropdown .nav-item i {
+    transition: transform 0.2s ease;
+}
+
+.nav-item-dropdown:hover .nav-item i {
+    transform: rotate(180deg);
+}
+
+/* Triangle/arrow pointing up */
+.nav-item-dropdown .dropdown-menu-list::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    background: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transform: rotate(45deg);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: -1;
+}
+
 /* Right Nav */
 .right-nav-wrapper {
     flex: 0 0 auto;
@@ -920,6 +1020,37 @@ const focusSearchField = () => {
 @media (max-width: 991px) {
     .header-inner {
         padding: 10px 15px;
+    }
+    
+    /* Mobile dropdown styles */
+    .nav-item-dropdown .dropdown-menu-list {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 0;
+        margin: 5px 0 0 20px;
+        min-width: auto;
+    }
+    
+    .nav-item-dropdown .dropdown-item {
+        color: rgba(255, 255, 255, 0.7) !important;
+        padding: 8px 0;
+        white-space: normal;
+    }
+    
+    .nav-item-dropdown .dropdown-item:hover {
+        color: #fff !important;
+        background: transparent;
+    }
+    
+    .nav-item-dropdown .dropdown-menu-list::before {
+        display: none;
     }
 }
 
