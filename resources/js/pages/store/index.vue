@@ -4088,12 +4088,13 @@ const toggleWishlist = (productId) => {
 }
 
 .cart-bar-btn:hover:not(:disabled) {
-    background: #005523;
+    background: #d96f0d;
 }
 
 .cart-bar-btn:disabled {
     opacity: 0.75;
     cursor: not-allowed;
+    background-color: #727272;
 }
 
 .btn-cancel,

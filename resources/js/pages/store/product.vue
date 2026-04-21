@@ -1064,7 +1064,7 @@ const addToCart = () => {
     height: 38px;
     border: 1.5px solid #1a1a1a;
     background: #fff;
-    color: #1a1a1a;
+    color: #1b4332;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -1076,7 +1076,7 @@ const addToCart = () => {
 }
 
 .card-add-btn:hover {
-    background: #1a1a1a;
+    background: #1b4332;
     color: #fff;
 }
 

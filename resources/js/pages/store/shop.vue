@@ -59,7 +59,7 @@
                                     v-model="selectedCategories"
                                     @change="applyFilters"
                                 />
-                                <span>
+                                <span class="filter-group-body-color">
                                     {{ cat.label || cat.name }}
                                     <small
                                         v-if="cat.products_count !== undefined"
@@ -275,20 +275,6 @@
 
                             <!-- Info -->
                             <div class="product-card-body">
-                                <p
-                                    class="product-card-collection text-uppercase"
-                                >
-                                    {{
-                                        product.category?.name ||
-                                        product.collection?.label ||
-                                        (product.short_description
-                                            ? product.short_description.substring(
-                                                  0,
-                                                  30,
-                                              )
-                                            : 'COLLECTION')
-                                    }}
-                                </p>
                                 <Link
                                     :href="
                                         route(
@@ -308,6 +294,20 @@
                                         }}
                                     </h3>
                                 </Link>
+                                <p
+                                    class="product-card-collection text-uppercase"
+                                >
+                                    {{
+                                        product.category?.name ||
+                                        product.collection?.label ||
+                                        (product.short_description
+                                            ? product.short_description.substring(
+                                                  0,
+                                                  30,
+                                              )
+                                            : 'COLLECTION')
+                                    }}
+                                </p>
 
                                 <!-- Stars -->
                                 <div class="product-card-stars">
@@ -808,7 +808,6 @@ const confirmAddToCart = () => {
 .shop-inner {
     max-width: 1300px;
     margin: 0 auto;
-    margin-left: 70px;
     padding: 0 32px;
 }
 
@@ -885,10 +884,11 @@ const confirmAddToCart = () => {
 /* Sidebar */
 .shop-sidebar {
     position: sticky;
-    top: 90px;
+    top: 50px;
     display: flex;
     flex-direction: column;
     gap: 0;
+
 }
 
 .filter-group {
@@ -901,12 +901,16 @@ const confirmAddToCart = () => {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
     color: #111;
-    letter-spacing: 0.8px;
     padding: 4px 0;
     user-select: none;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
 }
 
 .filter-group-header i {
@@ -919,6 +923,17 @@ const confirmAddToCart = () => {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    opacity: 1;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+.filter-group-body-color {
+    color:#727272
 }
 
 /* Radio / Checkbox */
@@ -934,7 +949,7 @@ const confirmAddToCart = () => {
 
 .filter-radio input,
 .filter-checkbox input {
-    accent-color: #e84b0f;
+    accent-color: #A9EADF;
     width: 15px;
     height: 15px;
     cursor: pointer;
@@ -944,23 +959,28 @@ const confirmAddToCart = () => {
 .color-swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
 .color-swatch {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    border: 2px solid transparent;
+    border: 3px solid #ddd;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
     outline: none;
+    padding: 0;
+    background-clip: padding-box;
 }
 
-.color-swatch.active,
+.color-swatch.active {
+    border: 2px solid #000;
+    transform: scale(1);
+}
+
 .color-swatch:hover {
-    border-color: #111;
-    transform: scale(1.15);
+    border-color: #999;
 }
 
 /* Size Chips */
@@ -985,8 +1005,7 @@ const confirmAddToCart = () => {
 
 .size-chip.active,
 .size-chip:hover {
-    border-color: #111;
-    background: #111;
+    background: #e84b0f;
     color: #fff;
 }
 
@@ -999,7 +1018,7 @@ const confirmAddToCart = () => {
 
 .collection-chip {
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 5px;
     border: 1.5px solid #ddd;
     background: #fff;
     font-size: 11px;
@@ -1149,7 +1168,7 @@ const confirmAddToCart = () => {
     position: relative;
     width: 100%;
     overflow: hidden;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 3;
     min-height: 250px;
 }
 
@@ -1182,7 +1201,7 @@ const confirmAddToCart = () => {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    min-height: 200px;
+    min-height: 180px;
 }
 
 .product-card-collection {
@@ -1456,12 +1475,13 @@ const confirmAddToCart = () => {
 }
 
 .cart-bar-btn:hover:not(:disabled) {
-    background: #d96f0d;
+    background: #005523;
 }
 
 .cart-bar-btn:disabled {
     opacity: 0.75;
     cursor: not-allowed;
+    background-color: #727272;
 }
 
 /* Responsive */
