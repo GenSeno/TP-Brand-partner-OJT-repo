@@ -162,25 +162,18 @@
             </div>
         </section>
 
-        <!-- Event Tabs -->
+        <!-- 
+        =========================================
+        EVENT TABS - Grocery Events Navigation
+        =========================================
         <section class="grocery-events-section" v-if="events.length > 0">
             <div class="events-tabs-container">
-                <!-- Optional: Add left fade gradient for better scroll indication -->
                 <div class="scroll-fade-left"></div>
-                
                 <ul class="nav nav-pills tab-style-5" role="tablist">
-                    <li
-                        class="nav-item"
-                        v-for="event in events"
-                        :key="event.id"
-                        role="presentation"
-                    >
+                    <li class="nav-item" v-for="event in events" :key="event.id" role="presentation">
                         <button
                             class="nav-link"
-                            :class="{ 
-                                active: selectedEvent == event.id,
-                                loading: event.loading 
-                            }"
+                            :class="{ active: selectedEvent == event.id, loading: event.loading }"
                             type="button"
                             role="tab"
                             :aria-selected="selectedEvent == event.id"
@@ -188,20 +181,14 @@
                             @click="selectEvent(event)"
                         >
                             <span class="tab-label">{{ event.name }}</span>
-                            <!-- Optional: Add count badge if needed -->
-                            <span 
-                                v-if="event.count" 
-                                class="event-count-badge"
-                            >
-                                {{ event.count }}
-                            </span>
+                            <span v-if="event.count" class="event-count-badge">{{ event.count }}</span>
                         </button>
                     </li>
                 </ul>
-                
                 <div class="scroll-fade-right"></div>
             </div>
         </section>
+        -->
 
         <!-- Category Section -->
         <section

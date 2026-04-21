@@ -431,7 +431,6 @@
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import LoginModal from '@/pages/store/auth/LoginModal.vue';
-import { route } from 'ziggy-js';
 
 const page = usePage();
 
