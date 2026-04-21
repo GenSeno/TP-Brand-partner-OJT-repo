@@ -184,9 +184,22 @@ const emailForm = ref({ email: '' });
 const passwordForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' });
 
 function openEditModal() {
-    form.value.firstName = firstName.value;
-    form.value.lastName = lastName.value;
+    const names = (props.user.name || '').split(' ');
+    form.value.firstName = names[0] || '';
+    form.value.lastName = names.slice(1).join(' ') || '';
     form.value.gender = props.user.gender || '';
+
+    if (props.user.date_of_birth) {
+        const dob = new Date(props.user.date_of_birth);
+        form.value.dobDay = String(dob.getDate()).padStart(2, '0');
+        form.value.dobMonth = String(dob.getMonth() + 1).padStart(2, '0');
+        form.value.dobYear = String(dob.getFullYear());
+    } else {
+        form.value.dobDay = '';
+        form.value.dobMonth = '';
+        form.value.dobYear = '';
+    }
+
     showEditModal.value = true;
 }
 

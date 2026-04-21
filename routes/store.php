@@ -66,6 +66,19 @@ Route::group([
         ->name('brand-partner.account')
         ->middleware('auth');
 
+    // Update user profile
+    Route::patch('/account/profile', [AuthController::class, 'updateProfile'])
+        ->name('brand-partner.account.update')
+        ->middleware('auth');
+
+    Route::patch('/account/email', [AuthController::class, 'updateEmail'])
+        ->name('brand-partner.account.email')
+        ->middleware('auth');
+
+    Route::patch('/account/password', [AuthController::class, 'updatePassword'])
+        ->name('brand-partner.account.password')
+        ->middleware('auth');
+
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])
         ->name('brand-partner.cart.add');
@@ -102,17 +115,16 @@ Route::group([
         ->name('brand-partner.order.cancel')
         ->middleware('auth');
 
-
-    //wishlist routes
+    // wishlist routes
     Route::middleware('auth')->group(function () {
         Route::get('/wishlist', [WishlistController::class, 'index'])
-        ->name('store.brand-partner.wishlist')
-        ->middleware('auth');
+            ->name('store.brand-partner.wishlist')
+            ->middleware('auth');
         Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
-        ->name('brand-partner.wishlist.toggle');
+            ->name('brand-partner.wishlist.toggle');
         Route::delete('/wishlist/{itemId}', [WishlistController::class, 'remove'])
-        ->name('store.brand-partner.wishlist.remove')
-        ->middleware('auth');
+            ->name('store.brand-partner.wishlist.remove')
+            ->middleware('auth');
     });
 
     // User Addresses

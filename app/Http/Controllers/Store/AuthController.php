@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
@@ -22,7 +22,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Merge any guest session cart into the user's DB cart
-            $cartController = new BrandPartnerCartController();
+            $cartController = new BrandPartnerCartController;
             $cartController->mergeSessionCartIntoDb($request, Auth::id());
 
             return redirect()->intended(route('store.brand-partner.index', config('store.brand_partner_slug')));
@@ -36,14 +36,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => $request->password,
         ]);
 
@@ -52,7 +52,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         // Merge any guest session cart into the new user's DB cart
-        $cartController = new BrandPartnerCartController();
+        $cartController = new BrandPartnerCartController;
         $cartController->mergeSessionCartIntoDb($request, $user->id);
 
         return redirect(route('store.brand-partner.index', config('store.brand_partner_slug')));
@@ -71,8 +71,8 @@ class AuthController extends Controller
     public function account(Request $request)
     {
         $brandPartner = \App\Models\BrandPartner::where('slug', config('store.brand_partner_slug'))
-        ->where('status', \App\Enums\BrandPartnerStatus::ACTIVE)
-        ->firstOrFail();
+            ->where('status', \App\Enums\BrandPartnerStatus::ACTIVE)
+            ->firstOrFail();
 
         $orders = \App\Models\BrandPartnerOrder::where('brand_partner_id', $brandPartner->id)
             ->where('user_id', $request->user()->id)
@@ -84,13 +84,13 @@ class AuthController extends Controller
         $countries = \App\Models\Country::orderBy('name')->get();
         $defaultCountryId = \App\Models\Country::where('iso2', 'PH')->value('id');
 
-    return Inertia::render('store/storeuser', [
-        'user'             => $user,
-        'brandPartner'     => $brandPartner,
-        'orders'           => $orders,
-        'countries'        => $countries,
-        'defaultCountryId' => $defaultCountryId,
-    ]);
+        return Inertia::render('store/storeuser', [
+            'user' => $user,
+            'brandPartner' => $brandPartner,
+            'orders' => $orders,
+            'countries' => $countries,
+            'defaultCountryId' => $defaultCountryId,
+        ]);
     }
 
     public function cancelOrder(Request $request, string $reference)
@@ -109,5 +109,68 @@ class AuthController extends Controller
         }
 
         return back()->with('success', 'Order cancelled successfully.');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'gender' => 'nullable|string|in:Male,Female,Other',
+            'dobDay' => 'nullable|string|max:2',
+            'dobMonth' => 'nullable|string|max:2',
+            'dobYear' => 'nullable|string|max:4',
+        ]);
+
+        $name = trim($validated['firstName'].' '.$validated['lastName']);
+
+        $dateOfBirth = null;
+        if (! empty($validated['dobDay']) && ! empty($validated['dobMonth']) && ! empty($validated['dobYear'])) {
+            $dateOfBirth = $validated['dobYear'].'-'.$validated['dobMonth'].'-'.$validated['dobDay'];
+        }
+
+        $request->user()->update([
+            'name' => $name,
+            'gender' => $validated['gender'] ?? null,
+            'date_of_birth' => $dateOfBirth,
+        ]);
+
+        return back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function updateEmail(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|max:255|unique:users,email,'.$request->user()->id,
+        ]);
+
+        $request->user()->update([
+            'email' => $validated['email'],
+        ]);
+
+        return back()->with('success', 'Email updated successfully.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'oldPassword' => 'required|string',
+            'newPassword' => 'required|string|min:8|different:oldPassword',
+            'confirmPassword' => 'required|string|same:newPassword',
+        ]);
+
+        $user = $request->user();
+
+        if (! \Hash::check($validated['oldPassword'], $user->password)) {
+            throw ValidationException::withMessages([
+                'oldPassword' => ['The provided password does not match your current password.'],
+            ]);
+        }
+
+        $user->update([
+            'password' => $validated['newPassword'],
+        ]);
+
+        return back()->with('success', 'Password updated successfully.');
     }
 }

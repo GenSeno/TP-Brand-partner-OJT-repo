@@ -82,7 +82,12 @@
                     <!-- PROFILE TAB                                    -->
                     <!-- ============================================== -->
                     <template v-if="activeTab === 'profile'">
-                        <ProfileTab :user="user" />
+                        <ProfileTab
+                            :user="user"
+                            @update-details="handleUpdateDetails"
+                            @update-email="handleUpdateEmail"
+                            @update-password="handleUpdatePassword"
+                        />
                     </template>
 
                     <!-- ============================================== -->
@@ -105,7 +110,7 @@
 </template>
 
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import ProfileTab from './useraccount/ProfileTab.vue';
 import OrdersTab from './useraccount/OrdersTab.vue';
@@ -122,6 +127,31 @@ const props = defineProps({
 });
 
 const activeTab = ref('profile');
+
+function handleUpdateDetails(data) {
+    router.patch(route('store.brand-partner.account.update'), {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender || null,
+        dobDay: data.dobDay || '',
+        dobMonth: data.dobMonth || '',
+        dobYear: data.dobYear || '',
+    });
+}
+
+function handleUpdateEmail(data) {
+    router.patch(route('store.brand-partner.account.email'), {
+        email: data.email,
+    });
+}
+
+function handleUpdatePassword(data) {
+    router.patch(route('store.brand-partner.account.password'), {
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword,
+        confirmPassword: data.confirmPassword,
+    });
+}
 </script>
 
 <style>
