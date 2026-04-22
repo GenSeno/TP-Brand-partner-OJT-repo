@@ -83,12 +83,12 @@
             />
           </template>
           <!-- ============================================== -->
-          <!-- ADDRESSES TAB                                  -->
+          <!-- WISHLIST TAB                                -->
           <!-- ============================================== -->
           <template v-else-if="activeTab === 'wishlist'">
             <Wishlist
               :brandPartner="$page.props.brandPartner"
-              :items="$page.props.wishlistItems || []"
+              :items="$props.wishlistItems || []"
             />
           </template>
         </div>
@@ -116,6 +116,10 @@ const props = defineProps({
   },
   countries: Array,
   defaultCountryId: Number,
+  wishlistItems: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const activeTab = ref('profile');

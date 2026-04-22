@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use App\Models\Wishlist;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,6 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Merge any guest session cart into the user's DB cart
             $cartController = new BrandPartnerCartController;
             $cartController->mergeSessionCartIntoDb($request, Auth::id());
 
@@ -51,7 +51,6 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        // Merge any guest session cart into the new user's DB cart
         $cartController = new BrandPartnerCartController;
         $cartController->mergeSessionCartIntoDb($request, $user->id);
 
@@ -90,6 +89,13 @@ class AuthController extends Controller
             'orders' => $orders,
             'countries' => $countries,
             'defaultCountryId' => $defaultCountryId,
+            'wishlistItems' => Wishlist::with('product.images')
+                ->where('user_id', Auth::id())
+                ->get()
+                ->map(fn($w) => [
+                    'id' => $w->id,
+                    'product' => $w->product,
+            ]),
         ]);
     }
 

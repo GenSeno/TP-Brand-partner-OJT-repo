@@ -14,9 +14,6 @@ use Inertia\Inertia;
 
 class BrandPartnerWishlistController extends Controller
 {
-    /**
-     * Display the wishlist page.
-     */
     public function index(Request $request)
     {
         $brandPartnerSlug = config('store.brand_partner_slug');
@@ -38,15 +35,18 @@ class BrandPartnerWishlistController extends Controller
                 'product' => $w->product,
             ]);
 
-        return Inertia::render('store/wishlist', [
+        return Inertia::render('store/useraccount/wishlist', [
             'brandPartner' => $brandPartner,
             'items'        => $items,
+            'wishlistedIds' => Auth::check()
+                ? \App\Models\Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                :[],
         ]);
     }
 
-    /**
-     * Toggle a product in the wishlist (add if not present, remove if present).
-     */
+  
     public function toggle(Request $request)
     {
         $request->validate([
@@ -70,9 +70,7 @@ class BrandPartnerWishlistController extends Controller
         return back()->with('success', __('Added to wishlist.'));
     }
 
-    /**
-     * Remove a specific item from the wishlist.
-     */
+  
     public function remove(Request $request, int $itemId)
     {
         Wishlist::where('id', $itemId)

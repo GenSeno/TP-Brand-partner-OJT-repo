@@ -25,9 +25,6 @@
               :alt="item.product.name"
               class="card-img"
             />
-            <div class="card-img-overlay">
-              <span class="quick-view">View Product</span>
-            </div>
           </Link>
 
           <!-- Product Info -->
@@ -75,7 +72,7 @@
         <h3>Your wishlist is empty</h3>
         <p>Save your favorite items here and come back to them anytime.</p>
         <Link
-          :href="route('store.brand-partner.index', brandPartner.slug)"
+          :href="route('store.brand-partner.shop', brandPartner.slug)"
           class="shop-btn"
         >
           <i class="ri-store-2-line"></i> Start Shopping
@@ -252,29 +249,8 @@ const addToCart = (product) => {
   transform: scale(1.04);
 }
 
-.card-img-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
 .wishlist-card:hover .card-img-overlay {
   opacity: 1;
-}
-
-.quick-view {
-  background: #fff;
-  color: #1b1b3e;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 8px 18px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
 }
 
 .card-body {

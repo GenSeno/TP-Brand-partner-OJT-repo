@@ -116,18 +116,18 @@ Route::group([
         ->middleware('auth');
 
     // Wishlist routes
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
 
-    Route::get('/wishlist', [WishlistController::class, 'index'])
-        ->name('brand-partner.wishlist');
+        Route::get('account/wishlist', [WishlistController::class, 'index'])
+            ->name('brand-partner.wishlist');
 
-    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
-        ->name('brand-partner.wishlist.toggle');
+        Route::post('account/wishlist/toggle', [WishlistController::class, 'toggle'])
+            ->name('brand-partner.wishlist.toggle');
 
-    Route::delete('/wishlist/{itemId}', [WishlistController::class, 'remove'])
-        ->name('brand-partner.wishlist.remove');
+        Route::delete('account/wishlist/{itemId}', [WishlistController::class, 'remove'])
+            ->name('brand-partner.wishlist.remove');
 
-});
+    });
 
     // User Addresses
     Route::post('/account/addresses', [UserAddressController::class, 'store'])
