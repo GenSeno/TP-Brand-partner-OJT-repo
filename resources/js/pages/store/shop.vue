@@ -495,6 +495,7 @@ const props = defineProps({
   filter: Object,
   cartCount: Number,
   wishlistedIds: { type: Array, default: () => [] },
+  auth: Object,
 });
 
 // Breadcrumb items
@@ -587,21 +588,21 @@ const toggleFeatured = () => {
 const isWishlisted = (productId) => props.wishlistedIds.includes(productId);
 
 const toggleWishlist = (productId) => {
+  if (!props.auth?.user) {
+    window.dispatchEvent(new CustomEvent('open-login-modal'));
+    return;
+  }
+
   router.post(
     route('store.brand-partner.wishlist.toggle'),
     { product_id: productId },
     {
       preserveScroll: true,
       onSuccess: () => {
+        router.reload({ only: ['wishlistedIds'] });
         emitter.emit('toast:show', {
           type: 'success',
           message: 'Wishlist updated successfully!',
-        });
-      },
-      onError: () => {
-        emitter.emit('toast:show', {
-          type: 'error',
-          message: 'Please log in to add items to your wishlist.',
         });
       },
     },

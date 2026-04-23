@@ -115,16 +115,13 @@
               <span v-if="user">{{ user.name }}</span>
               <span v-else>Account</span>
             </a>
-            <Link
+            <a
+              href="#"
               class="utility-link"
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.wishlist', brandPartner.slug)
-                  : '#'
-              "
+              @click.prevent="handleWishlistClick"
             >
               <i class="ri-heart-line"></i> Wishlist
-            </Link>
+            </a>
             <Link
               :href="
                 brandPartner
@@ -379,7 +376,30 @@ const openAccountModal = () => {
   }
 
   accountModalOpen.value = true;
-}; // <-- Make sure to
+};
+
+const handleWishlistClick = () => {
+  if (user.value) {
+    router.visit(route('store.brand-partner.account') + '?tab=wishlist');
+    return;
+  }
+
+  accountModalOpen.value = true;
+};
+
+const openLoginModal = () => {
+  accountModalOpen.value = true;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('open-login-modal', openLoginModal);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('open-login-modal', openLoginModal);
+});
 
 const handleAuthSuccess = () => {
   // Optional: Handle successful authentication

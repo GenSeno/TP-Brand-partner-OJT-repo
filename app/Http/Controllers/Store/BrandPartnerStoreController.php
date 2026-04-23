@@ -7,7 +7,9 @@ use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BrandPartnerStoreController extends Controller
@@ -26,12 +28,12 @@ class BrandPartnerStoreController extends Controller
         $categories = $brandPartner->categories()
             ->enabled()
             ->ordered()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $events = $brandPartner->events()
             ->enabled()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $productsQuery = $brandPartner->products()
@@ -65,12 +67,17 @@ class BrandPartnerStoreController extends Controller
             ->get();
 
         return Inertia::render('store/index', [
-            'brandPartner'     => $brandPartner,
-            'categories'       => $categories,
-            'events'           => $events,
-            'products'         => $products,
+            'brandPartner' => $brandPartner,
+            'categories' => $categories,
+            'events' => $events,
+            'products' => $products,
             'featuredProducts' => $featuredProducts,
-            'filter'           => $request->only(['category', 'event', 'featured', 'search']),
+            'filter' => $request->only(['category', 'event', 'featured', 'search']),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 
@@ -100,9 +107,14 @@ class BrandPartnerStoreController extends Controller
             ->get();
 
         return Inertia::render('store/product', [
-            'brandPartner'    => $brandPartner,
-            'product'         => $product,
+            'brandPartner' => $brandPartner,
+            'product' => $product,
             'relatedProducts' => $relatedProducts,
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 }

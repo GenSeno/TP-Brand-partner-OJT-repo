@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
-use App\Models\Wishlist;
 
 class AuthController extends Controller
 {
@@ -92,10 +92,11 @@ class AuthController extends Controller
             'wishlistItems' => Wishlist::with('product.images')
                 ->where('user_id', Auth::id())
                 ->get()
-                ->map(fn($w) => [
+                ->map(fn ($w) => [
                     'id' => $w->id,
                     'product' => $w->product,
-            ]),
+                ]),
+            'tab' => $request->query('tab', 'profile'),
         ]);
     }
 

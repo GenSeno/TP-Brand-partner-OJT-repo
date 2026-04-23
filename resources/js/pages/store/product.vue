@@ -118,8 +118,18 @@
                             <span v-if="isAddingToCart">ADDING...</span>
                             <span v-else>ADD TO CART</span>
                         </button>
-                        <button class="wishlist-btn" title="Save to wishlist">
-                            <i class="ri-heart-line"></i>
+                        <button
+                            class="wishlist-btn"
+                            title="Save to wishlist"
+                            @click="toggleWishlist(product.id)"
+                        >
+                            <i
+                                :class="
+                                    wishlistedIds.includes(product.id)
+                                        ? 'ri-heart-fill text-danger'
+                                        : 'ri-heart-line'
+                                "
+                            ></i>
                         </button>
                     </div>
 
@@ -304,6 +314,11 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
+    wishlistedIds: {
+        type: Array,
+        default: () => [],
+    },
+    auth: Object,
 });
 
 const breadcrumbItems = computed(() => [
@@ -386,6 +401,24 @@ const addToCart = () => {
             preserveScroll: true,
             onSuccess: () => confirmModal?.hide(),
             onFinish: () => { isAddingToCart.value = false; },
+        },
+    );
+};
+
+const toggleWishlist = (productId) => {
+    if (!props.auth?.user) {
+        window.dispatchEvent(new CustomEvent('open-login-modal'));
+        return;
+    }
+
+    router.post(
+        route('store.brand-partner.wishlist.toggle'),
+        { product_id: productId },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                router.reload({ only: ['wishlistedIds'] });
+            },
         },
     );
 };

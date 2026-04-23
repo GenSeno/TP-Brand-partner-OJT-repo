@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import ProfileTab from './useraccount/ProfileTab.vue';
 import OrdersTab from './useraccount/OrdersTab.vue';
@@ -122,7 +122,7 @@ const props = defineProps({
   },
 });
 
-const activeTab = ref('profile');
+const activeTab = ref(usePage().props.tab || 'profile');
 
 function handleUpdateDetails(data) {
   router.patch(route('store.brand-partner.account.update'), {

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Store;
 
-use App\Enums\BrandPartnerProductStatus;
 use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
 use App\Models\BrandPartnerProductOption;
 use App\Models\BrandPartnerProductOptionValue;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BrandPartnerShopController extends Controller
@@ -20,6 +21,7 @@ class BrandPartnerShopController extends Controller
     protected function getCartCount(Request $request, string $brandPartnerSlug): int
     {
         $cart = $request->session()->get("bp_cart_{$brandPartnerSlug}", []);
+
         return array_sum(array_column($cart, 'quantity'));
     }
 
@@ -58,7 +60,7 @@ class BrandPartnerShopController extends Controller
 
         $events = $brandPartner->events()
             ->enabled()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $productsQuery = $brandPartner->products()
@@ -141,7 +143,7 @@ class BrandPartnerShopController extends Controller
         $collections = BrandPartnerProductOptionValue::whereIn('id', $collectionIds)
             ->get();
 
-        return Inertia::render('store/shop', [  // This points to your shop.vue
+        return Inertia::render('store/shop', [
             'brandPartner' => $brandPartner,
             'categories' => $categories,
             'events' => $events,
@@ -151,6 +153,11 @@ class BrandPartnerShopController extends Controller
             'sizes' => $availableSizes->all(),
             'filter' => $request->only(['category', 'event', 'featured', 'search', 'collection', 'colors', 'sizes']),
             'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 }

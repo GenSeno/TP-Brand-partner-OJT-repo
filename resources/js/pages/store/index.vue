@@ -1116,6 +1116,7 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  auth: Object,
 });
 
 const selectedCategory = ref(props.filter.category || null);
@@ -1349,10 +1350,23 @@ const confirmAddToCart = () => {
 };
 
 const toggleWishlist = (productId) => {
+  // Check if user is logged in (from page props)
+  const user = props.auth?.user;
+  if (!user) {
+    // Trigger login modal via custom event
+    window.dispatchEvent(new CustomEvent('open-login-modal'));
+    return;
+  }
+
   router.post(
     route('store.brand-partner.wishlist.toggle'),
     { product_id: productId },
-    { preserveScroll: true },
+    {
+      preserveScroll: true,
+      onFinish: () => {
+        router.reload({ only: ['wishlistIds'] });
+      },
+    },
   );
 };
 </script>
