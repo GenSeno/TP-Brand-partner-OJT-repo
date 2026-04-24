@@ -10,6 +10,8 @@ use App\Http\Controllers\Store\BrandPartnerContactController;
 use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
+use App\Http\Controllers\Store\BrandPartnerWishlistController as WishlistController;
+use App\Http\Controllers\Store\UserAddressController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -64,6 +66,19 @@ Route::group([
         ->name('brand-partner.account')
         ->middleware('auth');
 
+    // Update user profile
+    Route::patch('/account/profile', [AuthController::class, 'updateProfile'])
+        ->name('brand-partner.account.update')
+        ->middleware('auth');
+
+    Route::patch('/account/email', [AuthController::class, 'updateEmail'])
+        ->name('brand-partner.account.email')
+        ->middleware('auth');
+
+    Route::patch('/account/password', [AuthController::class, 'updatePassword'])
+        ->name('brand-partner.account.password')
+        ->middleware('auth');
+
     // Cart routes
     Route::post('/cart/add', [BrandPartnerCartController::class, 'add'])
         ->name('brand-partner.cart.add');
@@ -95,4 +110,33 @@ Route::group([
     // Order confirmation
     Route::get('/order/{reference}', [BrandPartnerCheckoutController::class, 'confirmation'])
         ->name('brand-partner.order.confirmation');
+
+    Route::patch('/order/{reference}/cancel', [AuthController::class, 'cancelOrder'])
+        ->name('brand-partner.order.cancel')
+        ->middleware('auth');
+
+    // Wishlist routes
+    Route::middleware('auth')->group(function () {
+
+        Route::get('account/wishlist', [WishlistController::class, 'index'])
+            ->name('brand-partner.wishlist');
+
+        Route::post('account/wishlist/toggle', [WishlistController::class, 'toggle'])
+            ->name('brand-partner.wishlist.toggle');
+
+        Route::delete('account/wishlist/{itemId}', [WishlistController::class, 'remove'])
+            ->name('brand-partner.wishlist.remove');
+
+    });
+
+    // User Addresses
+    Route::post('/account/addresses', [UserAddressController::class, 'store'])
+        ->name('brand-partner.addresses.store')
+        ->middleware('auth');
+    Route::patch('/account/addresses/{address}', [UserAddressController::class, 'update'])
+        ->name('brand-partner.addresses.update')
+        ->middleware('auth');
+    Route::delete('/account/addresses/{address}', [UserAddressController::class, 'destroy'])
+        ->name('brand-partner.addresses.destroy')
+        ->middleware('auth');
 });

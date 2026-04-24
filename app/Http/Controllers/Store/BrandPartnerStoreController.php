@@ -7,20 +7,13 @@ use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BrandPartnerStoreController extends Controller
 {
-    /**
-     * Get cart count for a brand partner.
-     */
-    protected function getCartCount(Request $request, string $brandPartnerSlug): int
-    {
-        $cart = $request->session()->get("bp_cart_{$brandPartnerSlug}", []);
-        return array_sum(array_column($cart, 'quantity'));
-    }
-
     /**
      * Display the brand partner store page.
      */
@@ -35,34 +28,30 @@ class BrandPartnerStoreController extends Controller
         $categories = $brandPartner->categories()
             ->enabled()
             ->ordered()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $events = $brandPartner->events()
             ->enabled()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $productsQuery = $brandPartner->products()
             ->published()
             ->with(['category', 'event', 'images']);
 
-        // Filter by category
         if ($request->filled('category')) {
             $productsQuery->where('category_id', $request->category);
         }
 
-        // Filter by event
         if ($request->filled('event')) {
             $productsQuery->where('event_id', $request->event);
         }
 
-        // Filter featured
         if ($request->boolean('featured')) {
             $productsQuery->featured();
         }
 
-        // Search
         if ($request->filled('search')) {
             $productsQuery->search($request->search);
         }
@@ -84,7 +73,11 @@ class BrandPartnerStoreController extends Controller
             'products' => $products,
             'featuredProducts' => $featuredProducts,
             'filter' => $request->only(['category', 'event', 'featured', 'search']),
-            'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 
@@ -105,7 +98,6 @@ class BrandPartnerStoreController extends Controller
             ->with(['category', 'event', 'images'])
             ->firstOrFail();
 
-        // Get related products from the same category
         $relatedProducts = BrandPartnerProduct::where('brand_partner_id', $brandPartner->id)
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -118,7 +110,11 @@ class BrandPartnerStoreController extends Controller
             'brandPartner' => $brandPartner,
             'product' => $product,
             'relatedProducts' => $relatedProducts,
-            'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 }

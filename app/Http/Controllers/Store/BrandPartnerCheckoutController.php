@@ -9,35 +9,95 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerOrder;
 use App\Models\BrandPartnerProduct;
+use App\Models\CartItem;
 use App\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BrandPartnerCheckoutController extends Controller
 {
-    /**
-     * Get the cart session key for a brand partner.
-     */
     protected function getCartKey(string $brandPartnerSlug): string
     {
         return "bp_cart_{$brandPartnerSlug}";
     }
 
-    /**
-     * Get the cart items from session.
-     */
-    protected function getCart(Request $request, string $brandPartnerSlug): array
+    protected function getSessionCart(Request $request, string $brandPartnerSlug): array
     {
         return $request->session()->get($this->getCartKey($brandPartnerSlug), []);
     }
 
-    /**
-     * Clear the cart.
-     */
     protected function clearCart(Request $request, string $brandPartnerSlug): void
     {
-        $request->session()->forget($this->getCartKey($brandPartnerSlug));
+        if (Auth::check()) {
+            CartItem::where('user_id', Auth::id())->delete();
+        } else {
+            $request->session()->forget($this->getCartKey($brandPartnerSlug));
+        }
+    }
+
+    /**
+     * Build cart items array from DB (logged in) or session (guest).
+     */
+    protected function resolveCart(Request $request, BrandPartner $brandPartner): array
+    {
+        $cartItems = [];
+        $subTotal  = 0;
+
+        if (Auth::check()) {
+            // Logged in: load from DB
+            $dbItems = CartItem::with(['product.images'])
+                ->whereHas('product', function ($q) use ($brandPartner) {
+                    $q->where('brand_partner_id', $brandPartner->id)
+                      ->where('status', BrandPartnerProductStatus::PUBLISHED);
+                })
+                ->where('user_id', Auth::id())
+                ->get();
+
+            foreach ($dbItems as $item) {
+                $itemTotal  = $item->product->price * $item->quantity;
+                $subTotal  += $itemTotal;
+                $cartItems[] = [
+                    'id'         => $item->id,
+                    'product_id' => $item->brand_partner_product_id,
+                    'product'    => $item->product,
+                    'color'      => $item->color,
+                    'size'       => $item->size,
+                    'quantity'   => $item->quantity,
+                    'price'      => $item->product->price,
+                    'total'      => $itemTotal,
+                ];
+            }
+        } else {
+            // Guest: load from session
+            $sessionCart = $this->getSessionCart($request, config('store.brand_partner_slug'));
+
+            foreach ($sessionCart as $itemKey => $item) {
+                $product = BrandPartnerProduct::with('images')
+                    ->where('id', $item['product_id'])
+                    ->where('brand_partner_id', $brandPartner->id)
+                    ->where('status', BrandPartnerProductStatus::PUBLISHED)
+                    ->first();
+
+                if (!$product) continue;
+
+                $itemTotal  = $product->price * $item['quantity'];
+                $subTotal  += $itemTotal;
+                $cartItems[] = [
+                    'id'         => $itemKey,
+                    'product_id' => $item['product_id'],
+                    'product'    => $product,
+                    'color'      => $item['color'] ?? null,
+                    'size'       => $item['size'] ?? null,
+                    'quantity'   => $item['quantity'],
+                    'price'      => $product->price,
+                    'total'      => $itemTotal,
+                ];
+            }
+        }
+
+        return [$cartItems, $subTotal];
     }
 
     /**
@@ -51,57 +111,33 @@ class BrandPartnerCheckoutController extends Controller
             ->where('status', BrandPartnerStatus::ACTIVE)
             ->firstOrFail();
 
-        $cart = $this->getCart($request, $brandPartnerSlug);
-
-        if (empty($cart)) {
-            return redirect()->route('store.brand-partner.cart')
-                ->with('error', __('Your cart is empty.'));
-        }
-
-        $cartItems = [];
-        $subTotal = 0;
-
-        foreach ($cart as $itemKey => $item) {
-            $product = BrandPartnerProduct::with('images')
-                ->where('id', $item['product_id'])
-                ->where('brand_partner_id', $brandPartner->id)
-                ->where('status', BrandPartnerProductStatus::PUBLISHED)
-                ->first();
-
-            if ($product) {
-                $itemTotal = $product->price * $item['quantity'];
-                $cartItems[] = [
-                    'id'       => $itemKey,
-                    'product'  => $product,
-                    'color'    => $item['color'] ?? null,
-                    'size'     => $item['size'] ?? null,
-                    'quantity' => $item['quantity'],
-                    'price'    => $product->price,
-                    'total'    => $itemTotal,
-                ];
-                $subTotal += $itemTotal;
-            }
-        }
+        [$cartItems, $subTotal] = $this->resolveCart($request, $brandPartner);
 
         if (empty($cartItems)) {
             return redirect()->route('store.brand-partner.cart')
                 ->with('error', __('Your cart is empty.'));
         }
 
-        $countries = Country::orderBy('name')->get();
+        $countries        = Country::orderBy('name')->get();
         $defaultCountryId = Country::where('iso2', 'PH')->value('id');
 
+        $userAddresses = [];
+        if (Auth::check()) {
+            $userAddresses = Auth::user()->load('addresses.country')->addresses;
+        }
+
         return Inertia::render('store/checkout', [
-            'brandPartner' => $brandPartner,
-            'cart' => [
-                'items' => $cartItems,
+            'brandPartner'     => $brandPartner,
+            'cart'             => [
+                'items'    => $cartItems,
                 'subtotal' => $subTotal,
                 'discount' => 0,
-                'total' => $subTotal,
+                'total'    => $subTotal,
             ],
-            'cartCount' => array_sum(array_column($cart, 'quantity')),
-            'countries' => $countries,
+            'cartCount'        => array_sum(array_column($cartItems, 'quantity')),
+            'countries'        => $countries,
             'defaultCountryId' => $defaultCountryId,
+            'userAddresses'    => $userAddresses,
         ]);
     }
 
@@ -130,46 +166,39 @@ class BrandPartnerCheckoutController extends Controller
             ->where('status', BrandPartnerStatus::ACTIVE)
             ->firstOrFail();
 
-        $cart = $this->getCart($request, $brandPartnerSlug);
+        [$cartItems, $subTotal] = $this->resolveCart($request, $brandPartner);
 
-        if (empty($cart)) {
+        if (empty($cartItems)) {
             return back()->with('error', __('Your cart is empty.'));
         }
 
-        $order = DB::transaction(function () use ($request, $brandPartner, $cart) {
-            $subTotal = 0;
+        $order = DB::transaction(function () use ($request, $brandPartner, $cartItems, $subTotal) {
             $orderLines = [];
 
-            foreach ($cart as $itemKey => $item) {
+            foreach ($cartItems as $item) {
                 $product = BrandPartnerProduct::where('id', $item['product_id'])
                     ->where('brand_partner_id', $brandPartner->id)
                     ->where('status', BrandPartnerProductStatus::PUBLISHED)
                     ->first();
 
-                if (!$product) {
-                    continue;
-                }
+                if (!$product) continue;
 
                 $quantity = $item['quantity'];
-                $color    = $item['color'] ?? null;
-                $size     = $item['size'] ?? null;
 
-                // Check stock
                 if ($product->track_stock && $product->stock < $quantity) {
                     throw new \Exception("Insufficient stock for {$product->name}");
                 }
 
-                $itemTotal = $product->price * $quantity;
-                $subTotal += $itemTotal;
-
-                $meta = ($color || $size) ? ['color' => $color, 'size' => $size] : null;
+                $meta = ($item['color'] || $item['size'])
+                    ? ['color' => $item['color'], 'size' => $item['size']]
+                    : null;
 
                 $orderLines[] = [
                     'product_id'   => $product->id,
                     'product_name' => $product->name,
                     'quantity'     => $quantity,
                     'unit_price'   => $product->price,
-                    'total'        => $itemTotal,
+                    'total'        => $product->price * $quantity,
                     'meta'         => $meta,
                 ];
 
@@ -180,21 +209,20 @@ class BrandPartnerCheckoutController extends Controller
                 throw new \Exception('No valid products in cart.');
             }
 
-            // Create order
             $order = BrandPartnerOrder::create([
                 'brand_partner_id' => $brandPartner->id,
-                'customer_id' => auth()->id(), // null if guest
-                'user_id' => auth()->id(),
-                'customer_name' => $request->customer_name,
-                'customer_email' => $request->customer_email,
-                'customer_phone' => $request->customer_phone,
-                'status' => BrandPartnerOrderStatus::PENDING,
-                'sub_total' => $subTotal,
-                'tax_total' => 0,
-                'total' => $subTotal,
-                'notes' => $request->notes,
-                'placed_at' => now(),
-                'meta' => [
+                'customer_id'      => Auth::id(),
+                'user_id'          => Auth::id(),
+                'customer_name'    => $request->customer_name,
+                'customer_email'   => $request->customer_email,
+                'customer_phone'   => $request->customer_phone,
+                'status'           => BrandPartnerOrderStatus::PENDING,
+                'sub_total'        => $subTotal,
+                'tax_total'        => 0,
+                'total'            => $subTotal,
+                'notes'            => $request->notes,
+                'placed_at'        => now(),
+                'meta'             => [
                     'shipping_address' => [
                         'line1'      => $request->shipping_line1,
                         'line2'      => $request->shipping_line2,
@@ -207,7 +235,6 @@ class BrandPartnerCheckoutController extends Controller
                 ],
             ]);
 
-            // Create order lines
             foreach ($orderLines as $line) {
                 $order->lines()->create($line);
             }
@@ -215,7 +242,6 @@ class BrandPartnerCheckoutController extends Controller
             return $order;
         });
 
-        // Clear cart
         $this->clearCart($request, $brandPartnerSlug);
 
         return redirect()->route('store.brand-partner.order.confirmation', [
@@ -241,7 +267,7 @@ class BrandPartnerCheckoutController extends Controller
 
         return Inertia::render('store/confirmation', [
             'brandPartner' => $brandPartner,
-            'order' => $order,
+            'order'        => $order,
         ]);
     }
 }

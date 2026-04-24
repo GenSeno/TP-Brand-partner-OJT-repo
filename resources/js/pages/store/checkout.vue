@@ -93,9 +93,20 @@
 
                     <!-- Shipping Address -->
                     <div class="grocery-card">
-                        <div class="card-header">
-                            <i class="ri-map-pin-line" style="color: #FF9505;"></i>
-                            <h5>Shipping Address</h5>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="ri-map-pin-line" style="color: #FF9505;"></i>
+                                <h5 style="display:inline-block; margin-left: 10px;">Shipping Address</h5>
+                            </div>
+                            <!-- Address Selector -->
+                            <div v-if="$page.props.userAddresses?.length > 0">
+                                <select @change="applySavedAddress($event)" class="grocery-input" style="padding: 6px 12px; width: 200px; font-size: 13px;">
+                                    <option value="">Select a saved address...</option>
+                                    <option v-for="addr in $page.props.userAddresses" :key="addr.id" :value="addr.id">
+                                        {{ addr.first_name }} {{ addr.last_name }} {{ addr.default ? '(Default)' : '' }} - {{ addr.line1 }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Street Address -->
@@ -426,6 +437,7 @@ const props = defineProps({
     cart: Object,
     countries: Array,
     defaultCountryId: Number,
+    userAddresses: Array,
 });
 
 const PHILIPPINES_ID = props.defaultCountryId ?? 175;
@@ -450,6 +462,30 @@ const form = useForm({
     shipping_country_id: PHILIPPINES_ID,
     notes: '',
 });
+
+const applySavedAddress = (event) => {
+    const addressId = event.target.value;
+    if (!addressId) return;
+
+    const addr = props.userAddresses.find(a => a.id == addressId);
+    if (!addr) return;
+
+    form.customer_name = (addr.first_name + ' ' + addr.last_name).trim();
+    form.shipping_line1 = addr.line1;
+    form.shipping_line2 = addr.line2;
+    form.shipping_country_id = addr.country_id || PHILIPPINES_ID;
+    
+    // Assigning province will trigger the watcher which clears the city
+    form.shipping_province = addr.province;
+
+    // After province watcher completes data fetching, apply city
+    setTimeout(() => {
+        form.shipping_city = addr.city;
+    }, 500);
+
+    form.shipping_barangay = addr.barangay;
+    form.shipping_postcode = addr.postcode;
+};
 
 const isShippingPH = computed(
     () => form.shipping_country_id === PHILIPPINES_ID,

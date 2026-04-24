@@ -29,10 +29,26 @@ class HandleStoreInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $navCollections = [];
+        if ($brandPartnerSlug = config('store.brand_partner_slug')) {
+            $brandPartner = \App\Models\BrandPartner::where('slug', $brandPartnerSlug)->first();
+            if ($brandPartner) {
+                // Find the option named "Collection"
+                $collectionOption = \App\Models\BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
+                    ->where('name', 'Collection')
+                    ->first();
+                if ($collectionOption) {
+                    $navCollections = \App\Models\BrandPartnerProductOptionValue::where('product_option_id', $collectionOption->id)
+                        ->get();
+                }
+            }
+        }
+
         return [
             ...parent::share($request),
             'theme' => 'food',
-            'brandPartnerSlug' => config('store.brand_partner_slug'),
+            'brandPartnerSlug' => $brandPartnerSlug,
+            'navCollections' => $navCollections,
             'auth' => [
                 'user' => $request->user(),
             ],

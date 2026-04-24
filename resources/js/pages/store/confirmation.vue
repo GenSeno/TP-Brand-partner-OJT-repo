@@ -211,7 +211,7 @@ const formatDate = (date) => {
 .grocery-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 5rem 16px;
 }
 
 /* Success Order Box */
