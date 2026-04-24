@@ -131,17 +131,8 @@ const addToCart = (product) => {
   font-family: 'Public Sans', sans-serif;
 }
 
-/* Header */
-.wishlist-header {
-  background: #fff;
-  padding: 16px 0;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 32px;
-  margin-top: 80px;
-}
-
 .wishlist-container {
-  max-width: 1100px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -167,31 +158,16 @@ const addToCart = (product) => {
   gap: 10px;
 }
 
-.wishlist-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #ff9505;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
 /* Grid */
 .wishlist-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
 
 /* Card */
 .wishlist-card {
   background: #fff;
-  border-radius: 14px;
-  border: 1px solid #eee;
   overflow: hidden;
   position: relative;
   transition:
@@ -215,7 +191,7 @@ const addToCart = (product) => {
   border: none;
   background: rgba(255, 255, 255, 0.9);
   color: #aaa;
-  font-size: 16px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,7 +211,7 @@ const addToCart = (product) => {
   display: block;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
 }
 
 .card-img {
@@ -266,7 +242,7 @@ const addToCart = (product) => {
   color: #1b1b3e;
   text-decoration: none;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.3;
@@ -302,10 +278,9 @@ const addToCart = (product) => {
   gap: 6px;
   width: 100%;
   padding: 10px;
-  background: #1b5e38;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+  background: #fff;
+  color: #1b5e38;
+  border: 1px solid #1b5e38;
   font-size: 13px;
   font-weight: 700;
   font-family: 'Public Sans', sans-serif;

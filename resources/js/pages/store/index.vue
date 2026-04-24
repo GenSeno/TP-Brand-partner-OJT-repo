@@ -1183,7 +1183,7 @@ const hasFeaturedProducts = computed(() => {
   return featuredProductList.value.length > 0;
 });
 
-// "New" badge function 7 days to dissapear
+//Produst Badge
 function isNewProduct(createdAt) {
   const dateCreated = new Date(createdAt);
   const now = new Date();
