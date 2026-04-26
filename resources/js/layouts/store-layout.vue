@@ -3,7 +3,7 @@
     <!-- Header Start -->
     <header
       class="header-style-6 dark-theme-header"
-      :class="{ 'header-hidden': headerHide }"
+      :class="{ 'header-hidden': headerHide, 'light-theme-header': isLightRoute }"
     >
       <div class="header-inner">
         <!-- Brand Logo -->
@@ -14,7 +14,7 @@
             class="pakaras-logo"
           >
             <img
-              src="/img/logo/pakaras-logo2.png"
+              :src="logoSrc"
               alt="Pakaras Logo"
               class="img-fluid brand-logo-raw"
             />
@@ -355,8 +355,30 @@
 
 <script setup>
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import LoginModal from '@/pages/store/auth/LoginModal.vue';
+
+const currentPath = ref(window.location.pathname);
+
+const logoSrc = computed(() => {
+  return isLightRoute.value
+    ? '/img/logo/logo_pakaras_white.png'
+    : '/img/logo/pakaras-logo2.png';
+});
+
+// Update on every Inertia navigation
+router.on('navigate', () => {
+  currentPath.value = window.location.pathname;
+});
+
+const isLightRoute = computed(() => {
+  return (
+    currentPath.value.includes('/shop') ||
+    currentPath.value.includes('/cart') ||
+    currentPath.value.includes('/account') ||
+    currentPath.value.includes('/checkout')
+  );
+});
 
 const page = usePage();
 
@@ -486,7 +508,7 @@ const focusSearchField = () => {
 }
 
 .grocery-color {
-  --grocery-theme: 60, 133, 153;
+  --grocery-theme: 255, 149, 5, 1;
   --grocery-content: 143, 143, 178;
   --grocery-title: 27, 27, 62;
   --grocery-border: 232, 232, 232;
@@ -522,9 +544,7 @@ const focusSearchField = () => {
   padding-right: 15px;
 }
 
-/* ============================================
-   HEADER - Tribu Pakaras Dark Theme
-   ============================================ */
+/* HEADER - */
 .dark-theme-header {
   background-color: rgba(26, 26, 26, 0.5);
   backdrop-filter: blur(8px);
@@ -547,7 +567,7 @@ const focusSearchField = () => {
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 15px 30px;
+  padding: 15px 0 15px 30px;    /* Remove right padding, keep left */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -746,13 +766,20 @@ const focusSearchField = () => {
   color: #fff;
   font-weight: 500;
   font-size: 14px;
-  padding: 10px 24px;
+  padding: 0 24px;
   border-radius: 0;
   text-decoration: none;
   text-transform: uppercase;
   border: none;
   margin-left: 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-top: -15px;
+  margin-bottom: -15px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  margin-right: 0;
 }
 
 .race-cta-btn:hover {
@@ -761,7 +788,7 @@ const focusSearchField = () => {
 }
 
 .text-white {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 /* Mobile Adjustments */
@@ -1409,5 +1436,60 @@ button:active,
   .footer-info p {
     justify-content: center;
   }
+}
+
+/* LIGHT THEME HEADER */
+.light-theme-header {
+  background-color: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.light-theme-header .nav-item,
+.light-theme-header .utility-link {
+  color: #1a1a1a !important;
+}
+
+.light-theme-header .nav-item:hover,
+.light-theme-header .utility-link:hover {
+  color: rgb(var(--grocery-theme)) !important;
+}
+
+.light-theme-header .nav-item i {
+  color: #1a1a1a;
+}
+
+.light-theme-header .mobile-menu-header .menu-btn {
+  color: #1a1a1a !important;
+}
+
+.light-theme-header .nav-item-dropdown .dropdown-menu-list {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme-header .nav-item-dropdown .dropdown-item {
+  color: #1a1a1a !important;
+}
+
+.light-theme-header .nav-item-dropdown .dropdown-item:hover {
+  background: rgba(var(--grocery-theme), 0.06) !important;
+  color: rgb(var(--grocery-theme)) !important;
+}
+
+.light-theme-header .nav-item-dropdown .dropdown-menu-list::before {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Logo invert for light header if needed */
+.light-theme-header .brand-logo-raw {
+  transform: scale(1.7);
 }
 </style>

@@ -60,7 +60,7 @@
             <span class="arrow-icon">&#10095;</span>
           </button>
           <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
-          <div class="carousel-item active slide-2-bg">
+          <div class="carousel-item active slide-2-bg" >
             <div class="slide-layout">
               <div class="slide-content-left px-5">
                 <h1 class="slide-title text-white">HUGIS COLLECTION V2</h1>
