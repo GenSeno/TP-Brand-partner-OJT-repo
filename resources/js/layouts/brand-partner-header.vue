@@ -6,7 +6,7 @@
                     :href="route('brand-partner.dashboard')"
                     class="logo logo-normal"
                 >
-                    <img src="/img/logo/logo-pdf.png" alt="Logo" />
+                    <img src="/img/logo/logo_pakaras_white.png" alt="Logo" />
                 </Link>
                 <Link
                     :href="route('brand-partner.dashboard')"

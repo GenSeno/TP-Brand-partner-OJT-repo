@@ -38,7 +38,7 @@ class BrandPartnerStoreController extends Controller
 
         $productsQuery = $brandPartner->products()
             ->published()
-            ->with(['category', 'event', 'images']);
+            ->with(['category', 'event', 'images', 'collection']);
 
         if ($request->filled('category')) {
             $productsQuery->where('category_id', $request->category);
@@ -61,7 +61,7 @@ class BrandPartnerStoreController extends Controller
         $featuredProducts = $brandPartner->products()
             ->published()
             ->featured()
-            ->with(['category', 'event', 'images'])
+            ->with(['category', 'event', 'images', 'collection'])
             ->latest()
             ->limit(4)
             ->get();

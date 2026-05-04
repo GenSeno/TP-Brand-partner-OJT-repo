@@ -52,7 +52,7 @@
             display: inline-block;
             line-height: 0;
             img{
-                width: 130px;
+                width: 200px;
             }
             @include mixins.respond-below(custom991) {
                 text-align: center;

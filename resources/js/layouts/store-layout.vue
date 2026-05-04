@@ -376,7 +376,8 @@ const isLightRoute = computed(() => {
     currentPath.value.includes('/shop') ||
     currentPath.value.includes('/cart') ||
     currentPath.value.includes('/account') ||
-    currentPath.value.includes('/checkout')
+    currentPath.value.includes('/checkout') ||
+    currentPath.value.includes('/product')
   );
 });
 

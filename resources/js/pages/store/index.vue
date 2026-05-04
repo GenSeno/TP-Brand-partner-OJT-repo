@@ -275,6 +275,23 @@
                 </Link>
 
                 <p
+                  class="product-collection text-muted text-uppercase mb-2"
+                  style="
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  <Link
+                    v-if="product.collection"
+                    :href="route('store.brand-partner.shop', { collection: product.collection.id })"
+                    class="text-muted text-decoration-none"
+                  >
+                    {{ product.collection.label }}
+                  </Link>
+                </p>
+
+                <p
                   class="product-subtitle text-muted text-uppercase mb-2"
                   style="
                     font-size: 10px;
@@ -312,7 +329,7 @@
                       product.compare_price > product.price
                     "
                     class="old-price text-muted text-decoration-line-through"
-                    style="font-size: 11px"
+                    style="font-size: 11px; margin-left: 4px;"
                   >
                     {{ formatCurrency(product.compare_price) }}
                   </span>
@@ -569,11 +586,14 @@
               <!-- Info -->
               <div class="featured-product-info">
                 <p class="featured-product-collection">
-                  {{
-                    product.short_description
-                      ? truncate(product.short_description, 30)
-                      : '&nbsp;'
-                  }}
+                  <Link
+                    v-if="product.collection"
+                    :href="route('store.brand-partner.shop', { collection: product.collection.id })"
+                    class="text-muted text-decoration-none text-uppercase"
+                    style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px;"
+                  >
+                    {{ product.collection.label }}
+                  </Link>
                 </p>
 
                 <Link
@@ -595,9 +615,19 @@
                 </div>
 
                 <!-- Price -->
-                <div class="featured-product-price-row">
+                <div class="featured-product-price-row d-flex align-items-center gap-2">
                   <span class="featured-product-price">
                     {{ formatCurrency(product.price) }}
+                  </span>
+                  <span
+                    v-if="
+                      product.compare_price &&
+                      product.compare_price > product.price
+                    "
+                    class="featured-product-old-price text-muted text-decoration-line-through"
+                    style="font-size: 11px; margin-left: 4px;"
+                  >
+                    {{ formatCurrency(product.compare_price) }}
                   </span>
                 </div>
 
@@ -879,21 +909,14 @@
     <section class="runwild-section">
       <h2 class="runwild-title">Run Wild. Live Pakaras.</h2>
       <div class="runwild-grid">
-        <div class="runwild-item">
-          <div class="runwild-placeholder"></div>
-          <img src="/img/img-section1.png" alt="Section 1" />
-        </div>
-        <div class="runwild-item">
-          <div class="runwild-placeholder"></div>
-          <img src="/img/img-section2.png" alt="Section 2" />
-        </div>
-        <div class="runwild-item">
-          <div class="runwild-placeholder"></div>
-          <img src="/img/img-section3.png" alt="Section 3" />
-        </div>
-        <div class="runwild-item">
-          <div class="runwild-placeholder"></div>
-          <img src="/img/img-collection1.png" alt="Section 4" />
+        <div class="runwild-item" v-for="n in 3" :key="n">
+          <div class="runwild-card">
+            <img src="/img/top_paper.png" alt="" class="tear-img tear-img--top" />
+            <div class="photo-wrap">
+              <img :src="`/img/img-section${n}.png`" :alt="`Section ${n}`" class="photo" />
+            </div>
+            <img src="/img/buttom_paper.png" alt="" class="tear-img tear-img--bottom" />
+          </div>
         </div>
       </div>
     </section>
@@ -3729,14 +3752,13 @@ const toggleWishlist = (productId) => {
   left: 50%;
   margin-left: -50vw;
   background: #fff;
-  padding: 100px 60px 80px;
-  z-index: 1;
+  padding: 80px 60px 80px;
 }
 
 .runwild-title {
   font-size: 50px;
   font-weight: 900;
-  color: #535353;
+  color: #1a1a1a;
   text-align: center;
   margin: 0 0 48px;
   font-family: 'Public Sans', sans-serif;
@@ -3744,60 +3766,63 @@ const toggleWishlist = (productId) => {
 
 .runwild-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  max-width: 1400px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
-.runwild-item {
+.runwild-card {
+  display: flex;
+  flex-direction: column;
+  background: #e8450a;
   position: relative;
-  overflow: hidden;
-  aspect-ratio: 1 / 1;
-  background: #ddd; /* Fallback color while image loads */
 }
 
-.runwild-item img {
+.photo-wrap {
+  position: relative;
+  flex: 1;
+  line-height: 0;
+}
+
+.photo-wrap .photo {
   width: 100%;
-  height: 100%;
+  height: 320px;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
 }
 
-.runwild-item:hover img {
-  transform: scale(1.05);
+
+/* Torn paper images */
+.tear-img {
+  display: block;
+  width: 100%;
+  object-fit: fill;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 6px white) drop-shadow(0 0 3px white);
 }
 
+.tear-img--top {
+  margin-bottom: -28px;
+}
+
+.tear-img--bottom {
+  margin-top: -28px;
+}
 /* Responsive */
 @media (max-width: 991px) {
-  .runwild-section {
-    padding: 50px 40px 60px;
-  }
-
-  .runwild-title {
-    font-size: 32px;
-  }
-
-  .runwild-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .runwild-section { padding: 50px 40px 60px; }
+  .runwild-title { font-size: 32px; }
+  .runwild-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 575px) {
-  .runwild-section {
-    padding: 40px 16px 50px;
-  }
-
-  .runwild-title {
-    font-size: 26px;
-    margin-bottom: 28px;
-  }
-
-  .runwild-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
+  .runwild-section { padding: 40px 16px 50px; }
+  .runwild-title { font-size: 26px; margin-bottom: 28px; }
+  .runwild-grid { grid-template-columns: 1fr; gap: 16px; }
+  .tear-img--top { margin-bottom: -20px; }
+  .tear-img--bottom { margin-top: -20px; }
 }
 
 /* ===== Cart Bottom Bar - product-cart-box ===== */

@@ -6,16 +6,16 @@
                 :href="route('brand-partner.dashboard')"
                 class="logo logo-normal"
             >
-                <img src="/img/logo/logo-pdf.png" alt="Logo" />
+                <img src="/img/logo/logo_pakaras_white.png" alt="Logo" />
             </Link>
             <Link
                 :href="route('brand-partner.dashboard')"
                 class="logo logo-white"
             >
-                <img src="/img/logo/tpinklab_logo_white_full.svg" alt="Logo" />
+                <img src="/img/logo/logo_pakaras_white.png" alt="Logo" />
             </Link>
             <Link :href="route('brand-partner.dashboard')" class="logo-small">
-                <img src="/img/logo/logo-tp.png" alt="Logo" />
+                <img src="/img/logo/logo_pakaras_white_sun.png" alt="Logo" />
             </Link>
             <a
                 id="toggle_btn"
