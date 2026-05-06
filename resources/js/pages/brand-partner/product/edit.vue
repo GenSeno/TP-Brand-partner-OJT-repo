@@ -136,29 +136,25 @@
 
                         <div class="mb-3">
                             <label class="form-label">Colors</label>
-                            <input
+                            <vue-select
+                                :options="colorSelectOptions"
                                 v-model="form.data.colors"
-                                type="text"
-                                class="form-control"
-                                placeholder="e.g. Red, Blue, Green"
+                                :isMulti="true"
+                                multiple
+                                placeholder="Select colors"
                             />
-                            <small class="text-muted"
-                                >Separate with commas.</small
-                            >
                             <input-error :message="form.errors.colors" />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Sizes</label>
-                            <input
+                            <vue-select
+                                :options="sizeSelectOptions"
                                 v-model="form.data.sizes"
-                                type="text"
-                                class="form-control"
-                                placeholder="e.g. S, M, L, XL"
+                                :isMulti="true"
+                                multiple
+                                placeholder="Select sizes"
                             />
-                            <small class="text-muted"
-                                >Separate with commas.</small
-                            >
                             <input-error :message="form.errors.sizes" />
                         </div>
                     </div>
@@ -391,8 +387,19 @@ const props = defineProps({
     product: Object,
     categories: Array,
     events: Array,
+    collections: Array,
+    colorOptions: Array,
+    sizeOptions: Array,
     statusOptions: Object,
 });
+
+const colorSelectOptions = computed(() =>
+    (props.colorOptions || []).map((c) => ({ label: c.label, value: c.label })),
+);
+
+const sizeSelectOptions = computed(() =>
+    (props.sizeOptions || []).map((c) => ({ label: c.label, value: c.label })),
+);
 
 const modalRef = useTemplateRef('modalRef');
 const imageInputRef = useTemplateRef('imageInputRef');
@@ -411,8 +418,8 @@ const form = useAxiosForm({
         ? props.product.compare_price / 100
         : '',
     sku: props.product.sku || '',
-    colors: props.product.colors || '',
-    sizes: props.product.sizes || '',
+    colors: props.product.colors ? props.product.colors.split(',').map(s => s.trim()) : [],
+    sizes: props.product.sizes ? props.product.sizes.split(',').map(s => s.trim()) : [],
     stock: props.product.stock,
     track_stock: props.product.track_stock,
     status: props.product.status,
@@ -479,7 +486,17 @@ const setPrimary = async (image) => {
 };
 
 const submitForm = () => {
-    form.put(route('brand-partner.products.update', props.product.id), {
+    form.transform((data) => {
+        const formatSelect = (arr) => {
+            if (!Array.isArray(arr)) return arr;
+            return arr.map(item => (item && typeof item === 'object') ? item.value : item).join(',');
+        };
+        return {
+            ...data,
+            colors: formatSelect(data.colors),
+            sizes: formatSelect(data.sizes),
+        };
+    }).put(route('brand-partner.products.update', props.product.id), {
         onSuccess: ({ data }) => {
             alert.showSuccess(data.message || 'Product updated successfully.');
             modalRef.value.close();

@@ -307,7 +307,7 @@
                   :disabled="!product.in_stock"
                   @click.prevent="addToCart(product)"
                 >
-                  ADD TO CART
+                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
                 </button>
               </div>
             </div>

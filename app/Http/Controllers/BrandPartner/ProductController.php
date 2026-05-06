@@ -130,12 +130,16 @@ class ProductController extends Controller
         $categories = $this->getCategoryValues();
         $events = $this->brandPartner()->events()->enabled()->get();
         $collections = $this->getCollectionValues();
+        $colors = $this->getColorValues();
+        $sizes = $this->getSizeValues();
 
         return Inertia::modal('product/edit', [
             'product' => $product,
             'categories' => $categories,
             'events' => $events,
             'collections' => $collections,
+            'colorOptions' => $colors,
+            'sizeOptions' => $sizes,
             'statusOptions' => BrandPartnerProductStatus::getOptions(),
         ])->baseRoute('brand-partner.products.index');
     }
@@ -225,6 +229,30 @@ class ProductController extends Controller
     {
         $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
             ->where('name', 'Category')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
+    }
+
+    /**
+     * Get the color option values for the current brand partner.
+     */
+    protected function getColorValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Color')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
+    }
+
+    /**
+     * Get the size option values for the current brand partner.
+     */
+    protected function getSizeValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Size')
             ->first();
 
         return $option ? $option->values()->orderBy('position')->get() : collect();

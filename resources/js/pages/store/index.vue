@@ -340,7 +340,7 @@
                   @click.prevent="addToCart(product)"
                   :disabled="!product.in_stock"
                 >
-                  ADD TO CART
+                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
                 </button>
               </div>
             </div>
@@ -637,7 +637,7 @@
                   @click.prevent="addToCart(product)"
                   :disabled="!product.in_stock"
                 >
-                  ADD TO CART
+                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
                 </button>
               </div>
             </div>

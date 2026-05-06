@@ -116,6 +116,7 @@
                             @click="showConfirmModal"
                         >
                             <span v-if="isAddingToCart">ADDING...</span>
+                            <span v-else-if="!currentInStock">OUT OF STOCK</span>
                             <span v-else>ADD TO CART</span>
                         </button>
                         <button
@@ -225,7 +226,9 @@
                                 </div>
                             </div>
                         </Link>
-                        <button class="card-add-btn">ADD TO CART</button>
+                        <button class="card-add-btn" :disabled="!related.in_stock">
+                            {{ related.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
+                        </button>
                     </div>
                 </div>
             </section>
@@ -244,6 +247,7 @@
                 @click="showConfirmModal"
             >
                 <span v-if="isAddingToCart">Adding...</span>
+                <span v-else-if="!currentInStock">OUT OF STOCK</span>
                 <span v-else>ADD TO CART | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
