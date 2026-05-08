@@ -98,7 +98,7 @@
               </button>
             </p>
 
-            <div @click="guest" class="auth-do-later">
+            <div @click="guestLogin" class="auth-do-later">
               <a class="auth-do-later-link">Guest Login</a>
             </div>
           </form>
@@ -289,7 +289,7 @@ const registerForm = useForm({
 });
 
 //Function to login as guest for testing purposes
-const guest = () => {
+const guestLogin = () => {
   loginForm.email = 'guest@example.com';
   loginForm.password = 'guest123';
 
