@@ -77,6 +77,7 @@ class BrandPartnerOrder extends Model
 
     protected $appends = [
         'formatted_total',
+        'shipping_address',
     ];
 
     // Relationships
@@ -104,7 +105,21 @@ class BrandPartnerOrder extends Model
     protected function formattedTotal(): Attribute
     {
         return Attribute::make(
-            get: fn() => number_format($this->total / 100, 2),
+            get: fn () => number_format($this->total / 100, 2),
+        );
+    }
+
+    protected function shippingAddress(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect([
+                $this->address_line1,
+                $this->address_line2,
+                $this->barangay,
+                $this->city,
+                $this->province,
+                $this->postcode,
+            ])->filter()->implode(', '),
         );
     }
 
@@ -112,6 +127,7 @@ class BrandPartnerOrder extends Model
     public function scopeStatus(Builder $query, BrandPartnerOrderStatus|string $status): Builder
     {
         $status = $status instanceof BrandPartnerOrderStatus ? $status : BrandPartnerOrderStatus::from($status);
+
         return $query->where('status', $status);
     }
 
@@ -132,14 +148,14 @@ class BrandPartnerOrder extends Model
 
     public function scopeSearch(Builder $query, $value): Builder
     {
-        if (!trim($value)) {
+        if (! trim($value)) {
             return $query;
         }
 
         return $query->where(function ($q) use ($value) {
             $q->where('reference', 'like', "%{$value}%")
-              ->orWhere('customer_name', 'like', "%{$value}%")
-              ->orWhere('customer_email', 'like', "%{$value}%");
+                ->orWhere('customer_name', 'like', "%{$value}%")
+                ->orWhere('customer_email', 'like', "%{$value}%");
         });
     }
 
@@ -167,18 +183,21 @@ class BrandPartnerOrder extends Model
     public function confirm(): bool
     {
         $this->status = BrandPartnerOrderStatus::CONFIRMED;
+
         return $this->save();
     }
 
     public function complete(): bool
     {
         $this->status = BrandPartnerOrderStatus::COMPLETED;
+
         return $this->save();
     }
 
     public function cancel(): bool
     {
         $this->status = BrandPartnerOrderStatus::CANCELLED;
+
         return $this->save();
     }
 

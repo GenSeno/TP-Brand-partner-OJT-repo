@@ -133,11 +133,7 @@
                         <div class="totals">
                             <div class="totals-row">
                                 <span>Subtotal</span>
-                                <span>{{ formatCurrency(order.subtotal) }}</span>
-                            </div>
-                            <div class="totals-row discount" v-if="order.discount > 0">
-                                <span>Discount</span>
-                                <span>−{{ formatCurrency(order.discount) }}</span>
+                                <span>{{ formatCurrency(order.sub_total) }}</span>
                             </div>
                             <div class="totals-divider"></div>
                             <div class="totals-row grand">

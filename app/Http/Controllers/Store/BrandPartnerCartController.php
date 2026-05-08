@@ -14,7 +14,6 @@ use Inertia\Inertia;
 
 class BrandPartnerCartController extends Controller
 {
-
     protected function getCartKey(string $brandPartnerSlug): string
     {
         return "bp_cart_{$brandPartnerSlug}";
@@ -34,6 +33,7 @@ class BrandPartnerCartController extends Controller
     {
         $c = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($color ?? '')));
         $s = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($size ?? '')));
+
         return "{$productId}_{$c}_{$s}";
     }
 
@@ -57,11 +57,11 @@ class BrandPartnerCartController extends Controller
                 $existing->increment('quantity', $item['quantity']);
             } else {
                 CartItem::create([
-                    'user_id'                  => $userId,
+                    'user_id' => $userId,
                     'brand_partner_product_id' => $item['product_id'],
-                    'color'                    => $item['color'],
-                    'size'                     => $item['size'],
-                    'quantity'                 => $item['quantity'],
+                    'color' => $item['color'],
+                    'size' => $item['size'],
+                    'quantity' => $item['quantity'],
                 ]);
             }
         }
@@ -81,10 +81,10 @@ class BrandPartnerCartController extends Controller
         $total = 0;
 
         if (Auth::check()) {
-            $dbItems = CartItem::with(['product.images'])
+            $dbItems = CartItem::with(['product.images', 'product.collection'])
                 ->whereHas('product', function ($q) use ($brandPartner) {
                     $q->where('brand_partner_id', $brandPartner->id)
-                      ->where('status', BrandPartnerProductStatus::PUBLISHED);
+                        ->where('status', BrandPartnerProductStatus::PUBLISHED);
                 })
                 ->where('user_id', Auth::id())
                 ->get();
@@ -93,37 +93,39 @@ class BrandPartnerCartController extends Controller
                 $itemTotal = $item->product->price * $item->quantity;
                 $total += $itemTotal;
                 $cartItems[] = [
-                    'id'       => $item->id,
-                    'product'  => $item->product,
-                    'color'    => $item->color,
-                    'size'     => $item->size,
+                    'id' => $item->id,
+                    'product' => $item->product,
+                    'color' => $item->color,
+                    'size' => $item->size,
                     'quantity' => $item->quantity,
-                    'price'    => $item->product->price,
-                    'total'    => $itemTotal,
+                    'price' => $item->product->price,
+                    'total' => $itemTotal,
                 ];
             }
         } else {
             $sessionCart = $this->getSessionCart($request, $brandPartnerSlug);
 
             foreach ($sessionCart as $itemKey => $item) {
-                $product = BrandPartnerProduct::with('images')
+                $product = BrandPartnerProduct::with(['images', 'collection'])
                     ->where('id', $item['product_id'])
                     ->where('brand_partner_id', $brandPartner->id)
                     ->where('status', BrandPartnerProductStatus::PUBLISHED)
                     ->first();
 
-                if (!$product) continue;
+                if (! $product) {
+                    continue;
+                }
 
                 $itemTotal = $product->price * $item['quantity'];
                 $total += $itemTotal;
                 $cartItems[] = [
-                    'id'       => $itemKey,
-                    'product'  => $product,
-                    'color'    => $item['color'] ?? null,
-                    'size'     => $item['size'] ?? null,
+                    'id' => $itemKey,
+                    'product' => $product,
+                    'color' => $item['color'] ?? null,
+                    'size' => $item['size'] ?? null,
                     'quantity' => $item['quantity'],
-                    'price'    => $product->price,
-                    'total'    => $itemTotal,
+                    'price' => $product->price,
+                    'total' => $itemTotal,
                 ];
             }
         }
@@ -132,11 +134,11 @@ class BrandPartnerCartController extends Controller
 
         return Inertia::render('store/cart', [
             'brandPartner' => $brandPartner,
-            'cart'         => [
-                'items'    => $cartItems,
+            'cart' => [
+                'items' => $cartItems,
                 'subtotal' => $total,
                 'discount' => 0,
-                'total'    => $total,
+                'total' => $total,
             ],
             'cartCount' => $cartCount,
         ]);
@@ -146,9 +148,9 @@ class BrandPartnerCartController extends Controller
     {
         $request->validate([
             'product_id' => ['required', 'integer'],
-            'quantity'   => ['required', 'integer', 'min:1'],
-            'color'      => ['nullable', 'string', 'max:100'],
-            'size'       => ['nullable', 'string', 'max:50'],
+            'quantity' => ['required', 'integer', 'min:1'],
+            'color' => ['nullable', 'string', 'max:100'],
+            'size' => ['nullable', 'string', 'max:50'],
         ]);
 
         $brandPartnerSlug = config('store.brand_partner_slug');
@@ -163,7 +165,7 @@ class BrandPartnerCartController extends Controller
             ->firstOrFail();
 
         $color = $request->color ?: null;
-        $size  = $request->size ?: null;
+        $size = $request->size ?: null;
 
         if (Auth::check()) {
             $cartItem = CartItem::where('user_id', Auth::id())
@@ -180,10 +182,10 @@ class BrandPartnerCartController extends Controller
 
             CartItem::updateOrCreate(
                 [
-                    'user_id'                  => Auth::id(),
+                    'user_id' => Auth::id(),
                     'brand_partner_product_id' => $product->id,
-                    'color'                    => $color,
-                    'size'                     => $size,
+                    'color' => $color,
+                    'size' => $size,
                 ],
                 ['quantity' => $newQty]
             );
@@ -200,9 +202,9 @@ class BrandPartnerCartController extends Controller
 
             $cart[$itemKey] = [
                 'product_id' => $product->id,
-                'color'      => $color,
-                'size'       => $size,
-                'quantity'   => $newQty,
+                'color' => $color,
+                'size' => $size,
+                'quantity' => $newQty,
             ];
 
             $this->saveSessionCart($request, $brandPartnerSlug, $cart);
@@ -228,7 +230,7 @@ class BrandPartnerCartController extends Controller
         } else {
             $cart = $this->getSessionCart($request, $brandPartnerSlug);
 
-            if (!isset($cart[$itemId])) {
+            if (! isset($cart[$itemId])) {
                 return back()->with('error', __('Cart item not found.'));
             }
 

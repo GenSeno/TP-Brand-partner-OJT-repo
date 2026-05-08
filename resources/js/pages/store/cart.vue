@@ -7,7 +7,7 @@
       <Breadcrumb :items="breadcrumbItems" />
 
       <!-- Cart with items -->
-      <div v-if="cart.items.length > 0">
+      <div v-if="localCart.items.length > 0">
         <!-- Table Header -->
         <div class="cart-table-header">
           <span class="col-item">Item</span>
@@ -19,7 +19,7 @@
 
         <!-- Cart Rows -->
         <div class="cart-table-body">
-          <div class="cart-row" v-for="item in cart.items" :key="item.id">
+          <div class="cart-row" v-for="item in localCart.items" :key="item.id">
             <!-- Item -->
             <div class="col-item cart-item-info">
               <Link
@@ -33,7 +33,6 @@
                 />
               </Link>
               <div class="cart-item-details">
-                <span class="cart-item-badge">PRE-ORDER</span>
                 <Link
                   :href="
                     route('store.brand-partner.product', item.product.slug)
@@ -42,6 +41,10 @@
                 >
                   {{ item.product.name }}
                 </Link>
+                <span v-if="item.product.collection" class="cart-item-collection">
+                  {{ item.product.collection.label }}
+                </span>
+                <span class="cart-item-badge">PRE-ORDER</span>
                 <div class="cart-item-meta">
                   <span v-if="item.product.short_description"
                     >Garment: {{ item.product.short_description }}</span
@@ -128,13 +131,13 @@
             <div class="summary-row">
               <span class="summary-label">Subtotal</span>
               <span class="summary-value">{{
-                formatCurrency(cart.subtotal)
+                formatCurrency(localCart.subtotal)
               }}</span>
             </div>
-            <div class="summary-row" v-if="cart.discount > 0">
+            <div class="summary-row" v-if="localCart.discount > 0">
               <span class="summary-label">Savings</span>
               <span class="summary-value savings-val"
-                >-{{ formatCurrency(cart.discount) }}</span
+                >-{{ formatCurrency(localCart.discount) }}</span
               >
             </div>
             <div class="delivery-row summary-row">
@@ -144,7 +147,7 @@
             <div class="summary-row grand-total-row">
               <span class="grand-total-label">Grand Total</span>
               <span class="grand-total-value">{{
-                formatCurrency(cart.total)
+                formatCurrency(localCart.total)
               }}</span>
             </div>
             <Link
@@ -178,6 +181,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
@@ -194,6 +198,8 @@ const props = defineProps({
   },
 });
 
+const localCart = ref({ ...props.cart, items: [...props.cart.items] });
+
 const breadcrumbItems = [
   { label: 'My Account', link: '/account' },
   { label: 'Cart', link: '#' },
@@ -208,14 +214,27 @@ const formatCurrency = (amount) => {
 
 const updateQuantity = (itemId, quantity) => {
   if (quantity < 1) return;
-  router.patch(
-    route('store.brand-partner.cart.update', itemId),
-    { quantity: parseInt(quantity) },
-    { preserveScroll: true },
-  );
+  const qty = parseInt(quantity);
+
+  const item = localCart.value.items.find(i => i.id === itemId);
+  if (!item) return;
+
+  const diff = qty - item.quantity;
+  item.quantity = qty;
+  item.total = item.price * qty;
+  recalcTotals();
+
+  fetch(route('store.brand-partner.cart.update', itemId), {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    body: JSON.stringify({ quantity: qty }),
+  });
 };
 
 const removeItem = (itemId) => {
+  localCart.value.items = localCart.value.items.filter(i => i.id !== itemId);
+  recalcTotals();
+
   router.delete(route('store.brand-partner.cart.remove', itemId), {
     preserveScroll: true,
   });
@@ -228,6 +247,12 @@ const clearCart = () => {
     });
   }
 };
+
+function recalcTotals() {
+  const subtotal = localCart.value.items.reduce((sum, i) => sum + i.total, 0);
+  localCart.value.subtotal = subtotal;
+  localCart.value.total = subtotal;
+}
 </script>
 
 <style scoped>
@@ -401,6 +426,15 @@ const clearCart = () => {
 
 .cart-item-name:hover {
   color: #ff9505;
+}
+
+.cart-item-collection {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgb(var(--grocery-theme));
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
 }
 
 .cart-item-meta {

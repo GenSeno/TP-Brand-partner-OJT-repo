@@ -6,6 +6,7 @@
         @click.self="closeModal"
     >
         <div class="account-modal" :class="{ 'register-mode': showRegister }">
+            <div class="modal-loading-bar" v-if="loginForm.processing || registerForm.processing"></div>
             <button type="button" class="modal-close" @click="closeModal">
                 <i class="ri-close-line"></i>
             </button>
@@ -23,15 +24,22 @@
                     </div>
 
                     <form class="account-form" @submit.prevent="submitLogin">
+                        <div class="auth-error-banner" v-if="loginForm.hasErrors">
+                            <i class="ri-alert-line"></i>
+                            <span>{{ loginForm.errors.email || 'Please fix the errors below.' }}</span>
+                        </div>
+
                         <div class="auth-field">
                             <label class="auth-label">EMAIL ADDRESS</label>
                             <input
                                 type="email"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': loginForm.errors.email }"
                                 placeholder="Email Address"
                                 v-model="loginForm.email"
                                 required
                             />
+                            <span class="auth-field-error" v-if="loginForm.errors.email">{{ loginForm.errors.email }}</span>
                         </div>
 
                         <div class="auth-field">
@@ -39,10 +47,12 @@
                             <input
                                 type="password"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': loginForm.errors.password }"
                                 placeholder="Password"
                                 v-model="loginForm.password"
                                 required
                             />
+                            <span class="auth-field-error" v-if="loginForm.errors.password">{{ loginForm.errors.password }}</span>
                         </div>
 
                         <div class="auth-remember-row">
@@ -114,15 +124,22 @@
                 <!-- Right: Form Fields -->
                 <div class="account-card-right register-right">
                     <form class="account-form" @submit.prevent="submitRegister">
+                        <div class="auth-error-banner" v-if="registerForm.hasErrors">
+                            <i class="ri-alert-line"></i>
+                            <span>Please correct the errors below.</span>
+                        </div>
+
                         <div class="auth-field">
                             <label class="auth-label">FULL NAME</label>
                             <input
                                 type="text"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': registerForm.errors.name }"
                                 placeholder="Enter Full name"
                                 v-model="registerForm.name"
                                 required
                             />
+                            <span class="auth-field-error" v-if="registerForm.errors.name">{{ registerForm.errors.name }}</span>
                         </div>
 
                         <div class="auth-field">
@@ -130,10 +147,12 @@
                             <input
                                 type="email"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': registerForm.errors.email }"
                                 placeholder="Enter Email Address"
                                 v-model="registerForm.email"
                                 required
                             />
+                            <span class="auth-field-error" v-if="registerForm.errors.email">{{ registerForm.errors.email }}</span>
                         </div>
 
                         <div class="auth-field">
@@ -141,10 +160,12 @@
                             <input
                                 type="password"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': registerForm.errors.password }"
                                 placeholder="Enter Password"
                                 v-model="registerForm.password"
                                 required
                             />
+                            <span class="auth-field-error" v-if="registerForm.errors.password">{{ registerForm.errors.password }}</span>
                         </div>
 
                         <div class="auth-field">
@@ -152,10 +173,12 @@
                             <input
                                 type="password"
                                 class="auth-input"
+                                :class="{ 'auth-input--error': registerForm.errors.password_confirmation }"
                                 placeholder="Confirm Password"
                                 v-model="registerForm.password_confirmation"
                                 required
                             />
+                            <span class="auth-field-error" v-if="registerForm.errors.password_confirmation">{{ registerForm.errors.password_confirmation }}</span>
                         </div>
 
                         <label class="auth-terms">
@@ -308,6 +331,25 @@ onUnmounted(() => {
     grid-template-columns: 1fr 1fr;
 }
 
+.modal-loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ff9505;
+    z-index: 20;
+    animation: modalLoading 1.2s ease-in-out infinite;
+    transform-origin: left;
+    border-radius: 28px 28px 0 0;
+}
+
+@keyframes modalLoading {
+    0%   { transform: scaleX(0); opacity: 0.8; }
+    50%  { transform: scaleX(0.6); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0; }
+}
+
 .modal-close {
     position: absolute;
     top: 18px;
@@ -374,6 +416,42 @@ onUnmounted(() => {
 .auth-field {
     display: grid;
     gap: 7px;
+}
+
+.auth-field-error {
+    font-size: 11px;
+    color: #e74c3c;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.auth-input--error {
+    border-color: #e74c3c;
+    background: #fef5f5;
+}
+
+.auth-input--error:focus {
+    border-color: #e74c3c;
+    background: #fef5f5;
+}
+
+.auth-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fef5f5;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #c0392b;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.auth-error-banner i {
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
 .auth-label {
