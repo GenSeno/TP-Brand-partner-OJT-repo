@@ -12,6 +12,23 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
+    public function guestLogin()
+{
+    $user = User::firstOrCreate(
+        ['email' => 'guest@example.com'],
+        [
+            'name' => 'Guest User',
+            'password' => bcrypt('guest123'),
+        ]
+    );
+
+    Auth::login($user);
+
+    request()->session()->regenerate();
+
+    return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
+}
+
     public function login(Request $request)
     {
         $request->validate([

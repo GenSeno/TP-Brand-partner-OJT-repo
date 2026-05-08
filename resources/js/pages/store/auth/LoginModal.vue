@@ -99,7 +99,7 @@
             </p>
 
             <div @click="guestLogin" class="auth-do-later">
-              <a class="auth-do-later-link">Guest Login</a>
+              <a class="auth-do-later-link">Login as Guest</a>
             </div>
           </form>
         </div>
@@ -289,11 +289,10 @@ const registerForm = useForm({
 });
 
 //Function to login as guest for testing purposes
-const guestLogin = () => {
-  loginForm.email = 'guest@example.com';
-  loginForm.password = 'guest123';
+const guestLogin = async () => {
+  await axios.post('/guest-login');
 
-  submitLogin();
+  window.location.href = '/';
 };
 
 // Sync with v-model

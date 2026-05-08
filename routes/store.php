@@ -139,4 +139,7 @@ Route::group([
     Route::delete('/account/addresses/{address}', [UserAddressController::class, 'destroy'])
         ->name('brand-partner.addresses.destroy')
         ->middleware('auth');
+
+    //Testing Purposes
+    Route::post('/guest-login', [AuthController::class, 'guestLogin']);
 });
