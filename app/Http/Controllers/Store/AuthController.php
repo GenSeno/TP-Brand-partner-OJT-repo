@@ -89,7 +89,7 @@ class AuthController extends Controller
             'orders' => $orders,
             'countries' => $countries,
             'defaultCountryId' => $defaultCountryId,
-            'wishlistItems' => Wishlist::with('product.images')
+            'wishlistItems' => Wishlist::with(['product.images', 'product.collection', 'product.category'])
                 ->where('user_id', Auth::id())
                 ->get()
                 ->map(fn ($w) => [

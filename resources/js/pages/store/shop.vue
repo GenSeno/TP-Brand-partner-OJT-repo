@@ -478,7 +478,7 @@
 
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 import { emitter } from '@/composables/eventBus';
@@ -559,7 +559,11 @@ const selectedColor = ref(null);
 const selectedSize = ref(null);
 const isAddingToCart = ref(false);
 let cartModal = null;
-const priceMax = ref(5000);
+const priceMax = ref(props.filter.price_max || 5000);
+
+watch(priceMax, () => {
+  applyFilters();
+});
 
 const toggleColor = (val) => {
   const idx = selectedColors.value.indexOf(val);
@@ -630,6 +634,10 @@ const applyFilters = () => {
 
   if (selectedFeatured.value) {
     params.featured = 1;
+  }
+
+  if (priceMax.value < 5000) {
+    params.price_max = priceMax.value;
   }
 
   router.get(route('store.brand-partner.shop'), params, {

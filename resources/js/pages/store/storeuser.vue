@@ -50,19 +50,15 @@
                                 >My Addresses</a
                             >
                         </li>
-                        <li>
-                            <Link
-                                :href="
-                                    route(
-                                        'store.brand-partner.cart',
-                                        $page.props.brandPartner?.slug,
-                                    )
+                        <li :class="{ active: activeTab === 'wishlist' }">
+                            <a
+                                href="#"
+                                @click.prevent="
+                                    activeTab = 'wishlist';
                                 "
+                                >My Wishlist</a
                             >
-                                My Cart
-                            </Link>
                         </li>
-                        <li><a href="#">My Wishlist</a></li>
                         <li>
                             <Link
                                 :href="route('store.brand-partner.logout')"
@@ -103,6 +99,16 @@
                     <template v-else-if="activeTab === 'addresses'">
                         <AddressesTab :user="user" :countries="countries" :default-country-id="defaultCountryId" />
                     </template>
+
+                    <!-- ============================================== -->
+                    <!-- WISHLIST TAB                                   -->
+                    <!-- ============================================== -->
+                    <template v-else-if="activeTab === 'wishlist'">
+                        <Wishlist
+                            :brandPartner="$page.props.brandPartner"
+                            :items="wishlistItems || []"
+                        />
+                    </template>
                 </div>
             </div>
         </div>
@@ -110,11 +116,14 @@
 </template>
 
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import ProfileTab from './useraccount/ProfileTab.vue';
 import OrdersTab from './useraccount/OrdersTab.vue';
 import AddressesTab from './useraccount/AddressesTab.vue';
+import Wishlist from './useraccount/wishlist.vue';
+
+const page = usePage();
 
 const props = defineProps({
     user: Object,
@@ -124,9 +133,13 @@ const props = defineProps({
     },
     countries: Array,
     defaultCountryId: Number,
+    wishlistItems: {
+        type: Array,
+        default: () => [],
+    },
 });
 
-const activeTab = ref('profile');
+const activeTab = ref(page.props.tab || 'profile');
 
 function handleUpdateDetails(data) {
     router.patch(route('store.brand-partner.account.update'), {

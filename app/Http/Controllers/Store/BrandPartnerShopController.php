@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
 use App\Models\BrandPartnerProductOption;
-use App\Models\BrandPartnerProductOptionValue;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,36 +111,30 @@ class BrandPartnerShopController extends Controller
             $productsQuery->search($request->search);
         }
 
+        // Filter by price range
+        if ($request->filled('price_max')) {
+            $productsQuery->where('price', '<=', $request->price_max * 100);
+        }
+
         $products = $productsQuery->latest()->paginate(12)->withQueryString();
 
-        $allPublishedProducts = $brandPartner->products()
-            ->published()
-            ->get(['colors', 'sizes']);
+        $colorOption = BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
+            ->where('name', 'Color')
+            ->first();
 
-        $availableColors = $allPublishedProducts
-            ->flatMap(fn ($product) => explode(',', $product->colors ?? ''))
-            ->map(fn ($color) => trim($color))
-            ->filter()
-            ->unique()
-            ->values();
+        $availableColors = $colorOption ? $colorOption->values()->orderBy('position')->pluck('value') : collect();
 
-        $availableSizes = $allPublishedProducts
-            ->flatMap(fn ($product) => explode(',', $product->sizes ?? ''))
-            ->map(fn ($size) => trim($size))
-            ->filter()
-            ->unique()
-            ->values();
+        $sizeOption = BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
+            ->where('name', 'Size')
+            ->first();
 
-        $collectionIds = $brandPartner->products()
-            ->published()
-            ->whereNotNull('collection_id')
-            ->pluck('collection_id')
-            ->unique()
-            ->filter()
-            ->values();
+        $availableSizes = $sizeOption ? $sizeOption->values()->orderBy('position')->pluck('value') : collect();
 
-        $collections = BrandPartnerProductOptionValue::whereIn('id', $collectionIds)
-            ->get();
+        $collectionOption = BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
+            ->where('name', 'Collection')
+            ->first();
+
+        $collections = $collectionOption ? $collectionOption->values()->orderBy('position')->get() : collect();
 
         return Inertia::render('store/shop', [
             'brandPartner' => $brandPartner,
@@ -151,7 +144,7 @@ class BrandPartnerShopController extends Controller
             'collections' => $collections,
             'colors' => $availableColors->all(),
             'sizes' => $availableSizes->all(),
-            'filter' => $request->only(['category', 'event', 'featured', 'search', 'collection', 'colors', 'sizes']),
+            'filter' => $request->only(['category', 'event', 'featured', 'search', 'collection', 'colors', 'sizes', 'price_max']),
             'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
             'wishlistedIds' => Auth::check()
                 ? Wishlist::where('user_id', Auth::id())

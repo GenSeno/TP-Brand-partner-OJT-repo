@@ -3,62 +3,110 @@
 
   <div class="wishlist-section">
     <div class="wishlist-container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">My Wishlist</h1>
+        <p class="page-subtitle">Items you've saved for later</p>
+      </div>
+
       <!-- Items Grid -->
-      <div v-if="items.length > 0" class="wishlist-grid">
-        <div class="wishlist-card" v-for="item in items" :key="item.id">
-          <!-- Remove button -->
+      <div v-if="items.length > 0" class="products-grid">
+        <div
+          class="product-card"
+          v-for="item in items"
+          :key="item.id"
+          @mouseenter="hoverMap[item.product.id] = true"
+          @mouseleave="hoverMap[item.product.id] = false"
+        >
+          <!-- SALE Badge -->
+          <div class="product-card-badges">
+            <span
+              class="badge-sale"
+              v-if="item.product.compare_price && item.product.compare_price > item.product.price"
+            >Sale</span>
+          </div>
+
+          <!-- Remove (heart filled = wishlisted, click to remove) -->
           <button
-            class="remove-btn"
+            class="product-wishlist-btn"
             @click="removeItem(item.id)"
             title="Remove from wishlist"
           >
-            <i class="ri-close-line"></i>
+            <i class="ri-heart-fill"></i>
           </button>
 
-          <!-- Product Image -->
-          <Link
-            :href="route('store.brand-partner.product', item.product.slug)"
-            class="card-img-link"
-          >
-            <img
-              :src="item.product.image_url || '/img/tshirt-placeholder.svg'"
-              :alt="item.product.name"
-              class="card-img"
-            />
-          </Link>
+          <!-- Image -->
+          <div class="product-card-image">
+            <Link :href="route('store.brand-partner.product', item.product.slug)">
+              <img
+                :src="
+                  hoverMap[item.product.id] &&
+                  item.product.images &&
+                  item.product.images.length > 1
+                    ? item.product.images[1]?.url || item.product.image_url
+                    : item.product.image_url || '/img/tshirt-placeholder.svg'
+                "
+                :alt="item.product.name"
+              />
+            </Link>
+          </div>
 
-          <!-- Product Info -->
-          <div class="card-body">
+          <!-- Card Body -->
+          <div class="product-card-body">
             <Link
               :href="route('store.brand-partner.product', item.product.slug)"
-              class="card-name"
+              style="text-decoration: none; color: inherit"
             >
-              {{ item.product.name }}
+              <h3 class="product-card-name">
+                {{ item.product.name || 'Product Name Goes Here' }}
+              </h3>
             </Link>
 
-            <div class="card-price-row">
-              <span class="card-price">{{
-                formatCurrency(item.product.price)
-              }}</span>
+            <p class="product-card-collection">
+              {{
+                item.product.category?.name ||
+                item.product.collection?.label ||
+                (item.product.short_description
+                  ? item.product.short_description.substring(0, 30)
+                  : brandPartner.name)
+              }}
+            </p>
+
+            <!-- Stars -->
+            <div class="product-card-stars">
+              <i class="ri-star-fill star-filled" v-for="n in 5" :key="n"></i>
+            </div>
+
+            <!-- Price -->
+            <div class="product-card-price-row">
               <span
-                class="card-old-price"
-                v-if="
-                  item.product.compare_price &&
-                  item.product.compare_price > item.product.price
-                "
+                class="product-card-price"
+                :class="{
+                  'has-sale':
+                    item.product.compare_price &&
+                    item.product.compare_price > item.product.price,
+                }"
               >
-                {{ formatCurrency(item.product.compare_price) }}
+                PHP {{ (item.product.price / 100).toFixed(2) }}
+              </span>
+              <span
+                class="product-card-original"
+                v-if="item.product.compare_price && item.product.compare_price > item.product.price"
+              >
+                PHP {{ (item.product.compare_price / 100).toFixed(2) }}
               </span>
             </div>
 
+            <!-- Add to Cart -->
             <button
-              class="add-to-cart-btn"
-              @click="addToCart(item.product)"
-              :disabled="addingToCart === item.product.id"
+              class="product-card-atc"
+              :disabled="addingToCart === item.product.id || !item.product.in_stock"
+              @click.prevent="addToCart(item.product)"
             >
-              <i class="ri-shopping-cart-line"></i>
               <span v-if="addingToCart === item.product.id">Adding...</span>
-              <span v-else>Add to Cart</span>
+              <span v-else-if="!item.product.in_stock">OUT OF STOCK</span>
+              <span v-else>ADD TO CART</span>
             </button>
           </div>
         </div>
@@ -78,6 +126,7 @@
           <i class="ri-store-2-line"></i> Start Shopping
         </Link>
       </div>
+
     </div>
   </div>
 </template>
@@ -92,13 +141,7 @@ const props = defineProps({
 });
 
 const addingToCart = ref(null);
-
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-  }).format(amount / 100);
-};
+const hoverMap = ref({});
 
 const removeItem = (itemId) => {
   router.delete(route('store.brand-partner.wishlist.remove', itemId), {
@@ -122,249 +165,309 @@ const addToCart = (product) => {
 </script>
 
 <style scoped>
+/* ── Animation Variables ─────────────────────────────── */
+:root {
+  --animation-timing-unit: 80ms;
+  --animation-timing-300: calc(var(--animation-timing-unit) * 3);
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* ── Layout ──────────────────────────────────────────── */
 .wishlist-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #fff;
   min-height: 60vh;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
   font-family: 'Public Sans', sans-serif;
 }
 
 .wishlist-container {
-  max-width: 1800px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 32px 32px 0;
 }
 
-.header-inner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* ── Page Header ─────────────────────────────────────── */
+.page-header {
+  margin-bottom: 28px;
 }
 
-.header-back:hover {
-  background: #fff3e0;
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px;
 }
 
-.header-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #1b1b3e;
+.page-subtitle {
+  font-size: 13px;
+  color: #888;
   margin: 0;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
-/* Grid */
-.wishlist-grid {
+/* ── Products Grid (matches shop) ────────────────────── */
+.products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
-/* Card */
-.wishlist-card {
-  background: #fff;
-  overflow: hidden;
+/* ── Product Card (identical to shop) ───────────────── */
+.product-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #f0f0f0;
   transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+    box-shadow 0.25s,
+    transform 0.25s;
 }
 
-.wishlist-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+.product-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
 }
 
-.remove-btn {
+/* ── Badges ──────────────────────────────────────────── */
+.product-card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.badge-sale {
+  background: #e84b0f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Wishlist / Remove Button ────────────────────────── */
+.product-wishlist-btn {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  background: #fff;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
-  color: #aaa;
-  font-size: 22px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
-  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #e84b0f;
+  transition: all 0.2s;
 }
 
-.remove-btn:hover {
-  background: #fff;
-  color: #e74c3c;
+.product-wishlist-btn:hover {
+  box-shadow: 0 2px 12px rgba(232, 75, 15, 0.25);
+  color: #c0392b;
 }
 
-.card-img-link {
-  display: block;
+/* ── Product Image ───────────────────────────────────── */
+.product-card-image {
   position: relative;
+  width: 100%;
   overflow: hidden;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 3;
+  min-height: 250px;
 }
 
-.card-img {
+.product-card-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition-duration: var(--animation-timing-300);
+  transition-timing-function: var(--ease-out-quart);
+  transition-property: opacity, transform;
 }
 
-.wishlist-card:hover .card-img {
-  transform: scale(1.04);
+.product-card:hover .product-card-image img {
+  transform: scale(1.02);
 }
 
-.wishlist-card:hover .card-img-overlay {
-  opacity: 1;
-}
-
-.card-body {
-  padding: 14px 16px 16px;
+/* ── Card Body ───────────────────────────────────────── */
+.product-card-body {
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 180px;
 }
 
-.card-name {
-  font-size: 14px;
+.product-card-name {
+  font-size: 15px;
   font-weight: 700;
-  color: #1b1b3e;
-  text-decoration: none;
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  color: #111;
+  margin: 0;
+  font-family: 'Public Sans', sans-serif;
   line-height: 1.3;
-  transition: color 0.2s;
 }
 
-.card-name:hover {
-  color: #ff9505;
+.product-card-collection {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.card-price-row {
+/* ── Stars ───────────────────────────────────────────── */
+.product-card-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.product-card-stars i {
+  font-size: 14px;
+}
+
+.star-filled {
+  color: #f5a623;
+}
+
+/* ── Price ───────────────────────────────────────────── */
+.product-card-price-row {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
-.card-price {
+.product-card-price {
   font-size: 15px;
   font-weight: 800;
-  color: #ff9505;
+  color: #e84b0f;
+  font-family: 'Public Sans', sans-serif;
 }
 
-.card-old-price {
+.product-card-price.has-sale {
+  color: #e84b0f;
+}
+
+.product-card-original {
   font-size: 12px;
-  color: #bbb;
+  color: #aaa;
   text-decoration: line-through;
 }
 
-.add-to-cart-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+/* ── Add to Cart Button ──────────────────────────────── */
+.product-card-atc {
+  margin-top: auto;
   width: 100%;
   padding: 10px;
   background: #fff;
-  color: #1b5e38;
-  border: 1px solid #1b5e38;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: 'Public Sans', sans-serif;
+  border: 1.5px solid #198754;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  color: #198754;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 4px;
+  font-family: 'Public Sans', sans-serif;
+  transition: all 0.25s;
+  text-transform: uppercase;
 }
 
-.add-to-cart-btn:hover:not(:disabled) {
+.product-card-atc:hover:not(:disabled) {
   background: #ff9505;
+  border-color: #ff9505;
+  color: #fff;
 }
-.add-to-cart-btn:disabled {
-  background: #ccc;
+
+.product-card-atc:disabled {
+  border-color: #ccc;
+  color: #ccc;
   cursor: not-allowed;
 }
 
-/* Empty State */
+/* ── Empty State ─────────────────────────────────────── */
 .empty-wishlist {
   text-align: center;
-  padding: 80px 20px;
+  padding: 100px 20px;
 }
 
 .empty-icon {
-  width: 110px;
-  height: 110px;
-  background: rgba(255, 149, 5, 0.08);
+  width: 100px;
+  height: 100px;
+  background: #fff5e8;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .empty-icon i {
-  font-size: 48px;
+  font-size: 44px;
   color: #ff9505;
 }
 
 .empty-wishlist h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
-  color: #1b1b3e;
+  color: #1a1a1a;
   margin: 0 0 8px;
 }
 
 .empty-wishlist p {
   font-size: 14px;
   color: #888;
-  margin: 0 0 28px;
+  margin: 0 0 24px;
 }
 
 .shop-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 28px;
+  padding: 11px 28px;
   background: #ff9505;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   text-decoration: none;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   transition: background 0.2s;
 }
 
 .shop-btn:hover {
   background: #1b5e38;
-  color: #fff;
 }
 
-@media (max-width: 768px) {
-  .wishlist-grid {
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 991px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .wishlist-container {
+    padding: 24px 16px 0;
+  }
+
+  .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
-  .wishlist-header {
-    margin-top: 60px;
-  }
-}
 
-@media (max-width: 420px) {
-  .wishlist-grid {
-    grid-template-columns: 1fr;
+  .product-card-name {
+    font-size: 13px;
   }
 }
 </style>
