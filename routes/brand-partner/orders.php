@@ -3,7 +3,7 @@
 use App\Http\Controllers\BrandPartner\OrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('orders', OrderController::class)->only(['index', 'show']);
+Route::resource('orders', OrderController::class)->only(['index', 'show', 'create', 'store']);
 
 Route::get('orders/{order}/edit', [OrderController::class, 'edit'])
     ->name('orders.edit');

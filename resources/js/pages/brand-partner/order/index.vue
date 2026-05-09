@@ -64,6 +64,13 @@
                     name="Status"
                     @change="submitFilters"
                 ></select-filter>
+                <Link
+                    :href="route('brand-partner.orders.create')"
+                    class="btn btn-primary d-flex align-items-center gap-2"
+                >
+                    <vue-feather type="plus" class="feather-14"></vue-feather>
+                    Add Order
+                </Link>
             </div>
         </div>
 
