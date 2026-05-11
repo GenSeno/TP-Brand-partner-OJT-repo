@@ -17,7 +17,7 @@ class AuthController extends Controller
     $user = User::firstOrCreate(
         ['email' => 'guest@example.com'],
         [
-            'name' => 'Guest User',
+            'name' => 'Guest',
             'password' => bcrypt('guest123'),
         ]
     );
