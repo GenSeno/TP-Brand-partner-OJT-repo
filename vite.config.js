@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import { BootstrapVueNextResolver } from 'bootstrap-vue-next/resolvers';
 import laravel from 'laravel-vite-plugin';
@@ -15,8 +16,6 @@ export default defineConfig({
       refresh: true,
     }),
 
-    tailwindcss(),
-
     vue({
       template: {
         transformAssetUrls: {
@@ -25,6 +24,8 @@ export default defineConfig({
         },
       },
     }),
+
+    tailwindcss(),
 
     Components({
       resolvers: [BootstrapVueNextResolver()],

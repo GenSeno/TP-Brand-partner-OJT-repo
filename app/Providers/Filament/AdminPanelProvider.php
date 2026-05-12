@@ -18,6 +18,9 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\MenuItem;      
+use App\Filament\Widgets\EventStatsOverview;             
+use App\Filament\Widgets\UpcomingEventsWidget; 
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('cms')
+            ->brandName('Events Manager')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -39,7 +43,8 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                EventStatsOverview::class,
+                UpcomingEventsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +59,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Back to Admin')
+                    ->url('/admin')
+                    ->icon('heroicon-o-arrow-left'),
             ]);
     }
 }
