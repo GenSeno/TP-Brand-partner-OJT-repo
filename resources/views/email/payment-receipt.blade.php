@@ -18,7 +18,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
                            <tr>
                               <td width="50%" valign="top">
-                                 <img src="{{ asset('img/logo/logo-pdf.png') }}" width="160" style="display:block; margin-bottom:10px;">
+                                 <img src="{{ asset('img/logo/logo_pakaras_white.png') }}" width="160" style="display:block; margin-bottom:10px;">
                               </td>
                               <td width="50%" valign="top" align="right">
                                  <h2 style="margin:0;">PAYMENT ACKNOWLEDGEMENT</h2>

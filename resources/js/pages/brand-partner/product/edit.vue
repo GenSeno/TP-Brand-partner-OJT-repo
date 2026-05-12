@@ -323,21 +323,7 @@
                                 />
                                 <input-error :message="form.errors.stock" />
                             </div>
-                            <div class="col-6 mb-3 d-flex align-items-end">
-                                <div class="form-check">
-                                    <input
-                                        v-model="form.data.track_stock"
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="track_stock"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="track_stock"
-                                        >Track Stock</label
-                                    >
-                                </div>
-                            </div>
+                            <input type="hidden" name="track_stock" value="1" />
                         </div>
 
                         <div class="mb-0">
@@ -421,7 +407,7 @@ const form = useAxiosForm({
     colors: props.product.colors ? props.product.colors.split(',').map(s => s.trim()) : [],
     sizes: props.product.sizes ? props.product.sizes.split(',').map(s => s.trim()) : [],
     stock: props.product.stock,
-    track_stock: props.product.track_stock,
+    track_stock: 1,
     status: props.product.status,
     featured: props.product.featured,
 });

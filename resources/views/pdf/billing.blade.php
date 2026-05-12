@@ -49,7 +49,7 @@
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
         <tr>
             <td width="50%" valign="top" class="no-border-all">
-                <img src="{{ public_path('img/logo/logo-pdf.png') }}" width="160" style="display:block; margin-bottom:10px;">
+                <img src="{{ public_path('img/logo/logo_pakaras_white.png') }}" width="160" style="display:block; margin-bottom:10px;">
             </td>
             <td width="50%" valign="top" align="right" class="no-border-all">
                 <h2 style="margin:0;">BILLING STATEMENT</h2>

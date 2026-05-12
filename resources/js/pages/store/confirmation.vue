@@ -14,7 +14,7 @@
                 <p class="hero-eyebrow">ORDER #{{ order.reference }}</p>
                 <h1 class="hero-title">
                     <span class="hero-line1">THANK YOU</span>
-                    <span class="hero-line2">FOR YOUR ENQUIRY</span>
+                    <span class="hero-line2">FOR YOUR PURCHASE</span>
                 </h1>
                 <p class="hero-subtitle">
                     Your action means a lot to us-whether you place an order, signed up, or joined our community. Welcome to
@@ -29,7 +29,7 @@
                         CONTINUE EXPLORING
                     </Link>
                     <a href="#order-details" class="hero-btn hero-btn--ghost">
-                        VIEW YOUR ORDER
+                        VIEW ORDER DETAILS
                     </a>
                 </div>
             </div>
