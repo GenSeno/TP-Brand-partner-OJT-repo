@@ -11,10 +11,10 @@
       </div>
 
       <!-- Items Grid -->
-      <div v-if="items.length > 0" class="products-grid">
+        <div v-if="items.filter(i => i.product).length > 0" class="products-grid">
         <div
           class="product-card"
-          v-for="item in items"
+          v-for="item in items.filter(i => i.product)"
           :key="item.id"
           @mouseenter="hoverMap[item.product.id] = true"
           @mouseleave="hoverMap[item.product.id] = false"
@@ -101,11 +101,11 @@
             <!-- Add to Cart -->
             <button
               class="product-card-atc"
-              :disabled="addingToCart === item.product.id || !item.product.in_stock"
+              :disabled="addingToCart === item.product.id"
               @click.prevent="addToCart(item.product)"
             >
               <span v-if="addingToCart === item.product.id">Adding...</span>
-              <span v-else-if="!item.product.in_stock">OUT OF STOCK</span>
+              <span v-else-if="!item.product.in_stock">PRE-ORDER</span>
               <span v-else>ADD TO CART</span>
             </button>
           </div>

@@ -80,9 +80,13 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = DB::transaction(function () use ($request) {
-            $product = $this->brandPartner()->products()->create([
-                ...$request->validated(),
-                'track_stock' => true,
+            $validated = $request->validated();
+            $validated['track_stock'] = true;
+            $validated['meta'] = array_merge(
+                (array) ($validated['meta'] ?? []),
+                ['variants' => $request->input('variants', [])],
+            );
+            $product = $this->brandPartner()->products()->create([...$validated,
                 'slug' => $request->slug ?? Str::slug($request->name),
                 'price' => (int) (($request->price ?? 0) * 100),
                 'compare_price' => $request->compare_price ? (int) ($request->compare_price * 100) : null,
@@ -166,6 +170,10 @@ class ProductController extends Controller
             $data['track_stock'] = true;
             $data['price'] = (int) ($request->price * 100);
             $data['compare_price'] = $request->compare_price ? (int) ($request->compare_price * 100) : null;
+            $data['meta'] = array_merge(
+                (array) ($data['meta'] ?? []),
+                ['variants' => $request->input('variants', [])],
+            );
 
             $product->update($data);
         });

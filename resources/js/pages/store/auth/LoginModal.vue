@@ -87,6 +87,15 @@
               LOGIN WITH GOOGLE
             </button>
 
+            <button
+              type="button"
+              class="auth-btn-facebook"
+              @click="handleFacebookLogin"
+            >
+              <i class="ri-facebook-fill facebook-icon"></i>
+              LOGIN WITH FACEBOOK
+            </button>
+
             <p class="auth-switch">
               Don't have an account?
               <button
@@ -141,6 +150,15 @@
               class="google-icon"
             />
             LOGIN WITH GOOGLE
+          </button>
+
+          <button
+            type="button"
+            class="auth-btn-facebook"
+            @click="handleFacebookLogin"
+          >
+            <i class="ri-facebook-fill facebook-icon"></i>
+            LOGIN WITH FACEBOOK
           </button>
 
           <p class="auth-switch" style="margin-top: 20px">
@@ -347,6 +365,11 @@ const submitRegister = () => {
 const handleGoogleLogin = () => {
   // Implement Google OAuth logic here
   console.log('Google login clicked');
+};
+
+const handleFacebookLogin = () => {
+  // Implement Facebook OAuth logic here
+  console.log('Facebook login clicked');
 };
 
 // Cleanup on unmount
@@ -591,7 +614,7 @@ onUnmounted(() => {
   font-size: 14px;
   letter-spacing: 0.08em;
   cursor: pointer;
-  background: #1a6fa8;
+  background: #ff9505;
   color: #fff;
   transition:
     background 0.2s,
@@ -631,6 +654,36 @@ onUnmounted(() => {
 .google-icon {
   width: 20px;
   height: 20px;
+}
+
+.auth-btn-facebook {
+  height: 52px;
+  border-radius: 50px;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-family: 'Public Sans', sans-serif;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.auth-btn-facebook:hover {
+  border-color: #bbb;
+  background: #fafafa;
+}
+
+.facebook-icon {
+  font-size: 20px;
+  color: #166fe5 ;
 }
 
 .auth-switch {
