@@ -140,3 +140,4 @@ Route::group([
         ->name('brand-partner.addresses.destroy')
         ->middleware('auth');
 });
+
