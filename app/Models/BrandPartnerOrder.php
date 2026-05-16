@@ -78,6 +78,7 @@ class BrandPartnerOrder extends Model
     protected $appends = [
         'formatted_total',
         'shipping_address',
+        'has_pre_order',
     ];
 
     // Relationships
@@ -120,6 +121,15 @@ class BrandPartnerOrder extends Model
                 $this->province,
                 $this->postcode,
             ])->filter()->implode(', '),
+        );
+    }
+
+    protected function hasPreOrder(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->relationLoaded('lines')
+                ? $this->lines->contains(fn ($line) => $line->meta['pre_order'] ?? false)
+                : false,
         );
     }
 

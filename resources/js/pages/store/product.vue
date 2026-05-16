@@ -55,6 +55,7 @@
 
                     <div class="stock-row">
                         <span v-if="currentInStock" class="in-stock">✓ In Stock</span>
+                        <span v-else-if="variationReady" class="pre-order">Pre-Order (Will be ordered upon purchase)</span>
                         <span v-else class="out-stock">✕ Out of Stock</span>
                     </div>
 
@@ -112,11 +113,11 @@
                     <div class="cta-row">
                         <button
                             class="add-to-cart-btn"
-                            :disabled="!currentInStock || isAddingToCart || !variationReady"
+                            :disabled="isAddingToCart || !variationReady"
                             @click="showConfirmModal"
                         >
                             <span v-if="isAddingToCart">ADDING...</span>
-                            <span v-else-if="!currentInStock">OUT OF STOCK</span>
+                            <span v-else-if="!currentInStock">PRE-ORDER</span>
                             <span v-else>ADD TO CART</span>
                         </button>
                         <button
@@ -226,8 +227,8 @@
                                 </div>
                             </div>
                         </Link>
-                        <button class="card-add-btn" :disabled="!related.in_stock">
-                            {{ related.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
+                        <button class="card-add-btn">
+                            {{ related.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
                         </button>
                     </div>
                 </div>
@@ -243,11 +244,11 @@
             </div>
             <button
                 class="mobile-add-btn"
-                :disabled="!currentInStock || isAddingToCart || !variationReady"
+                :disabled="isAddingToCart || !variationReady"
                 @click="showConfirmModal"
             >
                 <span v-if="isAddingToCart">Adding...</span>
-                <span v-else-if="!currentInStock">OUT OF STOCK</span>
+                <span v-else-if="!currentInStock">PRE-ORDER</span>
                 <span v-else>ADD TO CART | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
@@ -350,7 +351,20 @@ const variationReady = computed(() => {
     return colorOk && sizeOk;
 });
 
-const currentInStock = computed(() => props.product.in_stock);
+const selectedVariant = computed(() => {
+    if (!props.product.meta?.variants?.length) return null;
+    return props.product.meta.variants.find(v =>
+        (!selectedColor.value || v.color === selectedColor.value) &&
+        (!selectedSize.value || v.size === selectedSize.value)
+    ) || null;
+});
+
+const currentInStock = computed(() => {
+    if (!hasVariations.value || !variationReady.value) return props.product.in_stock;
+    const variant = selectedVariant.value;
+    if (!variant) return false;
+    return (variant.stock ?? 0) > 0;
+});
 
 const selectColor = (color) => {
     selectedColor.value = color === selectedColor.value ? null : color;
@@ -629,6 +643,12 @@ const toggleWishlist = (productId) => {
     font-size: 13px;
     font-weight: 600;
     color: #16a34a;
+}
+
+.pre-order {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f97316;
 }
 
 .out-stock {

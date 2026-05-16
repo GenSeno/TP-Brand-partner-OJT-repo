@@ -4,7 +4,7 @@
         <!-- Logo -->
         <div class="header-left active">
             <Link href="/dashboard/" class="logo logo-normal">
-                <img src="/img/logo/logo-pdf.png" alt="Img" />
+                <img src="/img/logo/logo_pakaras_white.png" alt="Img" />
             </Link>
             <Link href="/dashboard/" class="logo logo-white">
                 <img src="/img/logo/tpinklab_logo_white_full.svg" alt="Img" />

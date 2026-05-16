@@ -22,13 +22,21 @@ class AuthController extends Controller
             'password' => bcrypt('guest123'),
         ]
     );
+    {
+        $user = User::firstOrCreate(
+            ['email' => 'guest@example.com'],
+            [
+                'name' => 'Guest User',
+                'password' => bcrypt('guest123'),
+            ]
+        );
 
-    Auth::login($user);
+        Auth::login($user);
 
-    request()->session()->regenerate();
+        request()->session()->regenerate();
 
-    return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
-}
+        return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
+    }
 
     public function login(Request $request)
     {
@@ -108,12 +116,15 @@ class AuthController extends Controller
             'countries' => $countries,
             'defaultCountryId' => $defaultCountryId,
             'wishlistItems' => Wishlist::with(['product.images', 'product.collection', 'product.category'])
+                ->whereHas('product', fn ($q) => $q->where('status', \App\Enums\BrandPartnerProductStatus::PUBLISHED))
                 ->where('user_id', Auth::id())
                 ->get()
                 ->map(fn ($w) => [
                     'id' => $w->id,
                     'product' => $w->product,
-                ]),
+                ])
+                ->filter(fn ($item) => $item['product'] !== null)
+                ->values(),
             'tab' => $request->query('tab', 'profile'),
         ]);
     }

@@ -49,7 +49,7 @@
         <!-- HEADER -->
         <div class="header">
             <div style="width:50%;line-height:1.5">
-                <img src="{{ public_path('/img/logo/logo-pdf.png') }}" alt="Company Logo" style="width:160px;margin-bottom:10px;">
+                <img src="{{ public_path('/img/logo/logo_pakaras_white.png') }}" alt="Company Logo" style="width:160px;margin-bottom:10px;">
                 <div class="small text-muted" >
                     <span style="font-size:16px;font-weight:bold;">TP Ink Lab Corp.</span><br>
                     109 Roxas Ave, Poblacion District, Davao City <br>

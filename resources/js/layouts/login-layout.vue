@@ -6,7 +6,7 @@
                     <div class="col-lg-5 mx-auto">
                         <div class="login-content user-login">
                             <div class="login-logo">
-                                <img src="/img/logo/logo-pdf.png" alt="img" />
+                                <img src="/img/logo/logo_pakaras_white.png" alt="img"/>
                                 <span
                                     to="/dashboard"
                                     class="login-logo logo-white"

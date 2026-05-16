@@ -135,27 +135,63 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Colors</label>
-                            <vue-select
-                                :options="colorSelectOptions"
-                                v-model="form.data.colors"
-                                :isMulti="true"
-                                multiple
-                                placeholder="Select colors"
-                            />
-                            <input-error :message="form.errors.colors" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Sizes</label>
-                            <vue-select
-                                :options="sizeSelectOptions"
-                                v-model="form.data.sizes"
-                                :isMulti="true"
-                                multiple
-                                placeholder="Select sizes"
-                            />
-                            <input-error :message="form.errors.sizes" />
+                            <label class="form-label">Variants (Color / Size / Quantity)</label>
+                            <div class="variants-table">
+                                <div class="variants-header">
+                                    <span>Color</span>
+                                    <span>Size</span>
+                                    <span>Qty</span>
+                                    <span></span>
+                                </div>
+                                <div
+                                    v-for="(v, i) in form.data.variants"
+                                    :key="i"
+                                    class="variants-row"
+                                >
+                                    <select v-model="v.color" class="form-select form-select-sm">
+                                        <option value="">Select color</option>
+                                        <option
+                                            v-for="opt in colorSelectOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <select v-model="v.size" class="form-select form-select-sm">
+                                        <option value="">Select size</option>
+                                        <option
+                                            v-for="opt in sizeSelectOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <input
+                                        v-model="v.stock"
+                                        type="number"
+                                        min="0"
+                                        class="form-control form-control-sm"
+                                        placeholder="0"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-danger btn-sm"
+                                        @click="removeVariant(i)"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary btn-sm mt-2"
+                                @click="addVariant"
+                            >
+                                + Add Variant
+                            </button>
+                            <input-error :message="form.errors.variants" />
                         </div>
                     </div>
 
@@ -288,7 +324,7 @@
                                 <input-error :message="form.errors.price" />
                             </div>
                             <div class="col-6 mb-3">
-                                <label class="form-label">Compare Price</label>
+                                <label class="form-label">Old Price</label>
                                 <input
                                     v-model="form.data.compare_price"
                                     type="number"
@@ -312,33 +348,7 @@
                             <input-error :message="form.errors.sku" />
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label">Stock</label>
-                                <input
-                                    v-model="form.data.stock"
-                                    type="number"
-                                    min="0"
-                                    class="form-control"
-                                />
-                                <input-error :message="form.errors.stock" />
-                            </div>
-                            <div class="col-6 mb-3 d-flex align-items-end">
-                                <div class="form-check">
-                                    <input
-                                        v-model="form.data.track_stock"
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="track_stock"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="track_stock"
-                                        >Track Stock</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" name="track_stock" value="1" />
 
                         <div class="mb-0">
                             <div class="form-check">
@@ -406,6 +416,23 @@ const imageInputRef = useTemplateRef('imageInputRef');
 const productImages = ref([...(props.product.images ?? [])]);
 const imageActionLoading = ref(false);
 
+function parseVariants() {
+    const meta = props.product.meta;
+    if (meta?.variants?.length) {
+        return meta.variants.map(v => ({ color: v.color, size: v.size, stock: v.stock ?? 0 }));
+    }
+    const colors = props.product.colors ? props.product.colors.split(',').map(s => s.trim()) : [];
+    const sizes = props.product.sizes ? props.product.sizes.split(',').map(s => s.trim()) : [];
+    if (!colors.length && !sizes.length) return [{ color: '', size: '', stock: 0 }];
+    const variants = [];
+    for (const c of colors.length ? colors : ['']) {
+        for (const s of sizes.length ? sizes : ['']) {
+            variants.push({ color: c, size: s, stock: 0 });
+        }
+    }
+    return variants;
+}
+
 const form = useAxiosForm({
     name: props.product.name,
     slug: props.product.slug,
@@ -418,10 +445,8 @@ const form = useAxiosForm({
         ? props.product.compare_price / 100
         : '',
     sku: props.product.sku || '',
-    colors: props.product.colors ? props.product.colors.split(',').map(s => s.trim()) : [],
-    sizes: props.product.sizes ? props.product.sizes.split(',').map(s => s.trim()) : [],
-    stock: props.product.stock,
-    track_stock: props.product.track_stock,
+    variants: parseVariants(),
+    track_stock: 1,
     status: props.product.status,
     featured: props.product.featured,
 });
@@ -485,16 +510,26 @@ const setPrimary = async (image) => {
     imageActionLoading.value = false;
 };
 
+const addVariant = () => {
+    form.data.variants.push({ color: '', size: '', stock: 0 });
+};
+
+const removeVariant = (index) => {
+    form.data.variants.splice(index, 1);
+};
+
 const submitForm = () => {
     form.transform((data) => {
-        const formatSelect = (arr) => {
-            if (!Array.isArray(arr)) return arr;
-            return arr.map(item => (item && typeof item === 'object') ? item.value : item).join(',');
-        };
+        const variants = data.variants.filter(v => v.color || v.size);
+        const colors = [...new Set(variants.map(v => v.color).filter(Boolean))].join(',');
+        const sizes = [...new Set(variants.map(v => v.size).filter(Boolean))].join(',');
+        const stock = variants.reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0);
         return {
             ...data,
-            colors: formatSelect(data.colors),
-            sizes: formatSelect(data.sizes),
+            variants,
+            colors,
+            sizes,
+            stock,
         };
     }).put(route('brand-partner.products.update', props.product.id), {
         onSuccess: ({ data }) => {
@@ -505,3 +540,38 @@ const submitForm = () => {
     });
 };
 </script>
+
+<style scoped>
+.variants-table {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.variants-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 40px;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.variants-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 40px;
+    gap: 8px;
+    padding: 6px 10px;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.variants-row:last-child {
+    border-bottom: none;
+}
+</style>
