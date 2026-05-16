@@ -18,7 +18,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
                            <tr>
                               <td width="50%" valign="top">
-                                 <img src="{{ asset('img/logo/logo-pdf.png') }}" width="160" style="display:block; margin-bottom:10px;">
+                                 <img src="{{ asset('img/logo/logo_pakaras_white.png') }}" width="160" style="display:block; margin-bottom:10px;">
                                  <div style="font-size:12px; color:#6c757d; line-height:1.5;">
                                     <strong style="font-size:16px;">TP Ink Lab Corp.</strong><br>
                                     109 Roxas Ave, Poblacion District, Davao City<br>

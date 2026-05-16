@@ -8,10 +8,39 @@ use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class AuthController extends Controller
 {
+    public function guestLogin()
+    {
+        $user = User::firstOrCreate(
+            ['email' => 'guest@example.com'],
+            [
+                'name' => 'Guest',
+                'password' => bcrypt('guest123'),
+            ]
+        );
+        {
+            $user = User::firstOrCreate(
+                ['email' => 'guest@example.com'],
+                [
+                    'name' => 'Guest User',
+                    'password' => bcrypt('guest123'),
+                ]
+            );
+
+            Auth::login($user);
+
+            request()->session()->regenerate();
+
+            return Inertia::location(route('store.brand-partner.index', config('store.brand_partner_slug')));
+        }
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -90,12 +119,15 @@ class AuthController extends Controller
             'countries' => $countries,
             'defaultCountryId' => $defaultCountryId,
             'wishlistItems' => Wishlist::with(['product.images', 'product.collection', 'product.category'])
+                ->whereHas('product', fn ($q) => $q->where('status', \App\Enums\BrandPartnerProductStatus::PUBLISHED))
                 ->where('user_id', Auth::id())
                 ->get()
                 ->map(fn ($w) => [
                     'id' => $w->id,
                     'product' => $w->product,
-                ]),
+                ])
+                ->filter(fn ($item) => $item['product'] !== null)
+                ->values(),
             'tab' => $request->query('tab', 'profile'),
         ]);
     }
@@ -179,5 +211,30 @@ class AuthController extends Controller
         ]);
 
         return back()->with('success', 'Password updated successfully.');
+    }
+    
+    public function redirectToGoogle()
+    {
+    return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+
+        $user = User::updateOrCreate(
+            [
+                'email' => $googleUser->email,
+            ],
+            [
+                'name' => $googleUser->name,
+                'google_id' => $googleUser->id,
+                'password' => Hash::make(Str::random(24)),
+            ]
+        );
+
+        Auth::login($user);
+
+        return redirect('/');
     }
 }

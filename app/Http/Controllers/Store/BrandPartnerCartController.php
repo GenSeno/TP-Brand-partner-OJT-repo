@@ -176,10 +176,6 @@ class BrandPartnerCartController extends Controller
 
             $newQty = ($cartItem ? $cartItem->quantity : 0) + $request->quantity;
 
-            if ($product->track_stock && $product->stock < $newQty) {
-                return back()->with('error', __('Insufficient stock available.'));
-            }
-
             CartItem::updateOrCreate(
                 [
                     'user_id' => Auth::id(),
@@ -195,10 +191,6 @@ class BrandPartnerCartController extends Controller
 
             $currentQty = $cart[$itemKey]['quantity'] ?? 0;
             $newQty = $currentQty + $request->quantity;
-
-            if ($product->track_stock && $product->stock < $newQty) {
-                return back()->with('error', __('Insufficient stock available.'));
-            }
 
             $cart[$itemKey] = [
                 'product_id' => $product->id,

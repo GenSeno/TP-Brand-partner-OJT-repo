@@ -189,13 +189,19 @@ class BrandPartnerCheckoutController extends Controller
 
                 $quantity = $item['quantity'];
 
-                if ($product->track_stock && $product->stock < $quantity) {
-                    throw new \Exception("Insufficient stock for {$product->name}");
+                $isPreOrder = false;
+                if ($product->meta && isset($product->meta['variants'])) {
+                    $match = collect($product->meta['variants'])->firstWhere(fn ($v) => (! $item['color'] || $v['color'] === $item['color']) &&
+                        (! $item['size'] || $v['size'] === $item['size'])
+                    );
+                    $isPreOrder = $match && ($match['stock'] ?? 0) < $quantity;
                 }
 
-                $meta = ($item['color'] || $item['size'])
-                    ? ['color' => $item['color'], 'size' => $item['size']]
-                    : null;
+                $meta = array_merge(
+                    ($item['color'] || $item['size']) ? ['color' => $item['color'], 'size' => $item['size']] : [],
+                    $isPreOrder ? ['pre_order' => true] : [],
+                );
+                $meta = empty($meta) ? null : $meta;
 
                 $orderLines[] = [
                     'product_id' => $product->id,
@@ -206,7 +212,7 @@ class BrandPartnerCheckoutController extends Controller
                     'meta' => $meta,
                 ];
 
-                $product->decrementStock($quantity);
+                $product->decrementStock($quantity, $item['color'] ?? null, $item['size'] ?? null);
             }
 
             if (empty($orderLines)) {

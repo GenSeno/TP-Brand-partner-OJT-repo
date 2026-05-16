@@ -73,6 +73,11 @@
                                                 <span>{{
                                                     line.product_name
                                                 }}</span>
+                                                <span
+                                                    v-if="line.meta?.pre_order"
+                                                    class="badge bg-warning ms-1"
+                                                    style="font-size: 10px;"
+                                                >Pre-Order</span>
                                                 <div
                                                     v-if="
                                                         line.meta?.color ||

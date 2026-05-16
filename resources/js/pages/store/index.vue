@@ -60,7 +60,7 @@
             <span class="arrow-icon">&#10095;</span>
           </button>
           <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
-          <div class="carousel-item active slide-2-bg" >
+          <div class="carousel-item active slide-2-bg">
             <div class="slide-layout">
               <div class="slide-content-left px-5">
                 <h1 class="slide-title text-white">HUGIS COLLECTION V2</h1>
@@ -284,7 +284,11 @@
                 >
                   <Link
                     v-if="product.collection"
-                    :href="route('store.brand-partner.shop', { collection: product.collection.id })"
+                    :href="
+                      route('store.brand-partner.shop', {
+                        collection: product.collection.id,
+                      })
+                    "
                     class="text-muted text-decoration-none"
                   >
                     {{ product.collection.label }}
@@ -328,8 +332,8 @@
                       product.compare_price &&
                       product.compare_price > product.price
                     "
-                    class="old-price text-muted text-decoration-line-through"
-                    style="font-size: 11px; margin-left: 4px;"
+                    class="text-muted text-decoration-line-through"
+                    style="font-size: 11px"
                   >
                     {{ formatCurrency(product.compare_price) }}
                   </span>
@@ -338,68 +342,13 @@
                 <button
                   class="btn add-to-cart-outline-btn w-100"
                   @click.prevent="addToCart(product)"
-                  :disabled="!product.in_stock"
                 >
-                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
+                  {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
                 </button>
               </div>
             </div>
           </li>
         </ul>
-
-        <!-- Empty State -->
-        <div v-else class="grocery-empty-state">
-          <div class="empty-icon-circle">
-            <i class="ri-shopping-bag-line"></i>
-          </div>
-          <h4>No products found</h4>
-          <p>Try adjusting your filters or search query.</p>
-          <a
-            class="btn btn-grocery-primary"
-            :href="route('store.brand-partner.shop', brandPartner?.slug)"
-          >
-            <i class="ri-store-2-line"></i> View All Products
-          </a>
-        </div>
-
-        <!-- View All Button -->
-        <div class="view-all-wrapper" v-if="products.data.length > 0">
-          <Link
-            :href="route('store.brand-partner.shop', brandPartner.slug)"
-            class="view-all-btn"
-          >
-            VIEW ALL PRODUCTS
-          </Link>
-        </div>
-
-        <!-- Pagination -->
-        <div
-          class="grocery-pagination"
-          v-if="products.links && products.links.length > 3"
-        >
-          <nav>
-            <ul class="pagination">
-              <li
-                v-for="link in products.links"
-                :key="link.label"
-                class="page-item"
-                :class="{
-                  active: link.active,
-                  disabled: !link.url,
-                }"
-              >
-                <Link
-                  v-if="link.url"
-                  :href="link.url"
-                  class="page-link"
-                  v-html="link.label"
-                  preserve-scroll
-                />
-                <span v-else class="page-link" v-html="link.label" />
-              </li>
-            </ul>
-          </nav>
-        </div>
       </div>
     </section>
 
@@ -522,7 +471,7 @@
     <!-- Featured Products Section -->
     <section class="featured-products-section">
       <div class="featured-products-inner">
-        <h2 class="featured-products-title">Better Build. Made Better</h2>
+        <h2 class="featured-products-title">Built Stronger. Made Better</h2>
 
         <ul class="featured-product-list" v-if="hasFeaturedProducts">
           <li
@@ -588,9 +537,17 @@
                 <p class="featured-product-collection">
                   <Link
                     v-if="product.collection"
-                    :href="route('store.brand-partner.shop', { collection: product.collection.id })"
+                    :href="
+                      route('store.brand-partner.shop', {
+                        collection: product.collection.id,
+                      })
+                    "
                     class="text-muted text-decoration-none text-uppercase"
-                    style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px;"
+                    style="
+                      font-size: 10px;
+                      font-weight: 700;
+                      letter-spacing: 0.5px;
+                    "
                   >
                     {{ product.collection.label }}
                   </Link>
@@ -615,7 +572,9 @@
                 </div>
 
                 <!-- Price -->
-                <div class="featured-product-price-row d-flex align-items-center gap-2">
+                <div
+                  class="featured-product-price-row d-flex align-items-center gap-2"
+                >
                   <span class="featured-product-price">
                     {{ formatCurrency(product.price) }}
                   </span>
@@ -625,7 +584,7 @@
                       product.compare_price > product.price
                     "
                     class="featured-product-old-price text-muted text-decoration-line-through"
-                    style="font-size: 11px; margin-left: 4px;"
+                    style="font-size: 11px"
                   >
                     {{ formatCurrency(product.compare_price) }}
                   </span>
@@ -635,9 +594,8 @@
                 <button
                   class="featured-atc-btn"
                   @click.prevent="addToCart(product)"
-                  :disabled="!product.in_stock"
                 >
-                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
+                  {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
                 </button>
               </div>
             </div>
@@ -911,11 +869,23 @@
       <div class="runwild-grid">
         <div class="runwild-item" v-for="n in 3" :key="n">
           <div class="runwild-card">
-            <img src="/img/top_paper.png" alt="" class="tear-img tear-img--top" />
+            <img
+              src="/img/top_paper.png"
+              alt=""
+              class="tear-img tear-img--top"
+            />
             <div class="photo-wrap">
-              <img :src="`/img/img-section${n}.png`" :alt="`Section ${n}`" class="photo" />
+              <img
+                :src="`/img/img-section${n}.png`"
+                :alt="`Section ${n}`"
+                class="photo"
+              />
             </div>
-            <img src="/img/buttom_paper.png" alt="" class="tear-img tear-img--bottom" />
+            <img
+              src="/img/buttom_paper.png"
+              alt=""
+              class="tear-img tear-img--bottom"
+            />
           </div>
         </div>
       </div>
@@ -2842,7 +2812,7 @@ const toggleWishlist = (productId) => {
 
 .featured-products-title {
   font-size: 48px;
-  font-weight: 900;
+  font-weight: 800;
   color: #535353;
   text-align: center;
   margin: 0 0 48px;
@@ -3792,7 +3762,6 @@ const toggleWishlist = (productId) => {
   display: block;
 }
 
-
 /* Torn paper images */
 .tear-img {
   display: block;
@@ -3812,17 +3781,35 @@ const toggleWishlist = (productId) => {
 }
 /* Responsive */
 @media (max-width: 991px) {
-  .runwild-section { padding: 50px 40px 60px; }
-  .runwild-title { font-size: 32px; }
-  .runwild-grid { grid-template-columns: repeat(2, 1fr); }
+  .runwild-section {
+    padding: 50px 40px 60px;
+  }
+  .runwild-title {
+    font-size: 32px;
+  }
+  .runwild-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 575px) {
-  .runwild-section { padding: 40px 16px 50px; }
-  .runwild-title { font-size: 26px; margin-bottom: 28px; }
-  .runwild-grid { grid-template-columns: 1fr; gap: 16px; }
-  .tear-img--top { margin-bottom: -20px; }
-  .tear-img--bottom { margin-top: -20px; }
+  .runwild-section {
+    padding: 40px 16px 50px;
+  }
+  .runwild-title {
+    font-size: 26px;
+    margin-bottom: 28px;
+  }
+  .runwild-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .tear-img--top {
+    margin-bottom: -20px;
+  }
+  .tear-img--bottom {
+    margin-top: -20px;
+  }
 }
 
 /* ===== Cart Bottom Bar - product-cart-box ===== */

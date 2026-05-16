@@ -44,7 +44,7 @@
                 <span v-if="item.product.collection" class="cart-item-collection">
                   {{ item.product.collection.label }}
                 </span>
-                <span class="cart-item-badge">PRE-ORDER</span>
+                <span v-if="getVariantStock(item) === 0" class="cart-item-badge">PRE-ORDER</span>
                 <div class="cart-item-meta">
                   <span v-if="item.product.short_description"
                     >Garment: {{ item.product.short_description }}</span
@@ -210,6 +210,16 @@ const formatCurrency = (amount) => {
     style: 'currency',
     currency: 'PHP',
   }).format(amount / 100);
+};
+
+const getVariantStock = (item) => {
+  const variants = item.product?.meta?.variants;
+  if (!variants?.length) return item.product?.stock ?? 0;
+  const match = variants.find(v =>
+    (!item.color || v.color === item.color) &&
+    (!item.size || v.size === item.size)
+  );
+  return match ? (match.stock ?? 0) : (item.product?.stock ?? 0);
 };
 
 const updateQuantity = (itemId, quantity) => {

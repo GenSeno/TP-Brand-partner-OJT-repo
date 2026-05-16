@@ -13,6 +13,7 @@ use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerWishlistController as WishlistController;
 use App\Http\Controllers\Store\UserAddressController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /**
  * Front Store Routes for Brand Partners
@@ -139,5 +140,12 @@ Route::group([
     Route::delete('/account/addresses/{address}', [UserAddressController::class, 'destroy'])
         ->name('brand-partner.addresses.destroy')
         ->middleware('auth');
+
+    //Google Login Method
+    Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+    //Testing Purposes
+    Route::post('/guest-login', [AuthController::class, 'guestLogin']);
 });
 

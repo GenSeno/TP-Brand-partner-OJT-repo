@@ -66,7 +66,7 @@ class OrderController extends Controller
         $products = BrandPartnerProduct::where('brand_partner_id', $this->brandPartner()->id)
             ->published()
             ->orderBy('name')
-            ->get(['id', 'name', 'price']);
+            ->get(['id', 'name', 'price', 'colors', 'sizes']);
 
         return Inertia::modal('order/create', [
             'products' => $products,
@@ -79,63 +79,75 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'customer_name'  => ['required', 'string', 'max:255'],
+            'customer_name' => ['required', 'string', 'max:255'],
             'customer_email' => ['required', 'email', 'max:255'],
-            'company_name'   => ['nullable', 'string', 'max:255'],
+            'company_name' => ['nullable', 'string', 'max:255'],
             'customer_phone' => ['nullable', 'string', 'max:50'],
-            'address'        => ['nullable', 'string'],
-            'address_line1'  => ['nullable', 'string', 'max:255'],
-            'address_line2'  => ['nullable', 'string', 'max:255'],
-            'barangay'       => ['nullable', 'string', 'max:255'],
-            'city'           => ['nullable', 'string', 'max:255'],
-            'province'       => ['nullable', 'string', 'max:255'],
-            'postcode'       => ['nullable', 'string', 'max:20'],
-            'placed_at'      => ['nullable', 'date'],
-            'notes'          => ['nullable', 'string'],
-            'lines'          => ['required', 'array', 'min:1'],
+            'address' => ['nullable', 'string'],
+            'address_line1' => ['nullable', 'string', 'max:255'],
+            'address_line2' => ['nullable', 'string', 'max:255'],
+            'barangay' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'province' => ['nullable', 'string', 'max:255'],
+            'postcode' => ['nullable', 'string', 'max:20'],
+            'placed_at' => ['nullable', 'date'],
+            'notes' => ['nullable', 'string'],
+            'lines' => ['required', 'array', 'min:1'],
             'lines.*.product_id' => ['required', 'integer', 'exists:brand_partner_products,id'],
-            'lines.*.quantity'   => ['required', 'integer', 'min:1'],
+            'lines.*.quantity' => ['required', 'integer', 'min:1'],
             'lines.*.unit_price' => ['required', 'numeric', 'min:0'],
+            'lines.*.color' => ['nullable', 'string', 'max:255'],
+            'lines.*.size' => ['nullable', 'string', 'max:255'],
         ]);
 
         $order = DB::transaction(function () use ($validated) {
             $order = $this->brandPartner()->orders()->create([
-                'customer_name'  => $validated['customer_name'],
-                'company_name'   => $validated['company_name'] ?? null,
+                'customer_name' => $validated['customer_name'],
+                'company_name' => $validated['company_name'] ?? null,
                 'customer_email' => $validated['customer_email'],
                 'customer_phone' => $validated['customer_phone'] ?? null,
-                'address'        => $validated['address'] ?? null,
-                'address_line1'  => $validated['address_line1'] ?? null,
-                'address_line2'  => $validated['address_line2'] ?? null,
-                'barangay'       => $validated['barangay'] ?? null,
-                'city'           => $validated['city'] ?? null,
-                'province'       => $validated['province'] ?? null,
-                'postcode'       => $validated['postcode'] ?? null,
-                'placed_at'      => $validated['placed_at'] ?? now(),
-                'notes'          => $validated['notes'] ?? null,
-                'status'         => BrandPartnerOrderStatus::CONFIRMED,
-                'sub_total'      => 0,
-                'tax_total'      => 0,
-                'total'          => 0,
+                'address' => $validated['address'] ?? null,
+                'address_line1' => $validated['address_line1'] ?? null,
+                'address_line2' => $validated['address_line2'] ?? null,
+                'barangay' => $validated['barangay'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'province' => $validated['province'] ?? null,
+                'postcode' => $validated['postcode'] ?? null,
+                'placed_at' => $validated['placed_at'] ?? now(),
+                'notes' => $validated['notes'] ?? null,
+                'status' => BrandPartnerOrderStatus::CONFIRMED,
+                'sub_total' => 0,
+                'tax_total' => 0,
+                'total' => 0,
             ]);
 
             foreach ($validated['lines'] as $line) {
                 $product = BrandPartnerProduct::find($line['product_id']);
                 $unitPrice = (int) round($line['unit_price'] * 100);
+                $meta = [];
+                if (! empty($line['color'])) {
+                    $meta['color'] = $line['color'];
+                }
+                if (! empty($line['size'])) {
+                    $meta['size'] = $line['size'];
+                }
                 $order->lines()->create([
-                    'product_id'   => $line['product_id'],
+                    'product_id' => $line['product_id'],
                     'product_name' => $product->name,
-                    'quantity'     => $line['quantity'],
-                    'unit_price'   => $unitPrice,
-                    'total'        => $unitPrice * $line['quantity'],
+                    'quantity' => $line['quantity'],
+                    'unit_price' => $unitPrice,
+                    'total' => $unitPrice * $line['quantity'],
+                    'meta' => empty($meta) ? null : $meta,
                 ]);
+
+                $product->decrementStock($line['quantity'], $line['color'] ?? null, $line['size'] ?? null);
             }
 
             return $order->fresh();
         });
 
         return response()->json([
-            'order'   => $order,
+            'order' => $order,
             'message' => 'Order created successfully.',
         ], 201);
     }
@@ -166,12 +178,12 @@ class OrderController extends Controller
         return Inertia::modal('order/edit', [
             'order' => $order,
             'joStatusOptions' => [
-                'pending'    => 'Pending',
+                'pending' => 'Pending',
                 'processing' => 'Processing',
-                'ready'      => 'Ready for Pickup',
-                'delivered'  => 'Delivered',
-                'completed'  => 'Completed',
-                'cancelled'  => 'Cancelled',
+                'ready' => 'Ready for Pickup',
+                'delivered' => 'Delivered',
+                'completed' => 'Completed',
+                'cancelled' => 'Cancelled',
             ],
         ])->baseRoute('brand-partner.orders.show', $order);
     }
@@ -184,26 +196,26 @@ class OrderController extends Controller
         $this->authorize($order);
 
         $validated = $request->validate([
-            'customer_name'  => ['required', 'string', 'max:255'],
-            'company_name'   => ['nullable', 'string', 'max:255'],
+            'customer_name' => ['required', 'string', 'max:255'],
+            'company_name' => ['nullable', 'string', 'max:255'],
             'customer_email' => ['required', 'email', 'max:255'],
             'customer_phone' => ['nullable', 'string', 'max:50'],
-            'address_line1'  => ['nullable', 'string', 'max:255'],
-            'address_line2'  => ['nullable', 'string', 'max:255'],
-            'barangay'       => ['nullable', 'string', 'max:255'],
-            'city'           => ['nullable', 'string', 'max:255'],
-            'province'       => ['nullable', 'string', 'max:255'],
-            'postcode'       => ['nullable', 'string', 'max:20'],
-            'placed_at'      => ['nullable', 'date'],
-            'jo_number'      => ['nullable', 'string', 'max:100'],
-            'jo_status'      => ['nullable', 'string', 'max:50'],
-            'notes'          => ['nullable', 'string'],
+            'address_line1' => ['nullable', 'string', 'max:255'],
+            'address_line2' => ['nullable', 'string', 'max:255'],
+            'barangay' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'province' => ['nullable', 'string', 'max:255'],
+            'postcode' => ['nullable', 'string', 'max:20'],
+            'placed_at' => ['nullable', 'date'],
+            'jo_number' => ['nullable', 'string', 'max:100'],
+            'jo_status' => ['nullable', 'string', 'max:50'],
+            'notes' => ['nullable', 'string'],
         ]);
 
         $order->update($validated);
 
         return response()->json([
-            'order'   => $order->fresh(),
+            'order' => $order->fresh(),
             'message' => 'Order updated successfully.',
         ]);
     }
@@ -234,7 +246,7 @@ class OrderController extends Controller
         $order->update(['payment_status' => $request->payment_status]);
 
         return response()->json([
-            'order'   => $order->fresh(),
+            'order' => $order->fresh(),
             'message' => 'Payment status updated successfully.',
         ]);
     }
@@ -258,7 +270,7 @@ class OrderController extends Controller
     {
         $this->authorize($order);
 
-        if (!$order->isPending()) {
+        if (! $order->isPending()) {
             return back()->with('error', __('Only pending orders can be confirmed.'));
         }
 
@@ -276,7 +288,7 @@ class OrderController extends Controller
     {
         $this->authorize($order);
 
-        if (!$order->isConfirmed()) {
+        if (! $order->isConfirmed()) {
             return back()->with('error', __('Only confirmed orders can be completed.'));
         }
 

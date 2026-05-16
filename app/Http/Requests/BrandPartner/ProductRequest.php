@@ -60,6 +60,10 @@ class ProductRequest extends FormRequest
             'sizes' => ['nullable', 'string', 'max:1000'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'track_stock' => ['nullable', 'boolean'],
+            'variants' => ['nullable', 'array'],
+            'variants.*.color' => ['nullable', 'string', 'max:255'],
+            'variants.*.size' => ['nullable', 'string', 'max:255'],
+            'variants.*.stock' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', Rule::enum(BrandPartnerProductStatus::class)],
             'featured' => ['nullable', 'boolean'],
         ];

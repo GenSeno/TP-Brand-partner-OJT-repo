@@ -26,7 +26,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
                            <tr>
                               <td width="50%" valign="top">
-                                 <img src="{{ public_path('/img/logo/logo-pdf.png') }}" alt="Company Logo" style="width:160px; margin-bottom:10px;">
+                                 <img src="{{ public_path('/img/logo/logo_pakaras_white.png') }}" alt="Company Logo" style="width:160px; margin-bottom:10px;">
                               </td>
                               <td width="50%" valign="top" align="right">
                                  <h2 style="margin:0;">PAYMENT ACKNOWLEDGEMENT</h2>

@@ -118,11 +118,15 @@ class BrandPartnerShopController extends Controller
 
         $products = $productsQuery->latest()->paginate(12)->withQueryString();
 
-        $colorOption = BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
-            ->where('name', 'Color')
-            ->first();
-
-        $availableColors = $colorOption ? $colorOption->values()->orderBy('position')->pluck('value') : collect();
+        $availableColors = BrandPartnerProduct::published()
+            ->where('brand_partner_id', $brandPartner->id)
+            ->whereNotNull('colors')
+            ->pluck('colors')
+            ->flatMap(fn ($c) => array_map('trim', explode(',', $c)))
+            ->unique()
+            ->values()
+            ->sort()
+            ->values();
 
         $sizeOption = BrandPartnerProductOption::where('brand_partner_id', $brandPartner->id)
             ->where('name', 'Size')

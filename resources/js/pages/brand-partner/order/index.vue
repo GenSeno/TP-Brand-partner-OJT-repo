@@ -64,6 +64,13 @@
                     name="Status"
                     @change="submitFilters"
                 ></select-filter>
+                <Link
+                    :href="route('brand-partner.orders.create')"
+                    class="btn btn-primary d-flex align-items-center gap-2"
+                >
+                    <vue-feather type="plus" class="feather-14"></vue-feather>
+                    Add Order
+                </Link>
             </div>
         </div>
 
@@ -83,14 +90,28 @@
                     {{ formatCurrency(row.total) }}
                 </template>
 
+                <template #has_pre_order="{ value }">
+                    <span v-if="value" class="badge bg-warning">Pre-Order</span>
+                    <span v-else class="text-muted">—</span>
+                </template>
+
                 <template #status="{ value }">
                     <span class="badge" :class="`bg-${getStatusColor(value)}`">
                         {{ value }}
                     </span>
                 </template>
 
+                <template #reference="{ row, value }">
+                    <Link
+                        :href="route('brand-partner.orders.show', row.id)"
+                        class="text-primary fw-semibold text-decoration-none"
+                    >
+                        {{ value }}
+                    </Link>
+                </template>
+
                 <template #created_at="{ value }">
-                    {{ formatDate(value) }}
+                    {{ formatDateShort(value) }}
                 </template>
 
                 <template #action="{ row, value }">
@@ -141,8 +162,12 @@ const columns = [
         key: 'customer_name',
         sortable: true,
     },
-    { title: 'Email', dataIndex: 'customer_email', key: 'customer_email' },
     { title: 'Total', dataIndex: 'total', key: 'total', sortable: true },
+    {
+        title: 'Pre-Order',
+        dataIndex: 'has_pre_order',
+        key: 'has_pre_order',
+    },
     { title: 'Status', dataIndex: 'status', key: 'status', sortable: true },
     {
         title: 'Date',
@@ -186,6 +211,10 @@ const formatDate = (date) => {
     return dayjs(date).format('MMM D, YYYY h:mm A');
 };
 
+const formatDateShort = (date) => {
+    return dayjs(date).format('MMM D');
+};
+
 const getStatusColor = (status) => {
     const colors = {
         pending: 'warning',
@@ -196,3 +225,9 @@ const getStatusColor = (status) => {
     return colors[status] || 'secondary';
 };
 </script>
+
+<style>
+.badge.bg-warning {
+    white-space: nowrap;
+}
+</style>

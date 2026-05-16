@@ -304,10 +304,9 @@
                 <!-- Add to Cart -->
                 <button
                   class="product-card-atc"
-                  :disabled="!product.in_stock"
                   @click.prevent="addToCart(product)"
                 >
-                  {{ product.in_stock ? 'ADD TO CART' : 'OUT OF STOCK' }}
+                  {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
                 </button>
               </div>
             </div>
