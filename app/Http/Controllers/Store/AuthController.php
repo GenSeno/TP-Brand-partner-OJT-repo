@@ -8,11 +8,20 @@ use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 use Inertia\Inertia;
 
 class AuthController extends Controller
 {
     public function guestLogin()
+{
+    $user = User::firstOrCreate(
+        ['email' => 'guest@example.com'],
+        [
+            'name' => 'Guest',
+            'password' => bcrypt('guest123'),
+        ]
+    );
     {
         $user = User::firstOrCreate(
             ['email' => 'guest@example.com'],
@@ -199,5 +208,9 @@ class AuthController extends Controller
         ]);
 
         return back()->with('success', 'Password updated successfully.');
+    }
+    
+    public function redirectToGoogle() {
+        return Socialite::driver('google')->redirect();
     }
 }

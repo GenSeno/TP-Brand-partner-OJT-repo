@@ -42,4 +42,10 @@ return [
         'brandpartner_callback_url' => env('TPINKLAB_BRANDPARTNER_CALLBACK_URL', 'http://localhost:8001/api/products'),
     ],
 
+    'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
 ];

@@ -2,16 +2,17 @@ import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import {
-    HeadlessModal,
-    Modal,
-    ModalLink,
-    renderApp,
+  HeadlessModal,
+  Modal,
+  ModalLink,
+  renderApp,
 } from '@inertiaui/modal-vue';
 import { createBootstrap } from 'bootstrap-vue-next/plugins/createBootstrap';
 import { createApp } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import { IconHome } from '@tabler/icons-vue';
+import '../css/app.css';
 
 import VueEasyLightbox from 'vue-easy-lightbox';
 import VueFeather from 'vue-feather';
@@ -64,60 +65,60 @@ import '../scss/main.scss';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: async (name) => {
-        const pages = import.meta.glob('./pages/**/*.vue');
-        const page = await pages[`./pages/${name}.vue`]();
+  title: (title) => (title ? `${title} - ${appName}` : appName),
+  resolve: async (name) => {
+    const pages = import.meta.glob('./pages/**/*.vue');
+    const page = await pages[`./pages/${name}.vue`]();
 
-        // Use StoreLayout for store pages
-        if (name.startsWith('store/')) {
-            page.default.layout = StoreLayout;
-        } else {
-            page.default.layout = page.default.layout || MainLayout;
-        }
+    // Use StoreLayout for store pages
+    if (name.startsWith('store/')) {
+      page.default.layout = StoreLayout;
+    } else {
+      page.default.layout = page.default.layout || MainLayout;
+    }
 
-        return page;
-    },
-    setup({ el, App, props, plugin }) {
-        const app = createApp({ render: renderApp(App, props) });
+    return page;
+  },
+  setup({ el, App, props, plugin }) {
+    const app = createApp({ render: renderApp(App, props) });
 
-        app.component(VueFeather.name, VueFeather);
-        app.component('vue-select', VueSelect);
-        app.component('IconHome', IconHome);
-        app.use(VueApexCharts);
-        app.use(FlagIcon);
-        app.use(VueEasyLightbox);
+    app.component(VueFeather.name, VueFeather);
+    app.component('vue-select', VueSelect);
+    app.component('IconHome', IconHome);
+    app.use(VueApexCharts);
+    app.use(FlagIcon);
+    app.use(VueEasyLightbox);
 
-        app.component('avatar-upload', AvatarUpload);
-        app.component('loading-text', LoadingText);
+    app.component('avatar-upload', AvatarUpload);
+    app.component('loading-text', LoadingText);
 
-        app.component('input-error', InputError);
-        app.component('input-text', InputText);
-        app.component('input-slug', InputSlug);
-        app.component('dropdown-select', DropdownSelect);
+    app.component('input-error', InputError);
+    app.component('input-text', InputText);
+    app.component('input-slug', InputSlug);
+    app.component('dropdown-select', DropdownSelect);
 
-        app.component('submit-btn', SubmitBtn);
-        app.component('toggle-btn', ToggleBtn);
+    app.component('submit-btn', SubmitBtn);
+    app.component('toggle-btn', ToggleBtn);
 
-        app.component('dt-table', DtTable);
-        app.component('dt-search', DtSearch);
-        app.component('select-filter', SelectFilter);
+    app.component('dt-table', DtTable);
+    app.component('dt-search', DtSearch);
+    app.component('select-filter', SelectFilter);
 
-        app.component('dt-delete', DtDelete);
-        app.component('dt-bulk-delete', DtBulkDelete);
-        app.component('dt-delete2', DtDelete2);
-        app.component('dt-bulk-delete2', DtBulkDelete2);
-        app.component('dt-bulk-delete3', DtBulkDelete3);
+    app.component('dt-delete', DtDelete);
+    app.component('dt-bulk-delete', DtBulkDelete);
+    app.component('dt-delete2', DtDelete2);
+    app.component('dt-bulk-delete2', DtBulkDelete2);
+    app.component('dt-bulk-delete3', DtBulkDelete3);
 
-        app.component('Modal', Modal);
-        app.component('ModalLink', ModalLink);
-        app.component('HeadlessModal', HeadlessModal);
+    app.component('Modal', Modal);
+    app.component('ModalLink', ModalLink);
+    app.component('HeadlessModal', HeadlessModal);
 
-        app.use(createBootstrap());
+    app.use(createBootstrap());
 
-        return app.use(plugin).use(ZiggyVue).mount(el);
-    },
-    progress: {
-        color: '#FE9F43',
-    },
+    return app.use(plugin).use(ZiggyVue).mount(el);
+  },
+  progress: {
+    color: '#FE9F43',
+  },
 });

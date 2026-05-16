@@ -363,8 +363,8 @@ const submitRegister = () => {
 };
 
 const handleGoogleLogin = () => {
-  // Implement Google OAuth logic here
-  console.log('Google login clicked');
+  window.location.href = 'localhost:8000/auth/google/redirect';
+  Console.log('Google Login CLicked');
 };
 
 const handleFacebookLogin = () => {
