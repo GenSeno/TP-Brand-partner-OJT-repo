@@ -13,6 +13,7 @@
         "inertiaui/modal": "^0.21.1",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.27",
         "laravel/tinker": "^2.9",
         "lorisleiva/laravel-actions": "^2.9",
         "spatie/laravel-activitylog": "^4.10",
