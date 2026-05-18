@@ -12,32 +12,16 @@
         data-bs-interval="4000"
         data-bs-pause="false"
       >
-        <div class="carousel-indicators">
+        <div class="carousel-indicators" v-if="sliders.length > 0">
           <button
+            v-for="(slider, idx) in sliders"
+            :key="idx"
             type="button"
             data-bs-target="#heroCarousel"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide-to="3"
-            aria-label="Slide 4"
+            :data-bs-slide-to="idx"
+            :class="{ active: idx === 0 }"
+            :aria-current="idx === 0 ? 'true' : null"
+            :aria-label="'Slide ' + (idx + 1)"
           ></button>
         </div>
         <div class="carousel-inner">
@@ -50,7 +34,6 @@
             <span class="arrow-icon">&#10094;</span>
           </button>
 
-          <!-- Next Button -->
           <button
             class="carousel-control-next custom-arrow"
             type="button"
@@ -59,77 +42,45 @@
           >
             <span class="arrow-icon">&#10095;</span>
           </button>
-          <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
-          <div class="carousel-item active slide-2-bg">
-            <div class="slide-layout">
-              <div class="slide-content-left px-5">
-                <h1 class="slide-title text-white">HUGIS COLLECTION V2</h1>
-                <p class="slide-subtitle text-white">
-                  HUGIS COLLECTION V2 celebrates this collective energy. It
-                  honors individuality while embracing the beauty of community,
-                  proving that when runners move as one, their diversity becomes
-                  the masterpiece.
-                </p>
-                <a
-                  :href="route('store.brand-partner.shop', brandPartner?.slug)"
-                  class="btn slide-btn-outline"
-                  >VIEW ALL PRODUCTS</a
-                >
-              </div>
-            </div>
-          </div>
 
-          <!-- Slide 2: Keep On Breaking Boundaries (img-carousel1) [WAS SLIDE 1] -->
-          <div class="carousel-item slide-1-bg">
-            <div class="slide-overlay-left-dark"></div>
-            <div class="slide-layout">
-              <div class="slide-content-left px-5" style="z-index: 2">
-                <h1 class="slide-title text-white">
-                  KEEP ON<br />BREAKING THE<br />BOUNDARIES.
-                </h1>
-                <p class="slide-subtitle text-white mt-3">
-                  Tribu Pakaras is launching its official eCommerce platform
-                  soon, powered by upgraded production, improved quality, and
-                  expanded product offerings designed for athletes who demand
-                  more.
-                </p>
-                <a
-                  :href="route('store.brand-partner.shop', brandPartner.slug)"
-                  class="btn slide-btn-outline mt-4"
-                  >VIEW ALL PRODUCTS</a
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3: Dare To Dream Big (img-carousel3) -->
-          <div class="carousel-item slide-3-bg">
-            <div class="slide-overlay-left-orange"></div>
-            <div class="slide-layout">
-              <div class="slide-content-left px-5" style="z-index: 2">
-                <h1 class="slide-title text-white">
-                  DARE TO DREAM BIG — KEEP ON BREAKING THE BOUNDARIES.
-                </h1>
-                <p class="slide-subtitle text-white mt-3">
-                  Tribu Pakaras is launching its official eCommerce platform
-                  soon, powered by upgraded production, improved quality, and
-                  expanded product offerings designed for athletes who demand
-                  more.
-                </p>
-                <Link
-                  :href="route('store.brand-partner.shop', brandPartner?.slug)"
-                  class="btn slide-btn-outline mt-4"
-                  >VIEW ALL PRODUCTS</Link
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 4: Believe In Your Dreams (img-carousel4) -->
-          <div class="carousel-item slide-4-bg">
+          <div
+            v-for="(slider, idx) in sliders"
+            :key="slider.id"
+            class="carousel-item"
+            :class="{ active: idx === 0 }"
+            :style="slider.image ? { backgroundImage: 'url(' + slider.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' } : {}"
+          >
+            <div v-if="slider.overlay_type === 'dark'" class="slide-overlay-left-dark"></div>
+            <div v-if="slider.overlay_type === 'orange'" class="slide-overlay-left-orange"></div>
             <div
-              class="slide-layout justify-content-center w-100 text-center flex-column"
-            ></div>
+              class="slide-layout"
+              :class="slider.content_position === 'center' ? 'justify-content-center w-100 text-center flex-column' : ''"
+            >
+              <div
+                v-if="slider.content_position !== 'center'"
+                class="slide-content-left px-5"
+                :style="slider.overlay_type !== 'none' ? { zIndex: 2 } : {}"
+              >
+                <h1 class="slide-title text-white">{{ slider.title }}</h1>
+                <p v-if="slider.subtitle" class="slide-subtitle text-white">{{ slider.subtitle }}</p>
+                <a
+                  v-if="slider.link_url"
+                  :href="slider.link_url"
+                  class="btn slide-btn-outline mt-3"
+                  >{{ slider.link_text }}</a
+                >
+                <a
+                  v-else
+                  :href="brandPartner ? route('store.brand-partner.shop', brandPartner.slug) : '#'"
+                  class="btn slide-btn-outline mt-3"
+                  >{{ slider.link_text }}</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div v-if="sliders.length === 0" class="carousel-item active" style="background: #1a1a2e; min-height: 400px; display: flex; align-items: center; justify-content: center;">
+            <p class="text-white">No slides configured. Add slides in CMS &rarr; Homepage &rarr; Carousel Slides.</p>
           </div>
         </div>
       </div>
@@ -354,118 +305,70 @@
 
     <!-- Check Our Collections Section -->
     <section class="collections-section">
-      <!-- THE Collection Banner -->
-      <div
-        class="dreamer-banner"
-        style="
-          background-image: url('/img/img-dreamercollection.png');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        "
-      >
-        <div class="dreamer-content">
-          <span class="dreamer-label">THE</span>
-          <h2 class="dreamer-title">DREAMER</h2>
-          <p class="dreamer-description">
-            <strong>Dare to Dream Big</strong> with our first shirt collection
-            for 2026 — <strong>The Dreamer</strong> — featuring the blend of
-            milky way &amp; outer space patterns, vectors of limitless
-            adventures and shades of greens and cloud dancer which represent the
-            colors of 2026.
-          </p>
-          <a
-            :href="
-              brandPartner
-                ? route('store.brand-partner.collections', brandPartner.slug)
-                : '#'
-            "
-            class="dreamer-btn"
-            >CHECK OUR COLLECTIONS</a
+      <template v-if="collectionBanners.length > 0">
+        <!-- Main Banners -->
+        <template v-for="banner in collectionBanners" :key="'banner-'+banner.id">
+          <div
+            v-if="banner.section_type === 'banner'"
+            class="dreamer-banner"
+            :style="banner.image ? { backgroundImage: 'url(' + banner.image + ')', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : {}"
           >
-        </div>
-      </div>
-
-      <!-- 3-Panel Grid -->
-      <div class="collections-panels">
-        <!-- Panel 1: HUGIS -->
-        <div
-          class="col-panel panel-dark"
-          style="background-image: url('/img/img-indexcollection1.png')"
-        >
-          <div class="col-panel-overlay"></div>
-          <div class="col-panel-body">
-            <h3 class="col-panel-title">HUGIS Collection v2</h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-outline"
-              >VIEW COLLECTION</a
-            >
+            <div class="dreamer-content">
+              <span v-if="banner.badge_text" class="dreamer-label">{{ banner.badge_text }}</span>
+              <h2 class="dreamer-title">{{ banner.title }}</h2>
+              <div class="dreamer-description" v-html="banner.description"></div>
+              <a
+                v-if="banner.link_url"
+                :href="banner.link_url"
+                class="dreamer-btn"
+                >{{ banner.link_text }}</a
+              >
+              <a
+                v-else
+                :href="brandPartner ? route('store.brand-partner.collections', brandPartner.slug) : '#'"
+                class="dreamer-btn"
+                >{{ banner.link_text }}</a
+              >
+            </div>
           </div>
-        </div>
+        </template>
 
-        <!-- Panel 2: Kuris Koleksyon -->
-        <div
-          class="col-panel panel-mid"
-          style="background-image: url('/img/img-collection2.png')"
-        >
-          <div class="col-panel-overlay"></div>
-          <div class="col-panel-body col-panel-body-center">
-            <div class="kuris-logo">></div>
-            <h3 class="col-panel-title">Kuris Koleksyon</h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-outline-dark"
-              >VIEW COLLECTION</a
+        <!-- Collection Panels -->
+        <div class="collections-panels" v-if="collectionBanners.some(b => b.section_type === 'panel')">
+          <template v-for="banner in collectionBanners" :key="'panel-'+banner.id">
+            <div
+              v-if="banner.section_type === 'panel'"
+              class="col-panel"
+              :class="banner.overlay_class || ''"
+              :style="banner.image ? { backgroundImage: 'url(' + banner.image + ')', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' } : {}"
             >
-          </div>
+              <div class="col-panel-overlay"></div>
+              <div class="col-panel-body" :class="banner.sort_order === 1 ? '' : 'col-panel-body-center'">
+                <h3 class="col-panel-title">{{ banner.title }}</h3>
+                <p v-if="banner.description" class="col-panel-desc">{{ banner.description }}</p>
+                <a
+                  v-if="banner.link_url"
+                  :href="banner.link_url"
+                  class="col-panel-btn"
+                  >{{ banner.link_text }}</a
+                >
+                <a
+                  v-else
+                  :href="brandPartner ? route('store.brand-partner.collections', brandPartner.slug) : '#'"
+                  class="col-panel-btn"
+                  >{{ banner.link_text }}</a
+                >
+              </div>
+            </div>
+          </template>
         </div>
+      </template>
 
-        <!-- Panel 3: Discover CTA -->
-        <div
-          class="col-panel panel-orange"
-          style="background-image: url('/img/img-indexcollection3.png')"
-        >
-          <div class="col-panel-overlay"></div>
-          <div class="col-panel-body col-panel-body-center">
-            <h3 class="col-panel-cta-title">
-              Discover about <br />Our Collections
-            </h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-white"
-              >VIEW OUR COLLECTIONS</a
-            >
-          </div>
+      <template v-else>
+        <div class="collections-panels text-center py-5" style="background: #f5f5f5;">
+          <p class="text-muted">No collection banners configured. Add them in CMS &rarr; Homepage &rarr; Collection Banners.</p>
         </div>
-      </div>
+      </template>
     </section>
 
     <!-- Featured Products Section -->
@@ -648,31 +551,14 @@
             </div>
           </div>
 
-          <!-- Static fallback cards if no reviews prop -->
-          <template v-if="!reviews || reviews.length === 0">
-            <div class="review-card" v-for="n in 4" :key="n">
-              <h4 class="review-headline">
-                Cras amet ultricies pellentesque aliquam varius.
-              </h4>
-              <p class="review-text">
-                Mauris id non nunc laoreet proin morbi faucibus id a. Donec
-                gravida at sed auctor amet platea ac sed. Est tincidunt morbi
-                tortor fermentum elementum platea. Erat id vestibulum duis
-                turpis.
-              </p>
-              <div class="review-author">
-                <img
-                  src="/img/avatar-placeholder.png"
-                  alt="Reviewer"
-                  class="review-avatar"
-                />
-                <div class="review-author-info">
-                  <span class="review-name">Iris Connelly</span>
-                  <span class="review-role">42k Finisher</span>
-                </div>
-              </div>
-            </div>
-          </template>
+          <div
+            v-if="!reviews || reviews.length === 0"
+            class="review-card"
+          >
+            <p class="review-text text-muted">
+              No reviews yet. Add them in CMS &rarr; Homepage &rarr; Reviews.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -1090,6 +976,14 @@ const props = defineProps({
   categories: Array,
   events: Array,
   reviews: {
+    type: Array,
+    default: () => [],
+  },
+  sliders: {
+    type: Array,
+    default: () => [],
+  },
+  collectionBanners: {
     type: Array,
     default: () => [],
   },
@@ -1523,6 +1417,7 @@ const toggleWishlist = (productId) => {
   height: 100%;
   background: linear-gradient(110deg, #ec4e20 85%, transparent 85%);
   z-index: 1;
+  opacity: 80%;
 }
 
 /* Carousel Indicators */
@@ -2348,8 +2243,32 @@ const toggleWishlist = (productId) => {
   margin-bottom: 12px;
 }
 
-.dreamer-description strong {
+.dreamer-description :deep(strong) {
   color: #fff;
+  font-weight: 700;
+}
+
+.dreamer-description :deep(img) {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px auto;
+  border-radius: 8px;
+}
+
+.dreamer-description :deep(p) {
+  margin-bottom: 12px;
+}
+
+.dreamer-description :deep(ul), .dreamer-description :deep(ol) {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.dreamer-description :deep(h1), .dreamer-description :deep(h2), .dreamer-description :deep(h3) {
+  color: #fff;
+  margin-top: 16px;
+  margin-bottom: 12px;
   font-weight: 700;
 }
 
@@ -2471,6 +2390,8 @@ const toggleWishlist = (productId) => {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 220px;
+  color: #fff;
+  text-align: center;
 }
 
 .panel-dark .col-panel-title {
@@ -2499,6 +2420,8 @@ const toggleWishlist = (productId) => {
   font-size: 12.5px;
   line-height: 1.6;
   margin: 0 0 20px;
+  color: #ffffff;
+  text-align: center;
 }
 
 .panel-dark .col-panel-desc {
@@ -2514,51 +2437,25 @@ const toggleWishlist = (productId) => {
 }
 
 /* Panel buttons */
+
 .col-panel-btn {
   display: inline-block;
-  font-size: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 11px 26px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 9px 18px;
   text-decoration: none;
-  width: fit-content;
-  transition: all 0.25s;
-  font-family: 'Public Sans', sans-serif;
+  transition: all 0.3s;
+  margin: 0 auto;
 }
 
-.col-panel-btn-outline {
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  color: #fff;
-  background: transparent;
-}
-
-.col-panel-btn-outline:hover {
+.col-panel-btn:hover {
   background: #fff;
+  color: #ec4e1f;
   border-color: #fff;
-  color: #ec4e1f;
-}
-
-.col-panel-btn-outline-dark {
-  border: 1.5px solid #ffffff;
-  color: #ffffff;
-  background: transparent;
-}
-
-.col-panel-btn-outline-dark:hover {
-  background: #ffffff;
-  color: #ec4e1f;
-}
-
-.col-panel-btn-white {
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  color: #fff;
-  background: transparent;
-}
-
-.col-panel-btn-white:hover {
-  background: #fff;
-  color: #e84b0f;
 }
 
 /* ===== Responsive ===== */

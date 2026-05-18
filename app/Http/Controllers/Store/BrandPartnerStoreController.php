@@ -14,16 +14,21 @@ use Inertia\Inertia;
 
 class BrandPartnerStoreController extends Controller
 {
+    protected function getBrandPartner(): BrandPartner
+    {
+        $slug = config('store.brand_partner_slug');
+
+        return BrandPartner::where('slug', $slug)
+            ->where('status', BrandPartnerStatus::ACTIVE)
+            ->firstOrFail();
+    }
+
     /**
      * Display the brand partner store page.
      */
     public function index(Request $request)
     {
-        $brandPartnerSlug = config('store.brand_partner_slug');
-
-        $brandPartner = BrandPartner::where('slug', $brandPartnerSlug)
-            ->where('status', BrandPartnerStatus::ACTIVE)
-            ->firstOrFail();
+        $brandPartner = $this->getBrandPartner();
 
         $categories = $brandPartner->categories()
             ->enabled()
@@ -66,12 +71,44 @@ class BrandPartnerStoreController extends Controller
             ->limit(4)
             ->get();
 
+        $sliders = $brandPartner->homepageSliders()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($s) => array_merge($s->toArray(), [
+                'image' => $s->image ? asset('storage/' . $s->image) : null,
+            ]));
+
+        $collectionBanners = $brandPartner->homepageCollectionBanners()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($b) => array_merge($b->toArray(), [
+                'image' => $b->image ? asset('storage/' . $b->image) : null,
+            ]));
+
+        $reviews = $brandPartner->homepageReviews()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($r) => [
+                'id' => $r->id,
+                'name' => $r->name,
+                'role' => $r->role,
+                'comment' => $r->comment,
+                'avatar_url' => $r->avatar ? asset('storage/'.$r->avatar) : null,
+                'rating' => $r->rating,
+            ]);
+
         return Inertia::render('store/index', [
             'brandPartner' => $brandPartner,
             'categories' => $categories,
             'events' => $events,
             'products' => $products,
             'featuredProducts' => $featuredProducts,
+            'sliders' => $sliders,
+            'collectionBanners' => $collectionBanners,
+            'reviews' => $reviews,
             'filter' => $request->only(['category', 'event', 'featured', 'search']),
             'wishlistedIds' => Auth::check()
                 ? Wishlist::where('user_id', Auth::id())
@@ -86,11 +123,7 @@ class BrandPartnerStoreController extends Controller
      */
     public function product(Request $request, string $productSlug)
     {
-        $brandPartnerSlug = config('store.brand_partner_slug');
-
-        $brandPartner = BrandPartner::where('slug', $brandPartnerSlug)
-            ->where('status', BrandPartnerStatus::ACTIVE)
-            ->firstOrFail();
+        $brandPartner = $this->getBrandPartner();
 
         $product = BrandPartnerProduct::where('brand_partner_id', $brandPartner->id)
             ->where('slug', $productSlug)

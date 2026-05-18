@@ -965,6 +965,26 @@ const toggleWishlist = (productId) => {
     font-weight: 700;
 }
 
+.tab-panel-right :deep(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 16px 0;
+    border-radius: 4px;
+}
+
+.tab-panel-right :deep(ul), .tab-panel-right :deep(ol) {
+    padding-left: 20px;
+    margin-bottom: 16px;
+}
+
+.tab-panel-right :deep(h1), .tab-panel-right :deep(h2), .tab-panel-right :deep(h3), .tab-panel-right :deep(h4), .tab-panel-right :deep(h5) {
+    color: #1a1a1a;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
 /* ========================
    Related Products
    ======================== */

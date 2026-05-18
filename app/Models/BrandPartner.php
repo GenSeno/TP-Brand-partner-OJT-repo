@@ -41,9 +41,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class BrandPartner extends Authenticatable implements HasMedia
 {
     use HasFactory;
-    use Notifiable;
     use InteractsWithMedia;
     use LogsActivity;
+    use Notifiable;
     use SoftDeletes;
 
     protected $guard_name = 'brand_partner';
@@ -114,11 +114,26 @@ class BrandPartner extends Authenticatable implements HasMedia
         return $this->hasMany(BrandPartnerSize::class);
     }
 
+    public function homepageSliders(): Relations\HasMany
+    {
+        return $this->hasMany(HomepageSlider::class);
+    }
+
+    public function homepageCollectionBanners(): Relations\HasMany
+    {
+        return $this->hasMany(HomepageCollectionBanner::class);
+    }
+
+    public function homepageReviews(): Relations\HasMany
+    {
+        return $this->hasMany(HomepageReview::class);
+    }
+
     // Accessors
     protected function logoUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->getFirstMediaUrl('logo', 'preview'),
+            get: fn () => $this->getFirstMediaUrl('logo', 'preview'),
         );
     }
 
@@ -131,19 +146,20 @@ class BrandPartner extends Authenticatable implements HasMedia
     public function scopeStatus(Builder $query, BrandPartnerStatus|string $status): Builder
     {
         $status = $status instanceof BrandPartnerStatus ? $status : BrandPartnerStatus::from($status);
+
         return $query->where('status', $status);
     }
 
     public function scopeSearch(Builder $query, $value): Builder
     {
-        if (!trim($value)) {
+        if (! trim($value)) {
             return $query;
         }
 
         return $query->where(function ($q) use ($value) {
             $q->where('name', 'like', "%{$value}%")
-              ->orWhere('email', 'like', "%{$value}%")
-              ->orWhere('contact_person', 'like', "%{$value}%");
+                ->orWhere('email', 'like', "%{$value}%")
+                ->orWhere('contact_person', 'like', "%{$value}%");
         });
     }
 
