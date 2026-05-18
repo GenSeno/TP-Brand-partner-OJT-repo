@@ -11,11 +11,16 @@ class Event extends Model
         'description',
         'image',
         'event_date',
+        'location',
+        'distances',
+        'other_distances',
         'is_published',
     ];
 
     protected $casts = [
         'event_date' => 'date',
         'is_published' => 'boolean',
+        'distances' => 'array',
+        'other_distances' => 'array',
     ];
 }

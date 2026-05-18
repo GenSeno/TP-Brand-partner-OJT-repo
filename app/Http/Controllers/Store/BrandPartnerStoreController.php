@@ -102,21 +102,24 @@ class BrandPartnerStoreController extends Controller
             ]);
 
         return Inertia::render('store/index', [
-        'brandPartner' => $brandPartner,
-        'categories' => $categories,
-        'events' => $events,
-        'products' => $products,
-        'featuredProducts' => $featuredProducts,
-        'filter' => $request->only(['category', 'event', 'featured', 'search']),
-        'wishlistedIds' => Auth::check()
-            ? Wishlist::where('user_id', Auth::id())
-                ->pluck('brand_partner_product_id')
-                ->toArray()
-            : [],
-        
-        'cmsEvents' => Event::where('is_published', true)
-            ->orderBy('event_date', 'asc')
-            ->get()
+            'brandPartner' => $brandPartner,
+            'categories' => $categories,
+            'events' => $events,
+            'products' => $products,
+            'featuredProducts' => $featuredProducts,
+            'sliders' => $sliders,
+            'collectionBanners' => $collectionBanners,
+            'reviews' => $reviews,
+            'filter' => $request->only(['category', 'event', 'featured', 'search']),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
+
+            'cmsEvents' => Event::where('is_published', true)
+                ->orderBy('event_date', 'asc')
+                ->get()
             ->map(fn($e) => [
                 'id'         => $e->id,
                 'title'      => $e->title,
@@ -124,6 +127,15 @@ class BrandPartnerStoreController extends Controller
                 'image'      => $e->image ? asset('storage/' . $e->image) : null,
                 'event_date' => $e->event_date->format('M d, Y'),
                 'raw_date'   => $e->event_date->toDateString(),
+                'location'   => $e->location,
+                'distances' => collect($e->distances ?? [])
+                    ->filter(fn($d) => $d !== 'Other')
+                    ->merge(
+                        collect($e->other_distances ?? [])
+                            ->pluck('value')
+                    )
+                    ->values()
+                    ->toArray(),
             ]),
         ]);
     }

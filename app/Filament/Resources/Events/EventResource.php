@@ -9,6 +9,7 @@ use App\Filament\Resources\Events\Pages\ViewEvent;
 use App\Models\Event;
 use BackedEnum;
 use Filament\Forms;
+use Filament\Schemas\Components\Group;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -35,17 +36,51 @@ class EventResource extends Resource
         return $form
             ->components([
                 Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
+                ->required()
+                ->maxLength(255),
+
                 Forms\Components\Textarea::make('description')
                     ->nullable(),
+
+                Forms\Components\TextInput::make('location')
+                    ->placeholder('e.g. Gaisano Mall of Gensan, General Santos City')
+                    ->nullable(),
+
+                Forms\Components\DatePicker::make('event_date')
+                    ->required(),
+
+                Group::make([
+                    Forms\Components\CheckBoxList::make('distances')
+                        ->options([
+                            '5KM'  => '5KM',
+                            '21KM' => '21KM',
+                            '10KM' => '10KM',
+                            '42KM' => '42KM',
+                            '15KM' => '15KM',
+                            'Other'=> 'Other'
+                        ])
+                        ->columns(3)
+                        ->live(),
+
+                    Forms\Components\Repeater::make('other_distances')
+                        ->label('Specify Other Distance')
+                        ->schema([
+                            Forms\Components\TextInput::make('value')
+                                ->placeholder('e.g. Ultra Marathon, 100KM...')
+                                ->required(),
+                        ])
+                        ->addActionLabel('Add another distance')
+                        ->visible(fn ($get) => in_array('Other', $get('distances') ?? []))
+                ])
+                    ->columnSpan(1),
+                    
+
                 Forms\Components\FileUpload::make('image')
                     ->disk('public')
                     ->directory('events')
                     ->image()
                     ->nullable(),
-                Forms\Components\DatePicker::make('event_date')
-                    ->required(),
+
                 Forms\Components\Toggle::make('is_published')
                     ->label('Published')
                     ->default(false),
