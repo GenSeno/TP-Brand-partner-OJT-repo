@@ -607,7 +607,7 @@
       </div>
     </section>
 
-    <!-- What's Happening Section -->
+    <!-- Events -->
     <section class="events-happening-section">
       <div class="events-happening-inner">
         <!-- Header -->
@@ -642,10 +642,27 @@
 
           <div class="events-scroll-wrap" id="eventsScrollWrap">
             <div class="events-scroll-track">
-              <div class="event-card" v-for="n in 6" :key="n">
+              <div
+                v-if="!filteredEvents.length"
+                style="padding: 2rem; color: #999"
+              >
+                No {{ activeEventTab }} events at the moment.
+              </div>
+
+              <div
+                class="event-card"
+                v-for="event in filteredEvents"
+                :key="event.id"
+              >
                 <!-- Image with hover overlay -->
                 <div class="event-card-image">
-                  <div class="event-img-placeholder"></div>
+                  <img
+                    v-if="event.image"
+                    :src="event.image"
+                    :alt="event.title"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                  <div v-else class="event-img-placeholder"></div>
                   <div class="event-card-hover-overlay">
                     <div class="event-hover-actions">
                       <a href="#" class="event-hover-btn">REGISTER</a>
@@ -658,28 +675,18 @@
                   </div>
                 </div>
 
-                <!-- Distance Tags -->
-                <div class="event-tags">
-                  <span class="event-tag">42KM</span>
-                  <span class="event-tag">21KM</span>
-                  <span class="event-tag">10KM</span>
-                  <span class="event-tag">5KM</span>
-                </div>
+                <!-- No distance tags since your CMS doesn't have them -->
 
-                <h3 class="event-card-title">Gensan Half Marathon 2026</h3>
+                <!-- Dynamic Title -->
+                <h3 class="event-card-title">{{ event.title }}</h3>
 
+                <!-- Dynamic Meta -->
                 <div class="event-card-meta">
                   <div class="event-meta-row">
                     <div class="event-meta-icon">
                       <i class="ri-calendar-line"></i>
                     </div>
-                    <span>Apr 19, 2026</span>
-                  </div>
-                  <div class="event-meta-row">
-                    <div class="event-meta-icon">
-                      <i class="ri-map-pin-line"></i>
-                    </div>
-                    <span>Gaisano Mall of Gensan, General Santos City</span>
+                    <span>{{ event.event_date }}</span>
                   </div>
                 </div>
 
@@ -970,11 +977,27 @@ import ToastComponent from '@/components/ToastContainer.vue';
 const activeEventTab = ref('upcoming');
 let countdownInterval = null;
 
+const filteredEvents = computed(() => {
+  if (!props.cmsEvents?.length) return [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return props.cmsEvents.filter((event) => {
+    const eventDate = new Date(event.raw_date);
+    return activeEventTab.value === 'upcoming'
+      ? eventDate >= today
+      : eventDate < today;
+  });
+});
+
 const props = defineProps({
   brandPartner: Object,
   products: Object,
   categories: Array,
   events: Array,
+  cmsEvents: {
+    type: Array,
+    default: () => [],
+  },
   reviews: {
     type: Array,
     default: () => [],

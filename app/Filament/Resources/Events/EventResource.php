@@ -40,6 +40,8 @@ class EventResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->nullable(),
                 Forms\Components\FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('events')
                     ->image()
                     ->nullable(),
                 Forms\Components\DatePicker::make('event_date')
