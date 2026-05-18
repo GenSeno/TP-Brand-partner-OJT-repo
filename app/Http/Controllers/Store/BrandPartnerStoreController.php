@@ -137,7 +137,11 @@ class BrandPartnerStoreController extends Controller
                     ->values()
                     ->toArray(),
             ]),
-        ]);
+            'nextEvent' => Event::where('is_published', true)
+                ->where('event_date', '>=', now()->toDateString())
+                ->orderBy('event_date', 'asc')
+                ->first()?->only(['title', 'event_date']),
+            ]);
     }
 
     /**

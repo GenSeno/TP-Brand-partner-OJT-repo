@@ -661,7 +661,7 @@
     </section>
 
     <!-- Marathon Countdown Section -->
-    <section class="marathon-section">
+    <section class="marathon-section" v-if="nextEvent">
       <div class="marathon-overlay"></div>
       <div class="marathon-content">
         <h2 class="marathon-title">
@@ -669,13 +669,18 @@
           <span class="marathon-highlight">Biggest<br />Marathon</span>
           of the Year
         </h2>
-        <p class="marathon-desc">
-          Eleifend nam ultrices sed ut ultrices. Nisi laoreet nulla posuere
-          hendrerit. Etiam lectus mattis ultricies nunc aliquet a. Mattis nisi
-          integer at diam amet sed sit.
+
+        <p
+          style="
+            color: #ff9505;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          "
+        >
+          {{ nextEvent.title }}
         </p>
 
-        <!-- Countdown Timer -->
         <div class="countdown-wrap">
           <div class="countdown-box">
             <span class="countdown-num">00</span>
@@ -695,14 +700,12 @@
           </div>
         </div>
 
-        <p class="marathon-note">
-          Note: Donec euismod lectus pellentesque mi neque turpis. Praesent
-          adipiscing mauris ut ut vel nunc. Elit eu gravida ut sit.
-        </p>
-
         <a href="#" class="marathon-btn">REGISTER NOW</a>
       </div>
     </section>
+
+    <!-- Hide section if no upcoming events -->
+    <section class="marathon-section" v-else style="display: none"></section>
 
     <!-- Event Section -->
     <section class="events-happening-section">
@@ -1090,19 +1093,6 @@ import { emitter } from '@/composables/eventBus';
 import ToastComponent from '@/components/ToastContainer.vue';
 
 const activeEventTab = ref('upcoming');
-let countdownInterval = null;
-
-const filteredEvents = computed(() => {
-  if (!props.cmsEvents?.length) return [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return props.cmsEvents.filter((event) => {
-    const eventDate = new Date(event.raw_date);
-    return activeEventTab.value === 'upcoming'
-      ? eventDate >= today
-      : eventDate < today;
-  });
-});
 
 const filteredEvents = computed(() => {
   if (!props.cmsEvents?.length) return [];
@@ -1121,14 +1111,6 @@ const props = defineProps({
   products: Object,
   categories: Array,
   events: Array,
-  cmsEvents: {
-    type: Array,
-    default: () => [],
-  },
-  cmsEvents: {
-    type: Array,
-    default: () => [],
-  },
   reviews: {
     type: Array,
     default: () => [],
@@ -1157,6 +1139,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  cmsEvents: {
+    type: Array,
+    default: () => [],
+  },
+  nextEvent: {
+    type: Object,
+    default: null,
+  },
   auth: Object,
 });
 
@@ -1180,11 +1170,6 @@ const truncate = (text, length) => {
 const selectCategory = (category) => {
   selectedCategory.value = category.id;
   selectedEvent.value = null;
-  applyFilters();
-};
-
-const selectEvent = (event) => {
-  selectedEvent.value = event.id;
   applyFilters();
 };
 
@@ -1275,25 +1260,45 @@ onMounted(() => {
     }
   });
 
-  // Countdown timer
-  const targetDate = new Date('2026-12-31T00:00:00').getTime();
-  const updateCountdown = () => {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
-    if (diff <= 0) return;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    const pad = (n) => String(n).padStart(2, '0');
-    const el = (id) => document.getElementById(id);
-    if (el('cd-days')) el('cd-days').textContent = pad(days);
-    if (el('cd-hours')) el('cd-hours').textContent = pad(hours);
-    if (el('cd-minutes')) el('cd-minutes').textContent = pad(minutes);
-    if (el('cd-seconds')) el('cd-seconds').textContent = pad(seconds);
-  };
-  updateCountdown();
-  countdownInterval = setInterval(updateCountdown, 1000);
+  // Event Countdown timer
+  onMounted(() => {
+    if (props.nextEvent) {
+      const eventDate = new Date(props.nextEvent.event_date);
+      eventDate.setHours(0, 0, 0, 0);
+
+      countdownInterval = setInterval(() => {
+        const now = new Date();
+        const diff = eventDate - now;
+
+        if (diff <= 0) {
+          clearInterval(countdownInterval);
+          document.querySelector('.countdown-wrap').innerHTML =
+            '<p style="color:white">Event has started!</p>';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const pad = (n) => String(n).padStart(2, '0');
+
+        document.querySelectorAll('.countdown-num')[0].textContent = pad(days);
+        document.querySelectorAll('.countdown-num')[1].textContent = pad(hours);
+        document.querySelectorAll('.countdown-num')[2].textContent =
+          pad(minutes);
+        document.querySelectorAll('.countdown-num')[3].textContent =
+          pad(seconds);
+      }, 1000);
+    }
+  });
+
+  onBeforeUnmount(() => {
+    if (countdownInterval) clearInterval(countdownInterval);
+  });
 
   // Events slider
   const eventsTrack = document.querySelector('.events-scroll-track');
