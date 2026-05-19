@@ -754,79 +754,73 @@
                 v-for="event in filteredEvents"
                 :key="event.id"
               >
-                <div
-                  v-if="!filteredEvents.length"
-                  style="padding: 2rem; color: #999"
-                >
-                  No {{ activeEventTab }} events at the moment.
+                <!-- Image with hover overlay -->
+                <div class="event-card-image">
+                  <img
+                    v-if="event.image"
+                    :src="event.image"
+                    :alt="event.title"
+                    style="width: 100%; height: 100%; object-fit: cover"
+                  />
+                  <div v-else class="event-img-placeholder"></div>
+                  <div class="event-card-hover-overlay">
+                    <div class="event-hover-actions">
+                      <a href="#" class="event-hover-btn">REGISTER</a>
+                      <a
+                        href="#"
+                        class="event-hover-btn event-hover-btn-outline"
+                        >VIEW EVENT INFO</a
+                      >
+                    </div>
+                  </div>
                 </div>
 
-                <div
-                  class="event-card"
-                  v-for="event in filteredEvents"
-                  :key="event.id"
-                >
-                  <!-- Image with hover overlay -->
-                  <div class="event-card-image">
-                    <img
-                      v-if="event.image"
-                      :src="event.image"
-                      :alt="event.title"
-                      style="width: 100%; height: 100%; object-fit: cover"
-                    />
-                    <div v-else class="event-img-placeholder"></div>
-                  </div>
+                <div class="event-tags" v-if="event.distances?.length">
+                  <span
+                    class="event-tag"
+                    v-for="distance in event.distances"
+                    :key="distance"
+                  >
+                    {{ distance }}
+                  </span>
+                </div>
 
-                  <!-- Distance Tags -->
-                  <div class="event-tags" v-if="event.distances?.length">
-                    <span
-                      class="event-tag"
-                      v-for="distance in event.distances"
-                      :key="distance"
-                    >
-                      {{ distance }}
-                    </span>
-                  </div>
+                <h3 class="event-card-title">{{ event.title }}</h3>
 
-                  <!-- Dynamic Title -->
-                  <h3 class="event-card-title">{{ event.title }}</h3>
-
-                  <!-- Dynamic Meta -->
-                  <div class="event-card-meta">
-                    <div class="event-meta-row">
-                      <div class="event-meta-icon">
-                        <i class="ri-calendar-line"></i>
-                      </div>
-                      <span>{{ event.event_date }}</span>
+                <div class="event-card-meta">
+                  <div class="event-meta-row">
+                    <div class="event-meta-icon">
+                      <i class="ri-calendar-line"></i>
                     </div>
-                    <div class="event-meta-row" v-if="event.location">
-                      <div class="event-meta-icon">
-                        <i class="ri-map-pin-line"></i>
-                      </div>
-                      <span>{{ event.location }}</span>
+                    <span>{{ event.event_date }}</span>
+                  </div>
+                  <div class="event-meta-row" v-if="event.location">
+                    <div class="event-meta-icon">
+                      <i class="ri-map-pin-line"></i>
                     </div>
+                    <span>{{ event.location }}</span>
                   </div>
+                </div>
 
-                  <div class="event-card-actions">
-                    <a href="#" class="event-action-link">REGISTER</a>
-                    <a href="#" class="event-action-link">VIEW EVENT INFO</a>
-                  </div>
+                <div class="event-card-actions">
+                  <a href="#" class="event-action-link">REGISTER</a>
+                  <a href="#" class="event-action-link">VIEW EVENT INFO</a>
                 </div>
               </div>
             </div>
-
-            <button
-              class="events-arrow-btn events-arrow-right"
-              id="eventsArrowRight"
-            >
-              <i class="ri-arrow-right-s-line"></i>
-            </button>
           </div>
 
-          <!-- View All Button -->
-          <div class="events-view-all-wrap">
-            <a href="#" class="events-view-all-btn">VIEW ALL EVENTS</a>
-          </div>
+          <button
+            class="events-arrow-btn events-arrow-right"
+            id="eventsArrowRight"
+          >
+            <i class="ri-arrow-right-s-line"></i>
+          </button>
+        </div>
+
+        <!-- View All Button -->
+        <div class="events-view-all-wrap">
+          <a href="#" class="events-view-all-btn">VIEW ALL EVENTS</a>
         </div>
       </div>
     </section>
@@ -1093,6 +1087,7 @@ import { emitter } from '@/composables/eventBus';
 import ToastComponent from '@/components/ToastContainer.vue';
 
 const activeEventTab = ref('upcoming');
+let countdownInterval = null;
 
 const filteredEvents = computed(() => {
   if (!props.cmsEvents?.length) return [];
@@ -1259,45 +1254,48 @@ onMounted(() => {
       track.style.transform = `translateX(-${reviewIndex * getCardWidth()}px)`;
     }
   });
+});
 
-  // Event Countdown timer
-  onMounted(() => {
-    if (props.nextEvent) {
-      const eventDate = new Date(props.nextEvent.event_date);
-      eventDate.setHours(0, 0, 0, 0);
+// Event Countdown timer
+onMounted(() => {
+  if (props.nextEvent) {
+    const eventDate = new Date(props.nextEvent.event_date);
+    eventDate.setHours(0, 0, 0, 0);
 
-      countdownInterval = setInterval(() => {
-        const now = new Date();
-        const diff = eventDate - now;
+    countdownInterval = setInterval(() => {
+      const now = new Date();
+      const diff = eventDate - now;
 
-        if (diff <= 0) {
-          clearInterval(countdownInterval);
-          document.querySelector('.countdown-wrap').innerHTML =
-            '<p style="color:white">Event has started!</p>';
-          return;
-        }
+      if (diff <= 0) {
+        clearInterval(countdownInterval);
+        document.querySelector('.countdown-wrap').innerHTML =
+          '<p style="color:white">Event has started!</p>';
+        return;
+      }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        const pad = (n) => String(n).padStart(2, '0');
+      const pad = (n) => String(n).padStart(2, '0');
 
-        document.querySelectorAll('.countdown-num')[0].textContent = pad(days);
-        document.querySelectorAll('.countdown-num')[1].textContent = pad(hours);
-        document.querySelectorAll('.countdown-num')[2].textContent =
-          pad(minutes);
-        document.querySelectorAll('.countdown-num')[3].textContent =
-          pad(seconds);
-      }, 1000);
-    }
-  });
+      document.querySelectorAll('.countdown-num')[0].textContent = pad(days);
+      document.querySelectorAll('.countdown-num')[1].textContent = pad(hours);
+      document.querySelectorAll('.countdown-num')[2].textContent = pad(minutes);
+      document.querySelectorAll('.countdown-num')[3].textContent = pad(seconds);
+    }, 1000);
+  }
 
   onBeforeUnmount(() => {
-    if (countdownInterval) clearInterval(countdownInterval);
+    clearTimeout(searchTimeout);
+    clearInterval(countdownInterval);
+    if (cartModal) {
+      cartModal.dispose();
+      cartModal = null;
+    }
   });
 
   // Events slider
