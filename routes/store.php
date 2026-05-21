@@ -13,6 +13,7 @@ use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerWishlistController as WishlistController;
 use App\Http\Controllers\Store\UserAddressController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Store\PaymentController;
 use Laravel\Socialite\Facades\Socialite;
 
 /**
@@ -142,8 +143,28 @@ Route::group([
         ->middleware('auth');
 
     //Google Login Method
-    Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+    Route::get('/auth/facebook', [AuthController::class, 'redirectToFacebook']);
+    Route::get('/auth/facebook/callback', [AuthController::class, 'handleFacebookCallback']);
+
+    Route::get('/auth/status', function () {
+        return response()->json([
+            'authenticated' => auth()->check(),
+            'user' => auth()->user()?->only('id', 'name', 'email')
+        ]);
+    });
+
+    // Payment routes
+    Route::middleware('auth')->group(function () {
+        Route::post('/payment/{reference}/invoice', [PaymentController::class, 'createInvoice'])->name('store.payment.invoice');
+        Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('store.payment.success');
+        Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('store.payment.failed');
+    });
+
+    // Webhook
+    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('store.payment.webhook');
 
     //Testing Purposes
     Route::post('/guest-login', [AuthController::class, 'guestLogin']);

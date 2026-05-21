@@ -213,28 +213,76 @@ class AuthController extends Controller
         return back()->with('success', 'Password updated successfully.');
     }
     
+    //Google Login Method
     public function redirectToGoogle()
     {
-    return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->redirect();
     }
-
     public function handleGoogleCallback()
     {
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return $this->closePopupWithError('Google login failed.');
+        }
 
         $user = User::updateOrCreate(
+            ['email' => $googleUser->email],
             [
-                'email' => $googleUser->email,
-            ],
-            [
-                'name' => $googleUser->name,
+                'name'      => $googleUser->name,
                 'google_id' => $googleUser->id,
-                'password' => Hash::make(Str::random(24)),
+                'avatar'    => $googleUser->avatar,
+                'password'  => Hash::make(Str::random(24)),
             ]
         );
 
         Auth::login($user);
 
-        return redirect('/');
+        return $this->closePopupWithSuccess();
+    }
+
+    //Facebook Login Method
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+    public function handleFacebookCallback()
+    {
+        try {
+            $facebookUser = Socialite::driver('facebook')->user();
+        } catch (\Exception $e) {
+            return $this->closePopupWithError('Facebook login failed.');
+        }
+
+        $user = User::updateOrCreate(
+            ['email' => $facebookUser->getEmail()],
+            [
+                'name'        => $facebookUser->getName(),
+                'facebook_id' => $facebookUser->getId(),
+                'avatar'      => $facebookUser->getAvatar(),
+                'password'    => Hash::make(Str::random(24)),
+            ]
+        );
+
+        Auth::login($user);
+
+        return $this->closePopupWithSuccess();
+    }
+
+    // Helper methods
+    private function closePopupWithSuccess()
+    {
+        return response('<script>
+            window.opener.postMessage("auth_success", window.location.origin);
+            window.close();
+        </script>')->header('Content-Type', 'text/html');
+    }
+
+    private function closePopupWithError($message)
+    {
+        return response('<script>
+            window.opener.postMessage("auth_error", window.location.origin);
+            window.close();
+        </script>')->header('Content-Type', 'text/html');
     }
 }

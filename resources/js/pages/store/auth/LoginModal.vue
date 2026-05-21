@@ -77,7 +77,7 @@
             <button
               type="button"
               class="auth-btn-google"
-              @click="handleGoogleLogin"
+              @click="openAuthPopup('google')"
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -90,7 +90,7 @@
             <button
               type="button"
               class="auth-btn-facebook"
-              @click="handleFacebookLogin"
+              @click="openAuthPopup('facebook')"
             >
               <i class="ri-facebook-fill facebook-icon"></i>
               LOGIN WITH FACEBOOK
@@ -142,7 +142,7 @@
           <button
             type="button"
             class="auth-btn-google"
-            @click="handleGoogleLogin"
+            @click="openAuthPopup('google')"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -155,7 +155,7 @@
           <button
             type="button"
             class="auth-btn-facebook"
-            @click="handleFacebookLogin"
+            @click="openAuthPopup('facebook')"
           >
             <i class="ri-facebook-fill facebook-icon"></i>
             LOGIN WITH FACEBOOK
@@ -306,6 +306,40 @@ const registerForm = useForm({
   terms: false,
 });
 
+//Social Login Methods
+function openAuthPopup(provider) {
+  const width = 500;
+  const height = 600;
+  const left = window.screenX + (window.outerWidth - width) / 2;
+  const top = window.screenY + (window.outerHeight - height) / 2;
+
+  const popup = window.open(
+    `/auth/${provider}`,
+    `${provider}_login`,
+    `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no`,
+  );
+
+  const pollTimer = setInterval(() => {
+    if (popup.closed) {
+      clearInterval(pollTimer);
+      checkAuthStatus();
+    }
+  }, 200);
+}
+
+async function checkAuthStatus() {
+  try {
+    const response = await fetch('/auth/status');
+    const data = await response.json();
+
+    if (data.authenticated) {
+      window.location.reload();
+    }
+  } catch (e) {
+    console.error('Auth check failed:', e);
+  }
+}
+
 //Function to login as guest for testing purposes
 const guestLogin = async () => {
   await axios.post('/guest-login');
@@ -360,16 +394,6 @@ const submitRegister = () => {
       emit('success');
     },
   });
-};
-
-const handleGoogleLogin = () => {
-  window.location.href = 'http://localhost:8000/auth/google/redirect';
-  console.log('Google login clicked');
-};
-
-const handleFacebookLogin = () => {
-  // Implement Facebook OAuth logic here
-  console.log('Facebook login clicked');
 };
 
 // Cleanup on unmount
