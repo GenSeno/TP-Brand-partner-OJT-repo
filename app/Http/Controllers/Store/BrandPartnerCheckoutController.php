@@ -15,9 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Xendit\Configuration;
-use Xendit\Invoice\InvoiceApi;
-use Xendit\Invoice\CreateInvoiceRequest;
 
 class BrandPartnerCheckoutController extends Controller
 {
@@ -249,7 +246,6 @@ class BrandPartnerCheckoutController extends Controller
 
             return $order;
         });
-        $this->clearCart($request, $brandPartnerSlug);
 
         $this->clearCart($request, $brandPartnerSlug);
 
@@ -283,7 +279,7 @@ class BrandPartnerCheckoutController extends Controller
             return Inertia::location($invoice['invoice_url']);
 
         } catch (\Exception $e) {
-            dd('Error: ' . $e->getMessage());
+            ('Error: ' . $e->getMessage());
         }
     }
 
