@@ -157,14 +157,9 @@ Route::group([
     });
 
     // Payment routes
-    Route::middleware('auth')->group(function () {
-        Route::post('/payment/{reference}/invoice', [PaymentController::class, 'createInvoice'])->name('store.payment.invoice');
-        Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('store.payment.success');
-        Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('store.payment.failed');
-    });
-
-    // Webhook
-    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('store.payment.webhook');
+    Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('payment.failed');
+    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook');
 
     //Testing Purposes
     Route::post('/guest-login', [AuthController::class, 'guestLogin']);

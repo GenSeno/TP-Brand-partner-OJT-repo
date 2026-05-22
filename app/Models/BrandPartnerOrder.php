@@ -64,6 +64,8 @@ class BrandPartnerOrder extends Model
         'jo_status',
         'placed_at',
         'meta',
+        'payment_invoice_id',
+        'payment_status',
     ];
 
     protected $casts = [

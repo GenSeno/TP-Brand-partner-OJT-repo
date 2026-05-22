@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Xendit\Configuration;
+use Xendit\Invoice\InvoiceApi;
+use Xendit\Invoice\CreateInvoiceRequest;
 
 class BrandPartnerCheckoutController extends Controller
 {
@@ -246,12 +249,42 @@ class BrandPartnerCheckoutController extends Controller
 
             return $order;
         });
+        $this->clearCart($request, $brandPartnerSlug);
 
         $this->clearCart($request, $brandPartnerSlug);
 
-        return redirect()->route('store.brand-partner.order.confirmation', [
-            'reference' => $order->reference,
-        ])->with('success', __('Order placed successfully!'));
+        try {
+            $successUrl = route('store.payment.success', $order->reference);
+            $failureUrl = route('store.payment.failed', $order->reference);
+
+            $response = \Illuminate\Support\Facades\Http::withBasicAuth(
+                config('services.xendit.secret_key'), ''
+            )->post('https://api.xendit.co/v2/invoices', [
+                'external_id'          => $order->reference,
+                'amount'               => $order->total / 100,
+                'payer_email'          => $order->customer_email,
+                'description'          => 'Order #' . $order->reference,
+                'success_redirect_url' => $successUrl,
+                'failure_redirect_url' => $failureUrl,
+                'currency'             => 'PHP',
+            ]);
+
+            if ($response->failed()) {
+                throw new \Exception('Xendit API error: ' . $response->body());
+            }
+
+            $invoice = $response->json();
+
+            $order->update([
+                'payment_invoice_id' => $invoice['id'],
+                'payment_status'     => 'pending',
+            ]);
+
+            return Inertia::location($invoice['invoice_url']);
+
+        } catch (\Exception $e) {
+            dd('Error: ' . $e->getMessage());
+        }
     }
 
     /**
