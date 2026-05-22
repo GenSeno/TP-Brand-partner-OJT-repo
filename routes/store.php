@@ -110,7 +110,7 @@ Route::group([
     Route::post('/address/states', [AddressController::class, 'states'])->name('address.states');
 
     // Order confirmation
-    Route::get('/order/{reference}', [BrandPartnerCheckoutController::class, 'confirmation'])
+    Route::get('/order/payment/{reference}/success', [BrandPartnerCheckoutController::class, 'confirmation'])
         ->name('brand-partner.order.confirmation');
 
     Route::patch('/order/{reference}/cancel', [AuthController::class, 'cancelOrder'])

@@ -52,16 +52,15 @@ class PaymentController extends Controller
         return Inertia::location($invoice['invoice_url']);
     }
 
-    public function success(Request $request, string $orderReference)
-    {
-        $order = BrandPartnerOrder::where('reference', $orderReference)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+    public function success(Request $request, string $reference)
+{
+    $order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
+    $order->update(['payment_status' => 'paid']);
 
-        return Inertia::render('store/payment-success', [
-            'order' => $order,
-        ]);
-    }
+    return redirect()->route('store.brand-partner.order.confirmation', [
+        'reference' => $reference,
+    ]);
+}
 
     public function failed(Request $request, string $orderReference)
     {
@@ -73,6 +72,16 @@ class PaymentController extends Controller
             'order' => $order,
         ]);
     }
+
+    //public function failed(Request $request, string $reference)
+    //{
+    //$order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
+    //$order->update(['payment_status' => 'failed']);
+
+    //return redirect()->route('store.brand-partner.order.confirmation', [
+    //    'reference' => $reference,
+    //]);
+    //}
 
     public function webhook(Request $request)
     {
