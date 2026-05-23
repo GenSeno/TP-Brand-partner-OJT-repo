@@ -1204,7 +1204,7 @@ const hasFeaturedProducts = computed(() => {
   return featuredProductList.value.length > 0;
 });
 
-//Produst Badge
+//Produst New Badge
 function isNewProduct(createdAt) {
   const dateCreated = new Date(createdAt);
   const now = new Date();
