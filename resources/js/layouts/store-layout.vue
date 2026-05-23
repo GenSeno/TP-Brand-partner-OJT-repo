@@ -3,7 +3,10 @@
     <!-- Header Start -->
     <header
       class="header-style-6 dark-theme-header"
-      :class="{ 'header-hidden': headerHide, 'light-theme-header': isLightRoute }"
+      :class="{
+        'header-hidden': headerHide,
+        'light-theme-header': isLightRoute,
+      }"
     >
       <div class="header-inner">
         <!-- Brand Logo -->
@@ -287,18 +290,45 @@
               about the probable consequences of ther actions
             </p>
           </div>
+
           <div class="footer-info">
             <h4>Sitemap</h4>
-            <p>Shop</p>
-            <p>Collections</p>
+            <Link
+              :href="
+                brandPartner
+                  ? route('store.brand-partner.shop', brandPartner.slug)
+                  : '#'
+              "
+            >
+              <p>Shop</p>
+            </Link>
+
+            <Link
+              :href="
+                brandPartner
+                  ? route('store.brand-partner.collections', brandPartner.slug)
+                  : '#'
+              "
+            >
+              <p>Collections</p>
+            </Link>
+
             <p>Header 1</p>
             <p>Header 2</p>
             <p>Header 3</p>
           </div>
           <div class="footer-info">
             <h4>Account</h4>
-            <p>Wishlist</p>
-            <p>Cart</p>
+            <button @click="handleWishlistClick">Wishlist</button>
+            <Link
+              :href="
+                brandPartner
+                  ? route('store.brand-partner.cart', brandPartner.slug)
+                  : '#'
+              "
+            >
+              <p>Cart</p>
+            </Link>
           </div>
           <div class="footer-info">
             <h4>Contact Information</h4>
@@ -568,7 +598,7 @@ const focusSearchField = () => {
   position: relative;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 15px 0 15px 30px;    /* Remove right padding, keep left */
+  padding: 15px 0 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1164,6 +1194,15 @@ const focusSearchField = () => {
   margin-right: 7px;
 }
 
+.footer-info button {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .socials div {
   display: flex;
   gap: 15px;
@@ -1190,6 +1229,8 @@ const focusSearchField = () => {
 }
 
 .footer-input {
+  color: #a2a2a2;
+  background-color: #f9f9f9;
   height: 45px;
   width: 250px;
   padding: 15px;
