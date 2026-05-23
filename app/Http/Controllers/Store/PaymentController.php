@@ -73,15 +73,15 @@ class PaymentController extends Controller
         ]);
     }
 
-    //public function failed(Request $request, string $reference)
-    //{
-    //$order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
-    //$order->update(['payment_status' => 'failed']);
+       /* public function failed(Request $request, string $reference)
+        {
+        $order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
+        $order->update(['payment_status' => 'failed']);
 
-    //return redirect()->route('store.brand-partner.order.confirmation', [
-    //    'reference' => $reference,
-    //]);
-    //}
+        return redirect()->route('store.brand-partner.order.confirmation', [
+            'reference' => $reference,
+        ]);
+        } */
 
     public function webhook(Request $request)
     {

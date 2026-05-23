@@ -160,8 +160,5 @@ Route::group([
     Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('payment.failed');
     Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook');
-
-    //Testing Purposes
-    Route::post('/guest-login', [AuthController::class, 'guestLogin']);
 });
 

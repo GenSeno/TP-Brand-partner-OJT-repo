@@ -107,8 +107,8 @@
               </button>
             </p>
 
-            <div @click="guestLogin" class="auth-do-later">
-              <a class="auth-do-later-link">Login as Guest</a>
+            <div class="auth-do-later">
+              <a href="/" class="auth-do-later-link">Do it later</a>
             </div>
           </form>
         </div>
@@ -139,27 +139,29 @@
             </p>
           </div>
 
-          <button
-            type="button"
-            class="auth-btn-google"
-            @click="openAuthPopup('google')"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              class="google-icon"
-            />
-            LOGIN WITH GOOGLE
-          </button>
+          <div class="signup-socials-btn">
+            <button
+              type="button"
+              class="auth-btn-google sign-up-google"
+              @click="openAuthPopup('google')"
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                class="google-icon"
+              />
+              LOGIN WITH GOOGLE
+            </button>
 
-          <button
-            type="button"
-            class="auth-btn-facebook"
-            @click="openAuthPopup('facebook')"
-          >
-            <i class="ri-facebook-fill facebook-icon"></i>
-            LOGIN WITH FACEBOOK
-          </button>
+            <button
+              type="button"
+              class="auth-btn-facebook sign-up-facebook"
+              @click="openAuthPopup('facebook')"
+            >
+              <i class="ri-facebook-fill facebook-icon"></i>
+              LOGIN WITH FACEBOOK
+            </button>
+          </div>
 
           <p class="auth-switch" style="margin-top: 20px">
             Already have an account?
@@ -306,7 +308,7 @@ const registerForm = useForm({
   terms: false,
 });
 
-//Social Login Methods
+//Socials Login Methods
 function openAuthPopup(provider) {
   const width = 500;
   const height = 600;
@@ -339,13 +341,6 @@ async function checkAuthStatus() {
     console.error('Auth check failed:', e);
   }
 }
-
-//Function to login as guest for testing purposes
-const guestLogin = async () => {
-  await axios.post('/guest-login');
-
-  window.location.href = '/';
-};
 
 // Sync with v-model
 watch(
@@ -650,6 +645,12 @@ onUnmounted(() => {
   transform: translateY(-1px);
 }
 
+.signup-socials-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px !important;
+}
+
 .auth-btn-google {
   height: 52px;
   border-radius: 50px;
@@ -659,7 +660,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
