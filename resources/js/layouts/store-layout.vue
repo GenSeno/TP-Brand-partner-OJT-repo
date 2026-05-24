@@ -261,7 +261,7 @@
     <!-- Side Menu End -->
 
     <!-- Account Modal Component -->
-    <LoginModal
+    <AuthForm
       v-model="accountModalOpen"
       :login-route="route('store.brand-partner.login.submit')"
       :register-route="route('store.brand-partner.register.submit')"
@@ -386,7 +386,7 @@
 <script setup>
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
-import LoginModal from '@/pages/store/auth/LoginModal.vue';
+import AuthForm from '@/pages/store/auth/AuthForm.vue';
 
 const currentPath = ref(window.location.pathname);
 
