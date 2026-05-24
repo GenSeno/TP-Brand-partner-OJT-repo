@@ -260,7 +260,7 @@
     </div>
     <!-- Side Menu End -->
 
-    <!-- Account Modal Component -->
+    <!-- Store Authentication Form -->
     <AuthForm
       v-model="accountModalOpen"
       :login-route="route('store.brand-partner.login.submit')"
