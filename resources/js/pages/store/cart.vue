@@ -41,10 +41,15 @@
                 >
                   {{ item.product.name }}
                 </Link>
-                <span v-if="item.product.collection" class="cart-item-collection">
+                <span
+                  v-if="item.product.collection"
+                  class="cart-item-collection"
+                >
                   {{ item.product.collection.label }}
                 </span>
-                <span v-if="getVariantStock(item) === 0" class="cart-item-badge">PRE-ORDER</span>
+                <span v-if="getVariantStock(item) === 0" class="cart-item-badge"
+                  >PRE-ORDER</span
+                >
                 <div class="cart-item-meta">
                   <span v-if="item.product.short_description"
                     >Garment: {{ item.product.short_description }}</span
@@ -215,9 +220,10 @@ const formatCurrency = (amount) => {
 const getVariantStock = (item) => {
   const variants = item.product?.meta?.variants;
   if (!variants?.length) return item.product?.stock ?? 0;
-  const match = variants.find(v =>
-    (!item.color || v.color === item.color) &&
-    (!item.size || v.size === item.size)
+  const match = variants.find(
+    (v) =>
+      (!item.color || v.color === item.color) &&
+      (!item.size || v.size === item.size),
   );
   return match ? (match.stock ?? 0) : (item.product?.stock ?? 0);
 };
@@ -226,7 +232,7 @@ const updateQuantity = (itemId, quantity) => {
   if (quantity < 1) return;
   const qty = parseInt(quantity);
 
-  const item = localCart.value.items.find(i => i.id === itemId);
+  const item = localCart.value.items.find((i) => i.id === itemId);
   if (!item) return;
 
   const diff = qty - item.quantity;
@@ -236,13 +242,16 @@ const updateQuantity = (itemId, quantity) => {
 
   fetch(route('store.brand-partner.cart.update', itemId), {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
     body: JSON.stringify({ quantity: qty }),
   });
 };
 
 const removeItem = (itemId) => {
-  localCart.value.items = localCart.value.items.filter(i => i.id !== itemId);
+  localCart.value.items = localCart.value.items.filter((i) => i.id !== itemId);
   recalcTotals();
 
   router.delete(route('store.brand-partner.cart.remove', itemId), {

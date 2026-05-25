@@ -265,7 +265,6 @@
       v-model="accountModalOpen"
       :login-route="route('store.brand-partner.login.submit')"
       :register-route="route('store.brand-partner.register.submit')"
-      @success="handleAuthSuccess"
     />
 
     <!-- Main Content -->
@@ -385,7 +384,7 @@
 
 <script setup>
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import AuthForm from '@/pages/store/auth/AuthForm.vue';
 
 const currentPath = ref(window.location.pathname);
@@ -453,12 +452,6 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('open-login-modal', openLoginModal);
 });
-
-const handleAuthSuccess = () => {
-  // Optional: Handle successful authentication
-  console.log('Authentication successful');
-  // You could refresh page props or redirect here
-};
 
 const isRoute = (name) => {
   return route().current(name);

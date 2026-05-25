@@ -293,6 +293,8 @@ const emit = defineEmits(['update:modelValue', 'success']);
 
 const accountModalOpen = ref(props.modelValue);
 const showRegister = ref(false);
+const showForgotPassword = ref(false);
+const forgotSuccess = ref(null);
 
 const loginForm = useForm({
   email: '',
@@ -341,6 +343,18 @@ async function checkAuthStatus() {
     console.error('Auth check failed:', e);
   }
 }
+
+//Password Reset
+const forgotForm = useForm({ email: '' });
+
+const sendResetLink = () => {
+  forgotForm.post(route('store.password.email'), {
+    onSuccess: () => {
+      forgotSuccess.value = 'Reset link sent! Check your email.';
+      forgotForm.reset();
+    },
+  });
+};
 
 // Sync with v-model
 watch(
