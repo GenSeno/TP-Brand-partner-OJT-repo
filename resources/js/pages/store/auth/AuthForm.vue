@@ -15,7 +15,7 @@
       </button>
 
       <!-- LOGIN VIEW -->
-      <template v-if="!showRegister">
+      <template v-if="!showRegister && !showForgotPassword">
         <!-- Left: Form -->
         <div class="account-card-left">
           <div class="account-card-copy">
@@ -69,7 +69,9 @@
                 <input type="checkbox" v-model="loginForm.remember" />
                 <span>Remember Password?</span>
               </label>
-              <a href="#" class="auth-forgot">Forgot Password?</a>
+              <a href="#" class="auth-forgot" @click="showForgotPassword = true"
+                >Forgot Password?</a
+              >
             </div>
 
             <button type="submit" class="auth-btn-primary">LOGIN</button>
@@ -113,7 +115,89 @@
           </form>
         </div>
 
-        <!-- Right: Photo -->
+        <div class="account-card-right">
+          <div class="account-card-img-placeholder"></div>
+        </div>
+      </template>
+
+      <!-- FORGOT PASSWORD -->
+      <template v-else-if="showForgotPassword && !showRegister">
+        <div class="account-card-left">
+          <button
+            type="button"
+            class="auth-back-btn"
+            @click="
+              showForgotPassword = false;
+              forgotSuccess = null;
+            "
+          >
+            <i class="ri-arrow-left-line"></i> Back to Login
+          </button>
+
+          <div class="account-card-copy">
+            <h2 class="auth-title">Forgot Password?</h2>
+            <p class="auth-subtitle">
+              Enter your email address and we'll send you a link to reset your
+              password.
+            </p>
+          </div>
+
+          <div v-if="forgotSuccess" class="forgot-success">
+            <i class="ri-checkbox-circle-line" style="font-size: 18px"></i>
+            {{ forgotSuccess }}
+          </div>
+
+          <form
+            class="account-form"
+            @submit.prevent="sendResetLink"
+            v-if="!forgotSuccess"
+          >
+            <div class="auth-error-banner" v-if="forgotForm.hasErrors">
+              <i class="ri-alert-line"></i>
+              <span>{{
+                forgotForm.errors.email || 'Something went wrong.'
+              }}</span>
+            </div>
+
+            <div class="auth-field">
+              <label class="auth-label">EMAIL ADDRESS</label>
+              <input
+                type="email"
+                class="auth-input"
+                :class="{ 'auth-input--error': forgotForm.errors.email }"
+                placeholder="Enter your email address"
+                v-model="forgotForm.email"
+                required
+              />
+              <span class="auth-field-error" v-if="forgotForm.errors.email">
+                {{ forgotForm.errors.email }}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              class="auth-btn-primary"
+              :disabled="forgotForm.processing"
+            >
+              {{ forgotForm.processing ? 'SENDING...' : 'SEND RESET LINK' }}
+            </button>
+          </form>
+
+          <div v-if="forgotSuccess" style="margin-top: 16px">
+            <button
+              type="button"
+              class="auth-btn-primary"
+              @click="
+                showForgotPassword = false;
+                forgotSuccess = null;
+                forgotForm.reset();
+              "
+            >
+              BACK TO LOGIN
+            </button>
+          </div>
+        </div>
+
         <div class="account-card-right">
           <div class="account-card-img-placeholder"></div>
         </div>
@@ -405,7 +489,6 @@ const submitRegister = () => {
   });
 };
 
-// Cleanup on unmount
 onUnmounted(() => {
   document.body.style.overflow = '';
   document.body.style.paddingRight = '';
@@ -413,7 +496,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Copy all the account modal styles from store-layout.vue here */
 /* ============================================
    ACCOUNT MODAL STYLES
    ============================================ */
@@ -506,8 +588,6 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   background: #fff;
-  overflow-y: auto;
-  max-height: 92vh;
 }
 
 .account-card-copy {
@@ -641,7 +721,7 @@ onUnmounted(() => {
 .auth-btn-primary {
   border: none;
   border-radius: 50px;
-  height: 52px;
+  height: 50px;
   font-weight: 700;
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
@@ -666,7 +746,7 @@ onUnmounted(() => {
 }
 
 .auth-btn-google {
-  height: 52px;
+  height: 50px;
   border-radius: 50px;
   border: 1.5px solid #e0e0e0;
   background: #fff;
@@ -696,7 +776,7 @@ onUnmounted(() => {
 }
 
 .auth-btn-facebook {
-  height: 52px;
+  height: 50px;
   border-radius: 50px;
   border: 1.5px solid #e0e0e0;
   background: #fff;
@@ -704,7 +784,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -830,6 +910,21 @@ onUnmounted(() => {
 
 .auth-back-btn:hover {
   color: #333;
+}
+
+/* Forgot Password Style */
+.forgot-success {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #166534;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 /* Responsive */
