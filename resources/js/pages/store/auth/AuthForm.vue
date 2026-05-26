@@ -586,8 +586,10 @@ onUnmounted(() => {
   padding: 48px 44px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background: #fff;
+  overflow-y: auto;
+  max-height: 92vh;
 }
 
 .account-card-copy {
@@ -876,9 +878,9 @@ onUnmounted(() => {
   padding: 48px 44px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow-y: auto;
   max-height: 92vh;
+  justify-content: flex-start;
 }
 
 /* REGISTER — Left panel styles */
