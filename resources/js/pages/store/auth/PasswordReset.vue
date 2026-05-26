@@ -8,20 +8,6 @@
 
       <form @submit.prevent="submit">
         <div class="form-group">
-          <label>Email</label>
-          <input
-            v-model="form.email"
-            type="email"
-            class="grocery-input"
-            placeholder="Enter your email"
-            required
-          />
-          <span class="error-text" v-if="form.errors.email">
-            {{ form.errors.email }}
-          </span>
-        </div>
-
-        <div class="form-group">
           <label>New Password</label>
           <input
             v-model="form.password"
@@ -69,7 +55,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.post(route('store.password.update'));
+  form.post(route('password.update'));
 };
 </script>
 

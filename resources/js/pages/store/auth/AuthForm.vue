@@ -432,7 +432,7 @@ async function checkAuthStatus() {
 const forgotForm = useForm({ email: '' });
 
 const sendResetLink = () => {
-  forgotForm.post(route('store.password.email'), {
+  forgotForm.post(route('password.email'), {
     onSuccess: () => {
       forgotSuccess.value = 'Reset link sent! Check your email.';
       forgotForm.reset();
