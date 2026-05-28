@@ -65,6 +65,7 @@
                   :title="buttonLabel"
                 >
                   <i
+                    class="text-gray-6 text-[13.5px]"
                     :class="{
                       'fas fa-eye': showPassword,
                       'fas fa-eye-slash': !showPassword,
@@ -80,9 +81,9 @@
             </div>
 
             <div class="auth-remember-row">
-              <label class="auth-remember text-gray-6">
+              <label class="auth-remember">
                 <input type="checkbox" v-model="loginForm.remember" />
-                <span>Remember Password?</span>
+                <span class="text-gray-6">Remember Password?</span>
               </label>
               <a href="#" class="auth-forgot" @click="showForgotPassword = true"
                 >Forgot Password?</a
@@ -701,7 +702,7 @@ onUnmounted(() => {
   height: 50px;
   padding: 0 18px;
   border: 1.5px solid #e0e0e0;
-  border-radius: 12px;
+  border-radius: 50px;
   background: #f9f9f9;
   font-size: 14px;
   color: #222;
@@ -723,6 +724,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  user-select: none;
 }
 
 .auth-remember {
