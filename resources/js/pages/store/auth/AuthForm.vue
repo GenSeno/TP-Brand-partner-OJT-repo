@@ -48,24 +48,39 @@
                 loginForm.errors.email
               }}</span>
             </div>
-
             <div class="auth-field">
               <label class="auth-label">PASSWORD</label>
-              <input
-                type="password"
-                class="auth-input"
-                :class="{ 'auth-input--error': loginForm.errors.password }"
-                placeholder="Password"
-                v-model="loginForm.password"
-                required
-              />
-              <span class="auth-field-error" v-if="loginForm.errors.password">{{
-                loginForm.errors.password
-              }}</span>
+              <div class="pass-group">
+                <input
+                  :type="showPassword ? 'text' : 'password'"
+                  class="auth-input"
+                  :class="{ 'auth-input--error': loginForm.errors.password }"
+                  placeholder="Password"
+                  v-model="loginForm.password"
+                  required
+                />
+                <span
+                  @click="toggleShow"
+                  class="toggle-password"
+                  :title="buttonLabel"
+                >
+                  <i
+                    :class="{
+                      'fas fa-eye': showPassword,
+                      'fas fa-eye-slash': !showPassword,
+                    }"
+                  ></i>
+                </span>
+                <span
+                  class="auth-field-error"
+                  v-if="loginForm.errors.password"
+                  >{{ loginForm.errors.password }}</span
+                >
+              </div>
             </div>
 
             <div class="auth-remember-row">
-              <label class="auth-remember">
+              <label class="auth-remember text-gray-6">
                 <input type="checkbox" v-model="loginForm.remember" />
                 <span>Remember Password?</span>
               </label>
@@ -356,7 +371,7 @@
 
 <script setup>
 import { useForm, router } from '@inertiajs/vue3';
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -487,6 +502,17 @@ const submitRegister = () => {
       emit('success');
     },
   });
+};
+
+//Show password function
+const showPassword = ref(false);
+
+const buttonLabel = computed(() => {
+  return showPassword.value ? 'Hide' : 'Show';
+});
+
+const toggleShow = () => {
+  showPassword.value = !showPassword.value;
 };
 
 onUnmounted(() => {
