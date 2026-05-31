@@ -7,6 +7,8 @@
       <p>Enter your new password below.</p>
 
       <form @submit.prevent="submit">
+        <input type="hidden" v-model="form.email" />
+        <input type="hidden" v-model="form.token" />
         <div class="form-group">
           <label>New Password</label>
           <input
@@ -48,13 +50,9 @@ const props = defineProps({
   email: String,
 });
 
-// Debug — remove after testing
-console.log('Token:', props.token);
-console.log('Email:', props.email);
-
 const form = useForm({
   token: props.token,
-  email: '',
+  email: props.email ?? '',
   password: '',
   password_confirmation: '',
 });
