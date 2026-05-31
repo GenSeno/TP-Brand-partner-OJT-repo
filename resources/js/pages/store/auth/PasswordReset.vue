@@ -45,7 +45,12 @@ import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   token: String,
+  email: String,
 });
+
+// Debug — remove after testing
+console.log('Token:', props.token);
+console.log('Email:', props.email);
 
 const form = useForm({
   token: props.token,
