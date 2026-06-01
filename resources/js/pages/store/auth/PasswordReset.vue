@@ -7,20 +7,8 @@
       <p>Enter your new password below.</p>
 
       <form @submit.prevent="submit">
-        <div class="form-group">
-          <label>Email</label>
-          <input
-            v-model="form.email"
-            type="email"
-            class="grocery-input"
-            placeholder="Enter your email"
-            required
-          />
-          <span class="error-text" v-if="form.errors.email">
-            {{ form.errors.email }}
-          </span>
-        </div>
-
+        <input type="hidden" v-model="form.email" />
+        <input type="hidden" v-model="form.token" />
         <div class="form-group">
           <label>New Password</label>
           <input
@@ -59,17 +47,18 @@ import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   token: String,
+  email: String,
 });
 
 const form = useForm({
   token: props.token,
-  email: '',
+  email: props.email ?? '',
   password: '',
   password_confirmation: '',
 });
 
 const submit = () => {
-  form.post(route('store.password.update'));
+  form.post(route('password.update'));
 };
 </script>
 

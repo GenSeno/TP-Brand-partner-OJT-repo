@@ -15,11 +15,19 @@ use App\Http\Controllers\Store\UserAddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Store\PaymentController;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
 
 /**
  * Front Store Routes for Brand Partners
  * These routes should be loaded LAST in web.php to avoid conflicts
  */
+
+
 Route::group([
     'as' => 'store.',
     'middleware' => [\App\Http\Middleware\HandleStoreInertiaRequests::class],
@@ -69,10 +77,11 @@ Route::group([
         ->middleware('auth');
 
     //Reset Password
-    Route::get('/reset-password/{token}', function (string $token) {
-        return Inertia::render('store/auth/reset-password', [
-            'token' => $token,]);
-            })->name('password.reset');
+    // Route::get('/reset-password/{token}', function (string $token) {
+    //     return Inertia::render('store/auth/reset-password', [
+    //         'token' => $token,]);
+    //         })->name('password.reset');
+
 
     // Update user profile
     Route::patch('/account/profile', [AuthController::class, 'updateProfile'])
@@ -169,3 +178,38 @@ Route::group([
     Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook');
 });
 
+// Reset Password
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+    $status = Password::sendResetLink($request->only('email'));
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with('success', 'Password reset link sent!')
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token, Request $request) {
+    return Inertia::render('store/auth/PasswordReset', [
+        'token' => $token,
+        'email' => $request->query('email'),
+    ]);
+})->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token'    => 'required',
+        'email'    => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill(['password' => $password])
+                 ->setRememberToken(Str::random(60));
+            $user->save();
+            event(new PasswordReset($user));
+        }
+    );
+    return $status === Password::PASSWORD_RESET
+        ? redirect('/')->with('success', 'Password reset successfully!')
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.update');

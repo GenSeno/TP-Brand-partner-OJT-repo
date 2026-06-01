@@ -48,26 +48,42 @@
                 loginForm.errors.email
               }}</span>
             </div>
-
             <div class="auth-field">
               <label class="auth-label">PASSWORD</label>
-              <input
-                type="password"
-                class="auth-input"
-                :class="{ 'auth-input--error': loginForm.errors.password }"
-                placeholder="Password"
-                v-model="loginForm.password"
-                required
-              />
-              <span class="auth-field-error" v-if="loginForm.errors.password">{{
-                loginForm.errors.password
-              }}</span>
+              <div class="pass-group">
+                <input
+                  :type="showPassword ? 'text' : 'password'"
+                  class="auth-input"
+                  :class="{ 'auth-input--error': loginForm.errors.password }"
+                  placeholder="Password"
+                  v-model="loginForm.password"
+                  required
+                />
+                <span
+                  @click="toggleShow"
+                  class="toggle-password"
+                  :title="buttonLabel"
+                >
+                  <i
+                    class="text-gray-6 text-[13.5px]"
+                    :class="{
+                      'fas fa-eye': showPassword,
+                      'fas fa-eye-slash': !showPassword,
+                    }"
+                  ></i>
+                </span>
+                <span
+                  class="auth-field-error"
+                  v-if="loginForm.errors.password"
+                  >{{ loginForm.errors.password }}</span
+                >
+              </div>
             </div>
 
             <div class="auth-remember-row">
               <label class="auth-remember">
                 <input type="checkbox" v-model="loginForm.remember" />
-                <span>Remember Password?</span>
+                <span class="text-gray-6">Remember Password?</span>
               </label>
               <a href="#" class="auth-forgot" @click="showForgotPassword = true"
                 >Forgot Password?</a
@@ -186,7 +202,7 @@
           <div v-if="forgotSuccess" style="margin-top: 16px">
             <button
               type="button"
-              class="auth-btn-primary"
+              class="auth-btn-primary w-full"
               @click="
                 showForgotPassword = false;
                 forgotSuccess = null;
@@ -212,7 +228,7 @@
             class="auth-back-btn"
             @click="showRegister = false"
           >
-            Back
+            <i class="ri-arrow-left-line"></i> Back to Login
           </button>
 
           <div class="account-card-copy">
@@ -355,8 +371,8 @@
 </template>
 
 <script setup>
-import { useForm, router } from '@inertiajs/vue3';
-import { ref, watch, onUnmounted } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { ref, watch, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -428,11 +444,11 @@ async function checkAuthStatus() {
   }
 }
 
-//Password Reset
+//Password Reset Function
 const forgotForm = useForm({ email: '' });
 
 const sendResetLink = () => {
-  forgotForm.post(route('store.password.email'), {
+  forgotForm.post(route('password.email'), {
     onSuccess: () => {
       forgotSuccess.value = 'Reset link sent! Check your email.';
       forgotForm.reset();
@@ -487,6 +503,17 @@ const submitRegister = () => {
       emit('success');
     },
   });
+};
+
+//Show password function
+const showPassword = ref(false);
+
+const buttonLabel = computed(() => {
+  return showPassword.value ? 'Hide' : 'Show';
+});
+
+const toggleShow = () => {
+  showPassword.value = !showPassword.value;
 };
 
 onUnmounted(() => {
@@ -586,8 +613,10 @@ onUnmounted(() => {
   padding: 48px 44px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background: #fff;
+  overflow-y: auto;
+  max-height: 92vh;
 }
 
 .account-card-copy {
@@ -673,7 +702,7 @@ onUnmounted(() => {
   height: 50px;
   padding: 0 18px;
   border: 1.5px solid #e0e0e0;
-  border-radius: 12px;
+  border-radius: 50px;
   background: #f9f9f9;
   font-size: 14px;
   color: #222;
@@ -695,6 +724,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  user-select: none;
 }
 
 .auth-remember {
@@ -876,9 +906,9 @@ onUnmounted(() => {
   padding: 48px 44px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow-y: auto;
   max-height: 92vh;
+  justify-content: flex-start;
 }
 
 /* REGISTER — Left panel styles */
