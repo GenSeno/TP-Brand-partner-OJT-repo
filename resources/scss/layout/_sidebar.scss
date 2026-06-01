@@ -819,7 +819,7 @@ body.mini-sidebar{
         border-bottom: 1px solid variables.$border-color;
         .logo {
             img {
-                width: 130px;
+                width: 200px;
             }
         }
         .logo-small {
@@ -854,7 +854,6 @@ body.mini-sidebar{
                 transform: rotate(180deg) !important;
             }
         }
-
     }
 
     .sidebar-inner {

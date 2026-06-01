@@ -80,17 +80,22 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = DB::transaction(function () use ($request) {
-            $product = $this->brandPartner()->products()->create([
-                ...$request->validated(),
-                'slug'            => $request->slug ?? Str::slug($request->name),
-                'price'           => (int) (($request->price ?? 0) * 100),
-                'compare_price'   => $request->compare_price ? (int) ($request->compare_price * 100) : null,
-                'status'          => config('store.brand_partner_product_approval', true)
+            $validated = $request->validated();
+            $validated['track_stock'] = true;
+            $validated['meta'] = array_merge(
+                (array) ($validated['meta'] ?? []),
+                ['variants' => $request->input('variants', [])],
+            );
+            $product = $this->brandPartner()->products()->create([...$validated,
+                'slug' => $request->slug ?? Str::slug($request->name),
+                'price' => (int) (($request->price ?? 0) * 100),
+                'compare_price' => $request->compare_price ? (int) ($request->compare_price * 100) : null,
+                'status' => config('store.brand_partner_product_approval', true)
                     ? \App\Enums\BrandPartnerProductStatus::DRAFT
                     : \App\Enums\BrandPartnerProductStatus::PUBLISHED,
                 'approval_status' => config('store.brand_partner_product_approval', true) ? 'pending' : 'approved',
-                'approval_notes'  => null,
-                'approved_at'     => config('store.brand_partner_product_approval', true) ? null : now(),
+                'approval_notes' => null,
+                'approved_at' => config('store.brand_partner_product_approval', true) ? null : now(),
             ]);
 
             return $product;
@@ -130,12 +135,16 @@ class ProductController extends Controller
         $categories = $this->getCategoryValues();
         $events = $this->brandPartner()->events()->enabled()->get();
         $collections = $this->getCollectionValues();
+        $colors = $this->getColorValues();
+        $sizes = $this->getSizeValues();
 
         return Inertia::modal('product/edit', [
             'product' => $product,
             'categories' => $categories,
             'events' => $events,
             'collections' => $collections,
+            'colorOptions' => $colors,
+            'sizeOptions' => $sizes,
             'statusOptions' => BrandPartnerProductStatus::getOptions(),
         ])->baseRoute('brand-partner.products.index');
     }
@@ -152,14 +161,19 @@ class ProductController extends Controller
         if ($request->status === 'published' && $approvalEnabled && ! $product->canBePublished()) {
             return response()->json([
                 'message' => 'Product must be approved by TPInkAdmin before it can be published.',
-                'errors'  => ['status' => ['Product requires TPInkAdmin approval before publishing.']],
+                'errors' => ['status' => ['Product requires TPInkAdmin approval before publishing.']],
             ], 422);
         }
 
         DB::transaction(function () use ($request, $product) {
             $data = $request->validated();
+            $data['track_stock'] = true;
             $data['price'] = (int) ($request->price * 100);
             $data['compare_price'] = $request->compare_price ? (int) ($request->compare_price * 100) : null;
+            $data['meta'] = array_merge(
+                (array) ($data['meta'] ?? []),
+                ['variants' => $request->input('variants', [])],
+            );
 
             $product->update($data);
         });
@@ -225,6 +239,30 @@ class ProductController extends Controller
     {
         $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
             ->where('name', 'Category')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
+    }
+
+    /**
+     * Get the color option values for the current brand partner.
+     */
+    protected function getColorValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Color')
+            ->first();
+
+        return $option ? $option->values()->orderBy('position')->get() : collect();
+    }
+
+    /**
+     * Get the size option values for the current brand partner.
+     */
+    protected function getSizeValues(): \Illuminate\Support\Collection
+    {
+        $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
+            ->where('name', 'Size')
             ->first();
 
         return $option ? $option->values()->orderBy('position')->get() : collect();

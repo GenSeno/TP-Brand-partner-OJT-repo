@@ -140,7 +140,7 @@
                     :key="index"
                     class="row mb-2 align-items-end"
                 >
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <label v-if="index === 0" class="form-label required"
                             >Product</label
                         >
@@ -176,9 +176,9 @@
                             :message="form.errors[`lines.${index}.quantity`]"
                         />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label v-if="index === 0" class="form-label required"
-                            >Unit Price</label
+                            >Price</label
                         >
                         <input
                             v-model.number="line.unit_price"
@@ -191,7 +191,41 @@
                             :message="form.errors[`lines.${index}.unit_price`]"
                         />
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
+                    <div class="col-md-2">
+                        <label v-if="index === 0" class="form-label">Color</label>
+                        <select
+                            v-model="line.color"
+                            class="form-select"
+                            :disabled="!getProduct(line.product_id)?.colors_array?.length"
+                        >
+                            <option value="">—</option>
+                            <option
+                                v-for="c in getProduct(line.product_id)?.colors_array ?? []"
+                                :key="c"
+                                :value="c"
+                            >
+                                {{ c }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label v-if="index === 0" class="form-label">Size</label>
+                        <select
+                            v-model="line.size"
+                            class="form-select"
+                            :disabled="!getProduct(line.product_id)?.sizes_array?.length"
+                        >
+                            <option value="">—</option>
+                            <option
+                                v-for="s in getProduct(line.product_id)?.sizes_array ?? []"
+                                :key="s"
+                                :value="s"
+                            >
+                                {{ s }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
                         <button
                             type="button"
                             class="btn btn-danger-light btn-sm"
@@ -262,7 +296,9 @@ const props = defineProps({
 
 const modalRef = useTemplateRef('modalRef');
 
-const newLine = () => ({ product_id: '', quantity: 1, unit_price: 0 });
+const newLine = () => ({ product_id: '', quantity: 1, unit_price: 0, color: '', size: '' });
+
+const getProduct = (id) => props.products.find(p => p.id === id);
 
 const form = useAxiosForm({
     customer_name: '',

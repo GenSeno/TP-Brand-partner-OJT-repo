@@ -7,18 +7,21 @@ use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
+use App\Models\Wishlist;
+use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BrandPartnerStoreController extends Controller
 {
-    /**
-     * Get cart count for a brand partner.
-     */
-    protected function getCartCount(Request $request, string $brandPartnerSlug): int
+    protected function getBrandPartner(): BrandPartner
     {
-        $cart = $request->session()->get("bp_cart_{$brandPartnerSlug}", []);
-        return array_sum(array_column($cart, 'quantity'));
+        $slug = config('store.brand_partner_slug');
+
+        return BrandPartner::where('slug', $slug)
+            ->where('status', BrandPartnerStatus::ACTIVE)
+            ->firstOrFail();
     }
 
     /**
@@ -26,43 +29,35 @@ class BrandPartnerStoreController extends Controller
      */
     public function index(Request $request)
     {
-        $brandPartnerSlug = config('store.brand_partner_slug');
-
-        $brandPartner = BrandPartner::where('slug', $brandPartnerSlug)
-            ->where('status', BrandPartnerStatus::ACTIVE)
-            ->firstOrFail();
+        $brandPartner = $this->getBrandPartner();
 
         $categories = $brandPartner->categories()
             ->enabled()
             ->ordered()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $events = $brandPartner->events()
             ->enabled()
-            ->withCount(['products' => fn($q) => $q->published()])
+            ->withCount(['products' => fn ($q) => $q->published()])
             ->get();
 
         $productsQuery = $brandPartner->products()
             ->published()
-            ->with(['category', 'event', 'images']);
+            ->with(['category', 'event', 'images', 'collection']);
 
-        // Filter by category
         if ($request->filled('category')) {
             $productsQuery->where('category_id', $request->category);
         }
 
-        // Filter by event
         if ($request->filled('event')) {
             $productsQuery->where('event_id', $request->event);
         }
 
-        // Filter featured
         if ($request->boolean('featured')) {
             $productsQuery->featured();
         }
 
-        // Search
         if ($request->filled('search')) {
             $productsQuery->search($request->search);
         }
@@ -72,10 +67,39 @@ class BrandPartnerStoreController extends Controller
         $featuredProducts = $brandPartner->products()
             ->published()
             ->featured()
-            ->with(['category', 'event', 'images'])
+            ->with(['category', 'event', 'images', 'collection'])
             ->latest()
             ->limit(4)
             ->get();
+
+        $sliders = $brandPartner->homepageSliders()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($s) => array_merge($s->toArray(), [
+                'image' => $s->image ? asset('storage/' . $s->image) : null,
+            ]));
+
+        $collectionBanners = $brandPartner->homepageCollectionBanners()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($b) => array_merge($b->toArray(), [
+                'image' => $b->image ? asset('storage/' . $b->image) : null,
+            ]));
+
+        $reviews = $brandPartner->homepageReviews()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($r) => [
+                'id' => $r->id,
+                'name' => $r->name,
+                'role' => $r->role,
+                'comment' => $r->comment,
+                'avatar_url' => $r->avatar ? asset('storage/'.$r->avatar) : null,
+                'rating' => $r->rating,
+            ]);
 
         return Inertia::render('store/index', [
             'brandPartner' => $brandPartner,
@@ -83,9 +107,41 @@ class BrandPartnerStoreController extends Controller
             'events' => $events,
             'products' => $products,
             'featuredProducts' => $featuredProducts,
+            'sliders' => $sliders,
+            'collectionBanners' => $collectionBanners,
+            'reviews' => $reviews,
             'filter' => $request->only(['category', 'event', 'featured', 'search']),
-            'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
-        ]);
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
+
+            'cmsEvents' => Event::where('is_published', true)
+                ->orderBy('event_date', 'asc')
+                ->get()
+            ->map(fn($e) => [
+                'id'         => $e->id,
+                'title'      => $e->title,
+                'description'=> $e->description,
+                'image'      => $e->image ? asset('storage/' . $e->image) : null,
+                'event_date' => $e->event_date->format('M d, Y'),
+                'raw_date'   => $e->event_date->toDateString(),
+                'location'   => $e->location,
+                'distances' => collect($e->distances ?? [])
+                    ->filter(fn($d) => $d !== 'Other')
+                    ->merge(
+                        collect($e->other_distances ?? [])
+                            ->pluck('value')
+                    )
+                    ->values()
+                    ->toArray(),
+            ]),
+            'nextEvent' => Event::where('is_published', true)
+                ->where('event_date', '>=', now()->toDateString())
+                ->orderBy('event_date', 'asc')
+                ->first()?->only(['title', 'event_date']),
+            ]);
     }
 
     /**
@@ -93,11 +149,7 @@ class BrandPartnerStoreController extends Controller
      */
     public function product(Request $request, string $productSlug)
     {
-        $brandPartnerSlug = config('store.brand_partner_slug');
-
-        $brandPartner = BrandPartner::where('slug', $brandPartnerSlug)
-            ->where('status', BrandPartnerStatus::ACTIVE)
-            ->firstOrFail();
+        $brandPartner = $this->getBrandPartner();
 
         $product = BrandPartnerProduct::where('brand_partner_id', $brandPartner->id)
             ->where('slug', $productSlug)
@@ -105,7 +157,6 @@ class BrandPartnerStoreController extends Controller
             ->with(['category', 'event', 'images'])
             ->firstOrFail();
 
-        // Get related products from the same category
         $relatedProducts = BrandPartnerProduct::where('brand_partner_id', $brandPartner->id)
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -118,7 +169,11 @@ class BrandPartnerStoreController extends Controller
             'brandPartner' => $brandPartner,
             'product' => $product,
             'relatedProducts' => $relatedProducts,
-            'cartCount' => $this->getCartCount($request, $brandPartnerSlug),
+            'wishlistedIds' => Auth::check()
+                ? Wishlist::where('user_id', Auth::id())
+                    ->pluck('brand_partner_product_id')
+                    ->toArray()
+                : [],
         ]);
     }
 }

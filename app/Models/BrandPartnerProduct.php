@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\BrandPartnerProductImage;
 use App\Enums\BrandPartnerProductApprovalStatus;
 use App\Enums\BrandPartnerProductStatus;
 use App\Lunar\Traits\LogsActivity;
@@ -70,17 +69,17 @@ class BrandPartnerProduct extends Model
 
     protected $casts = [
         'brand_partner_id' => 'integer',
-        'category_id'      => 'integer',
-        'collection_id'    => 'integer',
-        'event_id'         => 'integer',
+        'category_id' => 'integer',
+        'collection_id' => 'integer',
+        'event_id' => 'integer',
         'price' => 'integer',
         'compare_price' => 'integer',
         'stock' => 'integer',
         'track_stock' => 'boolean',
-        'status'          => BrandPartnerProductStatus::class,
+        'status' => BrandPartnerProductStatus::class,
         'approval_status' => BrandPartnerProductApprovalStatus::class,
-        'approved_at'     => 'datetime',
-        'featured'        => 'boolean',
+        'approved_at' => 'datetime',
+        'featured' => 'boolean',
         'meta' => AsArrayObject::class,
     ];
 
@@ -137,14 +136,14 @@ class BrandPartnerProduct extends Model
     protected function formattedPrice(): Attribute
     {
         return Attribute::make(
-            get: fn() => number_format($this->price / 100, 2),
+            get: fn () => number_format($this->price / 100, 2),
         );
     }
 
     protected function inStock(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->isInStock(),
+            get: fn () => $this->isInStock(),
         );
     }
 
@@ -154,8 +153,10 @@ class BrandPartnerProduct extends Model
             get: function () {
                 if ($this->relationLoaded('images')) {
                     $primary = $this->images->firstWhere('is_primary', true) ?? $this->images->first();
+
                     return $primary?->url;
                 }
+
                 return $this->primaryImage?->url;
             },
         );
@@ -193,6 +194,7 @@ class BrandPartnerProduct extends Model
     public function scopeStatus(Builder $query, BrandPartnerProductStatus|string $status): Builder
     {
         $status = $status instanceof BrandPartnerProductStatus ? $status : BrandPartnerProductStatus::from($status);
+
         return $query->where('status', $status);
     }
 
@@ -208,13 +210,13 @@ class BrandPartnerProduct extends Model
 
     public function scopeSearch(Builder $query, $value): Builder
     {
-        if (!trim($value)) {
+        if (! trim($value)) {
             return $query;
         }
 
         return $query->where(function ($q) use ($value) {
             $q->where('name', 'like', "%{$value}%")
-              ->orWhere('sku', 'like', "%{$value}%");
+                ->orWhere('sku', 'like', "%{$value}%");
         });
     }
 
@@ -256,17 +258,33 @@ class BrandPartnerProduct extends Model
 
     public function isInStock(): bool
     {
-        if (!$this->track_stock) {
+        if (! $this->track_stock) {
             return true;
         }
 
         return $this->stock > 0;
     }
 
-    public function decrementStock(int $quantity): void
+    public function decrementStock(int $quantity, ?string $color = null, ?string $size = null): void
     {
-        if ($this->track_stock) {
-            $this->decrement('stock', $quantity);
+        if (! $this->track_stock) {
+            return;
+        }
+
+        $this->decrement('stock', $quantity);
+
+        if (($color || $size) && $this->meta && isset($this->meta['variants'])) {
+            $variants = collect($this->meta['variants']);
+            $updated = $variants->map(function ($v) use ($quantity, $color, $size) {
+                if ((! $color || $v['color'] === $color) && (! $size || $v['size'] === $size)) {
+                    $v['stock'] = max(0, ($v['stock'] ?? 0) - $quantity);
+                }
+
+                return $v;
+            })->toArray();
+
+            $this->meta = array_merge((array) $this->meta, ['variants' => $updated]);
+            $this->save();
         }
     }
 

@@ -4,7 +4,7 @@
         <!-- COMPANY INFO -->
         <div class="col-md-6">
             <img
-                src="/img/logo/logo-pdf.png"
+                src="/img/logo/logo_pakaras_white.png"
                 alt="Company Logo"
                 style="width: 160px"
                 class="mb-2"

@@ -230,7 +230,7 @@ th {
                                     <!-- COMPANY INFO -->
                                     <div class="col-sm">
                                         <img
-                                            src="/img/logo/logo-pdf.png"
+                                            src="/img/logo/logo_pakaras_white.png"
                                             alt="Company Logo"
                                             class="company-logo"
                                         />
