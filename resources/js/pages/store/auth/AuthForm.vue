@@ -202,7 +202,7 @@
           <div v-if="forgotSuccess" style="margin-top: 16px">
             <button
               type="button"
-              class="auth-btn-primary"
+              class="auth-btn-primary w-full"
               @click="
                 showForgotPassword = false;
                 forgotSuccess = null;
@@ -228,7 +228,7 @@
             class="auth-back-btn"
             @click="showRegister = false"
           >
-            Back
+            <i class="ri-arrow-left-line"></i> Back to Login
           </button>
 
           <div class="account-card-copy">
@@ -371,7 +371,7 @@
 </template>
 
 <script setup>
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ref, watch, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
@@ -444,7 +444,7 @@ async function checkAuthStatus() {
   }
 }
 
-//Password Reset
+//Password Reset Function
 const forgotForm = useForm({ email: '' });
 
 const sendResetLink = () => {
