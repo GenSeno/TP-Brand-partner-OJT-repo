@@ -81,13 +81,6 @@ Route::group([
         ->name('brand-partner.account')
         ->middleware('auth');
 
-    //Reset Password
-    // Route::get('/reset-password/{token}', function (string $token) {
-    //     return Inertia::render('store/auth/reset-password', [
-    //         'token' => $token,]);
-    //         })->name('password.reset');
-
-
     // Update user profile
     Route::patch('/account/profile', [AuthController::class, 'updateProfile'])
         ->name('brand-partner.account.update')
