@@ -7,6 +7,7 @@ use App\Http\Controllers\Store\BrandPartnerCartController;
 use App\Http\Controllers\Store\BrandPartnerCheckoutController;
 use App\Http\Controllers\Store\BrandPartnerCollectionController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
+use App\Http\Controllers\Store\BrandPartnerFaqController;
 use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
@@ -56,6 +57,10 @@ Route::group([
     // Contact Us page
     Route::get('/contact', [BrandPartnerContactController::class, 'index'])
         ->name('brand-partner.contact');
+
+    // FAQ page
+    Route::get('/faq', [BrandPartnerFaqController::class, 'index'])
+        ->name('brand-partner.faq');
 
     // Be Our Partner page
     Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])

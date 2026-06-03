@@ -80,7 +80,7 @@ class BrandPartnerCheckoutController extends Controller
                     ->where('status', BrandPartnerProductStatus::PUBLISHED)
                     ->first();
 
-                if (! $product) {
+                if (!$product) {
                     continue;
                 }
 
@@ -183,7 +183,7 @@ class BrandPartnerCheckoutController extends Controller
                     ->where('status', BrandPartnerProductStatus::PUBLISHED)
                     ->first();
 
-                if (! $product) {
+                if (!$product) {
                     continue;
                 }
 
@@ -191,8 +191,9 @@ class BrandPartnerCheckoutController extends Controller
 
                 $isPreOrder = false;
                 if ($product->meta && isset($product->meta['variants'])) {
-                    $match = collect($product->meta['variants'])->firstWhere(fn ($v) => (! $item['color'] || $v['color'] === $item['color']) &&
-                        (! $item['size'] || $v['size'] === $item['size'])
+                    $match = collect($product->meta['variants'])->firstWhere(
+                        fn($v) => (!$item['color'] || $v['color'] === $item['color']) &&
+                        (!$item['size'] || $v['size'] === $item['size'])
                     );
                     $isPreOrder = $match && ($match['stock'] ?? 0) < $quantity;
                 }
@@ -254,16 +255,17 @@ class BrandPartnerCheckoutController extends Controller
             $failureUrl = route('store.payment.failed', $order->reference);
 
             $response = \Illuminate\Support\Facades\Http::withBasicAuth(
-                config('services.xendit.secret_key'), ''
+                config('services.xendit.secret_key'),
+                ''
             )->post('https://api.xendit.co/v2/invoices', [
-                'external_id'          => $order->reference,
-                'amount'               => $order->total / 100,
-                'payer_email'          => $order->customer_email,
-                'description'          => 'Order #' . $order->reference,
-                'success_redirect_url' => $successUrl,
-                'failure_redirect_url' => $failureUrl,
-                'currency'             => 'PHP',
-            ]);
+                        'external_id' => $order->reference,
+                        'amount' => $order->total / 100,
+                        'payer_email' => $order->customer_email,
+                        'description' => 'Order #' . $order->reference,
+                        'success_redirect_url' => $successUrl,
+                        'failure_redirect_url' => $failureUrl,
+                        'currency' => 'PHP',
+                    ]);
 
             if ($response->failed()) {
                 throw new \Exception('Xendit API error: ' . $response->body());
@@ -273,7 +275,7 @@ class BrandPartnerCheckoutController extends Controller
 
             $order->update([
                 'payment_invoice_id' => $invoice['id'],
-                'payment_status'     => 'pending',
+                'payment_status' => 'pending',
             ]);
 
             return Inertia::location($invoice['invoice_url']);
