@@ -1,4 +1,4 @@
-<template>
+`x`<template>
     <Head title="FAQ" />
 
     <div class="faq-page">

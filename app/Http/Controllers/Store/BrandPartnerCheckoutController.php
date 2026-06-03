@@ -11,6 +11,7 @@ use App\Models\BrandPartnerOrder;
 use App\Models\BrandPartnerProduct;
 use App\Models\CartItem;
 use App\Models\Country;
+use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -190,12 +191,15 @@ class BrandPartnerCheckoutController extends Controller
                 $quantity = $item['quantity'];
 
                 $isPreOrder = false;
+
                 if ($product->meta && isset($product->meta['variants'])) {
                     $match = collect($product->meta['variants'])->firstWhere(
                         fn($v) => (!$item['color'] || $v['color'] === $item['color']) &&
                         (!$item['size'] || $v['size'] === $item['size'])
                     );
                     $isPreOrder = $match && ($match['stock'] ?? 0) < $quantity;
+                } else {
+                    $isPreOrder = $product->stock < $quantity;
                 }
 
                 $meta = array_merge(
@@ -213,7 +217,9 @@ class BrandPartnerCheckoutController extends Controller
                     'meta' => $meta,
                 ];
 
-                $product->decrementStock($quantity, $item['color'] ?? null, $item['size'] ?? null);
+                if (! $isPreOrder) {
+                    $product->decrementStock($quantity, $item['color'] ?? null, $item['size'] ?? null);
+                }
             }
 
             if (empty($orderLines)) {
@@ -249,6 +255,11 @@ class BrandPartnerCheckoutController extends Controller
         });
 
         $this->clearCart($request, $brandPartnerSlug);
+
+        $order->load('lines');
+        if ($order->has_pre_order) {
+            (new TpinkLabService)->sendOrderToAdmin($order);
+        }
 
         try {
             $successUrl = route('store.payment.success', $order->reference);

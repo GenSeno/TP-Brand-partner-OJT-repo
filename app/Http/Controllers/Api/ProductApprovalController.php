@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ProductApprovalController extends Controller
 {
-    /**
+    /** 
      * Receive an approval/rejection decision from TPInkAdmin.
      *
      * Called by TPInkAdmin after an admin approves or rejects a product.
