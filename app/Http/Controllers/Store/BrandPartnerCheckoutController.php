@@ -263,7 +263,7 @@ class BrandPartnerCheckoutController extends Controller
         });
 
         $this->clearCart($request, $brandPartnerSlug);
-
+    
         $order->load('lines');
         if ($order->has_pre_order) {
             (new TpinkLabService)->sendOrderToAdmin($order);

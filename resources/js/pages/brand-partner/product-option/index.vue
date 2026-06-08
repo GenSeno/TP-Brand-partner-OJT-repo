@@ -88,16 +88,11 @@
                                     class="feather-14"
                                 ></vue-feather>
                             </ModalLink>
-                            <dt-delete2
-                                :url="
-                                    route(
-                                        'brand-partner.product-options.destroy',
-                                        value,
-                                    )
-                                "
-                                :record-name="row.name"
+                            <dt-delete
+                                :id="value"
+                                route-name="brand-partner.product-options.destroy"
+                                :name="row.name"
                                 model-name="product option"
-                                :emitter-event="deleteEmitterEvent"
                                 class="btn btn-icon btn-danger-light btn-sm"
                                 title="Delete"
                             >
@@ -105,7 +100,7 @@
                                     type="trash-2"
                                     class="feather-14"
                                 ></vue-feather>
-                            </dt-delete2>
+                            </dt-delete>
                         </div>
                     </div>
                 </template>
@@ -115,12 +110,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { removeEmptyValues } from '@/helpers/form';
-import { emitter } from '@/composables/eventBus';
-import * as alert from '@/helpers/alert';
 
 const props = defineProps({
     productOptions: Object,
@@ -142,8 +134,6 @@ const columns = [
     { title: 'Position', dataIndex: 'position', key: 'position' },
     { title: '', dataIndex: 'id', key: 'action' },
 ];
-
-const deleteEmitterEvent = ref('product-options-deleted');
 
 const form = useForm({
     filter: {
@@ -167,17 +157,4 @@ const submitFilters = () => {
         replace: true,
     });
 };
-
-onMounted(() => {
-    emitter.on(deleteEmitterEvent.value, (data) => {
-        router.reload({
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        });
-        alert.showSuccess(
-            data.message || 'Product option deleted successfully.',
-        );
-    });
-});
 </script>

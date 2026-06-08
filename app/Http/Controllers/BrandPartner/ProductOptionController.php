@@ -35,7 +35,7 @@ class ProductOptionController extends Controller
 
         return Inertia::render('product-option/index', [
             'productOptions' => $productOptions,
-            'filter'         => $request->input('filter', []),
+            'filter' => $request->input('filter', []),
             'default_per_page' => $this->defaultPerPage,
         ]);
     }
@@ -50,14 +50,14 @@ class ProductOptionController extends Controller
     {
         $option = DB::transaction(function () use ($request) {
             $option = $this->brandPartner()->productOptions()->create([
-                'name'     => $request->name,
+                'name' => $request->name,
                 'position' => $request->position,
             ]);
 
             foreach ($request->values as $i => $valueData) {
                 $option->values()->create([
-                    'label'    => $valueData['label'],
-                    'value'    => $valueData['value'] ?? null,
+                    'label' => $valueData['label'],
+                    'value' => $valueData['value'] ?? null,
                     'position' => $i + 1,
                 ]);
             }
@@ -66,7 +66,7 @@ class ProductOptionController extends Controller
         });
 
         return response()->json([
-            'option'  => $option->load('values'),
+            'option' => $option->load('values'),
             'message' => __('crud.created', ['record' => 'Product option']),
         ], 201);
     }
@@ -86,7 +86,7 @@ class ProductOptionController extends Controller
 
         DB::transaction(function () use ($request, $productOption) {
             $productOption->update([
-                'name'     => $request->name,
+                'name' => $request->name,
                 'position' => $request->position,
             ]);
 
@@ -103,7 +103,7 @@ class ProductOptionController extends Controller
         });
 
         return response()->json([
-            'option'  => $productOption->fresh('values'),
+            'option' => $productOption->fresh('values'),
             'message' => __('crud.updated', ['record' => 'Product option']),
         ]);
     }
@@ -114,10 +114,8 @@ class ProductOptionController extends Controller
 
         $productOption->delete();
 
-        return response()->json([
-            'deleted' => [$productOption->id],
-            'message' => __('crud.deleted', ['record' => 'Product option']),
-        ]);
+        return to_route('brand-partner.product-options.index')
+            ->with('success', __('crud.deleted', ['record' => 'Product option']));
     }
 
     protected function authorize(BrandPartnerProductOption $productOption): void
