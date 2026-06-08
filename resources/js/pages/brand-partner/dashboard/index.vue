@@ -11,7 +11,7 @@
   </div>
 
   <div class="row">
-    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+    <div class="col-xl d-flex">
       <div class="dash-count bg-primary">
         <div class="dash-counts">
           <h4 class="mb-1">{{ stats.total_products }}</h4>
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+    <div class="col-xl d-flex">
       <div class="dash-count bg-success">
         <div class="dash-counts">
           <h4 class="mb-1">{{ stats.published_products }}</h4>
@@ -33,7 +33,18 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+    <div class="col-xl d-flex">
+      <div class="dash-count bg-secondary">
+        <div class="dash-counts">
+          <h4 class="mb-1">{{ stats.pre_order_quantity }}</h4>
+          <p class="text-white mb-0">Pre-Order Qty</p>
+        </div>
+        <div class="dash-imgs">
+          <vue-feather type="package"></vue-feather>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl d-flex">
       <div class="dash-count bg-info">
         <div class="dash-counts">
           <h4 class="mb-1">{{ stats.total_orders }}</h4>
@@ -44,7 +55,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12 d-flex">
+    <div class="col-xl d-flex">
       <div class="dash-count bg-warning">
         <div class="dash-counts">
           <h4 class="mb-1">{{ stats.pending_orders }}</h4>
@@ -57,9 +68,9 @@
     </div>
   </div>
 
-  <div class="row mt-4">
-    <div class="col-12">
-      <div class="card">
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
         <div
           class="card-header d-flex justify-content-between align-items-center"
         >

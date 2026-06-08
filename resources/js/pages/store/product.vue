@@ -117,7 +117,7 @@
                             @click="showConfirmModal"
                         >
                             <span v-if="isAddingToCart">ADDING...</span>
-                            <span v-else-if="!currentInStock">PRE-ORDER</span>
+                            <span v-else-if="!currentInStock || exceedsStock">PRE-ORDER</span>
                             <span v-else>ADD TO CART</span>
                         </button>
                         <button
@@ -133,6 +133,10 @@
                                 "
                             ></i>
                         </button>
+                    </div>
+
+                    <div v-if="exceedsStock" class="pre-order-notice">
+                        The quantity exceeds available stock. This item will be processed as a pre-order.
                     </div>
 
                     <!-- Trust Badges -->
@@ -248,7 +252,7 @@
                 @click="showConfirmModal"
             >
                 <span v-if="isAddingToCart">Adding...</span>
-                <span v-else-if="!currentInStock">PRE-ORDER</span>
+                <span v-else-if="!currentInStock || exceedsStock">PRE-ORDER</span>
                 <span v-else>ADD TO CART | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
@@ -364,6 +368,16 @@ const currentInStock = computed(() => {
     const variant = selectedVariant.value;
     if (!variant) return false;
     return (variant.stock ?? 0) > 0;
+});
+
+const currentStock = computed(() => {
+    if (!hasVariations.value || !variationReady.value) return props.product.stock ?? 0;
+    const variant = selectedVariant.value;
+    return variant?.stock ?? 0;
+});
+
+const exceedsStock = computed(() => {
+    return currentStock.value > 0 && quantity.value > currentStock.value;
 });
 
 const selectColor = (color) => {
@@ -1398,6 +1412,17 @@ const toggleWishlist = (productId) => {
 .confirm-ok:disabled {
     background: #d1d5db;
     cursor: not-allowed;
+}
+
+.pre-order-notice {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f97316;
+    margin: -16px 0 20px;
+    padding: 10px 14px;
+    background: #fef3c7;
+    border-radius: 4px;
+    line-height: 1.4;
 }
 
 /* ========================

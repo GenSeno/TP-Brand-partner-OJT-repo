@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PreOrderController;
 use App\Http\Controllers\Api\ProductApprovalController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Store\PaymentController;
@@ -18,6 +19,9 @@ Route::middleware('api')->group(function () {
 
     Route::get('/products/{product}', [ProductController::class, 'show'])
         ->name('api.products.show');
+
+    Route::get('/pre-orders', [PreOrderController::class, 'index'])
+        ->name('api.pre-orders.index');
 });
 
 Route::post('/webhook/xendit', [PaymentController::class, 'webhook']);

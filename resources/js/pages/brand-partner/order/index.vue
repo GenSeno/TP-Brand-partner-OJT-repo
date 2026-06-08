@@ -95,6 +95,10 @@
                     <span v-else class="text-muted">—</span>
                 </template>
 
+                <template #pre_order_quantity="{ value }">
+                    {{ value || '—' }}
+                </template>
+
                 <template #status="{ value }">
                     <span class="badge" :class="`bg-${getStatusColor(value)}`">
                         {{ value }}
@@ -164,6 +168,12 @@ const columns = [
     },
     { title: 'Total', dataIndex: 'total', key: 'total', sortable: true },
     {
+        title: '(Pre) Qty',
+        dataIndex: 'pre_order_quantity',
+        key: 'pre_order_quantity',
+        class: 'col-pre-order-qty',
+    },
+    {
         title: 'Pre-Order',
         dataIndex: 'has_pre_order',
         key: 'has_pre_order',
@@ -229,5 +239,12 @@ const getStatusColor = (status) => {
 <style>
 .badge.bg-warning {
     white-space: nowrap;
+}
+
+.col-pre-order-qty {
+    width: 40px;
+    text-align: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 </style>

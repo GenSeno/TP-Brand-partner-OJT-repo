@@ -81,6 +81,7 @@ class BrandPartnerOrder extends Model
         'formatted_total',
         'shipping_address',
         'has_pre_order',
+        'pre_order_quantity',
     ];
 
     // Relationships
@@ -132,6 +133,15 @@ class BrandPartnerOrder extends Model
             get: fn () => $this->relationLoaded('lines')
                 ? $this->lines->contains(fn ($line) => $line->meta['pre_order'] ?? false)
                 : false,
+        );
+    }
+
+    protected function preOrderQuantity(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->relationLoaded('lines')
+                ? $this->lines->sum(fn ($line) => ($line->meta['pre_order'] ?? false) ? $line->quantity : 0)
+                : 0,
         );
     }
 

@@ -3851,7 +3851,7 @@ const toggleWishlist = (productId) => {
   background: #f39c12;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
   z-index: 998;
-  padding: 14px 0;
+  padding: 0;
   border-top: 1px solid #f0f0f0;
 }
 
@@ -3859,14 +3859,25 @@ const toggleWishlist = (productId) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 60px;
+  height: 60px;
+}
+
+
+.cart-bar-inner > div:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px 0 12px 50px;
+  height: 100%;
 }
 
 .cart-item-count {
   font-size: 12px;
-  color: black(var(--grocery-content));
+  color: black;
   margin: 0;
   font-weight: 500;
-  padding-left: 50px;
+  padding-left: 0;
   position: relative;
 }
 
@@ -3876,17 +3887,35 @@ const toggleWishlist = (productId) => {
   color: rgb(var(--grocery-title));
   margin: 0;
   font-family: 'Public Sans', sans-serif;
-  padding-left: 50px;
+  padding-left: 0;
   position: relative;
 }
 
 .cart-bar-btn {
-  padding: 10px 22px;
-  padding-right: 80px;
+  min-width: 150px;
+  height: 60px;
+  padding: 0 16px;
+  border-radius: 2px;
+  border: none;
+  background: #ff9505;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.cart-bar-btn i {
-  font-size: 16px;
+.cart-bar-btn:hover:not(:disabled) {
+  background: #005523;
+}
+
+.cart-bar-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
 }
 
 /* ===== Modal - Grocery Styling ===== */
@@ -4048,29 +4077,6 @@ const toggleWishlist = (productId) => {
   font-weight: 800;
   color: #ff9505;
   margin: 0;
-}
-
-.cart-bar-btn {
-  min-width: 150px;
-  padding: 12px 16px;
-  border-radius: 2px;
-  border: none;
-  background: #ff9505;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.cart-bar-btn:hover:not(:disabled) {
-  background: #005523;
-}
-
-.cart-bar-btn:disabled {
-  opacity: 0.75;
-  cursor: not-allowed;
 }
 
 .btn-cancel,
