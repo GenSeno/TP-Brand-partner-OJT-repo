@@ -28,6 +28,10 @@ class DashboardController extends Controller
                 ->sum('total'),
             'total_categories' => $brandPartner->categories()->count(),
             'total_events' => $brandPartner->events()->count(),
+            'pre_order_quantity' => $brandPartner->orders()
+                ->with('lines')
+                ->get()
+                ->sum(fn ($order) => $order->lines->sum(fn ($line) => ($line->meta['pre_order'] ?? false) ? $line->quantity : 0)),
         ];
 
         $recentOrders = $brandPartner->orders()

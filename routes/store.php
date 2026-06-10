@@ -7,6 +7,7 @@ use App\Http\Controllers\Store\BrandPartnerCartController;
 use App\Http\Controllers\Store\BrandPartnerCheckoutController;
 use App\Http\Controllers\Store\BrandPartnerCollectionController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
+use App\Http\Controllers\Store\BrandPartnerFaqController;
 use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
@@ -57,6 +58,10 @@ Route::group([
     Route::get('/contact', [BrandPartnerContactController::class, 'index'])
         ->name('brand-partner.contact');
 
+    // FAQ page
+    Route::get('/faq', [BrandPartnerFaqController::class, 'index'])
+        ->name('brand-partner.faq');
+
     // Be Our Partner page
     Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])
         ->name('brand-partner.partner');
@@ -75,13 +80,6 @@ Route::group([
     Route::get('/account', [AuthController::class, 'account'])
         ->name('brand-partner.account')
         ->middleware('auth');
-
-    //Reset Password
-    // Route::get('/reset-password/{token}', function (string $token) {
-    //     return Inertia::render('store/auth/reset-password', [
-    //         'token' => $token,]);
-    //         })->name('password.reset');
-
 
     // Update user profile
     Route::patch('/account/profile', [AuthController::class, 'updateProfile'])
@@ -175,7 +173,7 @@ Route::group([
     // Payment routes
     Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('payment.failed');
-    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook');
+    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook'); 
 });
 
 // Reset Password

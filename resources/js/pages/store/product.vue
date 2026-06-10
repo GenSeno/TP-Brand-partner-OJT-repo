@@ -117,7 +117,7 @@
                             @click="showConfirmModal"
                         >
                             <span v-if="isAddingToCart">ADDING...</span>
-                            <span v-else-if="!currentInStock">PRE-ORDER</span>
+                            <span v-else-if="!currentInStock || exceedsStock">PRE-ORDER</span>
                             <span v-else>ADD TO CART</span>
                         </button>
                         <button
@@ -135,6 +135,10 @@
                         </button>
                     </div>
 
+                    <div v-if="exceedsStock" class="pre-order-notice">
+                        The quantity exceeds available stock. This item will be processed as a pre-order.
+                    </div>
+
                     <!-- Trust Badges -->
                     <ul class="trust-list">
                         <li><i class="ri-truck-line"></i> Complimentary delivery</li>
@@ -147,7 +151,7 @@
             </div>
 
             <!-- Description Tabs -->
-            <div class="tabs-section" v-if="product.description">
+            <div class="tabs-section">
                 <div class="tab-bar">
                     <button
                         class="tab-btn"
@@ -161,9 +165,9 @@
                     >SHIPPING INFORMATION</button>
                     <button
                         class="tab-btn"
-                        :class="{ active: activeTab === 'style' }"
-                        @click="activeTab = 'style'"
-                    >STYLE GUIDE</button>
+                        :class="{ active: activeTab === 'size' }"
+                        @click="activeTab = 'size'"
+                    >SIZE GUIDE</button>
                 </div>
 
                 <div class="tab-content-area">
@@ -185,14 +189,12 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="activeTab === 'style'" class="tab-panel">
-                        <div class="tab-panel-inner">
-                            <div class="tab-panel-left">
-                                <h2 class="tab-section-title">Style Guide</h2>
-                            </div>
-                            <div class="tab-panel-right">
-                                <p>For the best fit, refer to our size chart. This piece is designed for an athletic cut — we recommend sizing up for a relaxed feel.</p>
-                            </div>
+                    <div v-if="activeTab === 'size'" class="tab-panel">
+                        <div class="size-guide-panel">
+                            <img src="/img/shirtsize/Tshirt_size.jpg" alt="T-Shirt Size Guide" class="size-guide-img" />
+                            <img src="/img/shirtsize/Singlet_size.jpg" alt="Singlet Size Guide" class="size-guide-img" />
+                            <img src="/img/shirtsize/LongSleeve_size.jpg" alt="Long Sleeve Size Guide" class="size-guide-img" />
+                            <img src="/img/shirtsize/PoloShirt_size.jpg" alt="Polo Shirt Size Guide" class="size-guide-img" />
                         </div>
                     </div>
                 </div>
@@ -248,7 +250,7 @@
                 @click="showConfirmModal"
             >
                 <span v-if="isAddingToCart">Adding...</span>
-                <span v-else-if="!currentInStock">PRE-ORDER</span>
+                <span v-else-if="!currentInStock || exceedsStock">PRE-ORDER</span>
                 <span v-else>ADD TO CART | {{ formatCurrency(product.price * quantity) }}</span>
             </button>
         </div>
@@ -364,6 +366,16 @@ const currentInStock = computed(() => {
     const variant = selectedVariant.value;
     if (!variant) return false;
     return (variant.stock ?? 0) > 0;
+});
+
+const currentStock = computed(() => {
+    if (!hasVariations.value || !variationReady.value) return props.product.stock ?? 0;
+    const variant = selectedVariant.value;
+    return variant?.stock ?? 0;
+});
+
+const exceedsStock = computed(() => {
+    return currentStock.value > 0 && quantity.value > currentStock.value;
 });
 
 const selectColor = (color) => {
@@ -1398,6 +1410,48 @@ const toggleWishlist = (productId) => {
 .confirm-ok:disabled {
     background: #d1d5db;
     cursor: not-allowed;
+}
+
+.pre-order-notice {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f97316;
+    margin: -16px 0 20px;
+    padding: 10px 14px;
+    background: #fef3c7;
+    border-radius: 4px;
+    line-height: 1.4;
+}
+
+.size-guide-panel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+}
+
+.size-guide-panel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.size-guide-panel::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 3px;
+}
+
+.size-guide-panel::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.size-guide-img {
+    flex-shrink: 0;
+    width: 340px;
+    height: auto;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    scroll-snap-align: start;
 }
 
 /* ========================

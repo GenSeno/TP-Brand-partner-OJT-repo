@@ -11,6 +11,7 @@ use App\Models\BrandPartnerOrder;
 use App\Models\BrandPartnerProduct;
 use App\Models\CartItem;
 use App\Models\Country;
+use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -176,6 +177,7 @@ class BrandPartnerCheckoutController extends Controller
 
         $order = DB::transaction(function () use ($request, $brandPartner, $cartItems, $subTotal) {
             $orderLines = [];
+            $hasAnyPreOrder = false;
 
             foreach ($cartItems as $item) {
                 $product = BrandPartnerProduct::where('id', $item['product_id'])
@@ -189,19 +191,17 @@ class BrandPartnerCheckoutController extends Controller
 
                 $quantity = $item['quantity'];
 
-                $isPreOrder = false;
                 if ($product->meta && isset($product->meta['variants'])) {
-                    $match = collect($product->meta['variants'])->firstWhere(fn ($v) => (! $item['color'] || $v['color'] === $item['color']) &&
+                    $match = collect($product->meta['variants'])->firstWhere(
+                        fn ($v) => (! $item['color'] || $v['color'] === $item['color']) &&
                         (! $item['size'] || $v['size'] === $item['size'])
                     );
-                    $isPreOrder = $match && ($match['stock'] ?? 0) < $quantity;
+                    if ($match && ($match['stock'] ?? 0) < $quantity) {
+                        $hasAnyPreOrder = true;
+                    }
+                } elseif ($product->stock < $quantity) {
+                    $hasAnyPreOrder = true;
                 }
-
-                $meta = array_merge(
-                    ($item['color'] || $item['size']) ? ['color' => $item['color'], 'size' => $item['size']] : [],
-                    $isPreOrder ? ['pre_order' => true] : [],
-                );
-                $meta = empty($meta) ? null : $meta;
 
                 $orderLines[] = [
                     'product_id' => $product->id,
@@ -209,10 +209,25 @@ class BrandPartnerCheckoutController extends Controller
                     'quantity' => $quantity,
                     'unit_price' => $product->price,
                     'total' => $product->price * $quantity,
-                    'meta' => $meta,
                 ];
+            }
 
-                $product->decrementStock($quantity, $item['color'] ?? null, $item['size'] ?? null);
+            foreach ($orderLines as $i => $line) {
+                $item = $cartItems[$i];
+                $meta = array_merge(
+                    ($item['color'] || $item['size']) ? ['color' => $item['color'], 'size' => $item['size']] : [],
+                    $hasAnyPreOrder ? ['pre_order' => true] : [],
+                );
+                $orderLines[$i]['meta'] = empty($meta) ? null : $meta;
+            }
+
+            if (! $hasAnyPreOrder) {
+                foreach ($cartItems as $item) {
+                    $product = BrandPartnerProduct::find($item['product_id']);
+                    if ($product) {
+                        $product->decrementStock($item['quantity'], $item['color'] ?? null, $item['size'] ?? null);
+                    }
+                }
             }
 
             if (empty($orderLines)) {
@@ -248,38 +263,44 @@ class BrandPartnerCheckoutController extends Controller
         });
 
         $this->clearCart($request, $brandPartnerSlug);
+    
+        $order->load('lines');
+        if ($order->has_pre_order) {
+            (new TpinkLabService)->sendOrderToAdmin($order);
+        }
 
         try {
             $successUrl = route('store.payment.success', $order->reference);
             $failureUrl = route('store.payment.failed', $order->reference);
 
             $response = \Illuminate\Support\Facades\Http::withBasicAuth(
-                config('services.xendit.secret_key'), ''
+                config('services.xendit.secret_key'),
+                ''
             )->post('https://api.xendit.co/v2/invoices', [
-                'external_id'          => $order->reference,
-                'amount'               => $order->total / 100,
-                'payer_email'          => $order->customer_email,
-                'description'          => 'Order #' . $order->reference,
+                'external_id' => $order->reference,
+                'amount' => $order->total / 100,
+                'payer_email' => $order->customer_email,
+                'description' => 'Order #'.$order->reference,
                 'success_redirect_url' => $successUrl,
                 'failure_redirect_url' => $failureUrl,
-                'currency'             => 'PHP',
+                'currency' => 'PHP',
             ]);
 
             if ($response->failed()) {
-                throw new \Exception('Xendit API error: ' . $response->body());
+                throw new \Exception('Xendit API error: '.$response->body());
             }
 
             $invoice = $response->json();
 
             $order->update([
                 'payment_invoice_id' => $invoice['id'],
-                'payment_status'     => 'pending',
+                'payment_status' => 'pending',
             ]);
 
             return Inertia::location($invoice['invoice_url']);
 
         } catch (\Exception $e) {
-            ('Error: ' . $e->getMessage());
+            ('Error: '.$e->getMessage());
         }
     }
 

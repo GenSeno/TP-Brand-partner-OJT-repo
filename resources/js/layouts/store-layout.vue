@@ -100,6 +100,17 @@
             <Link
               :href="
                 brandPartner
+                  ? route('store.brand-partner.faq', brandPartner.slug)
+                  : '#'
+              "
+              class="nav-item"
+            >
+              FAQ
+            </Link>
+
+            <Link
+              :href="
+                brandPartner
                   ? route('store.brand-partner.partner', brandPartner.slug)
                   : '#'
               "
@@ -234,6 +245,14 @@
               @click="toggleSideMenu"
             >
               <i class="ri-home-line"></i> Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              :href="route('store.brand-partner.faq', brandPartner.slug)"
+              @click="toggleSideMenu"
+            >
+              <i class="ri-question-line"></i> FAQ
             </Link>
           </li>
           <li>
