@@ -95,7 +95,7 @@
                     <span v-else class="text-muted">—</span>
                 </template>
 
-                <template #pre_order_quantity="{ value }">
+                <template #total_quantity="{ value }">
                     {{ value || '—' }}
                 </template>
 
@@ -168,9 +168,9 @@ const columns = [
     },
     { title: 'Total', dataIndex: 'total', key: 'total', sortable: true },
     {
-        title: '(Pre) Qty',
-        dataIndex: 'pre_order_quantity',
-        key: 'pre_order_quantity',
+        title: 'Qty',
+        dataIndex: 'total_quantity',
+        key: 'total_quantity',
         class: 'col-pre-order-qty',
     },
     {

@@ -62,80 +62,87 @@
                             <label class="form-label">Product Images</label>
                             <div
                                 v-if="productImages.length"
-                                class="d-flex flex-wrap gap-2 mb-2"
+                                class="d-flex flex-wrap gap-3 mb-3"
                             >
                                 <div
                                     v-for="image in productImages"
                                     :key="image.id"
-                                    class="position-relative"
-                                    style="width: 80px"
+                                    class="img-card"
                                 >
-                                    <img
-                                        :src="image.url"
-                                        style="
-                                            width: 80px;
-                                            height: 80px;
-                                            object-fit: cover;
-                                            border-radius: 6px;
-                                            border: 2px solid;
-                                        "
-                                        :style="{
-                                            borderColor: image.is_primary
-                                                ? '#0d6efd'
-                                                : '#dee2e6',
-                                        }"
-                                    />
-                                    <span
-                                        v-if="image.is_primary"
-                                        class="badge bg-primary position-absolute bottom-0 start-0"
-                                        style="font-size: 9px"
-                                        >Primary</span
-                                    >
-                                    <div class="d-flex gap-1 mt-1">
-                                        <button
-                                            v-if="!image.is_primary"
-                                            type="button"
-                                            class="btn btn-outline-primary btn-sm flex-fill"
-                                            style="
-                                                font-size: 10px;
-                                                padding: 1px 2px;
-                                            "
-                                            :disabled="imageActionLoading"
-                                            @click="setPrimary(image)"
-                                        >
-                                            ★
-                                        </button>
+                                    <div class="img-card-inner">
+                                        <img
+                                            :src="image.url"
+                                            class="img-card-preview"
+                                        />
                                         <button
                                             type="button"
-                                            class="btn btn-outline-danger btn-sm flex-fill"
-                                            style="
-                                                font-size: 10px;
-                                                padding: 1px 2px;
-                                            "
+                                            class="img-card-delete"
+                                            title="Delete image"
                                             :disabled="imageActionLoading"
                                             @click="deleteImage(image)"
                                         >
-                                            ×
+                                            <vue-feather
+                                                type="x"
+                                                size="14"
+                                            ></vue-feather>
                                         </button>
+                                        <button
+                                            v-if="!image.is_primary"
+                                            type="button"
+                                            class="img-card-primary-btn"
+                                            title="Set as primary"
+                                            :disabled="imageActionLoading"
+                                            @click="setPrimary(image)"
+                                        >
+                                            <vue-feather
+                                                type="star"
+                                                size="14"
+                                            ></vue-feather>
+                                        </button>
+                                        <span
+                                            v-if="image.is_primary"
+                                            class="img-card-primary-badge"
+                                        >
+                                            <vue-feather
+                                                type="star"
+                                                size="12"
+                                            ></vue-feather>
+                                            Primary
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <input
-                                ref="imageInputRef"
-                                type="file"
-                                class="form-control"
-                                multiple
-                                accept="image/*"
-                                :disabled="imageActionLoading"
-                                @change="uploadNewImages"
-                            />
-                            <small class="text-muted"
-                                >Upload additional images.</small
-                            >
+                            <div class="d-flex align-items-center gap-3">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-primary btn-sm"
+                                    :disabled="imageActionLoading"
+                                    @click="imageInputRef?.click()"
+                                >
+                                    <vue-feather
+                                        type="upload"
+                                        size="14"
+                                        class="me-1"
+                                    ></vue-feather>
+                                    Add Images
+                                </button>
+                                <input
+                                    ref="imageInputRef"
+                                    type="file"
+                                    class="d-none"
+                                    multiple
+                                    accept="image/*"
+                                    :disabled="imageActionLoading"
+                                    @change="uploadNewImages"
+                                />
+                                <small class="text-muted"
+                                    >Upload additional images.</small
+                                >
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Variants (Color / Size / Quantity)</label>
+                            <label class="form-label required">Variants (Color / Size / Quantity)</label>
                             <div class="variants-table">
                                 <div class="variants-header">
                                     <span>Color</span>
@@ -573,5 +580,109 @@ const submitForm = () => {
 
 .variants-row:last-child {
     border-bottom: none;
+}
+
+.img-card {
+    width: 120px;
+}
+
+.img-card-inner {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+    background: #f5f5f5;
+    transition: border-color 0.2s;
+}
+
+.img-card-inner:hover {
+    border-color: #adb5bd;
+}
+
+.img-card-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.img-card-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.img-card-inner:hover .img-card-delete {
+    opacity: 1;
+}
+
+.img-card-delete:hover {
+    background: rgba(220, 53, 69, 0.85);
+}
+
+.img-card-delete:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.img-card-primary-btn {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffc107;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.img-card-inner:hover .img-card-primary-btn {
+    opacity: 1;
+}
+
+.img-card-primary-btn:hover {
+    background: rgba(255, 193, 7, 0.85);
+    color: #fff;
+}
+
+.img-card-primary-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.img-card-primary-badge {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #0d6efd;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
 }
 </style>
