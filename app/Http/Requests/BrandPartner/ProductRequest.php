@@ -60,7 +60,7 @@ class ProductRequest extends FormRequest
             'sizes' => ['nullable', 'string', 'max:1000'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'track_stock' => ['nullable', 'boolean'],
-            'variants' => ['nullable', 'array'],
+            'variants' => [$this->route('product') ? 'required' : 'nullable', 'array', 'min:1'],
             'variants.*.color' => ['nullable', 'string', 'max:255'],
             'variants.*.size' => ['nullable', 'string', 'max:255'],
             'variants.*.stock' => ['nullable', 'integer', 'min:0'],
