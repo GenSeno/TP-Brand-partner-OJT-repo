@@ -18,7 +18,11 @@ return new class extends Migration
         ];
 
         foreach ($indexes as [$table, $name, $columns]) {
-            DB::statement("CREATE INDEX IF NOT EXISTS `{$name}` ON `{$table}` ({$columns})");
+            try {
+                DB::statement("ALTER TABLE `{$table}` ADD INDEX `{$name}` ({$columns})");
+            } catch (\Exception $e) {
+                // Index may already exist — skip
+            }
         }
     }
 
