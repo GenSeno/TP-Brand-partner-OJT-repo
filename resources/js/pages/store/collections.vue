@@ -28,99 +28,38 @@
         <!-- Collections Grid -->
         <section class="collections-grid-section" id="collections-grid">
             <div class="collections-grid-inner">
-                <div class="collections-grid">
-                    <!-- Collection Item 1 - img-collection2.png -->
-                    <div class="collection-item">
-                        <div class="collection-item-image">
-                            <img
-                                src="/img/img-collection2.png"
-                                alt="Collection 2"
-                            />
-                        </div>
-                        <div class="collection-item-body">
-                            <h3 class="collection-item-title">
-                                Running Collection
-                            </h3>
-                            <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel
-                                cras. Magna egestas enim tortor accumsan varius
-                                pellentesque amet dolor hac. Lorem sed fermentum
-                                sapien facilisi at magna pulvinar pretium.
-                            </p>
-                            <a href="#" class="collection-item-btn"
-                                >VIEW COLLECTION</a
-                            >
-                        </div>
+                <div v-if="collectionItems.length === 0" class="collections-empty">
+                    <div class="collections-empty-icon">
+                        <i class="ri-shopping-bag-line"></i>
                     </div>
-
-                    <!-- Collection Item 2 - img-collection3.png -->
-                    <div class="collection-item">
+                    <h3 class="collections-empty-title">No Collections Yet</h3>
+                    <p class="collections-empty-desc">
+                        Collections will appear here once the admin adds them through the CMS.
+                    </p>
+                </div>
+                <div v-else class="collections-grid">
+                    <div
+                        v-for="item in collectionItems"
+                        :key="item.id"
+                        class="collection-item"
+                    >
                         <div class="collection-item-image">
                             <img
-                                src="/img/img-carousel3.png"
-                                alt="Collection 3"
+                                :src="item.image || '/img/img-collection2.png'"
+                                :alt="item.title"
                             />
                         </div>
                         <div class="collection-item-body">
                             <h3 class="collection-item-title">
-                                Training Collection
+                                {{ item.title }}
                             </h3>
                             <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel
-                                cras. Magna egestas enim tortor accumsan varius
-                                pellentesque amet dolor hac. Lorem sed fermentum
-                                sapien facilisi at magna pulvinar pretium.
+                                {{ item.description }}
                             </p>
-                            <a href="#" class="collection-item-btn"
-                                >VIEW COLLECTION</a
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Collection Item 3 - img-collection4.png -->
-                    <div class="collection-item">
-                        <div class="collection-item-image">
-                            <img
-                                src="/img/img-collection4.png"
-                                alt="Collection 4"
-                            />
-                        </div>
-                        <div class="collection-item-body">
-                            <h3 class="collection-item-title">
-                                Lifestyle Collection
-                            </h3>
-                            <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel
-                                cras. Magna egestas enim tortor accumsan varius
-                                pellentesque amet dolor hac. Lorem sed fermentum
-                                sapien facilisi at magna pulvinar pretium.
-                            </p>
-                            <a href="#" class="collection-item-btn"
-                                >VIEW COLLECTION</a
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Collection Item 4 - img-collection5.png -->
-                    <div class="collection-item">
-                        <div class="collection-item-image">
-                            <img
-                                src="/img/img-collection5.png"
-                                alt="Collection 5"
-                            />
-                        </div>
-                        <div class="collection-item-body">
-                            <h3 class="collection-item-title">
-                                Limited Edition
-                            </h3>
-                            <p class="collection-item-desc">
-                                Pellentesque molestie lectus condimentum vel
-                                cras. Magna egestas enim tortor accumsan varius
-                                pellentesque amet dolor hac. Lorem sed fermentum
-                                sapien facilisi at magna pulvinar pretium.
-                            </p>
-                            <a href="#" class="collection-item-btn"
-                                >VIEW COLLECTION</a
+                            <a
+                                :href="item.link_url || '#'"
+                                class="collection-item-btn"
+                                >{{ item.link_text || 'VIEW COLLECTION' }}</a
                             >
                         </div>
                     </div>
@@ -133,6 +72,13 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+
+defineProps({
+    collectionItems: {
+        type: Array,
+        default: () => [],
+    },
+});
 
 // Breadcrumb items
 const breadcrumbItems = [{ label: 'Collections' }];
@@ -294,11 +240,16 @@ const breadcrumbItems = [{ label: 'Collections' }];
     width: 100%;
     aspect-ratio: 16 / 9;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .collection-item-image img {
-    width: 100%;
-    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
@@ -343,6 +294,35 @@ const breadcrumbItems = [{ label: 'Collections' }];
 .collection-item-btn:hover {
     background: #111;
     color: #fff;
+}
+
+/* Empty State */
+.collections-empty {
+    text-align: center;
+    padding: 80px 24px;
+}
+
+.collections-empty-icon {
+    font-size: 64px;
+    color: #ccc;
+    margin-bottom: 16px;
+}
+
+.collections-empty-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #333;
+    margin: 0 0 12px;
+    font-family: 'Public Sans', sans-serif;
+}
+
+.collections-empty-desc {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+    line-height: 1.7;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 /* Responsive */

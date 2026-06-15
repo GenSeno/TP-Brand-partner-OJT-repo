@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Homepage;
+namespace App\Filament\Resources\Store;
 
-use App\Filament\Resources\Homepage\Sliders\Pages\CreateSlider;
-use App\Filament\Resources\Homepage\Sliders\Pages\EditSlider;
-use App\Filament\Resources\Homepage\Sliders\Pages\ListSliders;
-use App\Filament\Resources\Homepage\Sliders\Pages\ViewSlider;
-use App\Models\HomepageSlider;
+use App\Filament\Resources\Store\CollectionItems\Pages\CreateCollectionItem;
+use App\Filament\Resources\Store\CollectionItems\Pages\EditCollectionItem;
+use App\Filament\Resources\Store\CollectionItems\Pages\ListCollectionItems;
+use App\Filament\Resources\Store\CollectionItems\Pages\ViewCollectionItem;
+use App\Models\StoreCollectionItem;
 use BackedEnum;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -21,17 +21,17 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class SliderResource extends Resource
+class CollectionItemResource extends Resource
 {
-    protected static ?string $model = HomepageSlider::class;
+    protected static ?string $model = StoreCollectionItem::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    protected static \UnitEnum|string|null $navigationGroup = 'Homepage';
+    protected static \UnitEnum|string|null $navigationGroup = 'Collections Page';
 
-    protected static ?string $navigationLabel = 'Carousel Slides';
+    protected static ?string $navigationLabel = 'Collection Items';
 
     public static function form(Schema $form): Schema
     {
@@ -44,37 +44,19 @@ class SliderResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('subtitle')
+                Forms\Components\Textarea::make('description')
                     ->nullable(),
                 Forms\Components\FileUpload::make('image')
                     ->image()
-                    ->label('Background Image')
                     ->nullable(),
                 Forms\Components\TextInput::make('link_url')
-                    ->label('Button Link URL')
+                    ->label('Link URL')
                     ->nullable()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('link_text')
-                    ->label('Button Text')
-                    ->default('VIEW ALL PRODUCTS')
+                    ->label('Link Text')
+                    ->default('VIEW COLLECTION')
                     ->maxLength(255),
-                Forms\Components\Select::make('overlay_type')
-                    ->options([
-                        'dark' => 'Dark Gradient',
-                        'orange' => 'Orange Slant',
-                        'none' => 'No Overlay',
-                    ])
-                    ->default('dark')
-                    ->helperText(fn ($state) => $state === 'none'
-                        ? 'Only the background image will be displayed. Title, subtitle, and button are hidden.'
-                        : null,
-                    ),
-                Forms\Components\Select::make('content_position')
-                    ->options([
-                        'left' => 'Left',
-                        'center' => 'Center',
-                    ])
-                    ->default('left'),
                 Forms\Components\Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),
@@ -119,10 +101,10 @@ class SliderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListSliders::route('/'),
-            'create' => CreateSlider::route('/create'),
-            'view' => ViewSlider::route('/{record}'),
-            'edit' => EditSlider::route('/{record}/edit'),
+            'index' => ListCollectionItems::route('/'),
+            'create' => CreateCollectionItem::route('/create'),
+            'view' => ViewCollectionItem::route('/{record}'),
+            'edit' => EditCollectionItem::route('/{record}/edit'),
         ];
     }
 }

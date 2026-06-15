@@ -109,7 +109,7 @@
 
             <!-- Street Address -->
             <div class="form-group" style="margin-bottom: 16px">
-              <label>Street Address</label>
+              <label class="required">Street Address</label>
               <input
                 v-model="form.shipping_line1"
                 type="text"
@@ -118,6 +118,7 @@
                   'input-error': form.errors.shipping_line1,
                 }"
                 placeholder="House number and street name"
+                required
               />
               <span class="error-text" v-if="form.errors.shipping_line1">
                 {{ form.errors.shipping_line1 }}
@@ -140,13 +141,14 @@
             <!-- Country / Province -->
             <div class="form-row-grid" style="margin-bottom: 16px">
               <div class="form-group">
-                <label>Country/Region</label>
+                <label class="required">Country/Region</label>
                 <select
                   v-model="form.shipping_country_id"
                   class="grocery-input"
                   :class="{
                     'input-error': form.errors.shipping_country_id,
                   }"
+                  required
                 >
                   <option value="">Select a country</option>
                   <option
@@ -162,7 +164,7 @@
                 </span>
               </div>
               <div class="form-group">
-                <label>Province</label>
+                <label class="required">Province</label>
                 <select
                   v-if="isShippingPH"
                   v-model="form.shipping_province"
@@ -170,6 +172,7 @@
                   :class="{
                     'input-error': form.errors.shipping_province,
                   }"
+                  required
                 >
                   <option value="">Select a province</option>
                   <option
@@ -189,6 +192,7 @@
                     'input-error': form.errors.shipping_province,
                   }"
                   placeholder="e.g. N/A"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_province">
                   {{ form.errors.shipping_province }}
@@ -199,7 +203,7 @@
             <!-- City / Barangay -->
             <div class="form-row-grid" style="margin-bottom: 16px">
               <div class="form-group">
-                <label>City</label>
+                <label class="required">City</label>
                 <select
                   v-if="isShippingPH && cities.length > 0"
                   v-model="form.shipping_city"
@@ -207,6 +211,7 @@
                   :class="{
                     'input-error': form.errors.shipping_city,
                   }"
+                  required
                 >
                   <option value="">Select a city</option>
                   <option v-for="c in cities" :key="c.id" :value="c.city_name">
@@ -220,6 +225,7 @@
                   :class="{
                     'input-error': form.errors.shipping_city,
                   }"
+                  required
                 >
                   <option value="">Select a city</option>
                   <option v-for="c in cities" :key="c.value" :value="c.value">
@@ -235,13 +241,14 @@
                     'input-error': form.errors.shipping_city,
                   }"
                   placeholder="Enter city"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_city">
                   {{ form.errors.shipping_city }}
                 </span>
               </div>
               <div class="form-group">
-                <label>Barangay</label>
+                <label class="required">Barangay</label>
                 <input
                   v-model="form.shipping_barangay"
                   type="text"
@@ -249,6 +256,7 @@
                   :class="{
                     'input-error': form.errors.shipping_barangay,
                   }"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_barangay">
                   {{ form.errors.shipping_barangay }}
@@ -258,7 +266,7 @@
 
             <!-- Postal / Zip Code -->
             <div class="form-group">
-              <label>Postal / Zip Code</label>
+              <label class="required">Postal / Zip Code</label>
               <input
                 v-model="form.shipping_postcode"
                 type="text"
@@ -266,6 +274,7 @@
                 :class="{
                   'input-error': form.errors.shipping_postcode,
                 }"
+                required
               />
               <span class="error-text" v-if="form.errors.shipping_postcode">
                 {{ form.errors.shipping_postcode }}
