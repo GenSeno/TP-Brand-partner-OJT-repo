@@ -8,20 +8,19 @@ use App\Filament\Resources\Events\Pages\ListEvents;
 use App\Filament\Resources\Events\Pages\ViewEvent;
 use App\Models\Event;
 use BackedEnum;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
-use Filament\Schemas\Components\Group;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\BulkActionGroup;
-
 
 class EventResource extends Resource
 {
@@ -31,13 +30,15 @@ class EventResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static \UnitEnum|string|null $navigationGroup = 'Homepage';
+
     public static function form(Schema $form): Schema
     {
         return $form
             ->components([
                 Forms\Components\TextInput::make('title')
-                ->required()
-                ->maxLength(255),
+                    ->required()
+                    ->maxLength(255),
 
                 Forms\Components\Textarea::make('description')
                     ->nullable(),
@@ -52,12 +53,12 @@ class EventResource extends Resource
                 Group::make([
                     Forms\Components\CheckBoxList::make('distances')
                         ->options([
-                            '5KM'  => '5KM',
+                            '5KM' => '5KM',
                             '21KM' => '21KM',
                             '10KM' => '10KM',
                             '42KM' => '42KM',
                             '15KM' => '15KM',
-                            'Other'=> 'Other'
+                            'Other' => 'Other',
                         ])
                         ->columns(3)
                         ->live(),
@@ -70,10 +71,9 @@ class EventResource extends Resource
                                 ->required(),
                         ])
                         ->addActionLabel('Add another distance')
-                        ->visible(fn ($get) => in_array('Other', $get('distances') ?? []))
+                        ->visible(fn ($get) => in_array('Other', $get('distances') ?? [])),
                 ])
                     ->columnSpan(1),
-                    
 
                 Forms\Components\FileUpload::make('image')
                     ->disk('public')
@@ -88,28 +88,28 @@ class EventResource extends Resource
     }
 
     public static function table(Table $table): Table
-{
-    return $table
-        ->columns([
-            Tables\Columns\TextColumn::make('title')->searchable(),
-            Tables\Columns\TextColumn::make('event_date')->date()->sortable(),
-            Tables\Columns\IconColumn::make('is_published')->boolean(),
-            Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
-        ])
-        ->filters([])
-        ->recordActions([       
-            ActionGroup::make([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
-            ]),
-        ])
-        ->bulkActions([
-            BulkActionGroup::make([
-                DeleteBulkAction::make(),
-            ]),
-        ]);
-}
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('title')->searchable(),
+                Tables\Columns\TextColumn::make('event_date')->date()->sortable(),
+                Tables\Columns\IconColumn::make('is_published')->boolean(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+            ])
+            ->filters([])
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
 
     public static function getRelations(): array
     {

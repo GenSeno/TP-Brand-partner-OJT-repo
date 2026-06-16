@@ -153,13 +153,13 @@ class BrandPartnerCheckoutController extends Controller
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_email' => ['required', 'email', 'max:255'],
             'customer_phone' => ['nullable', 'string', 'max:50'],
-            'shipping_line1' => ['nullable', 'string', 'max:255'],
+            'shipping_line1' => ['required', 'string', 'max:255'],
             'shipping_line2' => ['nullable', 'string', 'max:255'],
-            'shipping_province' => ['nullable', 'string', 'max:255'],
-            'shipping_city' => ['nullable', 'string', 'max:255'],
-            'shipping_barangay' => ['nullable', 'string', 'max:255'],
-            'shipping_postcode' => ['nullable', 'string', 'max:20'],
-            'shipping_country_id' => ['nullable', 'integer'],
+            'shipping_province' => ['required', 'string', 'max:255'],
+            'shipping_city' => ['required', 'string', 'max:255'],
+            'shipping_barangay' => ['required', 'string', 'max:255'],
+            'shipping_postcode' => ['required', 'string', 'max:20'],
+            'shipping_country_id' => ['required', 'integer'],
             'notes' => ['nullable', 'string'],
         ]);
 
@@ -263,7 +263,7 @@ class BrandPartnerCheckoutController extends Controller
         });
 
         $this->clearCart($request, $brandPartnerSlug);
-    
+
         $order->load('lines');
         if ($order->has_pre_order) {
             (new TpinkLabService)->sendOrderToAdmin($order);

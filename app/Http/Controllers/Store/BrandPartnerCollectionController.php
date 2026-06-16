@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
+use App\Models\StoreCollectionItem;
 use Inertia\Inertia;
 
 class BrandPartnerCollectionController extends Controller
@@ -20,12 +21,17 @@ class BrandPartnerCollectionController extends Controller
             ->where('status', BrandPartnerStatus::ACTIVE)
             ->firstOrFail();
 
-        // You can fetch collections data here if needed
-        // $collections = BrandPartnerCollection::where('brand_partner_id', $brandPartner->id)->get();
+        $collectionItems = StoreCollectionItem::where('brand_partner_id', $brandPartner->id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn ($item) => array_merge($item->toArray(), [
+                'image' => $item->image ? asset('storage/'.$item->image) : null,
+            ]));
 
         return Inertia::render('store/collections', [
             'brandPartner' => $brandPartner,
-            // 'collections' => $collections ?? [],
+            'collectionItems' => $collectionItems,
         ]);
     }
 }
