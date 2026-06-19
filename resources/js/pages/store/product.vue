@@ -141,11 +141,20 @@
 
                     <!-- Trust Badges -->
                     <ul class="trust-list">
-                        <li><i class="ri-truck-line"></i> Complimentary delivery</li>
-                        <li><i class="ri-shield-check-line"></i> 1-year warranty</li>
+                        <li>
+                          <i class="ri-truck-line"></i>
+                          <Link :href="route('store.brand-partner.shipping', brandPartner.slug)" class="trust-link">Complimentary delivery</Link>
+                        </li>
+                        <li>
+                          <i class="ri-shield-check-line"></i>
+                          <Link :href="route('store.brand-partner.warranty', brandPartner.slug)" class="trust-link">1-year warranty</Link>
+                        </li>
+                        <li>
+                          <i class="ri-refund-2-line"></i>
+                          <Link :href="route('store.brand-partner.refund', brandPartner.slug)" class="trust-link">Return &amp; Refund</Link>
+                        </li>
                         <li><i class="ri-leaf-line"></i> Ethically and sustainably made</li>
                         <li><i class="ri-heart-pulse-line"></i> Safe for sensitive skin</li>
-                        <li><i class="ri-earth-line"></i> Carbon-neutral shipping</li>
                     </ul>
                 </div>
             </div>
@@ -905,6 +914,16 @@ const toggleWishlist = (productId) => {
     color: #888;
     width: 18px;
     text-align: center;
+}
+
+.trust-link {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.trust-link:hover {
+    color: #ff9505;
 }
 
 /* ========================

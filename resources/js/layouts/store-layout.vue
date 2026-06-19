@@ -336,18 +336,71 @@
             <p>Header 3</p>
           </div>
           <div class="footer-info">
-            <h4>Account</h4>
-            <button @click="handleWishlistClick">Wishlist</button>
-            <Link
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.cart', brandPartner.slug)
-                  : '#'
-              "
-            >
-              <p>Cart</p>
-            </Link>
-          </div>
+              <h4>Account</h4>
+              <button @click="handleWishlistClick">Wishlist</button>
+              <Link
+                :href="
+                  brandPartner
+                    ? route('store.brand-partner.cart', brandPartner.slug)
+                    : '#'
+                "
+              >
+                <p>Cart</p>
+              </Link>
+            </div>
+            <div class="footer-info">
+              <h4>Legal</h4>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.terms', brandPartner.slug) : '#'"
+              >
+                <p>Terms &amp; Conditions</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.privacy', brandPartner.slug) : '#'"
+              >
+                <p>Privacy Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.refund', brandPartner.slug) : '#'"
+              >
+                <p>Refund &amp; Return Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.shipping', brandPartner.slug) : '#'"
+              >
+                <p>Shipping Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.payment', brandPartner.slug) : '#'"
+              >
+                <p>Payment Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.cookies', brandPartner.slug) : '#'"
+              >
+                <p>Cookie Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.warranty', brandPartner.slug) : '#'"
+              >
+                <p>Warranty Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.cancellation', brandPartner.slug) : '#'"
+              >
+                <p>Cancellation Policy</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.disclaimer', brandPartner.slug) : '#'"
+              >
+                <p>Disclaimer</p>
+              </Link>
+              <Link
+                :href="brandPartner ? route('store.brand-partner.acceptable-use', brandPartner.slug) : '#'"
+              >
+                <p>Acceptable Use Policy</p>
+              </Link>
+            </div>
           <div class="footer-info">
             <h4>Contact Information</h4>
             <p><i class="ri-map-pin-line"></i> Davao City, Philippines</p>
@@ -398,6 +451,8 @@
         </div>
       </div>
     </footer>
+
+    <CookieConsent />
   </div>
 </template>
 
@@ -405,6 +460,7 @@
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import AuthForm from '@/pages/store/auth/AuthForm.vue';
+import CookieConsent from '@/components/CookieConsent.vue';
 
 const currentPath = ref(window.location.pathname);
 
@@ -1156,7 +1212,7 @@ const focusSearchField = () => {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 2fr;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1fr 2fr;
   gap: 40px;
   margin-bottom: 25px;
 }
@@ -1199,6 +1255,14 @@ const focusSearchField = () => {
   gap: 10px;
 }
 
+.footer-info a p {
+  transition: color 0.2s ease;
+}
+
+.footer-info a:hover p {
+  color: #ff9505;
+}
+
 .footer-info i {
   color: #bcbcbc;
   font-size: 1.3rem;
@@ -1213,6 +1277,14 @@ const focusSearchField = () => {
   display: flex;
   align-items: center;
   gap: 10px;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer-info button:hover {
+  color: #ff9505;
 }
 
 .socials div {
@@ -1226,6 +1298,20 @@ const focusSearchField = () => {
   font-size: 0.9rem;
   width: 16px;
   margin-right: 7px;
+  transition: color 0.2s ease;
+}
+
+.socials a {
+  transition: transform 0.2s ease;
+  display: inline-flex;
+}
+
+.socials a:hover i {
+  color: #ff9505;
+}
+
+.socials a:hover {
+  transform: translateY(-2px);
 }
 
 .news-letter h2 {
@@ -1256,6 +1342,12 @@ const focusSearchField = () => {
   color: white;
   border: none;
   background: #ff9505;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subscribe-button:hover {
+  background: #e08500;
 }
 
 .footer-bottom {
