@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartnerOrder;
+use App\Services\TpinkLabService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -53,14 +54,16 @@ class PaymentController extends Controller
     }
 
     public function success(Request $request, string $reference)
-{
-    $order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
-    $order->update(['payment_status' => 'paid']);
+    {
+        $order = BrandPartnerOrder::where('reference', $reference)->firstOrFail();
+        $order->update(['payment_status' => 'paid']);
 
-    return redirect()->route('store.brand-partner.order.confirmation', [
-        'reference' => $reference,
-    ]);
-}
+        $this->fulfillOrder($order);
+
+        return redirect()->route('store.brand-partner.order.confirmation', [
+            'reference' => $reference,
+        ]);
+    }
 
     public function failed(Request $request, string $orderReference)
     {
@@ -102,11 +105,22 @@ class PaymentController extends Controller
 
         if ($status === 'PAID') {
             $order->update(['payment_status' => 'paid']);
-            // TODO: trigger order fulfillment here
+            $this->fulfillOrder($order);
         } elseif (in_array($status, ['EXPIRED', 'FAILED'])) {
             $order->update(['payment_status' => 'failed']);
         }
 
         return response()->json(['success' => true]);
+    }
+
+    protected function fulfillOrder(BrandPartnerOrder $order): void
+    {
+        if ($order->isPending()) {
+            $order->confirm();
+
+            if (! $order->has_pre_order) {
+                (new TpinkLabService)->sendOrderToAdmin($order);
+            }
+        }
     }
 }
