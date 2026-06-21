@@ -179,11 +179,15 @@ class BrandPartnerCheckoutController extends Controller
             $orderLines = [];
             $hasAnyPreOrder = false;
 
+            $productIds = array_column($cartItems, 'product_id');
+            $products = BrandPartnerProduct::whereIn('id', $productIds)
+                ->where('brand_partner_id', $brandPartner->id)
+                ->where('status', BrandPartnerProductStatus::PUBLISHED)
+                ->get()
+                ->keyBy('id');
+
             foreach ($cartItems as $item) {
-                $product = BrandPartnerProduct::where('id', $item['product_id'])
-                    ->where('brand_partner_id', $brandPartner->id)
-                    ->where('status', BrandPartnerProductStatus::PUBLISHED)
-                    ->first();
+                $product = $products->get($item['product_id']);
 
                 if (! $product) {
                     continue;
@@ -223,7 +227,7 @@ class BrandPartnerCheckoutController extends Controller
 
             if (! $hasAnyPreOrder) {
                 foreach ($cartItems as $item) {
-                    $product = BrandPartnerProduct::find($item['product_id']);
+                    $product = $products->get($item['product_id']);
                     if ($product) {
                         $product->decrementStock($item['quantity'], $item['color'] ?? null, $item['size'] ?? null);
                     }

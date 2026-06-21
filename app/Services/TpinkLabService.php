@@ -163,38 +163,78 @@ class TpinkLabService
         $firstName = $nameParts[0] ?? '';
         $lastName = $nameParts[1] ?? $firstName;
 
-        $shippingAddress = $order->meta ? ($order->meta['shipping_address'] ?? null) : null;
-        $addr = $shippingAddress instanceof \ArrayObject
-            ? $shippingAddress
-            : (is_array($shippingAddress) ? $shippingAddress : []);
-
-        $payload = [
-            'notes' => $order->notes,
-            'status' => 'pending',
-            'address' => [
+        return [
+            'brand_partner' => [
+                'id'    => $order->brand_partner_id,
+                'slug'  => $order->brandPartner->slug,
+                'name'  => $order->brandPartner->name,
+                'email' => $order->brandPartner->email,
+            ],
+            'order' => [
+                'reference'      => $order->reference,
+                'status'         => $order->status->value,
+                'payment_status' => $order->payment_status,
+                'placed_at'      => $order->placed_at?->toIso8601String(),
+                'notes'          => $order->notes,
+                'jo_number'      => $order->jo_number,
+                'jo_status'      => $order->jo_status,
+                'has_pre_order'  => $order->has_pre_order,
+                'total_quantity' => $order->total_quantity,
+                'pre_order_qty'  => $order->pre_order_quantity,
+            ],
+            'customer' => [
+                'name'       => $order->customer_name,
+                'email'      => $order->customer_email,
+                'phone'      => $order->customer_phone,
                 'first_name' => $firstName,
                 'last_name'  => $lastName,
-                'email'      => $order->customer_email,
-                'phone'      => $order->customer_phone ?? null,
-                'line1'      => $addr['line1'] ?? null,
-                'line2'      => $addr['line2'] ?? null,
-                'barangay'   => $addr['barangay'] ?? null,
-                'city'       => $addr['city'] ?? null,
-                'province'   => $addr['province'] ?? null,
-                'postcode'   => $addr['postcode'] ?? null,
-                'country_id' => $addr['country_id'] ?? 175,
+            ],
+            'address' => [
+                'address_line1' => $order->address_line1,
+                'address_line2' => $order->address_line2,
+                'barangay'      => $order->barangay,
+                'city'          => $order->city,
+                'province'      => $order->province,
+                'postcode'      => $order->postcode,
+                'full'          => $order->shipping_address,
+            ],
+            'totals' => [
+                'sub_total'       => $order->sub_total,
+                'tax_total'       => $order->tax_total,
+                'total'           => $order->total,
+                'formatted_total' => $order->formatted_total,
             ],
             'items' => $order->lines->map(fn($line) => [
-                'name'              => $line->product_name,
-                'quantity'          => $line->quantity,
-                'price'             => round($line->unit_price / 100, 2),
-                'sku'               => $line->product?->sku ?? null,
-                'short_description' => $line->product?->short_description ?? null,
-                'product_image'     => $line->product?->images->first()?->url ?? null,
+                'line_id'    => $line->id,
+                'product_id' => $line->product_id,
+                'name'       => $line->product_name,
+                'sku'        => $line->product?->sku,
+                'quantity'   => $line->quantity,
+                'unit_price' => $line->unit_price,
+                'total'      => $line->total,
+                'color'      => $line->meta['color'] ?? null,
+                'size'       => $line->meta['size'] ?? null,
+                'pre_order'  => $line->meta['pre_order'] ?? false,
+                'product'    => [
+                    'description'       => $line->product?->description,
+                    'short_description' => $line->product?->short_description,
+                    'price'             => $line->product?->price,
+                    'compare_price'     => $line->product?->compare_price,
+                    'stock'             => $line->product?->stock,
+                    'track_stock'       => $line->product?->track_stock,
+                    'colors'            => $line->product?->colors_array ?? [],
+                    'sizes'             => $line->product?->sizes_array ?? [],
+                    'variants'          => $line->product?->meta['variants'] ?? [],
+                    'status'            => $line->product?->status?->value,
+                    'approval_status'   => $line->product?->approval_status?->value,
+                    'images'            => $line->product?->images->map(fn($img) => [
+                        'url'      => $img->url,
+                        'is_primary' => $img->is_primary,
+                        'position' => $img->position,
+                    ])->values()->all() ?? [],
+                ],
             ])->values()->all(),
         ];
-
-        return $payload;
     }
 
     protected function buildBrandPartnerOrderPayload(BrandPartnerOrder $order): array

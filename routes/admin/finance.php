@@ -52,15 +52,15 @@ Route::group(['prefix' => 'cashflow', 'as' => 'cashflow.'], function () {
     Route::get('/{group}', [CashflowController::class, 'show'])->name('show');
 
     // Payment
-    Route::get('/post/payment/{payment}/modal', [CashFlowController::class, 'postPaymentModal'])
+    Route::get('/post/payment/{payment}/modal', [CashflowController::class, 'postPaymentModal'])
         ->name('post.payment.modal');
-    Route::post('/post/payment/{payment}', [CashFlowController::class, 'postPayment'])
+    Route::post('/post/payment/{payment}', [CashflowController::class, 'postPayment'])
         ->name('post.payment');
 
     // Expenses
-    Route::get('/post/expense/{expense}/modal', [CashFlowController::class, 'postExpenseModal'])
+    Route::get('/post/expense/{expense}/modal', [CashflowController::class, 'postExpenseModal'])
         ->name('post.expense.modal');
-    Route::post('/post/expense/{expense}', [CashFlowController::class, 'postExpense'])
+    Route::post('/post/expense/{expense}', [CashflowController::class, 'postExpense'])
         ->name('post.expense');
 
     Route::post('/payment/{payment}/unpost', [CashflowController::class, 'unpostPayment'])->name('unpost.payment');

@@ -557,8 +557,7 @@ class QuoteController extends Controller
         }
 
         $quotation->load(['billingAddress', 'shippingAddress', 'lines', 'currency']);
-       // dd(  $quotation->discount_breakdown );
-       
+
         $order = DB::transaction(function () use ($quotation) {
 
             $discountBreakdown = $this->save_discountBreakdown( $quotation );
