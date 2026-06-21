@@ -354,9 +354,10 @@
               <input type="checkbox" v-model="registerForm.terms" required />
               <span>
                 By creating an account, you agree to our
-                <a href="#" class="auth-terms-link">Terms &amp; Conditions</a>
+                <Link :href="route('store.brand-partner.terms', brandPartner?.slug)" class="auth-terms-link">Terms &amp; Conditions</Link>,
+                <Link :href="route('store.brand-partner.privacy', brandPartner?.slug)" class="auth-terms-link">Privacy Policy</Link>,
                 and
-                <a href="#" class="auth-terms-link">Privacy Policy</a>.
+                <Link :href="route('store.brand-partner.acceptable-use', brandPartner?.slug)" class="auth-terms-link">Acceptable Use Policy</Link>.
               </span>
             </label>
 
@@ -371,7 +372,7 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage, Link } from '@inertiajs/vue3';
 import { ref, watch, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
@@ -390,6 +391,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue', 'success']);
+
+const page = usePage();
+const brandPartner = computed(() => page.props.brandPartner);
 
 const accountModalOpen = ref(props.modelValue);
 const showRegister = ref(false);

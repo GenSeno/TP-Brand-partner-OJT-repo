@@ -248,10 +248,19 @@ function handleUpdatePassword(data) {
         color 0.15s;
 }
 
-.sidebar-menu li a:hover,
-.sidebar-menu li .logout-btn:hover {
+.sidebar-menu li a:hover {
     background: #fff8ee;
     color: #ff9505;
+}
+
+.sidebar-menu li .logout-btn {
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.sidebar-menu li .logout-btn:hover {
+    background: #fff5f5;
+    color: #c82333;
 }
 
 .sidebar-menu li.active a {

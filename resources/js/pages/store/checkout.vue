@@ -359,10 +359,22 @@
               <span>{{ formatCurrency(cart.total) }}</span>
             </div>
 
+            <label class="checkout-terms">
+              <input type="checkbox" v-model="form.terms_accepted" />
+              <span>
+                I agree to the
+                <a :href="route('store.brand-partner.terms', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Terms &amp; Conditions</a>,
+                <a :href="route('store.brand-partner.refund', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Refund Policy</a>,
+                <a :href="route('store.brand-partner.shipping', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Shipping Policy</a>,
+                and
+                <a :href="route('store.brand-partner.cancellation', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Cancellation Policy</a>.
+              </span>
+            </label>
+
             <button
               type="submit"
               class="grocery-btn theme-btn place-order-btn"
-              :disabled="form.processing"
+              :disabled="form.processing || !form.terms_accepted"
             >
               <span v-if="form.processing" class="btn-loading">
                 <i class="ri-loader-4-line spin"></i>
@@ -414,6 +426,7 @@ const form = useForm({
   shipping_postcode: '',
   shipping_country_id: PHILIPPINES_ID,
   notes: '',
+  terms_accepted: false,
 });
 
 const applySavedAddress = (event) => {
@@ -827,8 +840,40 @@ textarea.grocery-input {
   color: #ff9505;
 }
 
+/* Checkout Terms */
+.checkout-terms {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 14px;
+  background: #fefcf5;
+  border: 1px solid #f5edd6;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.checkout-terms input[type="checkbox"] {
+  margin-top: 3px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  accent-color: #ff9505;
+}
+
+.checkout-terms-link {
+  color: #ff9505;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.checkout-terms-link:hover {
+  text-decoration: underline;
+}
+
 /* Place Order Button */
-.grocery-btn.theme-btn {
   display: flex;
   align-items: center;
   justify-content: center;
