@@ -170,7 +170,7 @@
                 >
                   <i
                     :class="
-                      wishlistIds.includes(product.id)
+                      localWishlistedIds.includes(product.id)
                         ? 'ri-heart-fill text-red-500'
                         : 'ri-heart-line'
                     "
@@ -384,9 +384,9 @@
               >
                 <i
                   :class="
-                    wishlistIds.includes(product.id)
-                      ? 'ri-heart-fill text-red-500'
-                      : 'ri-heart-line'
+                    localWishlistedIds.includes(product.id)
+                        ? 'ri-heart-fill text-red-500'
+                        : 'ri-heart-line'
                   "
                 ></i>
               </button>
@@ -862,9 +862,8 @@
                   type="button"
                   class="pill-btn"
                   :class="{ active: selectedColor === color }"
-                  @click="
-                    selectedColor = selectedColor === color ? null : color
-                  "
+                  :disabled="validColors && !validColors.has(color)"
+                  @click="selectModalColor(color)"
                 >
                   {{ color }}
                 </button>
@@ -884,7 +883,8 @@
                   type="button"
                   class="pill-btn"
                   :class="{ active: selectedSize === size }"
-                  @click="selectedSize = selectedSize === size ? null : size"
+                  :disabled="validSizes && !validSizes.has(size)"
+                  @click="selectModalSize(size)"
                 >
                   {{ size }}
                 </button>
@@ -942,6 +942,10 @@
                 {{ formatCurrency(selectedProduct.price * modalQuantity) }}
               </h4>
             </div>
+            <div v-if="selectedProduct && (!currentInStock || exceedsStock)" class="pre-order-notice-modal">
+              <span v-if="exceedsStock">The quantity exceeds available stock. This item will be processed as a pre-order.</span>
+              <span v-else>This item is currently out of stock. It will be processed as a pre-order.</span>
+            </div>
             <button
               class="btn btn-grocery-primary cart-bar-btn"
               @click="confirmAddToCart"
@@ -952,6 +956,10 @@
               "
             >
               <span v-if="isAddingToCart">Adding...</span>
+              <span v-else-if="selectedProduct && (!currentInStock || exceedsStock)">
+                PRE-ORDER
+                <i class="ri-arrow-right-line"></i>
+              </span>
               <span v-else>
                 Add to Cart
                 <i class="ri-arrow-right-line"></i>
@@ -1015,7 +1023,7 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-  wishlistIds: {
+  wishlistedIds: {
     type: Array,
     default: () => [],
   },
@@ -1077,7 +1085,62 @@ const modalQuantity = ref(1);
 const selectedColor = ref(null);
 const selectedSize = ref(null);
 const isAddingToCart = ref(false);
+const localWishlistedIds = ref([]);
 let cartModal = null;
+
+const selectedVariant = computed(() => {
+  if (!selectedProduct.value?.meta?.variants?.length) return null;
+  return selectedProduct.value.meta.variants.find(v =>
+    (!selectedColor.value || v.color === selectedColor.value) &&
+    (!selectedSize.value || v.size === selectedSize.value)
+  ) || null;
+});
+
+const currentStock = computed(() => {
+  const product = selectedProduct.value;
+  if (!product) return 0;
+  if (product.meta?.variants?.length) {
+    const variant = selectedVariant.value;
+    if (variant) return variant.stock ?? 0;
+    return 0;
+  }
+  return product.stock ?? 0;
+});
+
+const exceedsStock = computed(() => {
+  return currentStock.value > 0 && modalQuantity.value > currentStock.value;
+});
+
+const validColors = computed(() => {
+  const product = selectedProduct.value;
+  if (!selectedSize.value || !product?.meta?.variants?.length) return null;
+  return new Set(
+    product.meta.variants
+      .filter(v => v.size === selectedSize.value)
+      .map(v => v.color)
+  );
+});
+
+const validSizes = computed(() => {
+  const product = selectedProduct.value;
+  if (!selectedColor.value || !product?.meta?.variants?.length) return null;
+  return new Set(
+    product.meta.variants
+      .filter(v => v.color === selectedColor.value)
+      .map(v => v.size)
+  );
+});
+
+const currentInStock = computed(() => {
+  const product = selectedProduct.value;
+  if (!product) return false;
+  if (product.meta?.variants?.length) {
+    const variant = selectedVariant.value;
+    if (variant) return (variant.stock ?? 0) > 0;
+    return product.in_stock;
+  }
+  return product.in_stock;
+});
 
 const featuredProductList = computed(() => {
   return props.featuredProducts.length > 0
@@ -1102,6 +1165,8 @@ function isNewProduct(createdAt) {
 }
 
 onMounted(() => {
+  localWishlistedIds.value = [...(props.wishlistedIds || [])];
+
   // Cart modal
   const modalEl = document.getElementById('addToCartModal');
   if (modalEl) {
@@ -1278,25 +1343,52 @@ const confirmAddToCart = () => {
   );
 };
 
+const selectModalColor = (color) => {
+  selectedColor.value = selectedColor.value === color ? null : color;
+  if (selectedColor.value && selectedSize.value && validSizes.value && !validSizes.value.has(selectedSize.value)) {
+    selectedSize.value = null;
+  }
+};
+
+const selectModalSize = (size) => {
+  selectedSize.value = selectedSize.value === size ? null : size;
+  if (selectedSize.value && selectedColor.value && validColors.value && !validColors.value.has(selectedColor.value)) {
+    selectedColor.value = null;
+  }
+};
+
 const toggleWishlist = (productId) => {
-  // Check if user is logged in (from page props)
   const user = props.auth?.user;
   if (!user) {
-    // Trigger login modal via custom event
     window.dispatchEvent(new CustomEvent('open-login-modal'));
     return;
   }
 
-  router.post(
-    route('store.brand-partner.wishlist.toggle'),
-    { product_id: productId },
-    {
-      preserveScroll: true,
-      onFinish: () => {
-        router.reload({ only: ['wishlistIds'] });
-      },
+  const idx = localWishlistedIds.value.indexOf(productId);
+  if (idx > -1) {
+    localWishlistedIds.value.splice(idx, 1);
+  } else {
+    localWishlistedIds.value.push(productId);
+  }
+
+  fetch(route('store.brand-partner.wishlist.toggle'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+      'X-Requested-With': 'XMLHttpRequest',
     },
-  );
+    body: JSON.stringify({ product_id: productId }),
+  }).then(r => {
+    if (!r.ok) throw new Error();
+  }).catch(() => {
+    const revertIdx = localWishlistedIds.value.indexOf(productId);
+    if (revertIdx > -1) {
+      localWishlistedIds.value.splice(revertIdx, 1);
+    } else {
+      localWishlistedIds.value.push(productId);
+    }
+  });
 };
 </script>
 
@@ -1588,6 +1680,13 @@ const toggleWishlist = (productId) => {
   border-color: #ff9505;
   background: #ff9505;
   color: #fff;
+}
+.pill-btn:disabled {
+  opacity: 2;
+  cursor: not-allowed;
+  border-color: #e8e8e8;
+  background: #fafafa;
+  color: #ccc;
 }
 .variation-hint {
   font-size: 12px;
@@ -3857,6 +3956,17 @@ const toggleWishlist = (productId) => {
 .cart-bar-btn:disabled {
   opacity: 0.75;
   cursor: not-allowed;
+}
+
+.pre-order-notice-modal {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f97316;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #fef3c7;
+  border-radius: 4px;
+  line-height: 1.4;
 }
 
 /* ===== Modal - Grocery Styling ===== */

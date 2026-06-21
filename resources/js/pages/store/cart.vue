@@ -130,6 +130,23 @@
           </button>
         </div>
 
+        <!-- Clear Cart Confirmation Modal -->
+        <div class="modal fade" id="clearCartModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content clear-modal">
+              <div class="modal-body text-center py-4">
+                <i class="ri-delete-bin-6-line text-danger" style="font-size: 48px;"></i>
+                <h5 class="mt-3 fw-bold">Clear Cart</h5>
+                <p class="text-muted mb-0">Are you sure you want to remove all items from your cart?</p>
+              </div>
+              <div class="modal-footer justify-content-center border-0 pt-0 pb-4 gap-2">
+                <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger px-4" @click="confirmClear">Yes, Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Summary -->
         <div class="cart-summary-section">
           <div class="cart-summary-box">
@@ -186,8 +203,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
 const props = defineProps({
@@ -204,6 +222,7 @@ const props = defineProps({
 });
 
 const localCart = ref({ ...props.cart, items: [...props.cart.items] });
+let clearModal = null;
 
 const breadcrumbItems = [
   { label: 'My Account', link: '/account' },
@@ -260,11 +279,17 @@ const removeItem = (itemId) => {
 };
 
 const clearCart = () => {
-  if (confirm('Are you sure you want to clear your cart?')) {
-    router.delete(route('store.brand-partner.cart.clear'), {
-      preserveScroll: true,
-    });
-  }
+  clearModal?.show();
+};
+
+const confirmClear = () => {
+  localCart.value = { items: [], subtotal: 0, discount: 0, total: 0 };
+  clearModal?.hide();
+
+  router.delete(route('store.brand-partner.cart.clear'), {
+    preserveScroll: true,
+    preserveState: true,
+  });
 };
 
 function recalcTotals() {
@@ -272,6 +297,16 @@ function recalcTotals() {
   localCart.value.subtotal = subtotal;
   localCart.value.total = subtotal;
 }
+
+onMounted(() => {
+  const el = document.getElementById('clearCartModal');
+  if (el) clearModal = new Modal(el);
+});
+
+onBeforeUnmount(() => {
+  clearModal?.dispose();
+  clearModal = null;
+});
 </script>
 
 <style scoped>
