@@ -15,12 +15,11 @@ class AddressController extends Controller
 {
     public function states(Request $request)
     {
-        $country_id = $request->input('country_id');
-        if (empty(trim($country_id))) {
+        if (! $request->filled('country_id')) {
             return [];
         }
 
-        return State::where('country_id', $country_id)->get();
+        return State::where('country_id', $request->input('country_id'))->get();
     }
 
     public function regions(Request $request)
@@ -41,24 +40,22 @@ class AddressController extends Controller
 
     public function cities(Request $request)
     {
-        $province_id = $request->input('province_id');
-        if (empty(trim($province_id))) {
+        if (! $request->filled('province_id')) {
             return [];
         }
 
-        return City::where('province_id', $province_id)
+        return City::where('province_id', $request->input('province_id'))
             ->orderBy('city_name')
             ->get();
     }
 
     public function barangays(Request $request)
     {
-        $city_id = $request->input('city_id');
-        if (empty(trim($city_id))) {
+        if (! $request->filled('city_id')) {
             return [];
         }
 
-        return Barangay::where('city_id', $city_id)
+        return Barangay::where('city_id', $request->input('city_id'))
             ->orderBy('barangay_name')
             ->get();
     }
