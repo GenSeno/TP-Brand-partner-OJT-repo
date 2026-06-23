@@ -130,7 +130,7 @@
                         >
                             <i
                                 :class="
-                                    localWishlistedIds.includes(product.id)
+                                    globalWishlistedIds.includes(product.id)
                                         ? 'ri-heart-fill text-danger'
                                         : 'ri-heart-line'
                                 "
@@ -318,11 +318,13 @@
 
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 import { emitter } from '@/composables/eventBus';
 import ToastComponent from '@/components/ToastContainer.vue';
+import { globalWishlistedIds, initWishlist, toggleGlobalWishlist, revertGlobalWishlist } from '@/composables/useWishlist';
 
 const props = defineProps({
     brandPartner: Object,
@@ -349,7 +351,6 @@ const breadcrumbItems = computed(() => [
 
 const quantity = ref(1);
 const isAddingToCart = ref(false);
-const localWishlistedIds = ref([]);
 const selectedImage = ref(props.product.image_url);
 const selectedColor = ref(null);
 const selectedSize = ref(null);
@@ -443,7 +444,7 @@ const decrementQuantity = () => { if (quantity.value > 1) quantity.value--; };
 let confirmModal = null;
 
 onMounted(() => {
-    localWishlistedIds.value = [...(props.wishlistedIds || [])];
+    initWishlist(props.wishlistedIds);
     const modalEl = document.getElementById('addToCartConfirmModal');
     if (modalEl) confirmModal = new Modal(modalEl);
 });
@@ -493,31 +494,12 @@ const toggleWishlist = (productId) => {
         return;
     }
 
-    const idx = localWishlistedIds.value.indexOf(productId);
-    if (idx > -1) {
-        localWishlistedIds.value.splice(idx, 1);
-    } else {
-        localWishlistedIds.value.push(productId);
-    }
+    const action = toggleGlobalWishlist(productId);
 
-    fetch(route('store.brand-partner.wishlist.toggle'), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({ product_id: productId }),
-    }).then(r => {
-        if (!r.ok) throw new Error();
-    }).catch(() => {
-        const revertIdx = localWishlistedIds.value.indexOf(productId);
-        if (revertIdx > -1) {
-            localWishlistedIds.value.splice(revertIdx, 1);
-        } else {
-            localWishlistedIds.value.push(productId);
-        }
-    });
+    axios.post(route('store.brand-partner.wishlist.toggle'), { product_id: productId, action })
+        .catch(() => {
+            revertGlobalWishlist(productId, action);
+        });
 };
 </script>
 
