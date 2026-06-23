@@ -74,6 +74,17 @@
                                             class="feather-16 me-2"
                                         ></vue-feather>
                                         <span>Events</span>
+                                        <span
+                                            v-if="
+                                                $page.props
+                                                    .activeEventsCount > 0
+                                            "
+                                            class="badge bg-primary ms-auto"
+                                            style="font-size: 10px"
+                                            >{{
+                                                $page.props.activeEventsCount
+                                            }}</span
+                                        >
                                     </Link>
                                 </li>
                                 <li
@@ -131,6 +142,17 @@
                                             class="feather-16 me-2"
                                         ></vue-feather>
                                         <span>Orders</span>
+                                        <span
+                                            v-if="
+                                                $page.props
+                                                    .pendingOrdersCount > 0
+                                            "
+                                            class="badge bg-warning ms-auto"
+                                            style="font-size: 10px"
+                                            >{{
+                                                $page.props.pendingOrdersCount
+                                            }}</span
+                                        >
                                     </Link>
                                 </li>
                             </ul>
