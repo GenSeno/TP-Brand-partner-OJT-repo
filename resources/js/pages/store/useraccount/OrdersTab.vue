@@ -123,6 +123,9 @@
                                     <span v-else-if="order.status === 'pending'"
                                         >Order is being prepared</span
                                     >
+                                    <span v-else-if="order.status === 'confirmed'"
+                                        >Order has been confirmed</span
+                                    >
                                     <span v-else-if="order.status === 'cancelled'"
                                         >Order has been cancelled</span
                                     >
@@ -403,6 +406,7 @@ const getStatusBadgeClass = (status) => {
     if (status === 'completed') return 'badge-delivered';
     if (status === 'cancelled') return 'badge-processing';
     if (status === 'sent_to_tpinklab') return 'badge-shipping';
+    if (status === 'confirmed') return 'badge-confirmed';
     return 'badge-processing';
 };
 
@@ -410,6 +414,7 @@ const getStatusLabel = (status) => {
     if (status === 'completed') return 'Delivered';
     if (status === 'cancelled') return 'Cancelled';
     if (status === 'sent_to_tpinklab') return 'Shipping';
+    if (status === 'confirmed') return 'Confirmed';
     return 'PROCESSING';
 };
 
@@ -593,6 +598,13 @@ const cancelOrder = (order) => {
 }
 .badge-processing .status-dot {
     background: #fe0000;
+}
+.badge-confirmed {
+    background: #bbdefb;
+    color: #1565c0;
+}
+.badge-confirmed .status-dot {
+    background: #1565c0;
 }
 
 .order-card-footer {
