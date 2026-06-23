@@ -64,7 +64,11 @@ class SliderResource extends Resource
                         'orange' => 'Orange Slant',
                         'none' => 'No Overlay',
                     ])
-                    ->default('dark'),
+                    ->default('dark')
+                    ->helperText(fn ($state) => $state === 'none'
+                        ? 'Only the background image will be displayed. Title, subtitle, and button are hidden.'
+                        : null,
+                    ),
                 Forms\Components\Select::make('content_position')
                     ->options([
                         'left' => 'Left',

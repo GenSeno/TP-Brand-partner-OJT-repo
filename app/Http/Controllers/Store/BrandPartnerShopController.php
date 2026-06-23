@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
 use App\Models\BrandPartnerProduct;
 use App\Models\BrandPartnerProductOption;
+use App\Models\CartItem;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,10 @@ class BrandPartnerShopController extends Controller
      */
     protected function getCartCount(Request $request, string $brandPartnerSlug): int
     {
+        if (Auth::check()) {
+            return CartItem::where('user_id', Auth::id())->sum('quantity');
+        }
+
         $cart = $request->session()->get("bp_cart_{$brandPartnerSlug}", []);
 
         return array_sum(array_column($cart, 'quantity'));

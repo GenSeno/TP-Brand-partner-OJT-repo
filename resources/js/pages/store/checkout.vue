@@ -109,7 +109,7 @@
 
             <!-- Street Address -->
             <div class="form-group" style="margin-bottom: 16px">
-              <label>Street Address</label>
+              <label class="required">Street Address</label>
               <input
                 v-model="form.shipping_line1"
                 type="text"
@@ -118,6 +118,7 @@
                   'input-error': form.errors.shipping_line1,
                 }"
                 placeholder="House number and street name"
+                required
               />
               <span class="error-text" v-if="form.errors.shipping_line1">
                 {{ form.errors.shipping_line1 }}
@@ -140,13 +141,14 @@
             <!-- Country / Province -->
             <div class="form-row-grid" style="margin-bottom: 16px">
               <div class="form-group">
-                <label>Country/Region</label>
+                <label class="required">Country/Region</label>
                 <select
                   v-model="form.shipping_country_id"
                   class="grocery-input"
                   :class="{
                     'input-error': form.errors.shipping_country_id,
                   }"
+                  required
                 >
                   <option value="">Select a country</option>
                   <option
@@ -162,7 +164,7 @@
                 </span>
               </div>
               <div class="form-group">
-                <label>Province</label>
+                <label class="required">Province</label>
                 <select
                   v-if="isShippingPH"
                   v-model="form.shipping_province"
@@ -170,6 +172,7 @@
                   :class="{
                     'input-error': form.errors.shipping_province,
                   }"
+                  required
                 >
                   <option value="">Select a province</option>
                   <option
@@ -189,6 +192,7 @@
                     'input-error': form.errors.shipping_province,
                   }"
                   placeholder="e.g. N/A"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_province">
                   {{ form.errors.shipping_province }}
@@ -199,7 +203,7 @@
             <!-- City / Barangay -->
             <div class="form-row-grid" style="margin-bottom: 16px">
               <div class="form-group">
-                <label>City</label>
+                <label class="required">City</label>
                 <select
                   v-if="isShippingPH && cities.length > 0"
                   v-model="form.shipping_city"
@@ -207,6 +211,7 @@
                   :class="{
                     'input-error': form.errors.shipping_city,
                   }"
+                  required
                 >
                   <option value="">Select a city</option>
                   <option v-for="c in cities" :key="c.id" :value="c.city_name">
@@ -220,6 +225,7 @@
                   :class="{
                     'input-error': form.errors.shipping_city,
                   }"
+                  required
                 >
                   <option value="">Select a city</option>
                   <option v-for="c in cities" :key="c.value" :value="c.value">
@@ -235,13 +241,14 @@
                     'input-error': form.errors.shipping_city,
                   }"
                   placeholder="Enter city"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_city">
                   {{ form.errors.shipping_city }}
                 </span>
               </div>
               <div class="form-group">
-                <label>Barangay</label>
+                <label class="required">Barangay</label>
                 <input
                   v-model="form.shipping_barangay"
                   type="text"
@@ -249,6 +256,7 @@
                   :class="{
                     'input-error': form.errors.shipping_barangay,
                   }"
+                  required
                 />
                 <span class="error-text" v-if="form.errors.shipping_barangay">
                   {{ form.errors.shipping_barangay }}
@@ -258,7 +266,7 @@
 
             <!-- Postal / Zip Code -->
             <div class="form-group">
-              <label>Postal / Zip Code</label>
+              <label class="required">Postal / Zip Code</label>
               <input
                 v-model="form.shipping_postcode"
                 type="text"
@@ -266,6 +274,7 @@
                 :class="{
                   'input-error': form.errors.shipping_postcode,
                 }"
+                required
               />
               <span class="error-text" v-if="form.errors.shipping_postcode">
                 {{ form.errors.shipping_postcode }}
@@ -350,10 +359,26 @@
               <span>{{ formatCurrency(cart.total) }}</span>
             </div>
 
+            <label class="checkout-terms">
+              <input type="checkbox" v-model="form.terms_accepted" />
+              <span>
+                I agree to the
+                <a :href="route('store.brand-partner.terms', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Terms &amp; Conditions</a>,
+                <a :href="route('store.brand-partner.refund', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Refund Policy</a>,
+                <a :href="route('store.brand-partner.shipping', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Shipping Policy</a>,
+                and
+                <a :href="route('store.brand-partner.cancellation', brandPartner?.slug)" target="_blank" rel="noopener" class="checkout-terms-link">Cancellation Policy</a>.
+              </span>
+            </label>
+
+            <div v-if="form.errors.checkout_error" class="error-text" style="margin-top: 10px; font-size: 14px; text-align: center; color: #ff4757; font-weight: bold;">
+              {{ form.errors.checkout_error }}
+            </div>
+
             <button
               type="submit"
               class="grocery-btn theme-btn place-order-btn"
-              :disabled="form.processing"
+              :disabled="form.processing || !form.terms_accepted"
             >
               <span v-if="form.processing" class="btn-loading">
                 <i class="ri-loader-4-line spin"></i>
@@ -405,6 +430,7 @@ const form = useForm({
   shipping_postcode: '',
   shipping_country_id: PHILIPPINES_ID,
   notes: '',
+  terms_accepted: false,
 });
 
 const applySavedAddress = (event) => {
@@ -816,6 +842,39 @@ textarea.grocery-input {
   font-size: 20px;
   font-weight: 900;
   color: #ff9505;
+}
+
+/* Checkout Terms */
+.checkout-terms {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 14px;
+  background: #fefcf5;
+  border: 1px solid #f5edd6;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.checkout-terms input[type="checkbox"] {
+  margin-top: 3px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  accent-color: #ff9505;
+}
+
+.checkout-terms-link {
+  color: #ff9505;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.checkout-terms-link:hover {
+  text-decoration: underline;
 }
 
 /* Place Order Button */

@@ -129,6 +129,11 @@ class BrandPartner extends Authenticatable implements HasMedia
         return $this->hasMany(HomepageReview::class);
     }
 
+    public function storeCollectionItems(): Relations\HasMany
+    {
+        return $this->hasMany(StoreCollectionItem::class);
+    }
+
     // Accessors
     protected function logoUrl(): Attribute
     {

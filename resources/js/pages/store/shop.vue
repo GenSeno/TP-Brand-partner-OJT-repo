@@ -248,8 +248,10 @@
                             </div>
 
                             <!-- Wishlist -->
-                            <button class="product-wishlist-btn">
-                                <i class="ri-heart-line"></i>
+                            <button class="product-wishlist-btn" @click="toggleWishlist(product.id)">
+                                <i
+                                    :class="localWishlistedIds.includes(product.id) ? 'ri-heart-fill text-danger' : 'ri-heart-line'"
+                                ></i>
                             </button>
 
                             <!-- Image -->
@@ -352,10 +354,9 @@
                                 <!-- Add to Cart -->
                                 <button
                                     class="product-card-atc"
-                                    :disabled="!product.in_stock"
                                     @click.prevent="addToCart(product)"
                                 >
-                                    ADD TO CART
+                                    {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
                                 </button>
                             </div>
                         </div>
@@ -434,7 +435,8 @@
                                 type="button"
                                 class="pill-btn"
                                 :class="{ active: selectedColor === color }"
-                                @click="selectedColor = (selectedColor === color ? null : color)"
+                                :disabled="validColors && !validColors.has(color)"
+                                @click="selectModalColor(color)"
                             >{{ color }}</button>
                         </div>
                     </div>
@@ -449,7 +451,8 @@
                                 type="button"
                                 class="pill-btn"
                                 :class="{ active: selectedSize === size }"
-                                @click="selectedSize = (selectedSize === size ? null : size)"
+                                :disabled="validSizes && !validSizes.has(size)"
+                                @click="selectModalSize(size)"
                             >{{ size }}</button>
                         </div>
                     </div>
@@ -505,12 +508,20 @@
                             }}
                         </h4>
                     </div>
+                    <div v-if="selectedProduct && (!currentInStock || exceedsStock)" class="pre-order-notice-modal">
+                        <span v-if="exceedsStock">The quantity exceeds available stock. This item will be processed as a pre-order.</span>
+                        <span v-else>This item is currently out of stock. It will be processed as a pre-order.</span>
+                    </div>
                     <button
                         class="btn btn-grocery-primary cart-bar-btn"
                         @click="confirmAddToCart"
                         :disabled="isAddingToCart || (selectedProduct?.colors_array?.length > 0 && !selectedColor) || (selectedProduct?.sizes_array?.length > 0 && !selectedSize)"
                     >
                         <span v-if="isAddingToCart">Adding...</span>
+                        <span v-else-if="selectedProduct && (!currentInStock || exceedsStock)">
+                            PRE-ORDER
+                            <i class="ri-arrow-right-line"></i>
+                        </span>
                         <span v-else>
                             Add to Cart
                             <i class="ri-arrow-right-line"></i>
@@ -540,6 +551,11 @@ const props = defineProps({
     sizes: Array,
     filter: Object,
     cartCount: Number,
+    wishlistedIds: {
+        type: Array,
+        default: () => [],
+    },
+    auth: Object,
 });
 
 // Breadcrumb items
@@ -602,8 +618,63 @@ const modalQuantity = ref(1);
 const selectedColor = ref(null);
 const selectedSize = ref(null);
 const isAddingToCart = ref(false);
+const localWishlistedIds = ref([]);
 let cartModal = null;
 const priceMax = ref(5000);
+
+const selectedVariant = computed(() => {
+    if (!selectedProduct.value?.meta?.variants?.length) return null;
+    return selectedProduct.value.meta.variants.find(v =>
+        (!selectedColor.value || v.color === selectedColor.value) &&
+        (!selectedSize.value || v.size === selectedSize.value)
+    ) || null;
+});
+
+const currentStock = computed(() => {
+    const product = selectedProduct.value;
+    if (!product) return 0;
+    if (product.meta?.variants?.length) {
+        const variant = selectedVariant.value;
+        if (variant) return variant.stock ?? 0;
+        return 0;
+    }
+    return product.stock ?? 0;
+});
+
+const currentInStock = computed(() => {
+    const product = selectedProduct.value;
+    if (!product) return false;
+    if (product.meta?.variants?.length) {
+        const variant = selectedVariant.value;
+        if (variant) return (variant.stock ?? 0) > 0;
+        return product.in_stock;
+    }
+    return product.in_stock;
+});
+
+const exceedsStock = computed(() => {
+    return currentStock.value > 0 && modalQuantity.value > currentStock.value;
+});
+
+const validColors = computed(() => {
+    const product = selectedProduct.value;
+    if (!selectedSize.value || !product?.meta?.variants?.length) return null;
+    return new Set(
+        product.meta.variants
+            .filter(v => v.size === selectedSize.value)
+            .map(v => v.color)
+    );
+});
+
+const validSizes = computed(() => {
+    const product = selectedProduct.value;
+    if (!selectedColor.value || !product?.meta?.variants?.length) return null;
+    return new Set(
+        product.meta.variants
+            .filter(v => v.color === selectedColor.value)
+            .map(v => v.size)
+    );
+});
 
 const toggleColor = (val) => {
     const idx = selectedColors.value.indexOf(val);
@@ -622,6 +693,20 @@ const toggleCollection = (val) => {
     if (idx > -1) selectedCollections.value.splice(idx, 1);
     else selectedCollections.value.push(val);
     applyFilters();
+};
+
+const selectModalColor = (color) => {
+    selectedColor.value = selectedColor.value === color ? null : color;
+    if (selectedColor.value && selectedSize.value && validSizes.value && !validSizes.value.has(selectedSize.value)) {
+        selectedSize.value = null;
+    }
+};
+
+const selectModalSize = (size) => {
+    selectedSize.value = selectedSize.value === size ? null : size;
+    if (selectedSize.value && selectedColor.value && validColors.value && !validColors.value.has(selectedColor.value)) {
+        selectedColor.value = null;
+    }
 };
 
 const toggleFeatured = () => {
@@ -662,6 +747,7 @@ const formatPrice = (val) =>
     `PHP ${(val / 100).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 onMounted(() => {
+    localWishlistedIds.value = [...(props.wishlistedIds || [])];
     const modalEl = document.getElementById('addToCartModal');
     if (modalEl) {
         cartModal = new Modal(modalEl);
@@ -730,6 +816,39 @@ const confirmAddToCart = () => {
         },
     );
 };
+
+const toggleWishlist = (productId) => {
+    if (!props.auth?.user) {
+        window.dispatchEvent(new CustomEvent('open-login-modal'));
+        return;
+    }
+
+    const idx = localWishlistedIds.value.indexOf(productId);
+    if (idx > -1) {
+        localWishlistedIds.value.splice(idx, 1);
+    } else {
+        localWishlistedIds.value.push(productId);
+    }
+
+    fetch(route('store.brand-partner.wishlist.toggle'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ product_id: productId }),
+    }).then(r => {
+        if (!r.ok) throw new Error();
+    }).catch(() => {
+        const revertIdx = localWishlistedIds.value.indexOf(productId);
+        if (revertIdx > -1) {
+            localWishlistedIds.value.splice(revertIdx, 1);
+        } else {
+            localWishlistedIds.value.push(productId);
+        }
+    });
+};
 </script>
 
 <style scoped>
@@ -747,6 +866,7 @@ const confirmAddToCart = () => {
 .pill-btn { padding: 7px 18px; border: 1px solid #d1d1d1; background: #fff; border-radius: 2px; font-size: 13px; font-weight: 500; color: #1a1a1a; cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; text-transform: uppercase; }
 .pill-btn:hover { border-color: #1a1a1a; background: #f9f9f9; }
 .pill-btn.active { border-color: #FF9505; background: #FF9505; color: #fff; }
+.pill-btn:disabled { opacity: 2; cursor: not-allowed; border-color: #e8e8e8; background: #fafafa; color: #ccc; }
 .variation-hint { font-size: 12px; color: #dc2626; margin: -8px 0 16px; }
 
 /* Breadcrumb Styles */
@@ -1482,6 +1602,17 @@ const confirmAddToCart = () => {
     opacity: 0.75;
     cursor: not-allowed;
     background-color: #727272;
+}
+
+.pre-order-notice-modal {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f97316;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: #fef3c7;
+    border-radius: 4px;
+    line-height: 1.4;
 }
 
 /* Responsive */

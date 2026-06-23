@@ -2,6 +2,7 @@
     <Head :title="`${product.name} - ${brandPartner.name}`" />
 
     <div class="product-page">
+        <ToastComponent />
         <!-- Breadcrumb -->
         <div class="breadcrumb-bar">
             <div class="container-wrap">
@@ -70,6 +71,7 @@
                                 class="pill-btn"
                                 :class="{ active: selectedColor === color }"
                                 @click="selectColor(color)"
+                            :disabled="validColors && !validColors.has(color)"
                             >{{ color }}</button>
                         </div>
                     </div>
@@ -84,6 +86,7 @@
                                 type="button"
                                 class="pill-btn"
                                 :class="{ active: selectedSize === size }"
+                                :disabled="validSizes && !validSizes.has(size)"
                                 @click="selectSize(size)"
                             >{{ size }}</button>
                         </div>
@@ -127,7 +130,7 @@
                         >
                             <i
                                 :class="
-                                    wishlistedIds.includes(product.id)
+                                    localWishlistedIds.includes(product.id)
                                         ? 'ri-heart-fill text-danger'
                                         : 'ri-heart-line'
                                 "
@@ -141,11 +144,20 @@
 
                     <!-- Trust Badges -->
                     <ul class="trust-list">
-                        <li><i class="ri-truck-line"></i> Complimentary delivery</li>
-                        <li><i class="ri-shield-check-line"></i> 1-year warranty</li>
+                        <li>
+                          <i class="ri-truck-line"></i>
+                          <Link :href="route('store.brand-partner.shipping', brandPartner.slug)" class="trust-link">Complimentary delivery</Link>
+                        </li>
+                        <li>
+                          <i class="ri-shield-check-line"></i>
+                          <Link :href="route('store.brand-partner.warranty', brandPartner.slug)" class="trust-link">1-year warranty</Link>
+                        </li>
+                        <li>
+                          <i class="ri-refund-2-line"></i>
+                          <Link :href="route('store.brand-partner.refund', brandPartner.slug)" class="trust-link">Return &amp; Refund</Link>
+                        </li>
                         <li><i class="ri-leaf-line"></i> Ethically and sustainably made</li>
                         <li><i class="ri-heart-pulse-line"></i> Safe for sensitive skin</li>
-                        <li><i class="ri-earth-line"></i> Carbon-neutral shipping</li>
                     </ul>
                 </div>
             </div>
@@ -309,6 +321,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { emitter } from '@/composables/eventBus';
+import ToastComponent from '@/components/ToastContainer.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -335,6 +349,7 @@ const breadcrumbItems = computed(() => [
 
 const quantity = ref(1);
 const isAddingToCart = ref(false);
+const localWishlistedIds = ref([]);
 const selectedImage = ref(props.product.image_url);
 const selectedColor = ref(null);
 const selectedSize = ref(null);
@@ -378,12 +393,36 @@ const exceedsStock = computed(() => {
     return currentStock.value > 0 && quantity.value > currentStock.value;
 });
 
+const validColors = computed(() => {
+    if (!selectedSize.value || !props.product.meta?.variants?.length) return null;
+    return new Set(
+        props.product.meta.variants
+            .filter(v => v.size === selectedSize.value)
+            .map(v => v.color)
+    );
+});
+
+const validSizes = computed(() => {
+    if (!selectedColor.value || !props.product.meta?.variants?.length) return null;
+    return new Set(
+        props.product.meta.variants
+            .filter(v => v.color === selectedColor.value)
+            .map(v => v.size)
+    );
+});
+
 const selectColor = (color) => {
     selectedColor.value = color === selectedColor.value ? null : color;
+    if (selectedColor.value && selectedSize.value && validSizes.value && !validSizes.value.has(selectedSize.value)) {
+        selectedSize.value = null;
+    }
 };
 
 const selectSize = (size) => {
     selectedSize.value = size === selectedSize.value ? null : size;
+    if (selectedSize.value && selectedColor.value && validColors.value && !validColors.value.has(selectedColor.value)) {
+        selectedColor.value = null;
+    }
 };
 
 const discountPercent = computed(() => {
@@ -404,6 +443,7 @@ const decrementQuantity = () => { if (quantity.value > 1) quantity.value--; };
 let confirmModal = null;
 
 onMounted(() => {
+    localWishlistedIds.value = [...(props.wishlistedIds || [])];
     const modalEl = document.getElementById('addToCartConfirmModal');
     if (modalEl) confirmModal = new Modal(modalEl);
 });
@@ -429,7 +469,19 @@ const addToCart = () => {
         },
         {
             preserveScroll: true,
-            onSuccess: () => confirmModal?.hide(),
+            onSuccess: () => {
+                confirmModal?.hide();
+                emitter.emit('toast:show', {
+                    type: 'success',
+                    message: `${props.product.name} added to cart!`,
+                });
+            },
+            onError: () => {
+                emitter.emit('toast:show', {
+                    type: 'error',
+                    message: 'Failed to add item to cart',
+                });
+            },
             onFinish: () => { isAddingToCart.value = false; },
         },
     );
@@ -441,16 +493,31 @@ const toggleWishlist = (productId) => {
         return;
     }
 
-    router.post(
-        route('store.brand-partner.wishlist.toggle'),
-        { product_id: productId },
-        {
-            preserveScroll: true,
-            onFinish: () => {
-                router.reload({ only: ['wishlistedIds'] });
-            },
+    const idx = localWishlistedIds.value.indexOf(productId);
+    if (idx > -1) {
+        localWishlistedIds.value.splice(idx, 1);
+    } else {
+        localWishlistedIds.value.push(productId);
+    }
+
+    fetch(route('store.brand-partner.wishlist.toggle'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest',
         },
-    );
+        body: JSON.stringify({ product_id: productId }),
+    }).then(r => {
+        if (!r.ok) throw new Error();
+    }).catch(() => {
+        const revertIdx = localWishlistedIds.value.indexOf(productId);
+        if (revertIdx > -1) {
+            localWishlistedIds.value.splice(revertIdx, 1);
+        } else {
+            localWishlistedIds.value.push(productId);
+        }
+    });
 };
 </script>
 
@@ -716,6 +783,14 @@ const toggleWishlist = (productId) => {
     color: #fff;
 }
 
+.pill-btn:disabled {
+    opacity: 2;
+    cursor: not-allowed;
+    border-color: #e8e8e8;
+    background: #fafafa;
+    color: #ccc;
+}
+
 .variation-hint {
     font-size: 12px;
     color: #dc2626;
@@ -905,6 +980,16 @@ const toggleWishlist = (productId) => {
     color: #888;
     width: 18px;
     text-align: center;
+}
+
+.trust-link {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.trust-link:hover {
+    color: #ff9505;
 }
 
 /* ========================

@@ -9,26 +9,23 @@ use App\Http\Controllers\Store\BrandPartnerCollectionController;
 use App\Http\Controllers\Store\BrandPartnerContactController;
 use App\Http\Controllers\Store\BrandPartnerFaqController;
 use App\Http\Controllers\Store\BrandPartnerPartnerController;
+use App\Http\Controllers\Store\BrandPartnerPolicyController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
 use App\Http\Controllers\Store\BrandPartnerWishlistController as WishlistController;
-use App\Http\Controllers\Store\UserAddressController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Store\PaymentController;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\Store\UserAddressController;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
-
 
 /**
  * Front Store Routes for Brand Partners
  * These routes should be loaded LAST in web.php to avoid conflicts
  */
-
-
 Route::group([
     'as' => 'store.',
     'middleware' => [\App\Http\Middleware\HandleStoreInertiaRequests::class],
@@ -155,31 +152,44 @@ Route::group([
         ->name('brand-partner.addresses.destroy')
         ->middleware('auth');
 
-    //Google Login Method
+    // Google Login Method
     Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
-    //Facebook Login Method
+    // Facebook Login Method
     Route::get('/auth/facebook', [AuthController::class, 'redirectToFacebook']);
     Route::get('/auth/facebook/callback', [AuthController::class, 'handleFacebookCallback']);
 
     Route::get('/auth/status', function () {
         return response()->json([
             'authenticated' => auth()->check(),
-            'user' => auth()->user()?->only('id', 'name', 'email')
+            'user' => auth()->user()?->only('id', 'name', 'email'),
         ]);
     });
+
+    // Policy pages
+    Route::get('/terms', [BrandPartnerPolicyController::class, 'terms'])->name('brand-partner.terms');
+    Route::get('/privacy', [BrandPartnerPolicyController::class, 'privacy'])->name('brand-partner.privacy');
+    Route::get('/refund', [BrandPartnerPolicyController::class, 'refund'])->name('brand-partner.refund');
+    Route::get('/shipping', [BrandPartnerPolicyController::class, 'shipping'])->name('brand-partner.shipping');
+    Route::get('/payment-policy', [BrandPartnerPolicyController::class, 'payment'])->name('brand-partner.payment');
+    Route::get('/cookies', [BrandPartnerPolicyController::class, 'cookies'])->name('brand-partner.cookies');
+    Route::get('/warranty', [BrandPartnerPolicyController::class, 'warranty'])->name('brand-partner.warranty');
+    Route::get('/cancellation', [BrandPartnerPolicyController::class, 'cancellation'])->name('brand-partner.cancellation');
+    Route::get('/disclaimer', [BrandPartnerPolicyController::class, 'disclaimer'])->name('brand-partner.disclaimer');
+    Route::get('/acceptable-use', [BrandPartnerPolicyController::class, 'acceptableUse'])->name('brand-partner.acceptable-use');
 
     // Payment routes
     Route::get('/payment/{reference}/success', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/{reference}/failed', [PaymentController::class, 'failed'])->name('payment.failed');
-    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook'); 
+    Route::post('/webhook/xendit', [PaymentController::class, 'webhook'])->name('payment.webhook');
 });
 
 // Reset Password
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
     $status = Password::sendResetLink($request->only('email'));
+
     return $status === Password::RESET_LINK_SENT
         ? back()->with('success', 'Password reset link sent!')
         : back()->withErrors(['email' => __($status)]);
@@ -194,19 +204,20 @@ Route::get('/reset-password/{token}', function (string $token, Request $request)
 
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
-        'token'    => 'required',
-        'email'    => 'required|email',
+        'token' => 'required',
+        'email' => 'required|email',
         'password' => 'required|min:8|confirmed',
     ]);
     $status = Password::reset(
         $request->only('email', 'password', 'password_confirmation', 'token'),
         function ($user, $password) {
             $user->forceFill(['password' => $password])
-                 ->setRememberToken(Str::random(60));
+                ->setRememberToken(Str::random(60));
             $user->save();
             event(new PasswordReset($user));
         }
     );
+
     return $status === Password::PASSWORD_RESET
         ? redirect('/')->with('success', 'Password reset successfully!')
         : back()->withErrors(['email' => __($status)]);

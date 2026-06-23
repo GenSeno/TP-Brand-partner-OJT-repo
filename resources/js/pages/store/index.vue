@@ -5,114 +5,60 @@
     <ToastComponent />
     <!-- Hero Carousel Section -->
     <section class="hero-carousel-section">
-      <div
-        id="heroCarousel"
-        class="carousel slide hero-carousel"
-        data-bs-ride="carousel"
-        data-bs-interval="4000"
-        data-bs-pause="false"
-      >
-        <div class="carousel-indicators" v-if="sliders.length > 0">
-          <button
-            v-for="(slider, idx) in sliders"
-            :key="idx"
-            type="button"
-            data-bs-target="#heroCarousel"
-            :data-bs-slide-to="idx"
-            :class="{ active: idx === 0 }"
-            :aria-current="idx === 0 ? 'true' : null"
-            :aria-label="'Slide ' + (idx + 1)"
-          ></button>
+      <div v-if="sliders.length > 0" id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="false">
+        <div class="carousel-controls-wrapper">
+          <button class="carousel-control-prev carousel-arrow" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="arrow-icon">&#10094;</span></button>
+          <div class="carousel-indicators">
+            <button v-for="(slider, idx) in sliders" :key="idx" type="button" data-bs-target="#heroCarousel" :data-bs-slide-to="idx" :class="{ active: idx === 0 }" :aria-current="idx === 0 ? 'true' : null" :aria-label="'Slide ' + (idx + 1)"></button>
+          </div>
+          <button class="carousel-control-next carousel-arrow" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="arrow-icon">&#10095;</span></button>
         </div>
         <div class="carousel-inner">
-          <button
-            class="carousel-control-prev custom-arrow"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="prev"
-          >
-            <span class="arrow-icon">&#10094;</span>
-          </button>
-
-          <button
-            class="carousel-control-next custom-arrow"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="next"
-          >
-            <span class="arrow-icon">&#10095;</span>
-          </button>
-          <!-- Slide 1: Collection (img-carousel2) [WAS SLIDE 2] -->
-          <div class="carousel-item active slide-2-bg">
-            <div class="slide-layout">
-              <div class="slide-content-left px-5">
-                <h1 class="slide-title text-white">HUGIS COLLECTION V2</h1>
-                <p class="slide-subtitle text-white">
-                  HUGIS COLLECTION V2 celebrates this collective energy. It
-                  honors individuality while embracing the beauty of community,
-                  proving that when runners move as one, their diversity becomes
-                  the masterpiece.
-                </p>
-                <a
-                  :href="route('store.brand-partner.shop', brandPartner?.slug)"
-                  class="btn slide-btn-outline"
-                  >VIEW ALL PRODUCTS</a
-                >
+          <div v-for="(slider, idx) in sliders" :key="slider.id" class="carousel-item" :class="{ active: idx === 0 }" :style="{ backgroundImage: slider.image ? 'url(' + slider.image + ')' : undefined }">
+            <div v-if="slider.overlay_type === 'dark'" class="slide-overlay-left-dark"></div>
+            <div v-if="slider.overlay_type === 'orange'" class="slide-overlay-left-orange"></div>
+            <div class="slide-layout" :class="slider.content_position === 'center' ? 'justify-content-center' : ''">
+              <div v-if="slider.overlay_type !== 'none'" class="px-5" :class="slider.content_position === 'center' ? 'text-center' : 'slide-content-left'" :style="{ zIndex: 2 }">
+                <h1 v-if="slider.title" class="slide-title text-white">{{ slider.title }}</h1>
+                <p v-if="slider.subtitle" class="slide-subtitle text-white">{{ slider.subtitle }}</p>
+                <Link v-if="slider.link_url" :href="slider.link_url" class="btn slide-btn-outline">{{ slider.link_text || 'VIEW ALL PRODUCTS' }}</Link>
               </div>
             </div>
           </div>
-
-          <!-- Slide 2: Keep On Breaking Boundaries (img-carousel1) [WAS SLIDE 1] -->
-          <div class="carousel-item slide-1-bg">
-            <div class="slide-overlay-left-dark"></div>
-            <div class="slide-layout">
-              <div class="slide-content-left px-5" style="z-index: 2">
-                <h1 class="slide-title text-white">
-                  KEEP ON<br />BREAKING THE<br />BOUNDARIES.
-                </h1>
-                <p class="slide-subtitle text-white mt-3">
-                  Tribu Pakaras is launching its official eCommerce platform
-                  soon, powered by upgraded production, improved quality, and
-                  expanded product offerings designed for athletes who demand
-                  more.
-                </p>
-                <a
-                  :href="route('store.brand-partner.shop', brandPartner.slug)"
-                  class="btn slide-btn-outline mt-4"
-                  >VIEW ALL PRODUCTS</a
-                >
+        </div>
+      </div>
+      <div v-else class="cms-preview">
+        <div class="cms-preview-inner">
+          <div class="cms-preview-label">CMS Preview — Carousel Slides</div>
+          <div class="carousel slide hero-carousel">
+            <div class="carousel-controls-wrapper">
+              <button class="carousel-control-prev carousel-arrow" type="button"><span class="arrow-icon">&#10094;</span></button>
+              <div class="carousel-indicators">
+                <button type="button" class="active"></button>
+                <button type="button"></button>
+              </div>
+              <button class="carousel-control-next carousel-arrow" type="button"><span class="arrow-icon">&#10095;</span></button>
+            </div>
+          <div class="carousel-inner">
+              <div class="carousel-item active" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+                <div class="slide-layout">
+                  <div class="slide-content-left px-5">
+                    <h1 class="slide-title text-white">Your Hero Title Here</h1>
+                    <p class="slide-subtitle text-white">Your subtitle or tagline goes here to capture attention.</p>
+                    <a class="btn slide-btn-outline">CTA Button</a>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item" style="background: linear-gradient(135deg, #2d1b3d, #1a1a2e);">
+                <div class="slide-layout">
+                  <div class="slide-content-left px-5">
+                    <h1 class="slide-title text-white">Second Slide Title</h1>
+                    <p class="slide-subtitle text-white">Another engaging message for your audience.</p>
+                    <a class="btn slide-btn-outline">Shop Now</a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Slide 3: Dare To Dream Big (img-carousel3) -->
-          <div class="carousel-item slide-3-bg">
-            <div class="slide-overlay-left-orange"></div>
-            <div class="slide-layout">
-              <div class="slide-content-left px-5" style="z-index: 2">
-                <h1 class="slide-title text-white">
-                  DARE TO DREAM BIG — KEEP ON BREAKING THE BOUNDARIES.
-                </h1>
-                <p class="slide-subtitle text-white mt-3">
-                  Tribu Pakaras is launching its official eCommerce platform
-                  soon, powered by upgraded production, improved quality, and
-                  expanded product offerings designed for athletes who demand
-                  more.
-                </p>
-                <Link
-                  :href="route('store.brand-partner.shop', brandPartner?.slug)"
-                  class="btn slide-btn-outline mt-4"
-                  >VIEW ALL PRODUCTS</Link
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 4: Believe In Your Dreams (img-carousel4) -->
-          <div class="carousel-item slide-4-bg">
-            <div
-              class="slide-layout justify-content-center w-100 text-center flex-column"
-            ></div>
           </div>
         </div>
       </div>
@@ -224,7 +170,7 @@
                 >
                   <i
                     :class="
-                      wishlistIds.includes(product.id)
+                      localWishlistedIds.includes(product.id)
                         ? 'ri-heart-fill text-red-500'
                         : 'ri-heart-line'
                     "
@@ -336,116 +282,65 @@
     </section>
 
     <!-- Check Our Collections Section -->
-    <section class="collections-section">
-      <!-- THE Collection Banner -->
-      <div
-        class="dreamer-banner"
-        style="
-          background-image: url('/img/img-dreamercollection.png');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        "
-      >
-        <div class="dreamer-content">
-          <span class="dreamer-label">THE</span>
-          <h2 class="dreamer-title">DREAMER</h2>
-          <p class="dreamer-description">
-            <strong>Dare to Dream Big</strong> with our first shirt collection
-            for 2026 — <strong>The Dreamer</strong> — featuring the blend of
-            milky way &amp; outer space patterns, vectors of limitless
-            adventures and shades of greens and cloud dancer which represent the
-            colors of 2026.
-          </p>
-          <a
-            :href="
-              brandPartner
-                ? route('store.brand-partner.collections', brandPartner.slug)
-                : '#'
-            "
-            class="dreamer-btn"
-            >CHECK OUR COLLECTIONS</a
-          >
+    <section v-if="collectionBanners.length > 0" class="collections-section">
+      <template v-for="banner in collectionBanners" :key="banner.id">
+        <div v-if="banner.section_type === 'banner'" class="dreamer-banner" :style="{ backgroundImage: banner.image ? 'url(' + banner.image + ')' : undefined }">
+          <div class="dreamer-content">
+            <span v-if="banner.badge_text" class="dreamer-label">{{ banner.badge_text }}</span>
+            <h2 class="dreamer-title">{{ banner.title }}</h2>
+            <p v-if="banner.description" class="dreamer-description">{{ banner.description }}</p>
+            <a v-if="banner.link_url" :href="banner.link_url" class="dreamer-btn">{{ banner.link_text || 'VIEW COLLECTION' }}</a>
+          </div>
         </div>
-      </div>
-
-      <!-- 3-Panel Grid -->
+      </template>
       <div class="collections-panels">
-        <!-- Panel 1: HUGIS -->
-        <div
-          class="col-panel panel-dark"
-          style="background-image: url('/img/img-indexcollection1.png')"
-        >
+        <div v-for="banner in collectionBanners.filter(b => b.section_type === 'panel')" :key="banner.id" class="col-panel" :class="banner.overlay_class || 'panel-dark'" :style="{ backgroundImage: banner.image ? 'url(' + banner.image + ')' : undefined }">
           <div class="col-panel-overlay"></div>
           <div class="col-panel-body">
-            <h3 class="col-panel-title">HUGIS Collection v2</h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-outline"
-              >VIEW COLLECTION</a
-            >
+            <h3 class="col-panel-title">{{ banner.title }}</h3>
+            <p v-if="banner.description" class="col-panel-desc">{{ banner.description }}</p>
+            <a v-if="banner.link_url" :href="banner.link_url" class="col-panel-btn" :class="banner.overlay_class === 'panel-orange' ? 'col-panel-btn-white' : 'col-panel-btn-outline'">{{ banner.link_text || 'VIEW COLLECTION' }}</a>
           </div>
         </div>
-
-        <!-- Panel 2: Kuris Koleksyon -->
-        <div
-          class="col-panel panel-mid"
-          style="background-image: url('/img/img-collection2.png')"
-        >
-          <div class="col-panel-overlay"></div>
-          <div class="col-panel-body col-panel-body-center">
-            <div class="kuris-logo">></div>
-            <h3 class="col-panel-title">Kuris Koleksyon</h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-outline-dark"
-              >VIEW COLLECTION</a
-            >
+      </div>
+    </section>
+    <section v-else class="collections-section">
+      <div class="cms-preview">
+        <div class="cms-preview-inner">
+          <div class="cms-preview-label">CMS Preview — Collection Banners</div>
+          <div class="dreamer-banner" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);">
+            <div class="dreamer-content">
+              <span class="dreamer-label">THE</span>
+              <h2 class="dreamer-title">Collection Name</h2>
+              <p class="dreamer-description">Your collection description goes here. This is where you talk about what makes this collection special.</p>
+              <a class="dreamer-btn">VIEW COLLECTION</a>
+            </div>
           </div>
-        </div>
-
-        <!-- Panel 3: Discover CTA -->
-        <div
-          class="col-panel panel-orange"
-          style="background-image: url('/img/img-indexcollection3.png')"
-        >
-          <div class="col-panel-overlay"></div>
-          <div class="col-panel-body col-panel-body-center">
-            <h3 class="col-panel-cta-title">
-              Discover about <br />Our Collections
-            </h3>
-            <p class="col-panel-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-            <a
-              :href="
-                brandPartner
-                  ? route('store.brand-partner.collections', brandPartner.slug)
-                  : '#'
-              "
-              class="col-panel-btn col-panel-btn-white"
-              >VIEW OUR COLLECTIONS</a
-            >
+          <div class="collections-panels">
+            <div class="col-panel panel-dark" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+              <div class="col-panel-overlay"></div>
+              <div class="col-panel-body">
+                <h3 class="col-panel-title">Panel Title</h3>
+                <p class="col-panel-desc">Short description for this collection panel.</p>
+                <a class="col-panel-btn col-panel-btn-outline">VIEW COLLECTION</a>
+              </div>
+            </div>
+            <div class="col-panel panel-mid" style="background: linear-gradient(135deg, #3a3a5c, #2a2a4a);">
+              <div class="col-panel-overlay"></div>
+              <div class="col-panel-body col-panel-body-center">
+                <h3 class="col-panel-title">Another Collection</h3>
+                <p class="col-panel-desc">Description for another collection panel.</p>
+                <a class="col-panel-btn col-panel-btn-outline-dark">VIEW COLLECTION</a>
+              </div>
+            </div>
+            <div class="col-panel panel-orange" style="background: linear-gradient(135deg, #e65c00, #f9a825);">
+              <div class="col-panel-overlay"></div>
+              <div class="col-panel-body col-panel-body-center">
+                <h3 class="col-panel-cta-title">Discover Our Collections</h3>
+                <p class="col-panel-desc">Explore what we have to offer.</p>
+                <a class="col-panel-btn col-panel-btn-white">VIEW ALL</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -489,9 +384,9 @@
               >
                 <i
                   :class="
-                    wishlistIds.includes(product.id)
-                      ? 'ri-heart-fill text-red-500'
-                      : 'ri-heart-line'
+                    localWishlistedIds.includes(product.id)
+                        ? 'ri-heart-fill text-red-500'
+                        : 'ri-heart-line'
                   "
                 ></i>
               </button>
@@ -599,63 +494,53 @@
 
     <!-- Reviews Section -->
     <section class="reviews-section">
-      <div class="reviews-header">
+      <div v-if="reviews.length > 0" class="reviews-header">
         <h2 class="reviews-title">Read reviews,<br />Run with confidence</h2>
         <div class="reviews-nav">
-          <button class="reviews-nav-btn" id="reviewsPrev">
-            <i class="ri-arrow-left-line"></i>
-          </button>
-          <button
-            class="reviews-nav-btn reviews-nav-btn-active"
-            id="reviewsNext"
-          >
-            <i class="ri-arrow-right-line"></i>
-          </button>
+          <button class="reviews-nav-btn" id="reviewsPrev"><i class="ri-arrow-left-line"></i></button>
+          <button class="reviews-nav-btn reviews-nav-btn-active" id="reviewsNext"><i class="ri-arrow-right-line"></i></button>
         </div>
       </div>
 
-      <div class="reviews-track-wrap">
+      <div v-if="reviews.length > 0" class="reviews-track-wrap">
         <div class="reviews-track" id="reviewsTrack">
           <div class="review-card" v-for="review in reviews" :key="review.id">
             <p class="review-text">{{ review.comment }}</p>
             <div class="review-author">
-              <img
-                :src="review.avatar_url || '/img/avatar-placeholder.png'"
-                :alt="review.name"
-                class="review-avatar"
-              />
+              <img :src="review.avatar_url || '/img/avatar-placeholder.png'" :alt="review.name" class="review-avatar" />
               <div class="review-author-info">
                 <span class="review-name">{{ review.name }}</span>
                 <span class="review-role">{{ review.role }}</span>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Static fallback cards if no reviews prop -->
-          <template v-if="!reviews || reviews.length === 0">
-            <div class="review-card" v-for="n in 4" :key="n">
-              <h4 class="review-headline">
-                Cras amet ultricies pellentesque aliquam varius.
-              </h4>
-              <p class="review-text">
-                Mauris id non nunc laoreet proin morbi faucibus id a. Donec
-                gravida at sed auctor amet platea ac sed. Est tincidunt morbi
-                tortor fermentum elementum platea. Erat id vestibulum duis
-                turpis.
-              </p>
-              <div class="review-author">
-                <img
-                  src="/img/avatar-placeholder.png"
-                  alt="Reviewer"
-                  class="review-avatar"
-                />
-                <div class="review-author-info">
-                  <span class="review-name">Iris Connelly</span>
-                  <span class="review-role">42k Finisher</span>
+      <div v-else class="cms-preview">
+        <div class="cms-preview-inner">
+          <div class="cms-preview-label">CMS Preview — Reviews</div>
+          <div class="reviews-header">
+            <h2 class="reviews-title">Read reviews,<br />Run with confidence</h2>
+            <div class="reviews-nav">
+              <button class="reviews-nav-btn"><i class="ri-arrow-left-line"></i></button>
+              <button class="reviews-nav-btn reviews-nav-btn-active"><i class="ri-arrow-right-line"></i></button>
+            </div>
+          </div>
+          <div class="reviews-track-wrap">
+            <div class="reviews-track">
+              <div class="review-card" v-for="n in 3" :key="n">
+                <p class="review-text">"Amazing quality! The fabric is comfortable and the fit is perfect. Will definitely order again."</p>
+                <div class="review-author">
+                  <img src="/img/avatar-placeholder.png" alt="Reviewer" class="review-avatar" />
+                  <div class="review-author-info">
+                    <span class="review-name">Customer Name</span>
+                    <span class="review-role">Verified Buyer</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </template>
+          </div>
         </div>
       </div>
     </section>
@@ -977,9 +862,8 @@
                   type="button"
                   class="pill-btn"
                   :class="{ active: selectedColor === color }"
-                  @click="
-                    selectedColor = selectedColor === color ? null : color
-                  "
+                  :disabled="validColors && !validColors.has(color)"
+                  @click="selectModalColor(color)"
                 >
                   {{ color }}
                 </button>
@@ -999,7 +883,8 @@
                   type="button"
                   class="pill-btn"
                   :class="{ active: selectedSize === size }"
-                  @click="selectedSize = selectedSize === size ? null : size"
+                  :disabled="validSizes && !validSizes.has(size)"
+                  @click="selectModalSize(size)"
                 >
                   {{ size }}
                 </button>
@@ -1057,6 +942,10 @@
                 {{ formatCurrency(selectedProduct.price * modalQuantity) }}
               </h4>
             </div>
+            <div v-if="selectedProduct && (!currentInStock || exceedsStock)" class="pre-order-notice-modal">
+              <span v-if="exceedsStock">The quantity exceeds available stock. This item will be processed as a pre-order.</span>
+              <span v-else>This item is currently out of stock. It will be processed as a pre-order.</span>
+            </div>
             <button
               class="btn btn-grocery-primary cart-bar-btn"
               @click="confirmAddToCart"
@@ -1067,6 +956,10 @@
               "
             >
               <span v-if="isAddingToCart">Adding...</span>
+              <span v-else-if="selectedProduct && (!currentInStock || exceedsStock)">
+                PRE-ORDER
+                <i class="ri-arrow-right-line"></i>
+              </span>
               <span v-else>
                 Add to Cart
                 <i class="ri-arrow-right-line"></i>
@@ -1130,7 +1023,7 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-  wishlistIds: {
+  wishlistedIds: {
     type: Array,
     default: () => [],
   },
@@ -1192,7 +1085,62 @@ const modalQuantity = ref(1);
 const selectedColor = ref(null);
 const selectedSize = ref(null);
 const isAddingToCart = ref(false);
+const localWishlistedIds = ref([]);
 let cartModal = null;
+
+const selectedVariant = computed(() => {
+  if (!selectedProduct.value?.meta?.variants?.length) return null;
+  return selectedProduct.value.meta.variants.find(v =>
+    (!selectedColor.value || v.color === selectedColor.value) &&
+    (!selectedSize.value || v.size === selectedSize.value)
+  ) || null;
+});
+
+const currentStock = computed(() => {
+  const product = selectedProduct.value;
+  if (!product) return 0;
+  if (product.meta?.variants?.length) {
+    const variant = selectedVariant.value;
+    if (variant) return variant.stock ?? 0;
+    return 0;
+  }
+  return product.stock ?? 0;
+});
+
+const exceedsStock = computed(() => {
+  return currentStock.value > 0 && modalQuantity.value > currentStock.value;
+});
+
+const validColors = computed(() => {
+  const product = selectedProduct.value;
+  if (!selectedSize.value || !product?.meta?.variants?.length) return null;
+  return new Set(
+    product.meta.variants
+      .filter(v => v.size === selectedSize.value)
+      .map(v => v.color)
+  );
+});
+
+const validSizes = computed(() => {
+  const product = selectedProduct.value;
+  if (!selectedColor.value || !product?.meta?.variants?.length) return null;
+  return new Set(
+    product.meta.variants
+      .filter(v => v.color === selectedColor.value)
+      .map(v => v.size)
+  );
+});
+
+const currentInStock = computed(() => {
+  const product = selectedProduct.value;
+  if (!product) return false;
+  if (product.meta?.variants?.length) {
+    const variant = selectedVariant.value;
+    if (variant) return (variant.stock ?? 0) > 0;
+    return product.in_stock;
+  }
+  return product.in_stock;
+});
 
 const featuredProductList = computed(() => {
   return props.featuredProducts.length > 0
@@ -1217,6 +1165,8 @@ function isNewProduct(createdAt) {
 }
 
 onMounted(() => {
+  localWishlistedIds.value = [...(props.wishlistedIds || [])];
+
   // Cart modal
   const modalEl = document.getElementById('addToCartModal');
   if (modalEl) {
@@ -1393,25 +1343,52 @@ const confirmAddToCart = () => {
   );
 };
 
+const selectModalColor = (color) => {
+  selectedColor.value = selectedColor.value === color ? null : color;
+  if (selectedColor.value && selectedSize.value && validSizes.value && !validSizes.value.has(selectedSize.value)) {
+    selectedSize.value = null;
+  }
+};
+
+const selectModalSize = (size) => {
+  selectedSize.value = selectedSize.value === size ? null : size;
+  if (selectedSize.value && selectedColor.value && validColors.value && !validColors.value.has(selectedColor.value)) {
+    selectedColor.value = null;
+  }
+};
+
 const toggleWishlist = (productId) => {
-  // Check if user is logged in (from page props)
   const user = props.auth?.user;
   if (!user) {
-    // Trigger login modal via custom event
     window.dispatchEvent(new CustomEvent('open-login-modal'));
     return;
   }
 
-  router.post(
-    route('store.brand-partner.wishlist.toggle'),
-    { product_id: productId },
-    {
-      preserveScroll: true,
-      onFinish: () => {
-        router.reload({ only: ['wishlistIds'] });
-      },
+  const idx = localWishlistedIds.value.indexOf(productId);
+  if (idx > -1) {
+    localWishlistedIds.value.splice(idx, 1);
+  } else {
+    localWishlistedIds.value.push(productId);
+  }
+
+  fetch(route('store.brand-partner.wishlist.toggle'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+      'X-Requested-With': 'XMLHttpRequest',
     },
-  );
+    body: JSON.stringify({ product_id: productId }),
+  }).then(r => {
+    if (!r.ok) throw new Error();
+  }).catch(() => {
+    const revertIdx = localWishlistedIds.value.indexOf(productId);
+    if (revertIdx > -1) {
+      localWishlistedIds.value.splice(revertIdx, 1);
+    } else {
+      localWishlistedIds.value.push(productId);
+    }
+  });
 };
 </script>
 
@@ -1579,17 +1556,13 @@ const toggleWishlist = (productId) => {
 
 /* Carousel Indicators */
 .hero-carousel .carousel-indicators {
-  position: absolute;
-  bottom: 25px;
-  transform: translateX(-50%);
+  position: static;
   display: flex;
   align-items: center;
   gap: 10px;
-  left: 50%;
   padding: 8px 16px;
   border-radius: 50px;
   margin: 0;
-  right: auto;
 }
 
 .hero-carousel .carousel-indicators button {
@@ -1607,6 +1580,66 @@ const toggleWishlist = (productId) => {
   border-radius: 10px;
   background-color: #fff;
 }
+
+/* Carousel Controls Wrapper (prev arrow, indicators, next arrow) */
+.hero-carousel .carousel-controls-wrapper {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 5;
+}
+
+.hero-carousel .carousel-arrow {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.25s;
+  padding: 4px;
+}
+
+.hero-carousel .carousel-arrow:hover {
+  opacity: 1;
+}
+
+.cms-preview {
+  padding: 20px;
+  position: relative;
+}
+
+.cms-preview-inner {
+  border: 2px dashed #adb5bd;
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  background: rgba(248, 249, 250, 0.5);
+}
+
+.cms-preview-label {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: #adb5bd;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 12px;
+  border-radius: 4px;
+}
+
+
 
 /* ===== Grocery Template Styles ===== */
 .variation-block {
@@ -1647,6 +1680,13 @@ const toggleWishlist = (productId) => {
   border-color: #ff9505;
   background: #ff9505;
   color: #fff;
+}
+.pill-btn:disabled {
+  opacity: 2;
+  cursor: not-allowed;
+  border-color: #e8e8e8;
+  background: #fafafa;
+  color: #ccc;
 }
 .variation-hint {
   font-size: 12px;
@@ -3916,6 +3956,17 @@ const toggleWishlist = (productId) => {
 .cart-bar-btn:disabled {
   opacity: 0.75;
   cursor: not-allowed;
+}
+
+.pre-order-notice-modal {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f97316;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #fef3c7;
+  border-radius: 4px;
+  line-height: 1.4;
 }
 
 /* ===== Modal - Grocery Styling ===== */
