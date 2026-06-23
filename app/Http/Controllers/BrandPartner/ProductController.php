@@ -98,6 +98,19 @@ class ProductController extends Controller
                 'approved_at' => config('store.brand_partner_product_approval', true) ? null : now(),
             ]);
 
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store(
+                    "brand-partners/{$product->brand_partner_id}/products/{$product->id}",
+                    'public'
+                );
+
+                $product->images()->create([
+                    'path' => $path,
+                    'position' => 1,
+                    'is_primary' => true,
+                ]);
+            }
+
             return $product;
         });
 
@@ -214,6 +227,10 @@ class ProductController extends Controller
                 ->with('error', __('Product cannot be deleted because it has orders.'));
         }
 
+        $product->update([
+            'slug' => $product->slug . '-deleted-' . time(),
+        ]);
+        
         $product->delete();
 
         return to_route('brand-partner.products.index')
@@ -250,7 +267,7 @@ class ProductController extends Controller
     protected function getColorValues(): \Illuminate\Support\Collection
     {
         $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
-            ->where('name', 'Color')
+            ->whereIn('name', ['Color', 'Colors', 'color', 'colors'])
             ->first();
 
         return $option ? $option->values()->orderBy('position')->get() : collect();
@@ -262,7 +279,7 @@ class ProductController extends Controller
     protected function getSizeValues(): \Illuminate\Support\Collection
     {
         $option = BrandPartnerProductOption::where('brand_partner_id', $this->brandPartner()->id)
-            ->where('name', 'Size')
+            ->whereIn('name', ['Size', 'Sizes', 'size', 'sizes'])
             ->first();
 
         return $option ? $option->values()->orderBy('position')->get() : collect();
