@@ -461,6 +461,11 @@
                         Please select required variations to continue.
                     </p>
 
+                    <div class="stock-row-modal">
+                        <span v-if="currentStock > 0" class="in-stock-modal">Stock: {{ currentStock }}</span>
+                        <span v-else class="out-stock-modal">Out of Stock</span>
+                    </div>
+
                     <div class="qty-section-title">
                         <h5>Quantity</h5>
                     </div>
@@ -868,6 +873,9 @@ const toggleWishlist = (productId) => {
 .pill-btn.active { border-color: #FF9505; background: #FF9505; color: #fff; }
 .pill-btn:disabled { opacity: 2; cursor: not-allowed; border-color: #e8e8e8; background: #fafafa; color: #ccc; }
 .variation-hint { font-size: 12px; color: #dc2626; margin: -8px 0 16px; }
+.stock-row-modal { margin-bottom: 12px; }
+.in-stock-modal { font-size: 13px; font-weight: 600; color: #16a34a; }
+.out-stock-modal { font-size: 13px; font-weight: 600; color: #dc2626; }
 
 /* Breadcrumb Styles */
 .breadcrumb {

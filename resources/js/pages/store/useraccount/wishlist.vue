@@ -11,10 +11,10 @@
       </div>
 
       <!-- Items Grid -->
-        <div v-if="items.filter(i => i.product).length > 0" class="products-grid">
+        <div v-if="visibleItems.length > 0" class="products-grid">
         <div
           class="product-card"
-          v-for="item in items.filter(i => i.product)"
+          v-for="item in visibleItems"
           :key="item.id"
           @mouseenter="hoverMap[item.product.id] = true"
           @mouseleave="hoverMap[item.product.id] = false"
@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -142,10 +142,25 @@ const props = defineProps({
 
 const addingToCart = ref(null);
 const hoverMap = ref({});
+const localItems = ref([...props.items]);
+
+const visibleItems = computed(() => localItems.value.filter(i => i.product));
 
 const removeItem = (itemId) => {
-  router.delete(route('store.brand-partner.wishlist.remove', itemId), {
-    preserveScroll: true,
+  const idx = localItems.value.findIndex(i => i.id === itemId);
+  if (idx === -1) return;
+  const removed = localItems.value.splice(idx, 1);
+
+  fetch(route('store.brand-partner.wishlist.remove', itemId), {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  }).then(r => {
+    if (!r.ok) throw new Error();
+  }).catch(() => {
+    localItems.value.splice(idx, 0, removed[0]);
   });
 };
 

@@ -48,13 +48,17 @@
                   type="email"
                   class="grocery-input"
                   :class="{
-                    'input-error': form.errors.customer_email,
+                    'input-error': form.errors.customer_email || emailError,
                   }"
                   placeholder="Enter your email"
+                  @input="emailTouched = true"
                   required
                 />
                 <span class="error-text" v-if="form.errors.customer_email">
                   {{ form.errors.customer_email }}
+                </span>
+                <span class="error-text" v-else-if="emailError">
+                  {{ emailError }}
                 </span>
               </div>
               <div class="form-group full-width">
@@ -374,7 +378,7 @@
             <button
               type="submit"
               class="grocery-btn theme-btn place-order-btn"
-              :disabled="form.processing || !form.terms_accepted"
+              :disabled="form.processing || !form.terms_accepted || (emailTouched && !!emailError)"
             >
               <span v-if="form.processing" class="btn-loading">
                 <i class="ri-loader-4-line spin"></i>
@@ -429,6 +433,21 @@ const form = useForm({
   terms_accepted: false,
 });
 
+const emailTouched = ref(false);
+
+const emailError = computed(() => {
+  if (!emailTouched.value || !form.customer_email) return '';
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(form.customer_email) ? '' : 'Please enter a valid email address.';
+});
+
+watch(() => form.customer_email, () => {
+  if (!emailTouched.value) emailTouched.value = true;
+  if (form.errors.customer_email) {
+    form.errors.customer_email = '';
+  }
+});
+
 const applySavedAddress = (event) => {
   const addressId = event.target.value;
   if (!addressId) return;
@@ -479,6 +498,7 @@ watch(
 watch(
   () => form.shipping_province,
   (value) => {
+    if (!isShippingPH.value) return;
     form.shipping_city = '';
     const province = provinces.value.find((p) => p.province_name === value);
     if (!province) {
@@ -873,7 +893,7 @@ textarea.grocery-input {
   text-decoration: underline;
 }
 
-/* Place Order Button */
+.grocery-btn.theme-btn {
   display: flex;
   align-items: center;
   justify-content: center;

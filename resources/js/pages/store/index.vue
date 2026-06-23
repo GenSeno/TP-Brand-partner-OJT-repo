@@ -139,145 +139,104 @@
           <h2 class="section-title-main">Our Products</h2>
         </div>
 
-        <ul class="product-offer-list" v-if="products.data.length > 0">
-          <li
+        <div class="products-grid" v-if="products.data.length > 0">
+          <div
+            class="product-card"
             v-for="product in products.data"
             :key="product.id"
-            class="product-offer-item"
             @mouseenter="hoverImageIndex[product.id] = true"
             @mouseleave="hoverImageIndex[product.id] = false"
           >
-            <div class="product-box">
-              <div class="product-image-wrap">
-                <div class="product-badges">
-                  <span
-                    class="badge sale-badge"
-                    v-if="
-                      product.compare_price &&
-                      product.compare_price > product.price
-                    "
-                    >SALE</span
-                  >
-                  <span
-                    class="badge new-badge"
-                    v-else-if="isNewProduct(product.created_at)"
-                    >NEW
-                  </span>
-                </div>
-                <button
-                  @click="toggleWishlist(product.id)"
-                  class="wishlist-btn"
-                >
-                  <i
-                    :class="
-                      localWishlistedIds.includes(product.id)
-                        ? 'ri-heart-fill text-red-500'
-                        : 'ri-heart-line'
-                    "
-                  ></i>
-                </button>
-                <Link
-                  :href="route('store.brand-partner.product', product.slug)"
-                  class="product-image-link"
-                >
-                  <img
-                    :src="
-                      hoverImageIndex[product.id] &&
-                      product.images &&
-                      product.images.length > 1
-                        ? product.images[1]?.url || product.image_url
-                        : product.image_url || '/img/tshirt-placeholder.svg'
-                    "
-                    :alt="product.name"
-                    class="img-fluid"
-                  />
-                </Link>
-              </div>
-              <div class="product-content">
-                <Link
-                  :href="route('store.brand-partner.product', product.slug)"
-                  class="product-name-link"
-                >
-                  <h5 class="product-name">
-                    {{ product.name }}
-                  </h5>
-                </Link>
-
-                <p
-                  class="product-collection text-muted text-uppercase mb-2"
-                  style="
-                    font-size: 10px;
-                    font-weight: 700;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  <Link
-                    v-if="product.collection"
-                    :href="
-                      route('store.brand-partner.shop', {
-                        collection: product.collection.id,
-                      })
-                    "
-                    class="text-muted text-decoration-none"
-                  >
-                    {{ product.collection.label }}
-                  </Link>
-                </p>
-
-                <p
-                  class="product-subtitle text-muted text-uppercase mb-2"
-                  style="
-                    font-size: 10px;
-                    font-weight: 700;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  {{
-                    product.short_description
-                      ? truncate(product.short_description, 30)
-                      : ' '
-                  }}
-                </p>
-
-                <div class="product-rating mb-2">
-                  <i class="ri-star-fill text-warning"></i>
-                  <i class="ri-star-fill text-warning"></i>
-                  <i class="ri-star-fill text-warning"></i>
-                  <i class="ri-star-fill text-warning"></i>
-                  <i class="ri-star-fill text-warning"></i>
-                </div>
-
-                <div
-                  class="product-price-row mb-3 d-flex align-items-center gap-2"
-                >
-                  <span
-                    class="current-price"
-                    style="font-size: 12px; font-weight: 700; color: #111"
-                  >
-                    {{ formatCurrency(product.price) }}
-                  </span>
-                  <span
-                    v-if="
-                      product.compare_price &&
-                      product.compare_price > product.price
-                    "
-                    class="text-muted text-decoration-line-through"
-                    style="font-size: 11px"
-                  >
-                    {{ formatCurrency(product.compare_price) }}
-                  </span>
-                </div>
-
-                <button
-                  class="btn add-to-cart-outline-btn w-100"
-                  @click.prevent="addToCart(product)"
-                >
-                  {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
-                </button>
-              </div>
+            <div class="product-card-badges">
+              <span
+                class="badge-sale"
+                v-if="
+                  product.compare_price &&
+                  product.compare_price > product.price
+                "
+                >Sale</span
+              >
             </div>
-          </li>
-        </ul>
+
+            <button class="product-wishlist-btn" @click="toggleWishlist(product.id)">
+              <i
+                :class="localWishlistedIds.includes(product.id) ? 'ri-heart-fill text-danger' : 'ri-heart-line'"
+              ></i>
+            </button>
+
+            <div class="product-card-image">
+              <Link
+                :href="route('store.brand-partner.product', product.slug)"
+              >
+                <img
+                  :src="
+                    (hoverImageIndex[product.id] && product.images && product.images.length > 1)
+                      ? product.images[1]?.url || product.image_url
+                      : product.image_url || '/img/tshirt-placeholder.svg'
+                  "
+                  :alt="product.name"
+                />
+              </Link>
+            </div>
+
+            <div class="product-card-body">
+              <Link
+                :href="route('store.brand-partner.product', product.slug)"
+                style="text-decoration: none; color: inherit;"
+              >
+                <h3 class="product-card-name">
+                  {{ product.name || 'Product Name Goes Here' }}
+                </h3>
+              </Link>
+              <p class="product-card-collection text-uppercase">
+                {{
+                  product.category?.name ||
+                  product.collection?.label ||
+                  (product.short_description
+                    ? product.short_description.substring(0, 30)
+                    : 'COLLECTION')
+                }}
+              </p>
+
+              <div class="product-card-stars">
+                <i
+                  class="ri-star-fill star-filled"
+                  v-for="n in 5"
+                  :key="n"
+                ></i>
+              </div>
+
+              <div class="product-card-price-row">
+                <span
+                  class="product-card-price"
+                  :class="{
+                    'has-sale':
+                      product.compare_price &&
+                      product.compare_price > product.price,
+                  }"
+                >
+                  {{ formatCurrency(product.price) }}
+                </span>
+                <span
+                  class="product-card-original"
+                  v-if="
+                    product.compare_price &&
+                    product.compare_price > product.price
+                  "
+                >
+                  {{ formatCurrency(product.compare_price) }}
+                </span>
+              </div>
+
+              <button
+                class="product-card-atc"
+                @click.prevent="addToCart(product)"
+              >
+                {{ product.in_stock ? 'ADD TO CART' : 'PRE-ORDER' }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -900,6 +859,11 @@
             >
               Please select required variations to continue.
             </p>
+
+            <div class="stock-row-modal">
+              <span v-if="currentStock > 0" class="in-stock-modal">Stock: {{ currentStock }}</span>
+              <span v-else class="out-stock-modal">Out of Stock</span>
+            </div>
 
             <div class="qty-section-title">
               <h5>Quantity</h5>
@@ -1692,6 +1656,22 @@ const toggleWishlist = (productId) => {
   font-size: 12px;
   color: #dc2626;
   margin: -8px 0 16px;
+}
+
+.stock-row-modal {
+  margin-bottom: 12px;
+}
+
+.in-stock-modal {
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.out-stock-modal {
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc2626;
 }
 
 .grocery-store-page {
@@ -4172,7 +4152,7 @@ const toggleWishlist = (productId) => {
 
 /* ===== Responsive ===== */
 @media (min-width: 576px) {
-  .product-offer-list {
+  .products-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
@@ -4189,7 +4169,7 @@ const toggleWishlist = (productId) => {
 }
 
 @media (min-width: 992px) {
-  .product-offer-list {
+  .products-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
   }
@@ -4227,24 +4207,12 @@ const toggleWishlist = (productId) => {
 }
 
 @media (min-width: 1200px) {
-  .product-offer-list {
+  .products-grid {
     gap: 24px;
-  }
-
-  .product-content {
-    padding: 14px;
   }
 }
 
 @media (max-width: 575px) {
-  .product-offer-list {
-    gap: 10px;
-  }
-
-  .product-content {
-    padding: 10px;
-  }
-
   .product-name {
     font-size: 13px;
   }
@@ -4280,83 +4248,67 @@ const toggleWishlist = (productId) => {
   }
 }
 
-.product-box {
-  width: 100%;
+/* ===== Product Card (Shop-style) ===== */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.product-card {
   position: relative;
-  background: #fff;
   display: flex;
   flex-direction: column;
+  background: #fff;
+  border: 1px solid #f0f0f0;
   transition:
-    transform 0.25s,
-    box-shadow 0.25s;
+    box-shadow 0.25s,
+    transform 0.25s;
 }
 
-.product-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+.product-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
 }
 
-.product-image-wrap {
-  position: relative;
-  margin-bottom: 12px;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
-  overflow: hidden;
-}
-
-.product-image-wrap img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition-duration: var(--animation-timing-300);
-  transition-timing-function: var(--ease-out-quart);
-  transition-property: opacity;
-}
-
-.product-image-wrap .img-fluid {
-  transition: transform 0.3s ease;
-}
-
-.product-image-wrap:hover .img-fluid {
-  transform: scale(1.05);
-}
-
-.product-badges {
+/* Badges */
+.product-card-badges {
   position: absolute;
   top: 10px;
-  left: 0;
-  border-radius: 0 50px 50px 0;
+  left: 10px;
   z-index: 2;
+  display: flex;
+  gap: 6px;
 }
 
-.product-badges .badge {
-  font-size: 0.625rem;
+.badge-sale {
+  background: #e84b0f;
+  color: #fff;
+  font-size: 10px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-radius: 0 50px 50px 0;
 }
 
-.sale-badge {
-  background-color: #ff5722 !important;
-  color: #fff !important;
+.badge-new {
+  background: #1a5c3a;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.new-badge {
-  background-color: #1976d2 !important;
-  color: #fff !important;
-}
-
-.wishlist-btn {
+/* Wishlist */
+.product-wishlist-btn {
   position: absolute;
   top: 10px;
-  right: 15px;
+  right: 10px;
+  z-index: 2;
   background: #fff;
   border: none;
   width: 32px;
@@ -4365,79 +4317,167 @@ const toggleWishlist = (productId) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  color: #666;
-  z-index: 2;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #888;
+  transition: all 0.2s;
 }
 
-.wishlist-btn:hover {
-  color: #ff5722;
-  transform: scale(1.1);
+.product-wishlist-btn:hover {
+  color: #e84b0f;
+  box-shadow: 0 2px 12px rgba(232, 75, 15, 0.2);
 }
 
-.product-content {
-  text-align: left;
-  padding: 0;
+/* Image */
+.product-card-image {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 3 / 3;
+  min-height: 250px;
 }
 
-.product-name-link {
-  text-decoration: none;
+.product-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #e8e8e8;
+}
+
+.product-card-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition-duration: var(--animation-timing-300);
+  transition-timing-function: var(--ease-out-quart);
+  transition-property: opacity, transform;
+}
+
+.product-card:hover .product-card-image img,
+.product-card:hover .product-card-img-placeholder {
+  transform: scale(1.02);
+}
+
+/* Card Body */
+.product-card-body {
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 180px;
+}
+
+.product-card-collection {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-card-name {
+  font-size: 15px;
+  font-weight: 700;
   color: #111;
+  margin: 0;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 1.3;
 }
 
-.product-name-link:hover .product-name {
-  color: #198754;
+/* Stars */
+.product-card-stars {
+  display: flex;
+  gap: 2px;
 }
 
-.product-name {
+.product-card-stars i {
   font-size: 14px;
+}
+
+.star-filled {
+  color: #f5a623;
+}
+
+.star-empty {
+  color: #ddd;
+}
+
+/* Price */
+.product-card-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-card-price {
+  font-size: 15px;
   font-weight: 800;
-  margin-bottom: 4px;
+  color: #e84b0f;
   font-family: 'Public Sans', sans-serif;
 }
 
-.product-subtitle {
-  display: block;
+.product-card-price.has-sale {
+  color: #e84b0f;
 }
 
-.add-to-cart-outline-btn {
+.product-card-original {
+  font-size: 12px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.product-card-saved {
+  font-size: 10px;
+  font-weight: 700;
+  background: #fff3e0;
+  color: #e84b0f;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+/* ATC Button */
+.product-card-atc {
+  margin-top: auto;
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border: 1.5px solid #198754;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  color: #198754;
+  cursor: pointer;
+  font-family: 'Public Sans', sans-serif;
+  transition: all 0.25s;
   text-transform: uppercase;
-  border: 1px solid #198754 !important;
-  color: #198754 !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  padding: 10px !important;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  transition: all 0.3s ease;
 }
 
-.add-to-cart-outline-btn:hover {
-  background-color: #ff9505 !important;
-  border: 1px solid #ff9505 !important;
-  color: #fff !important;
+.product-card-atc:hover {
+  background: #ff9505;
+  border: 1px solid #ff9505;
+  color: #fff;
 }
 
-/* Grid layout for products */
-.product-offer-list {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 24px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
+/* Grid responsive */
 @media (max-width: 991px) {
-  .product-offer-list {
-    grid-template-columns: repeat(2, 1fr) !important;
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 575px) {
-  .product-offer-list {
-    grid-template-columns: 1fr !important;
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .product-card-name {
+    font-size: 13px;
   }
 }
 </style>

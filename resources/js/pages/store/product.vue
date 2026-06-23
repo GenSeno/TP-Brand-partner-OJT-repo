@@ -54,7 +54,8 @@
                     </div>
 
                     <div class="stock-row">
-                        <span v-if="currentInStock" class="in-stock">✓ In Stock</span>
+                        <span v-if="currentInStock" class="in-stock">✓ In Stock ({{ currentStock }})</span>
+                        <span v-else-if="currentStock > 0 && exceedsStock" class="pre-order">Pre-Order (Only {{ currentStock }} left — quantity exceeds stock)</span>
                         <span v-else-if="variationReady" class="pre-order">Pre-Order (Will be ordered upon purchase)</span>
                         <span v-else class="out-stock">✕ Out of Stock</span>
                     </div>
