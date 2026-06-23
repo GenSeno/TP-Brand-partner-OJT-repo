@@ -2,6 +2,7 @@
     <Head :title="`${product.name} - ${brandPartner.name}`" />
 
     <div class="product-page">
+        <ToastComponent />
         <!-- Breadcrumb -->
         <div class="breadcrumb-bar">
             <div class="container-wrap">
@@ -320,6 +321,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Modal } from 'bootstrap';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
+import { emitter } from '@/composables/eventBus';
+import ToastComponent from '@/components/ToastContainer.vue';
 
 const props = defineProps({
     brandPartner: Object,
@@ -466,7 +469,19 @@ const addToCart = () => {
         },
         {
             preserveScroll: true,
-            onSuccess: () => confirmModal?.hide(),
+            onSuccess: () => {
+                confirmModal?.hide();
+                emitter.emit('toast:show', {
+                    type: 'success',
+                    message: `${props.product.name} added to cart!`,
+                });
+            },
+            onError: () => {
+                emitter.emit('toast:show', {
+                    type: 'error',
+                    message: 'Failed to add item to cart',
+                });
+            },
             onFinish: () => { isAddingToCart.value = false; },
         },
     );

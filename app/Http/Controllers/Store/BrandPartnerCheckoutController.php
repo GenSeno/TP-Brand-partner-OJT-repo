@@ -300,7 +300,8 @@ class BrandPartnerCheckoutController extends Controller
             return Inertia::location($invoice['invoice_url']);
 
         } catch (\Exception $e) {
-            ('Error: '.$e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Checkout Error: '.$e->getMessage());
+            return back()->withErrors(['checkout_error' => 'Payment failed: ' . $e->getMessage()]);
         }
     }
 
