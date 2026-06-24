@@ -418,6 +418,9 @@ axios.get(route('store.address.provinces')).then(({ data }) => {
   provinces.value = data;
 });
 
+
+
+
 const form = useForm({
   customer_name: '',
   customer_email: '',
@@ -499,6 +502,7 @@ watch(
   },
 );
 
+
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
@@ -506,11 +510,45 @@ const formatCurrency = (amount) => {
   }).format(amount / 100);
 };
 
+
+function validateEmail(email) {
+  const allowedDomains = [
+    'gmail.com',
+    'yahoo.com',
+    'outlook.com',
+    'hotmail.com'
+  ];
+
+  const pattern = new RegExp('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+
+  if (!pattern.test(email)) {
+    return false;
+  }
+
+  const domain = email.split('@')[1].toLowerCase();
+
+  return allowedDomains.includes(domain);
+}
+
 const submitOrder = () => {
+  form.errors.customer_email = "";
+
+  if (!form.customer_email) {
+    form.errors.customer_email = "Email is required";
+    return;
+  }
+
+  if (!validateEmail(form.customer_email)) {
+    form.errors.customer_email =
+      "Please enter a valid Gmail, Yahoo, Outlook, or Hotmail email";
+    return;
+  }
+
   form.post(route('store.brand-partner.checkout.store'));
 };
 
-//Payment Gateway
+
+// Payment Gateway
 function pay() {
   router.post(route('store.payment.invoice', props.order.reference));
 }
