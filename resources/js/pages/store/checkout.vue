@@ -396,7 +396,7 @@
 </template>
 
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 import axios from 'axios';
 
@@ -414,12 +414,15 @@ const PHILIPPINES_ID = props.defaultCountryId ?? 175;
 const provinces = ref([]);
 const cities = ref([]);
 
-axios.get(route('store.address.provinces')).then(({ data }) => {
-  provinces.value = data;
-});
-
-
-
+// Load PH provinces once
+axios
+  .get(route('store.address.provinces'))
+  .then(({ data }) => {
+    provinces.value = data;
+  })
+  .catch(() => {
+    provinces.value = [];
+  });
 
 const form = useForm({
   customer_name: '',
@@ -436,72 +439,9 @@ const form = useForm({
   terms_accepted: false,
 });
 
-const applySavedAddress = (event) => {
-  const addressId = event.target.value;
-  if (!addressId) return;
-
-  const addr = props.userAddresses.find((a) => a.id == addressId);
-  if (!addr) return;
-
-  form.customer_name = (addr.first_name + ' ' + addr.last_name).trim();
-  form.shipping_line1 = addr.line1;
-  form.shipping_line2 = addr.line2;
-  form.shipping_country_id = addr.country_id || PHILIPPINES_ID;
-
-  // Assigning province will trigger the watcher which clears the city
-  form.shipping_province = addr.province;
-
-  // After province watcher completes data fetching, apply city
-  setTimeout(() => {
-    form.shipping_city = addr.city;
-  }, 500);
-
-  form.shipping_barangay = addr.barangay;
-  form.shipping_postcode = addr.postcode;
-};
-
 const isShippingPH = computed(
-  () => form.shipping_country_id === PHILIPPINES_ID,
+  () => Number(form.shipping_country_id) === Number(PHILIPPINES_ID),
 );
-
-watch(
-  () => form.shipping_country_id,
-  (value) => {
-    form.shipping_province = '';
-    form.shipping_city = '';
-    cities.value = [];
-    if (value && value !== PHILIPPINES_ID) {
-      axios
-        .post(route('store.address.states'), { country_id: value })
-        .then(({ data }) => {
-          cities.value = data.map((s) => ({
-            label: s.name,
-            value: s.name,
-          }));
-        });
-    }
-  },
-);
-
-watch(
-  () => form.shipping_province,
-  (value) => {
-    form.shipping_city = '';
-    const province = provinces.value.find((p) => p.province_name === value);
-    if (!province) {
-      cities.value = [];
-      return;
-    }
-    axios
-      .get(route('store.address.cities'), {
-        params: { province_id: province.id },
-      })
-      .then(({ data }) => {
-        cities.value = data;
-      });
-  },
-);
-
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-PH', {
@@ -510,46 +450,110 @@ const formatCurrency = (amount) => {
   }).format(amount / 100);
 };
 
-
 function validateEmail(email) {
-  const allowedDomains = [
-    'gmail.com',
-    'yahoo.com',
-    'outlook.com',
-    'hotmail.com'
-  ];
+  const value = String(email ?? '').trim();
 
-  const pattern = new RegExp('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+  // Good enough for frontend format validation.
+  // Real validation should still happen on the backend.
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!pattern.test(email)) {
-    return false;
-  }
-
-  const domain = email.split('@')[1].toLowerCase();
-
-  return allowedDomains.includes(domain);
+  return pattern.test(value);
 }
 
+const applySavedAddress = (event) => {
+  const addressId = event.target.value;
+  if (!addressId) return;
+
+  const addr = props.userAddresses?.find((a) => String(a.id) === String(addressId));
+  if (!addr) return;
+
+  form.customer_name = `${addr.first_name ?? ''} ${addr.last_name ?? ''}`.trim();
+  form.shipping_line1 = addr.line1 ?? '';
+  form.shipping_line2 = addr.line2 ?? '';
+  form.shipping_country_id = addr.country_id || PHILIPPINES_ID;
+  form.shipping_province = addr.province ?? '';
+  form.shipping_barangay = addr.barangay ?? '';
+  form.shipping_postcode = addr.postcode ?? '';
+
+  // City is populated by watcher/lookup; set after a short delay if needed
+  setTimeout(() => {
+    form.shipping_city = addr.city ?? '';
+  }, 300);
+};
+
+watch(
+  () => form.shipping_country_id,
+  async (value) => {
+    form.shipping_province = '';
+    form.shipping_city = '';
+    cities.value = [];
+
+    if (Number(value) !== Number(PHILIPPINES_ID) && value) {
+      try {
+        const { data } = await axios.post(route('store.address.states'), {
+          country_id: value,
+        });
+
+        cities.value = data.map((s) => ({
+          label: s.name,
+          value: s.name,
+        }));
+      } catch {
+        cities.value = [];
+      }
+    }
+  },
+);
+
+watch(
+  () => form.shipping_province,
+  async (value) => {
+    form.shipping_city = '';
+
+    const province = provinces.value.find(
+      (p) => p.province_name === value,
+    );
+
+    if (!province) {
+      cities.value = [];
+      return;
+    }
+
+    try {
+      const { data } = await axios.get(route('store.address.cities'), {
+        params: { province_id: province.id },
+      });
+
+      cities.value = data;
+    } catch {
+      cities.value = [];
+    }
+  },
+);
+
 const submitOrder = () => {
-  form.errors.customer_email = "";
+  form.clearErrors();
 
-  if (!form.customer_email) {
-    form.errors.customer_email = "Email is required";
+  const email = String(form.customer_email ?? '').trim();
+
+  if (!email) {
+    form.setError('customer_email', 'Email is required');
     return;
   }
 
-  if (!validateEmail(form.customer_email)) {
-    form.errors.customer_email =
-      "Please enter a valid Gmail, Yahoo, Outlook, or Hotmail email";
+  if (!validateEmail(email)) {
+    form.setError('customer_email', 'Please enter a valid email address');
     return;
   }
+
+  form.customer_email = email.toLowerCase();
 
   form.post(route('store.brand-partner.checkout.store'));
 };
 
-
 // Payment Gateway
 function pay() {
+  if (!props.order?.reference) return;
   router.post(route('store.payment.invoice', props.order.reference));
 }
 </script>

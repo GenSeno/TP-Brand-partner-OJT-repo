@@ -151,7 +151,7 @@ class BrandPartnerCheckoutController extends Controller
     {
         $request->validate([
             'customer_name' => ['required', 'string', 'max:255'],
-            'customer_email' => ['required', 'email', 'max:255'],
+            'customer_email' => ['required', 'email:rfc,dns', 'max:255'],
             'customer_phone' => ['nullable', 'string', 'max:50'],
             'shipping_line1' => ['required', 'string', 'max:255'],
             'shipping_line2' => ['nullable', 'string', 'max:255'],
