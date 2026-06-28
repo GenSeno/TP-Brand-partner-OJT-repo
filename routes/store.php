@@ -12,6 +12,7 @@ use App\Http\Controllers\Store\BrandPartnerPartnerController;
 use App\Http\Controllers\Store\BrandPartnerPolicyController;
 use App\Http\Controllers\Store\BrandPartnerShopController;
 use App\Http\Controllers\Store\BrandPartnerStoreController;
+use App\Http\Controllers\Store\BrandPartnerSupportController;
 use App\Http\Controllers\Store\BrandPartnerWishlistController as WishlistController;
 use App\Http\Controllers\Store\PaymentController;
 use App\Http\Controllers\Store\UserAddressController;
@@ -58,6 +59,26 @@ Route::group([
     // FAQ page
     Route::get('/faq', [BrandPartnerFaqController::class, 'index'])
         ->name('brand-partner.faq');
+
+    // Support Pages
+    Route::get('/support', [BrandPartnerSupportController::class, 'help'])
+        ->name('brand-partner.support.help');
+    Route::get('/support/ticket', [BrandPartnerSupportController::class, 'supportTicket'])
+        ->name('brand-partner.support.ticket');
+    Route::post('/support/ticket', [BrandPartnerSupportController::class, 'supportTicketSubmit'])
+        ->name('brand-partner.support.ticket.submit');
+    Route::get('/support/live-chat', [BrandPartnerSupportController::class, 'liveChat'])
+        ->name('brand-partner.support.live-chat');
+    Route::get('/support/returns', [BrandPartnerSupportController::class, 'returns'])
+        ->name('brand-partner.support.returns');
+    Route::post('/support/returns', [BrandPartnerSupportController::class, 'returnsSubmit'])
+        ->name('brand-partner.support.returns.submit');
+    Route::get('/support/warranty-claims', [BrandPartnerSupportController::class, 'warrantyClaims'])
+        ->name('brand-partner.support.warranty-claims');
+    Route::post('/support/warranty-claims', [BrandPartnerSupportController::class, 'warrantyClaimsSubmit'])
+        ->name('brand-partner.support.warranty-claims.submit');
+    Route::get('/support/store-locator', [BrandPartnerSupportController::class, 'storeLocator'])
+        ->name('brand-partner.support.store-locator');
 
     // Be Our Partner page
     Route::get('/be-our-partner', [BrandPartnerPartnerController::class, 'index'])

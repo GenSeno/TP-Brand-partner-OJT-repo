@@ -109,6 +109,13 @@
             </Link>
 
             <Link
+              :href="route('store.brand-partner.support.help')"
+              class="nav-item"
+            >
+              SUPPORT
+            </Link>
+
+            <Link
               :href="
                 brandPartner
                   ? route('store.brand-partner.partner', brandPartner.slug)
@@ -331,9 +338,21 @@
               <p>Collections</p>
             </Link>
 
-            <p>Header 1</p>
-            <p>Header 2</p>
-            <p>Header 3</p>
+            <Link :href="route('store.brand-partner.support.help')">
+              <p>Help Center</p>
+            </Link>
+
+            <Link :href="route('store.brand-partner.support.ticket')">
+              <p>Support Ticket</p>
+            </Link>
+
+            <Link :href="route('store.brand-partner.support.live-chat')">
+              <p>Live Chat</p>
+            </Link>
+
+            <Link :href="route('store.brand-partner.support.store-locator')">
+              <p>Store Locator</p>
+            </Link>
           </div>
           <div class="footer-info">
               <h4>Account</h4>
