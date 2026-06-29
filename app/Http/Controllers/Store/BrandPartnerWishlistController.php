@@ -49,11 +49,26 @@ class BrandPartnerWishlistController extends Controller
     {
         $request->validate([
             'product_id' => ['required', 'integer'],
+            'action' => ['nullable', 'string', 'in:add,remove'],
         ]);
 
         $existing = Wishlist::where('user_id', Auth::id())
             ->where('brand_partner_product_id', $request->product_id)
             ->first();
+
+        if ($request->has('action')) {
+            if ($request->action === 'add' && !$existing) {
+                Wishlist::create([
+                    'user_id' => Auth::id(),
+                    'brand_partner_product_id' => $request->product_id,
+                ]);
+                return back()->with('success', __('Added to wishlist.'));
+            } elseif ($request->action === 'remove' && $existing) {
+                $existing->delete();
+                return back()->with('success', __('Removed from wishlist.'));
+            }
+            return back();
+        }
 
         if ($existing) {
             $existing->delete();

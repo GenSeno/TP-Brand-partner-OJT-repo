@@ -371,6 +371,10 @@
               </span>
             </label>
 
+            <div v-if="form.errors.checkout_error" class="error-text" style="margin-top: 10px; font-size: 14px; text-align: center; color: #ff4757; font-weight: bold;">
+              {{ form.errors.checkout_error }}
+            </div>
+
             <button
               type="submit"
               class="grocery-btn theme-btn place-order-btn"
@@ -874,6 +878,7 @@ textarea.grocery-input {
 }
 
 /* Place Order Button */
+.grocery-btn.theme-btn {
   display: flex;
   align-items: center;
   justify-content: center;

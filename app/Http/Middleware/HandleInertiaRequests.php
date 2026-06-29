@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BrandPartnerEvent;
+use App\Models\BrandPartnerOrder;
 use App\Models\BrandPartnerProduct;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
@@ -35,6 +37,16 @@ class HandleInertiaRequests extends Middleware
             'pendingProductsCount' => fn() => ($bp = Auth::guard('brand_partner')->user())
                 ? BrandPartnerProduct::where('brand_partner_id', $bp->id)
                     ->where('approval_status', 'pending')
+                    ->count()
+                : 0,
+            'pendingOrdersCount' => fn() => ($bp = Auth::guard('brand_partner')->user())
+                ? BrandPartnerOrder::where('brand_partner_id', $bp->id)
+                    ->where('status', 'pending')
+                    ->count()
+                : 0,
+            'activeEventsCount' => fn() => ($bp = Auth::guard('brand_partner')->user())
+                ? BrandPartnerEvent::where('brand_partner_id', $bp->id)
+                    ->where('status', 'active')
                     ->count()
                 : 0,
             'cartCount' => function () use ($request) {

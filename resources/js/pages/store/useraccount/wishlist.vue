@@ -30,7 +30,7 @@
           <!-- Remove (heart filled = wishlisted, click to remove) -->
           <button
             class="product-wishlist-btn"
-            @click="removeItem(item.id)"
+            @click="removeItem(item.id, item.product?.id)"
             title="Remove from wishlist"
           >
             <i class="ri-heart-fill"></i>
@@ -134,6 +134,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { globalWishlistedIds } from '@/composables/useWishlist';
 
 const props = defineProps({
   brandPartner: Object,
@@ -143,7 +144,14 @@ const props = defineProps({
 const addingToCart = ref(null);
 const hoverMap = ref({});
 
-const removeItem = (itemId) => {
+const removeItem = (itemId, productId) => {
+  if (productId) {
+    const idx = globalWishlistedIds.value.indexOf(productId);
+    if (idx > -1) {
+      globalWishlistedIds.value.splice(idx, 1);
+    }
+  }
+
   router.delete(route('store.brand-partner.wishlist.remove', itemId), {
     preserveScroll: true,
   });
