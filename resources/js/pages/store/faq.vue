@@ -32,7 +32,7 @@
                             <i class="ri-arrow-up-s-line icon-up" v-else></i>
                         </div>
                         <div class="faq-answer" v-show="activeIndex === index">
-                            <p>{{ faq.answer }}</p>
+                            <div class="faq-answer-content" v-html="faq.answer"></div>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,10 @@ import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import Breadcrumb from '@/components/breadcrumb/layout-breadcrumb.vue';
 
-// Breadcrumb items
+const props = defineProps({
+    faqs: { type: Array, default: () => [] },
+});
+
 const breadcrumbItems = [{ label: 'FAQ', link: '#' }];
 
 const activeIndex = ref(null);
@@ -54,29 +57,6 @@ const activeIndex = ref(null);
 const toggleFaq = (index) => {
     activeIndex.value = activeIndex.value === index ? null : index;
 };
-
-const faqs = ref([
-    {
-        question: "What is your return policy?",
-        answer: "We offer a 30-day return policy for unused and unworn items with their original tags attached. Please contact our support team to initiate a return."
-    },
-    {
-        question: "How long does shipping take?",
-        answer: "Standard shipping typically takes 3-5 business days within the Philippines. Delivery times may vary depending on your exact location."
-    },
-    {
-        question: "Do you offer international shipping?",
-        answer: "Currently, we only ship within the Philippines. We are working hard to expand our reach internationally in the near future."
-    },
-    {
-        question: "How can I track my order?",
-        answer: "Once your order has been shipped, you will receive an email with a tracking number and a link to monitor your package's progress."
-    },
-    {
-        question: "Are your products suitable for extreme weather?",
-        answer: "Yes, our gear is designed with the great outdoors in mind. We use durable, high-quality materials built to withstand rugged terrains and changing weather conditions."
-    }
-]);
 </script>
 
 <style scoped>
@@ -247,13 +227,21 @@ const faqs = ref([
     background-color: #fff;
 }
 
-.faq-answer p {
+.faq-answer-content {
     font-size: 15px;
     color: #666;
     line-height: 1.7;
     margin: 0;
     border-top: 1px solid #eee;
     padding-top: 15px;
+}
+
+.faq-answer-content p {
+    margin: 0 0 10px;
+}
+
+.faq-answer-content p:last-child {
+    margin-bottom: 0;
 }
 
 /* Responsive */

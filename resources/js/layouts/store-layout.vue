@@ -356,7 +356,15 @@
           </div>
           <div class="footer-info">
               <h4>Account</h4>
-              <button @click="handleWishlistClick">Wishlist</button>
+              <a href="#" @click.prevent="openAccountModal">
+                <p>My Profile</p>
+              </a>
+              <a href="#" @click.prevent="openAccountModal">
+                <p>My Address</p>
+              </a>
+              <a href="#" @click.prevent="handleWishlistClick">
+                <p>My Wishlist</p>
+              </a>
               <Link
                 :href="
                   brandPartner

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Store;
 use App\Enums\BrandPartnerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\BrandPartner;
+use App\Models\Policy;
 use Inertia\Inertia;
 
 class BrandPartnerPolicyController extends Controller
@@ -21,60 +22,71 @@ class BrandPartnerPolicyController extends Controller
             ->first();
     }
 
-    private function renderPolicy(string $page)
+    private function renderPolicy(string $slug)
     {
-        return Inertia::render($page, [
+        $policy = Policy::getBySlug($slug);
+
+        if (! $policy) {
+            abort(404);
+        }
+
+        return Inertia::render('store/policy', [
             'brandPartner' => $this->getBrandPartner(),
+            'policy' => [
+                'title' => $policy->title,
+                'content' => $policy->content,
+                'lastUpdatedDate' => $policy->last_updated_date,
+            ],
         ]);
     }
 
     public function terms()
     {
-        return $this->renderPolicy('store/policies/terms');
+        return $this->renderPolicy('terms');
     }
 
     public function privacy()
     {
-        return $this->renderPolicy('store/policies/privacy');
+        return $this->renderPolicy('privacy');
     }
 
     public function refund()
     {
-        return $this->renderPolicy('store/policies/refund');
+        return $this->renderPolicy('refund');
     }
 
     public function shipping()
     {
-        return $this->renderPolicy('store/policies/shipping');
+        return $this->renderPolicy('shipping');
     }
 
     public function payment()
     {
-        return $this->renderPolicy('store/policies/payment');
+        return $this->renderPolicy('payment');
     }
 
     public function cookies()
     {
-        return $this->renderPolicy('store/policies/cookies');
+        return $this->renderPolicy('cookies');
     }
 
     public function warranty()
     {
-        return $this->renderPolicy('store/policies/warranty');
+        return $this->renderPolicy('warranty');
     }
 
     public function cancellation()
     {
-        return $this->renderPolicy('store/policies/cancellation');
+        return $this->renderPolicy('cancellation');
     }
 
     public function disclaimer()
     {
-        return $this->renderPolicy('store/policies/disclaimer');
+        return $this->renderPolicy('disclaimer');
     }
 
     public function acceptableUse()
     {
-        return $this->renderPolicy('store/policies/acceptable-use');
+        return $this->renderPolicy('acceptable-use');
     }
 }

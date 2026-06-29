@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
-                // CountriesSeeder::class, --- REPLACED ---
+            // CountriesSeeder::class, --- REPLACED ---
             CountryStateSeeder::class,
             PhilippineGeoSeeder::class,
             CurrencySeeder::class,
@@ -27,11 +27,15 @@ class DatabaseSeeder extends Seeder
             BrandPartnerSeeder::class,
             BrandPartnerProductOptionSeeder::class,
 
-                // Test Data Seeders
+            // Test Data Seeders
             CustomerSeeder::class,
             ProductSeeder::class,
             OrderSeeder::class,
-            JobOrderSeeder::class
+            JobOrderSeeder::class,
+
+            // CMS Seeders
+            PolicySeeder::class,
+            FaqSeeder::class,
         ]);
     }
 }
